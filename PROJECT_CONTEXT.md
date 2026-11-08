@@ -58,35 +58,51 @@
 
 ```
 azib-mobile/
-├─ docs/
-│  ├─ AGENT_RULES.md
-│  ├─ DECISIONS.md
-│  ├─ PRODUCT_POLICIES.md
-│  ├─ GLOSSARY.md
-│  ├─ ASSET_LICENSES.md
-│  └─ THREAT_MODEL.md
-├─ PROJECT_CONTEXT.md
-├─ DEVELOPMENT_PROGRESS.md
-├─ README.md
-├─ app/                    # Expo Router (P05+)
+├─ app/ # Routes ONLY (Expo Router)
+│ ├─ layout.tsx
+│ └─ index.tsx
 ├─ src/
-│  ├─ features/            # كل ميزة مجلد مستقل
-│  ├─ components/          # مكوّنات مشتركة
-│  ├─ design/              # توكنز الثيم (P04)
-│  ├─ i18n/                # ملفات اللغات
-│  ├─ lib/                 # أدوات صغيرة مشتركة
-│  ├─ providers/           # Provider Abstraction (Supabase خلف واجهة)
-│  ├─ store/               # Zustand
-│  └─ types/               # أنواع مشتركة
-├─ supabase/               # migrations, RLS, pgTAP (P18+)
-├─ e2e/                    # Playwright (Web)
-├─ assets/
-└─ .github/workflows/
+│ ├─ lib/ # Small internal helpers (i18n stub, etc.)
+│ │ ├─ i18n.ts
+│ │ └─ tests/
+│ ├─ locales/ # Translation JSON (only place allowed for Arabic text)
+│ │ ├─ ar.json
+│ │ └─ en.json
+│ ├─ components/ # Shared presentational components
+│ ├─ features/ # Feature modules
+│ ├─ hooks/ # Shared hooks
+│ ├─ services/ # Use-case services
+│ ├─ repositories/ # Data-access boundary
+│ ├─ providers/ # Provider Abstraction (Supabase behind interface)
+│ ├─ adapters/ # Third-party SDK adapters
+│ ├─ stores/ # Zustand stores (client state only)
+│ ├─ schemas/ # Zod schemas
+│ ├─ types/ # Shared domain types
+│ ├─ constants/ # Constants (no Arabic strings)
+│ ├─ config/ # Runtime config from EXPO_PUBLIC*
+│ ├─ theme/ # Design tokens (P04)
+│ ├─ utils/ # Pure utilities
+│ └─ core/ # Cross-cutting primitives
+├─ tests/tests/ # Cross-cutting tests (scripts, tooling)
+├─ mocks/ # Shared test mocks / fixtures
+├─ supabase/ # Migrations + RLS + pgTAP (P18)
+├─ scripts/ # Dev & lint scripts
+├─ assets/images/ # Placeholder icons (P04 replaces)
+├─ docs/ # Governance (P01)
+├─ .github/workflows/ # CI
+├─ app.config.ts
+├─ eslint.config.js
+├─ jest.config.js
+├─ jest.setup.ts
+├─ .prettierrc.json
+├─ tsconfig.json
+├─ package.json
+├─ .nvmrc
+└─ .env.example
 ```
 
-**قاعدة عامة:** لا عمق مجلدات > 4 مستويات، ولا ملف > الحد الموصى به في `AGENT_RULES.md §1 #11`.
-
----
+**قاعدة عامة:** Routes in `app/` only. Features in `src/features/`. No business logic in `app/*.tsx`. 
+```
 
 ## 4) الوظائف المكتملة
 
