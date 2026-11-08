@@ -1,5 +1,6 @@
 {
   "common": {
-    "appName": "AZIB"
+    "appName": "AZIB",
+    "phaseLabel": "Phase: P02 — Project Init"
   }
 }
