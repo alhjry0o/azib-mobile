@@ -33,24 +33,23 @@
 
 | الأداة | الإصدار | مصدر التحقق | تاريخ |
 |--------|---------|--------------|-------|
-| Node.js | (يُملأ في P02) | `node -v` | — |
-| npm | (يُملأ في P02) | `npm -v` | — |
-| Expo SDK | (يُملأ في P02) | `npx expo --version` | — |
-| React Native | (يُملأ في P02) | `package.json` | — |
-| React | (يُملأ في P02) | `package.json` | — |
-| TypeScript | (يُملأ في P02) | `package.json` | — |
-| expo-router | (يُملأ في P02) | `package.json` | — |
-| zustand | (يُملأ في P02) | `package.json` | — |
-| @tanstack/react-query | (يُملأ في P02) | `package.json` | — |
-| react-hook-form | (يُملأ في P02) | `package.json` | — |
-| zod | (يُملأ في P02) | `package.json` | — |
-| i18next | (يُملأ في P02) | `package.json` | — |
-| react-native-reanimated | (يُملأ في P02) | `package.json` | — |
-| react-native-gesture-handler | (يُملأ في P02) | `package.json` | — |
-| @supabase/supabase-js | (يُملأ في P02) | `package.json` | — |
-| jest / @testing-library/react-native | (يُملأ في P02) | `package.json` | — |
-| @playwright/test | (يُملأ في P02) | `package.json` | — |
-
+| Node.js | v26.13.0 | `node -v` | 2026-11-08 |
+| npm | 12.2.1 | `npm -v` | 2026-11-08 |
+| Expo SDK | ~58.0.23 | `package.json` | 2026-11-08 |
+| React Native | 0.88.1 | `package.json` | 2026-11-08 |
+| React | 19.3.0 | `package.json` | 2026-11-08 |
+| React DOM | 19.3.0 | `package.json` | 2026-11-08 |
+| expo-router | ~58.0.30 | `package.json` | 2026-11-08 |
+| TypeScript | ~6.0.3 | `package.json` | 2026-11-08 |
+| react-native-reanimated | 4.7.1 | `package.json` | 2026-11-08 |
+| react-native-gesture-handler | ~3.3.0 | `package.json` | 2026-11-08 |
+| react-native-safe-area-context | ~5.11.1 | `package.json` | 2026-11-08 |
+| react-native-screens | ~4.30.1 | `package.json` | 2026-11-08 |
+| react-native-web | ~0.21.4 | `package.json` | 2026-11-08 |
+| react-native-worklets | 0.13.0 | `package.json` | 2026-11-08 |
+| eslint / eslint-config-expo | (يُقرأ من `package.json` بعد التثبيت) | `npm run lint:js` | 2026-11-08 |
+| jest / jest-expo | (يُقرأ من `package.json` بعد التثبيت) | `npm test -- --ci` | 2026-11-08 |
+| prettier | (يُقرأ من `package.json` بعد التثبيت) | `npm run format:check` | 2026-11-08 |
 ---
 
 ## 3) بنية المجلدات
