@@ -102,7 +102,7 @@ azib-mobile/
 ```
 
 **قاعدة عامة:** Routes in `app/` only. Features in `src/features/`. No business logic in `app/*.tsx`. 
-```
+
 
 ## 4) الوظائف المكتملة
 
