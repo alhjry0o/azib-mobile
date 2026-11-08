@@ -151,7 +151,7 @@ azib-mobile/
 
 ## 9) الخطوة التالية
 
-**P02 — Init**: تهيئة مشروع Expo، إعداد TypeScript strict، ESLint، Jest، بنية المجلدات الأساسية، i18n مع `ar` وRTL، وتثبيت الإصدارات فعلياً وتعبئة §2 من هذا الملف، مع تحديث `DEVELOPMENT_PROGRESS.md` عند الاكتمال.
+**P03 — Core Platform**: Provider Abstraction contracts, error model, feature flags, env config module, i18next real setup (with `ar` default and RTL forcing), Zustand stores skeleton, first shared hooks, and updating this file with the concrete decisions.
 
 **قبل بدء P02:** يجب أن يقرر المالك أولوية قرارات `docs/PRODUCT_POLICIES.md` التي تحجب P08/P10/P11/P15 — حتى لو تأخر التنفيذ، يُفضَّل تثبيت قرارات P08 مبكراً.
 ```
