@@ -53,6 +53,20 @@
 
 ---
 
+## قائمة تحقق P02 (تفصيل)
+
+- [x] مشروع Expo SDK 58 من قالب `default` (React 19.3 / RN 0.88.1).
+- [x] TypeScript strict + `noUncheckedIndexedAccess` + Path Alias `@/*`.
+- [x] ESLint flat config + Prettier + سكربتات `lint`/`format`/`typecheck`/`test`/`web:export`/`doctor`.
+- [x] Jest (jest-expo) + RNTL مع اختبارات وحدة حقيقية (i18n + سكربت العربية).
+- [x] هيكل مجلدات `src/*` مع READMEs.
+- [x] `.env.example` موثق، و`.gitignore` يمنع `.env` و keystores.
+- [x] `scripts/check-hardcoded-arabic.mjs` مربوط بسكربت `lint`.
+- [x] `app.config.ts` مع `android.allowBackup=false`، `android.supportsRTL=true`، scheme.
+- [x] CI: `npm ci` → `lint` → `typecheck` → `test` (contents: read, concurrency).
+- [x] شاشة Index مؤقتة تستخدم `t('common.appName')`.
+- [ ] تأكيد المستخدم بنتائج `expo-doctor` و`web:export`.
+---
 ## القرارات البشرية المفتوحة (Blockers محتملة)
 
 | # | القرار | يحجب |
