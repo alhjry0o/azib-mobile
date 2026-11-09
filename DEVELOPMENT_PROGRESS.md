@@ -65,7 +65,7 @@
 - [x] `app.config.ts` مع `android.allowBackup=false`، `android.supportsRTL=true`، scheme.
 - [x] CI: `npm ci` → `lint` → `typecheck` → `test` (contents: read, concurrency).
 - [x] شاشة Index مؤقتة تستخدم `t('common.appName')`.
-- [ ] تأكيد المستخدم بنتائج `expo-doctor` و`web:export`.
+- [x] تأكيد المستخدم بنتائج `expo-doctor` و`web:export` (2026-11-09، CI أخضر).
 
 ### فجوات أدوات موثّقة (لا تكسر CI، تُعالَج في مرحلة لاحقة)
 
