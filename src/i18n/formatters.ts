@@ -49,7 +49,7 @@ export function formatNumber(value: number, opts: FormatOptions = {}): string {
 export function formatCurrency(amount: number, opts: FormatOptions = {}): string {
   const { language, numerals } = resolve(opts.language, opts.numerals);
   if (!isIntlAvailable()) {
-    const suffix = language === 'ar' ? 'ر.ي' : 'YER';
+    const suffix = language === 'ar' ? 'ر.ي' : 'YER';// i18n-allow-arabic
     return `${String(amount)} ${suffix}`;
   }
   try {
@@ -62,7 +62,7 @@ export function formatCurrency(amount: number, opts: FormatOptions = {}): string
     }).format(amount);
   } catch (e) {
     logger.warn('formatCurrency failed', { error: e });
-    const suffix = language === 'ar' ? 'ر.ي' : 'YER';
+    const suffix = language === 'ar' ? 'ر.ي' : 'YER';// i18n-allow-arabic
     return `${String(amount)} ${suffix}`;
   }
 }
