@@ -69,12 +69,12 @@
 ```
 azib-mobile/
 ├─ app/ # Routes ONLY (Expo Router)
-│ ├─ layout.tsx
+│ ├─ _layout.tsx
 │ └─ index.tsx
 ├─ src/
 │ ├─ lib/ # Small internal helpers (i18n stub, etc.)
 │ │ ├─ i18n.ts
-│ │ └─ tests/
+│ │ └─ __tests__/
 │ ├─ locales/ # Translation JSON (only place allowed for Arabic text)
 │ │ ├─ ar.json
 │ │ └─ en.json
