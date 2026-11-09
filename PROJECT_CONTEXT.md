@@ -29,27 +29,40 @@
 
 ## 2) إصدارات الأدوات
 
-> تُملأ في **P02 (Init)** من مصادر حقيقية، لا من التخمين. المصادر: `package.json` بعد `npx expo install`، ومخرجات `npx expo-doctor`.
+> المصدر الأساسي `package.json`. القيم المُعلَّمة `TBD` تُملأ في أول ردّ يصلني فيه `package.json` بعد P02. لا تخمين.
 
 | الأداة | الإصدار | مصدر التحقق | تاريخ |
 |--------|---------|--------------|-------|
-| Node.js | v26.13.0 | `node -v` | 2026-11-08 |
-| npm | 12.2.1 | `npm -v` | 2026-11-08 |
+| Node.js | v26.13.0 | `node -v` (بتقرير المستخدم) | 2026-11-08 |
+| npm | 12.2.1 | `npm -v` (بتقرير المستخدم) | 2026-11-08 |
 | Expo SDK | ~58.0.23 | `package.json` | 2026-11-08 |
 | React Native | 0.88.1 | `package.json` | 2026-11-08 |
 | React | 19.3.0 | `package.json` | 2026-11-08 |
 | React DOM | 19.3.0 | `package.json` | 2026-11-08 |
 | expo-router | ~58.0.30 | `package.json` | 2026-11-08 |
-| TypeScript | ~6.0.3 | `package.json` | 2026-11-08 |
+| expo-constants | ~58.0.15 | `package.json` | 2026-11-08 |
+| expo-linking | ~58.0.16 | `package.json` | 2026-11-08 |
+| expo-status-bar | ~58.0.4 | `package.json` | 2026-11-08 |
 | react-native-reanimated | 4.7.1 | `package.json` | 2026-11-08 |
 | react-native-gesture-handler | ~3.3.0 | `package.json` | 2026-11-08 |
 | react-native-safe-area-context | ~5.11.1 | `package.json` | 2026-11-08 |
 | react-native-screens | ~4.30.1 | `package.json` | 2026-11-08 |
 | react-native-web | ~0.21.4 | `package.json` | 2026-11-08 |
 | react-native-worklets | 0.13.0 | `package.json` | 2026-11-08 |
-| eslint / eslint-config-expo | (يُقرأ من `package.json` بعد التثبيت) | `npm run lint:js` | 2026-11-08 |
-| jest / jest-expo | (يُقرأ من `package.json` بعد التثبيت) | `npm test -- --ci` | 2026-11-08 |
-| prettier | (يُقرأ من `package.json` بعد التثبيت) | `npm run format:check` | 2026-11-08 |
+| TypeScript | ~6.0.3 | `package.json` | 2026-11-08 |
+| @types/react | ~19.3.0 | `package.json` | 2026-11-08 |
+| ESLint | ^9.0.0 | `package.json` (بتقرير المستخدم) | 2026-11-09 |
+| eslint-config-expo | ^58.0.4 | `package.json` | 2026-11-09 |
+| eslint-import-resolver-typescript | ^4.4.5 | `package.json` | 2026-11-09 |
+| eslint-plugin-import | ^2.32.0 | `package.json` | 2026-11-09 |
+| Prettier | TBD من package.json | — | — |
+| Jest | ^30.5.2 | `package.json` | 2026-11-09 |
+| jest-expo | ^58.0.14 | `package.json` | 2026-11-09 |
+| @testing-library/react-native | TBD من package.json | — | — |
+| react-test-renderer | 19.3.0 (مثبّت ليُطابق React) | `package.json` | 2026-11-09 |
+| @types/jest | ^30.0.0 | `package.json` | 2026-11-09 |
+| @types/node | ^26.6.6 | `package.json` | 2026-11-09 |
+
 ---
 
 ## 3) بنية المجلدات
