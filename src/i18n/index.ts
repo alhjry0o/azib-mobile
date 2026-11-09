@@ -113,8 +113,9 @@ export function translate(
   key: string,
   options?: Record<string, unknown> & { ns?: string },
 ): string {
-  // TypeScript: i18next's t() can return TFunctionDetailedResult. We force it to string.
-  return instance.t(key, options as never) as string;
+  // TypeScript: i18next's t() can return TFunctionDetailedResult. 
+  // We cast via unknown to force the compiler to accept it.
+  return instance.t(key, options as never) as unknown as string;
 }
 
 /**
