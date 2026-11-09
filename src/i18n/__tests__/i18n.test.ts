@@ -14,7 +14,7 @@ describe('i18n', () => {
 
   it('defaults to Arabic after setLanguage', () => {
     expect(getLanguage()).toBe('ar');
-    expect(translate('appName')).toBe('عازب');
+    expect(translate('appName')).toBe('عازب');// i18n-allow-arabic
   });
 
   it('translates from the errors namespace via cross-namespace key', () => {
@@ -41,12 +41,12 @@ describe('i18n', () => {
   });
 
   it('supports Arabic plural forms', () => {
-    expect(translate('counts.items', { count: 0 })).toBe('لا عناصر');
-    expect(translate('counts.items', { count: 1 })).toBe('عنصر واحد');
-    expect(translate('counts.items', { count: 2 })).toBe('عنصران');
-    expect(translate('counts.items', { count: 5 })).toBe('5 عناصر');
-    expect(translate('counts.items', { count: 15 })).toBe('15 عنصراً');
-    expect(translate('counts.items', { count: 100 })).toBe('100 عنصر');
+    expect(translate('counts.items', { count: 0 })).toBe('لا عناصر');// i18n-allow-arabic
+    expect(translate('counts.items', { count: 1 })).toBe('عنصر واحد');// i18n-allow-arabic
+    expect(translate('counts.items', { count: 2 })).toBe('عنصران');// i18n-allow-arabic
+    expect(translate('counts.items', { count: 5 })).toBe('5 عناصر');// i18n-allow-arabic
+    expect(translate('counts.items', { count: 15 })).toBe('15 عنصراً');// i18n-allow-arabic
+    expect(translate('counts.items', { count: 100 })).toBe('100 عنصر');// i18n-allow-arabic
   });
 
   it('detectDeviceLanguage returns a supported language', () => {
