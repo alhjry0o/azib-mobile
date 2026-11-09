@@ -29,8 +29,8 @@ export interface AppEnv {
 }
 
 export class EnvValidationError extends Error {
-  readonly issues: ReadonlyArray<string>;
-  constructor(issues: ReadonlyArray<string>) {
+  readonly issues: readonly string[];
+  constructor(issues: readonly string[]) {
     super(`Invalid environment variables:\n - ${issues.join('\n - ')}`);
     this.name = 'EnvValidationError';
     this.issues = issues;
