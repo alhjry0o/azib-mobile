@@ -10,8 +10,8 @@
 
 | # | المرحلة | الحالة | تاريخ الإنجاز | ملاحظات |
 |---|---------|--------|----------------|---------|
-| P01 | Requirements, Architecture & Agent Governance | Done | 2026-11-08 | وثائق فقط. بانتظار تأكيد المستخدم بتشغيل قائمة التحقق (`AGENT_RULES.md §6`). |
-| P02 | Init (Expo + TS strict + ESLint + Jest + i18n + بنية) | Done | 2026-11-08 | Expo SDK 58، React 19.3، RN 0.88.1، Node 26. CI جاهز. بانتظار تأكيد تشغيل قائمة التحقق. |-doctor` لتعبئة إصدارات الأدوات. |
+| P01 | Requirements, Architecture & Agent Governance | Done | 2026-11-08 | وثائق فقط. | (`AGENT_RULES.md §6`). |
+| P02 | Init (Expo + TS strict + ESLint + Jest + i18n + بنية) | Done | 2026-11-09 | Expo SDK 58، React 19.3، RN 0.88.1، Node 26، ESLint 9. CI أخضر 2026-11-09. |
 | P03 | Core Platform (Types, Provider Abstraction, Errors, Env) | Not Started | — | لا كود خادم قبل عقد Provider واضح. |
 | P04 | Design System (Royal Black / Purple / Mustard, Qamariya, 3D ثلاث طبقات) | Not Started | — | يستهلك توكنز فقط، لا قيم Hardcoded. |
 | P05 | Shell + Onboarding | Not Started | — | RTL أولاً، Logical Properties فقط. |
@@ -66,6 +66,11 @@
 - [x] CI: `npm ci` → `lint` → `typecheck` → `test` (contents: read, concurrency).
 - [x] شاشة Index مؤقتة تستخدم `t('common.appName')`.
 - [ ] تأكيد المستخدم بنتائج `expo-doctor` و`web:export`.
+
+### فجوات أدوات موثّقة (لا تكسر CI، تُعالَج في مرحلة لاحقة)
+
+- [ ] `prettier` غير مثبت رغم وجود سكربتَي `format`/`format:check` — يُضاف في P03/P04 (موثَّق في `PROJECT_CONTEXT §8 #9`).
+- [ ] `@testing-library/react-native` + `react-test-renderer` غير مثبتين — يُضافان مع أول اختبار مكوّن (موثَّق في `PROJECT_CONTEXT §8 #10`).
 ---
 ## القرارات البشرية المفتوحة (Blockers محتملة)
 
