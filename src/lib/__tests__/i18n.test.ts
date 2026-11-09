@@ -8,7 +8,7 @@ describe('i18n (temporary, replaced in P03)', () => {
   it('defaults to the Arabic app name', () => {
     setLocale('ar');
     expect(getLocale()).toBe('ar');
-    expect(t('common.appName')).toBe('عازب');
+    expect(t('common.appName')).toBe('عازب');// i18n-allow-arabic
   });
 
   it('resolves the English app name after switching locale', () => {

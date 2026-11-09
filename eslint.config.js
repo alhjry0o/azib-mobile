@@ -1,7 +1,4 @@
 // Flat config (ESLint 9). `expo lint` uses this file directly.
-// If you upgrade eslint-config-expo and its export shape changes,
-// run `npx expo lint` once to auto-generate, then merge ignoring rules from here.
-
 const expoConfig = require('eslint-config-expo/flat');
 
 module.exports = [
@@ -16,6 +13,15 @@ module.exports = [
       'expo-env.d.ts',
       'assets/**',
     ],
+  },
+  {
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
+    },
   },
   {
     rules: {
