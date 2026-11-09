@@ -59,9 +59,45 @@ async function walk(dir) {
     if (ext !== '.ts' && ext !== '.tsx') continue;
     const content = await readFile(fullPath, 'utf8');
     const lines = content.split('\n');
+    let inBlockComment = false; // متغير لتتبع التعليقات الكتلية متعددة الأسطر
+
     lines.forEach((line, idx) => {
       if (line.includes(INLINE_ALLOW)) return;
-      if (ARABIC_RE.test(line)) {
+
+      let codeToCheck = line;
+
+      // 1. التعامل مع التعليقات الكتلية (/* ... */)
+      if (inBlockComment) {
+        const endIdx = codeToCheck.indexOf('*/');
+        if (endIdx !== -1) {
+          codeToCheck = codeToCheck.slice(endIdx + 2); // احتفظ بما بعد إغلاق التعليق
+          inBlockComment = false;
+        } else {
+          return; // السطر بالكامل تعليق، تجاهله
+        }
+      }
+
+      const startIdx = codeToCheck.indexOf('/*');
+      if (startIdx !== -1) {
+        const endIdx = codeToCheck.indexOf('*/', startIdx + 2);
+        if (endIdx !== -1) {
+          // التعليق يبدأ وينتهي في نفس السطر
+          codeToCheck = codeToCheck.slice(0, startIdx) + codeToCheck.slice(endIdx + 2);
+        } else {
+          // التعليق يبدأ هنا ويستمر للأسطر التالية
+          codeToCheck = codeToCheck.slice(0, startIdx);
+          inBlockComment = true;
+        }
+      }
+
+      // 2. التعامل مع تعليقات السطر الواحد (//)
+      const lineCommentIdx = codeToCheck.indexOf('//');
+      if (lineCommentIdx !== -1) {
+        codeToCheck = codeToCheck.slice(0, lineCommentIdx);
+      }
+
+      // 3. الفحص النهائي (نفحص النص الخالي من التعليقات فقط)
+      if (ARABIC_RE.test(codeToCheck)) {
         findings.push({ rel, line: idx + 1, text: line.trim().slice(0, 160) });
       }
     });
