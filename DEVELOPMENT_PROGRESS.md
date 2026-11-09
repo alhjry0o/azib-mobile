@@ -50,7 +50,7 @@
 - [x] `README.md` (تعريف + حالة، يُستكمل في P23).
 - [x] لا كود تطبيق في P01.
 - [x] تأكيد المستخدم بتشغيل أوامر التحقق (بتاريخ 2026-11-8).
-- [x] `Expo Doctor` مُفعَّل في CI (بعد `Install`، قبل `Audit`).
+
 ---
 
 ## قائمة تحقق P02 (تفصيل)
@@ -71,7 +71,7 @@
 
 - [ ] `prettier` غير مثبت رغم وجود سكربتَي `format`/`format:check` — يُضاف في P03/P04 (موثَّق في `PROJECT_CONTEXT §8 #9`).
 - [ ] `@testing-library/react-native` + `react-test-renderer` غير مثبتين — يُضافان مع أول اختبار مكوّن (موثَّق في `PROJECT_CONTEXT §8 #10`).
-
+- [x] `Expo Doctor` مُفعَّل في CI (بعد `Install`، قبل `Audit`).
 ---
 ## القرارات البشرية المفتوحة (Blockers محتملة)
 
