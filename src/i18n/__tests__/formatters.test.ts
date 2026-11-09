@@ -6,7 +6,7 @@ import {
   isIntlAvailable,
 } from '@/i18n/formatters';
 
-const ARABIC_DIGIT_RE = /[٠-٩]/;
+const ARABIC_DIGIT_RE = /[٠-٩]/;// i18n-allow-arabic
 const LATIN_DIGIT_RE = /[0-9]/;
 
 describe('i18n formatters', () => {
