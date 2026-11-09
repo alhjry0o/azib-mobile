@@ -13,7 +13,7 @@
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-const REDACT_PATTERNS: ReadonlyArray<readonly [RegExp, string]> = [
+const REDACT_PATTERNS: readonly (readonly [RegExp, string])[] = [
   // JWT (three base64url segments starting with eyJ)
   [/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[REDACTED_TOKEN]'],
   // Bearer tokens
@@ -59,7 +59,6 @@ export interface Logger {
 }
 
 const isDev = (): boolean => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const proc = (globalThis as any).process;
   return proc?.env?.NODE_ENV !== 'production';
 };
@@ -67,20 +66,16 @@ const isDev = (): boolean => {
 export const logger: Logger = {
   debug(message, context) {
     if (!isDev()) return;
-    // eslint-disable-next-line no-console
     console.debug('[debug]', redactString(message), context ? redact(context) : undefined);
   },
   info(message, context) {
     if (!isDev()) return;
-    // eslint-disable-next-line no-console
     console.info('[info]', redactString(message), context ? redact(context) : undefined);
   },
   warn(message, context) {
-    // eslint-disable-next-line no-console
     console.warn('[warn]', redactString(message), context ? redact(context) : undefined);
   },
   error(message, context) {
-    // eslint-disable-next-line no-console
     console.error('[error]', redactString(message), context ? redact(context) : undefined);
   },
 };
