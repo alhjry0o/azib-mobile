@@ -46,3 +46,6 @@ jobs:
 
       - name: Test
         run: npm run test -- --ci
+
+      - name: Web Export
+        run: npm run web:export
