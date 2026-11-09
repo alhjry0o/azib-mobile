@@ -1,10 +1,10 @@
 import { useAppModeStore, APP_MODE_STORAGE_KEY } from '@/stores/app-mode.store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 describe('useAppModeStore', () => {
   beforeEach(async () => {
     // Reset store and storage between tests.
     useAppModeStore.setState({ mode: 'demo', hydrated: false });
-    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
     await AsyncStorage.clear();
   });
 
