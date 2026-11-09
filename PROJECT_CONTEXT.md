@@ -3,7 +3,7 @@
 > هذا الملف يُقرأ في بداية كل مرحلة. يُحدَّث في نهاية كل مرحلة قبل إعلانها Done.
 > **عام المستودع:** لا أسرار، لا بيانات شخصية حقيقية.
 
-آخر تحديث: P01 — Requirements, Architecture & Agent Governance.
+آخر تحديث: P02 — Project Init & Development Environment (مغلق).
 
 ---
 
@@ -55,11 +55,8 @@
 | eslint-config-expo | ^58.0.4 | `package.json` | 2026-11-09 |
 | eslint-import-resolver-typescript | ^4.4.5 | `package.json` | 2026-11-09 |
 | eslint-plugin-import | ^2.32.0 | `package.json` | 2026-11-09 |
-| Prettier | TBD من package.json | — | — |
 | Jest | ^30.5.2 | `package.json` | 2026-11-09 |
 | jest-expo | ^58.0.14 | `package.json` | 2026-11-09 |
-| @testing-library/react-native | TBD من package.json | — | — |
-| react-test-renderer | 19.3.0 (مثبّت ليُطابق React) | `package.json` | 2026-11-09 |
 | @types/jest | ^30.0.0 | `package.json` | 2026-11-09 |
 | @types/node | ^26.6.6 | `package.json` | 2026-11-09 |
 
@@ -123,15 +120,17 @@ azib-mobile/
 |---|---------|---------|---------|
 | 1 | ملفات الحوكمة (AGENT_RULES, DECISIONS, PRODUCT_POLICIES, GLOSSARY, ASSET_LICENSES, THREAT_MODEL) | P01 | وثائق فقط، لا كود تطبيق. |
 | 2 | السياق الدائم (PROJECT_CONTEXT, DEVELOPMENT_PROGRESS, README) | P01 | جاهزة للتحديث مع كل مرحلة. |
-
+| 3 | مشروع Expo SDK 58 (TS strict, ESLint, Jest, i18n stub, CI) | P02 | CI أخضر 2026-11-09. |
+| 4 | شاشة Index مؤقتة تعرض `t('common.appName')` | P02 | تُستبدل في P05. |
 > لا شيء آخر مكتمل. أي جدول آخر يكون فارغاً حتى المرحلة المعنية.
 
 ---
 
 ## 5) غير المكتملة
 
-- كل شيء ابتداءً من P02 (Init) حتى P24 (Final Integration).
-- لا يوجد `package.json`، لا كود، لا اختبارات، لا CI، لا قاعدة بيانات.
+- ابتداءً من **P03 (Core Platform)** حتى **P24 (Final Integration)**.
+- لا يوجد Provider Abstraction فعلي، لا Zustand stores، لا i18next (النظام الحالي بديل مؤقت).
+- لا قاعدة بيانات، لا RLS، لا تكاملات خارجية.
 
 ---
 
@@ -160,13 +159,15 @@ azib-mobile/
 | 3 | `I18nManager.forceRTL` غير مُفعَّل | تبديل اللغة لا يعكس التخطيط بعد | Open | يُفعَّل في P03 مع i18n. |
 | 4 | أيقونات Placeholder من قالب Expo | لا تعكس الهوية البصرية | Open | تُستبدل في P04. |
 | 5 | لا تحقق آلي من وجود ملفات الحوكمة | يدوي فقط | Open | قائمة تحقق في `AGENT_RULES.md §6`. |
----
+| 6 | ESLint مثبّت على 9.x (ADR-0007) | لا تستفيد من ميزات ESLint 10 | Accepted | يُفتح ADR بديل عند دعم `eslint-config-expo` لـ10. |
+| 7 | `src/lib/__tests__/i18n.test.ts:11` يستخدم `// i18n-allow-arabic` | مقبول (نص غير UI)، قابل للتنظيف | Accepted | في P21: استيراد `ar.json` بدل النص الحرفي. |
+| 8 | `tsconfig.types = ["jest","node"]` | إن أُضيفت بيئات اختبار جديدة تُحدَّث القائمة | Accepted | إعداد داخلي، لا ADR. |
+| 9 | `prettier` غير مثبت رغم وجود سكربتَي `format`/`format:check` | `npm run format` و`npm run format:check` سيفشلان | Open | يُضاف في P03/P04. CI لا يشغّلهما حالياً. |
+| 10 | `@testing-library/react-native` و`react-test-renderer` غير مثبتين | اختبارات مكوّنات React غير ممكنة | Open | يُضافان مع أول اختبار مكوّن في P04/P05. |
 
 ## 9) الخطوة التالية
 
-**P02 — Init**: تهيئة مشروع Expo، إعداد TypeScript strict، ESLint، Jest، بنية المجلدات الأساسية، i18n مع `ar` وRTL، وتثبيت الإصدارات فعلياً وتعبئة §2 من هذا الملف، مع تحديث `DEVELOPMENT_PROGRESS.md` عند الاكتمال.
+**P03 — Core Platform:** بانتظار برومبت المرحلة التفصيلي من المالك. النطاق المتوقع (وفق HRD): أنواع مشتركة، عقد Provider Abstraction، نموذج الأخطاء (`src/core/errors`)، وحدة إعداد بيئي (`src/config/env`) تقرأ `EXPO_PUBLIC_*` مع تحقق Zod، تفعيل i18next الحقيقي مع `ar` و`forceRTL`، أول Zustand store، وأول hooks مشتركة — دون أي اتصال فعلي بـ Supabase.
 
-**قبل بدء P02:** يجب أن يقرر المالك أولوية قرارات `docs/PRODUCT_POLICIES.md` التي تحجب P08/P10/P11/P15 — حتى لو تأخر التنفيذ، يُفضَّل تثبيت قرارات P08 مبكراً.
-
-**P03 — Core Platform**: Provider Abstraction contracts, error model, feature flags, env config module, i18next real setup (with `ar` default and RTL forcing), Zustand stores skeleton, first shared hooks, and updating this file with the concrete decisions.
+**قبل بدء P03:** تثبيت `prettier` (فجوة §8 #9) لتفعيل سكربتَي `format`/`format:check` — قرار يُتخذ في P03.
 
