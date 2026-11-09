@@ -1,0 +1,14 @@
+{
+  "network": "Cannot reach the network. Check your connection and try again.",
+  "auth": "You need to sign in to continue.",
+  "forbidden": "You don't have access to this resource.",
+  "validation": "Some fields are invalid. Review them and try again.",
+  "notFound": "We couldn't find what you're looking for.",
+  "conflict": "A data conflict occurred. Reload and try again.",
+  "notConnected": "This service isn't connected yet. It will be enabled later.",
+  "unknown": "An unexpected error occurred. Try again.",
+  "boundary": {
+    "title": "Something went wrong",
+    "description": "You can retry or go back to the home screen."
+  }
+}
