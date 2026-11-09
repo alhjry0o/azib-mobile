@@ -1,0 +1,36 @@
+{
+  "appName": "عازب",
+  "phaseLabel": "المرحلة الحالية: P03 — منصة النواة",
+  "buttons": {
+    "ok": "موافق",
+    "cancel": "إلغاء",
+    "retry": "إعادة المحاولة",
+    "continue": "متابعة",
+    "back": "رجوع",
+    "skip": "تخطي",
+    "close": "إغلاق"
+  },
+  "states": {
+    "loading": "جارٍ التحميل…",
+    "empty": "لا يوجد شيء بعد",
+    "error": "حدث خطأ",
+    "offline": "غير متصل"
+  },
+  "language": {
+    "label": "اللغة",
+    "arabic": "العربية",
+    "english": "English"
+  },
+  "demo": {
+    "badge": "بيانات تجريبية",
+    "description": "هذه البيانات للعرض فقط ولا تمثل أشخاصاً حقيقيين."
+  },
+  "counts": {
+    "items_zero": "لا عناصر",
+    "items_one": "عنصر واحد",
+    "items_two": "عنصران",
+    "items_few": "{{count}} عناصر",
+    "items_many": "{{count}} عنصراً",
+    "items_other": "{{count}} عنصر"
+  }
+}
