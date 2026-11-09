@@ -15,6 +15,7 @@ export default ({ config: _config }: ConfigContext): ExpoConfig => ({
   android: {
     package: 'app.azib.mobile',
     allowBackup: false,
+    // @ts-ignore
     supportsRTL: true,
     predictiveBackGestureEnabled: false,
     adaptiveIcon: {
