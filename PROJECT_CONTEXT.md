@@ -89,7 +89,7 @@ azib-mobile/
 │ ├─ schemas/ # Zod schemas
 │ ├─ types/ # Shared domain types
 │ ├─ constants/ # Constants (no Arabic strings)
-│ ├─ config/ # Runtime config from EXPO_PUBLIC*
+│ ├─ config/ # Runtime config from EXPO_PUBLIC_*
 │ ├─ theme/ # Design tokens (P04)
 │ ├─ utils/ # Pure utilities
 │ └─ core/ # Cross-cutting primitives
