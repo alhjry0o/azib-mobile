@@ -1,0 +1,33 @@
+{
+  "appName": "AZIB",
+  "phaseLabel": "Current phase: P03 — Core Platform",
+  "buttons": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "retry": "Retry",
+    "continue": "Continue",
+    "back": "Back",
+    "skip": "Skip",
+    "close": "Close"
+  },
+  "states": {
+    "loading": "Loading…",
+    "empty": "Nothing here yet",
+    "error": "Something went wrong",
+    "offline": "Offline"
+  },
+  "language": {
+    "label": "Language",
+    "arabic": "العربية",
+    "english": "English"
+  },
+  "demo": {
+    "badge": "Demo data",
+    "description": "This data is for demonstration only and does not represent real people."
+  },
+  "counts": {
+    "items_zero": "No items",
+    "items_one": "One item",
+    "items_other": "{{count}} items"
+  }
+}
