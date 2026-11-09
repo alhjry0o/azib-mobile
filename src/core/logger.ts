@@ -20,10 +20,10 @@ const REDACT_PATTERNS: ReadonlyArray<readonly [RegExp, string]> = [
   [/(bearer\s+)[A-Za-z0-9._-]+/gi, '$1[REDACTED_TOKEN]'],
   // Email
   [/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[REDACTED_EMAIL]'],
-  // Phone (Yemen + generic + E.164)
-  [/(?:\+?\d{1,3}[-\s]?)?(?:0|\d)?\d{7,12}/g, '[REDACTED_PHONE]'],
   // Card-like (13–19 digits, optionally grouped)
   [/\b(?:\d[ -]*?){13,19}\b/g, '[REDACTED_CARD]'],
+  // Phone (Yemen + generic + E.164)
+  [/(?:\+?\d{1,3}[-\s]?)?(?:0|\d)?\d{7,12}/g, '[REDACTED_PHONE]'],
 ];
 
 export function redactString(input: string): string {
