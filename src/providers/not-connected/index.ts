@@ -58,7 +58,7 @@ function unavailable(name: ProviderName): () => Promise<HealthCheckResult> {
   });
 }
 
-function base(name: ProviderName, capabilities: ReadonlyArray<string>): ProviderBase {
+function base(name: ProviderName, capabilities: readonly string[]): ProviderBase {
   return {
     name,
     mode: 'backend',
@@ -183,6 +183,6 @@ export function createNotConnectedContentProvider(): ContentProvider {
     name: 'content' as const,
     mode: 'backend' as const,
     getArticleBySlug: (_s: string) => nc<ContentArticle | null>('content.getArticleBySlug'),
-    listArticles: () => nc<ReadonlyArray<ContentArticle>>('content.listArticles'),
+    listArticles: () => nc<readonly ContentArticle[]>('content.listArticles'),
   });
 }
