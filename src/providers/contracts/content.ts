@@ -27,5 +27,5 @@ export interface ContentArticle {
 export interface ContentProvider extends ProviderBase {
   readonly name: 'content';
   getArticleBySlug(slug: string): Promise<Result<ContentArticle | null>>;
-  listArticles(): Promise<Result<readonly ContentArticle>>;
+  listArticles(): Promise<Result<readonly<ContentArticle>>>;
 }
