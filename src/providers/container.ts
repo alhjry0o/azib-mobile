@@ -50,10 +50,9 @@ import {
   createNotConnectedStorageProvider,
 } from './not-connected';
 import { IntegrationRegistry } from './registry';
-import type { ProviderMode } from './types';
 
 export interface ProviderContainer {
-  readonly mode: ProviderMode;
+  readonly mode: 'demo' | 'backend';
   readonly auth: AuthProvider;
   readonly database: DatabaseProvider;
   readonly storage: FileStorageProvider;
@@ -72,7 +71,7 @@ export interface ProviderContainer {
 }
 
 export interface CreateContainerOptions {
-  readonly mode: ProviderMode;
+  readonly mode: 'demo' | 'backend';
   readonly env: AppEnv;
   readonly mockConfig?: Partial<MockProviderConfig>;
 }
