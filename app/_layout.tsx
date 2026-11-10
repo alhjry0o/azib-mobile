@@ -5,6 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { i18n } from '@/i18n';
+import { ProviderContainerProvider } from '@/providers';
 
 // Enable RTL at the native layer. Per-language forcing is handled by P05 Developer Settings.
 I18nManager.allowRTL(true);
@@ -12,17 +13,19 @@ I18nManager.allowRTL(true);
 export default function RootLayout() {
   return (
     <I18nextProvider i18n={i18n}>
-      <SafeAreaProvider>
-        <View style={styles.root}>
-          <StatusBar style="light" />
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              contentStyle: styles.content,
-            }}
-          />
-        </View>
-      </SafeAreaProvider>
+      <ProviderContainerProvider>
+        <SafeAreaProvider>
+          <View style={styles.root}>
+            <StatusBar style="light" />
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: styles.content,
+              }}
+            />
+          </View>
+        </SafeAreaProvider>
+      </ProviderContainerProvider>
     </I18nextProvider>
   );
 }
