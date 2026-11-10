@@ -23,14 +23,14 @@ describe('ProviderContainer', () => {
 
     it('all 12 providers are present', () => {
       for (const name of ALL_PROVIDER_NAMES) {
-        const p = (container as unknown as Record<string, { name: string }>)[name];
+        const p = (container as unknown as Record<string, { name: string }>)[name]!;
         expect(p.name).toBe(name);
       }
     });
 
     it('all providers are in mock mode', () => {
       for (const name of ALL_PROVIDER_NAMES) {
-        const p = (container as unknown as Record<string, { mode: string }>)[name];
+        const p = (container as unknown as Record<string, { mode: string }>)[name]!;
         expect(p.mode).toBe('mock');
       }
     });
