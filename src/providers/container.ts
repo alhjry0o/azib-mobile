@@ -1,9 +1,5 @@
-// ProviderContainer — dependency injection for the 12 providers.
-// Chooses mock adapters in demo mode, NotConnected stubs in backend mode
-// (until the real backend adapters land in P18).
-// Populates the IntegrationRegistry on creation.
-
 import type { AppEnv } from '@/config/env';
+import { createRepositoryContainer, type RepositoryContainer } from '@/repositories';
 
 import type {
   AiProvider,
@@ -66,7 +62,7 @@ export interface ProviderContainer {
   readonly ai: AiProvider;
   readonly content: ContentProvider;
   readonly registry: IntegrationRegistry;
-  /** Runs healthCheck() on all providers and updates the registry. */
+  readonly repositories: RepositoryContainer;
   healthCheckAll(): Promise<void>;
 }
 
@@ -81,7 +77,7 @@ export function createProviderContainer(options: CreateContainerOptions): Provid
   const mockConfig = withConfig(options.mockConfig);
 
   if (options.mode === 'demo') {
-    return Object.freeze(buildDemoContainer(registry, mockConfig));
+    return Object.freeze(buildDemoContainer(registry, mockConfig, options.env));
   }
   return Object.freeze(buildBackendContainer(registry, options.env));
 }
@@ -89,6 +85,7 @@ export function createProviderContainer(options: CreateContainerOptions): Provid
 function buildDemoContainer(
   registry: IntegrationRegistry,
   mockConfig: MockProviderConfig,
+  env: AppEnv,
 ): ProviderContainer {
   const auth = createMockAuthProvider(mockConfig);
   const database = createMockDatabaseProvider(mockConfig);
@@ -102,6 +99,7 @@ function buildDemoContainer(
   const search = createMockSearchProvider(mockConfig);
   const ai = createMockAiProvider(mockConfig);
   const content = createMockContentProvider(mockConfig);
+  const repositories = createRepositoryContainer({ mode: 'demo', env });
 
   for (const name of [
     'auth',
@@ -135,6 +133,7 @@ function buildDemoContainer(
     ai,
     content,
     registry,
+    repositories,
     async healthCheckAll(): Promise<void> {
       for (const p of [
         auth,
@@ -173,6 +172,7 @@ function buildBackendContainer(
   const search = createNotConnectedSearchProvider();
   const ai = createNotConnectedAiProvider();
   const content = createNotConnectedContentProvider();
+  const repositories = createRepositoryContainer({ mode: 'backend', env });
 
   const status = env.isSupabaseConfigured ? 'configured' : 'disabled';
   for (const name of [
@@ -207,6 +207,7 @@ function buildBackendContainer(
     ai,
     content,
     registry,
+    repositories,
     async healthCheckAll(): Promise<void> {
       for (const p of [
         auth,
