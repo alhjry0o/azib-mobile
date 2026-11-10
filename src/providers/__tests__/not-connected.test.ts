@@ -39,7 +39,7 @@ describe('NotConnected provider stubs', () => {
       const provider = (factories as Record<string, () => unknown>)[name]?.() as {
         name: string;
         mode: string;
-        capabilities: ReadonlyArray<string>;
+        capabilities: readonly string[];
         healthCheck: () => Promise<{ status: string }>;
       };
 
