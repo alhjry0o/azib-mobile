@@ -23,15 +23,15 @@ describe('ProviderContainer', () => {
 
     it('all 12 providers are present', () => {
       for (const name of ALL_PROVIDER_NAMES) {
-        const p = (container as unknown as Record<string, { name: string }>)[name]!;
-        expect(p.name).toBe(name);
+        const p = (container as unknown as Record<string, { name: string }>)[name];
+        expect(p!.name).toBe(name);
       }
     });
 
     it('all providers are in mock mode', () => {
       for (const name of ALL_PROVIDER_NAMES) {
-        const p = (container as unknown as Record<string, { mode: string }>)[name]!;
-        expect(p.mode).toBe('mock');
+        const p = (container as unknown as Record<string, { mode: string }>)[name];
+        expect(p!.mode).toBe('mock');
       }
     });
 
@@ -42,10 +42,7 @@ describe('ProviderContainer', () => {
     });
 
     it('auth works end-to-end', async () => {
-      const r = await container.auth.signIn({
-        email: 'demo@example.com',
-        password: 'x',
-      });
+      const r = await container.auth.signIn({ email: 'demo@example.com', password: 'x' });
       expect(r.ok).toBe(true);
     });
 
@@ -54,6 +51,26 @@ describe('ProviderContainer', () => {
       for (const name of ALL_PROVIDER_NAMES) {
         expect(container.registry.get(name).status).toBe('connected');
       }
+    });
+
+    it('repositories is in demo mode', () => {
+      expect(container.repositories.mode).toBe('demo');
+    });
+
+    it('repositories.profiles works (fully implemented)', async () => {
+      const r = await container.repositories.profiles.create({
+        userId: 'u1',
+        displayName: 'Test',
+        gender: 'male',
+        maritalStatus: 'single',
+      });
+      expect(r.ok).toBe(true);
+    });
+
+    it('repositories.donations is a stub (NotConnected)', async () => {
+      const r = await container.repositories.donations.list();
+      expect(r.ok).toBe(false);
+      if (!r.ok) expect(r.error.kind).toBe('NotConnected');
     });
   });
 
@@ -65,10 +82,7 @@ describe('ProviderContainer', () => {
     });
 
     it('all providers are NotConnected stubs', async () => {
-      const r = await container.auth.signIn({
-        email: 'x@y.z',
-        password: 'p',
-      });
+      const r = await container.auth.signIn({ email: 'x@y.z', password: 'p' });
       expect(r.ok).toBe(false);
       if (!r.ok) expect(r.error.kind).toBe('NotConnected');
     });
@@ -85,6 +99,10 @@ describe('ProviderContainer', () => {
         expect(container.registry.get(name).status).toBe('error');
       }
     });
+
+    it('repositories is in backend mode', () => {
+      expect(container.repositories.mode).toBe('backend');
+    });
   });
 
   describe('backend mode without Supabase env', () => {
@@ -97,11 +115,7 @@ describe('ProviderContainer', () => {
     });
 
     it('errors are AppError.NotConnected, not crashes', async () => {
-      const r = await container.email.send({
-        to: 'a@b.c',
-        subject: 's',
-        body: 'b',
-      });
+      const r = await container.email.send({ to: 'a@b.c', subject: 's', body: 'b' });
       expect(r.ok).toBe(false);
       if (!r.ok) {
         expect(r.error).toBeInstanceOf(AppError);
