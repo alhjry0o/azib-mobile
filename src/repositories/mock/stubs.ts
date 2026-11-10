@@ -38,7 +38,7 @@ export function createStubDonationRepository(): DonationRepository {
     list: nc('donations.list'),
     listByDonor: nc('donations.listByDonor'),
     create: nc('donations.create'),
-  });
+  }) as unknown as DonationRepository;
 }
 
 export function createStubDisbursementRepository(): DisbursementRepository {
@@ -47,7 +47,7 @@ export function createStubDisbursementRepository(): DisbursementRepository {
     list: nc('disbursements.list'),
     listByApplication: nc('disbursements.listByApplication'),
     create: nc('disbursements.create'),
-  });
+  }) as unknown as DisbursementRepository;
 }
 
 export function createStubWeddingRepository(): WeddingRepository {
@@ -57,7 +57,7 @@ export function createStubWeddingRepository(): WeddingRepository {
     create: nc('weddings.create'),
     update: nc('weddings.update'),
     delete: nc('weddings.delete'),
-  });
+  }) as unknown as WeddingRepository;
 }
 
 export function createStubPartnerRepository(): PartnerRepository {
@@ -67,7 +67,7 @@ export function createStubPartnerRepository(): PartnerRepository {
     create: nc('partners.create'),
     update: nc('partners.update'),
     delete: nc('partners.delete'),
-  });
+  }) as unknown as PartnerRepository;
 }
 
 export function createStubOfferRepository(): OfferRepository {
@@ -77,7 +77,7 @@ export function createStubOfferRepository(): OfferRepository {
     create: nc('offers.create'),
     update: nc('offers.update'),
     delete: nc('offers.delete'),
-  });
+  }) as unknown as OfferRepository;
 }
 
 export function createStubSoukRepository(): SoukRepository {
@@ -87,7 +87,7 @@ export function createStubSoukRepository(): SoukRepository {
     create: nc('souk.create'),
     update: nc('souk.update'),
     delete: nc('souk.delete'),
-  });
+  }) as unknown as SoukRepository;
 }
 
 export function createStubJobRepository(): JobRepository {
@@ -97,7 +97,7 @@ export function createStubJobRepository(): JobRepository {
     create: nc('jobs.create'),
     update: nc('jobs.update'),
     delete: nc('jobs.delete'),
-  });
+  }) as unknown as JobRepository;
 }
 
 export function createStubVolunteerRepository(): VolunteerRepository {
@@ -107,7 +107,7 @@ export function createStubVolunteerRepository(): VolunteerRepository {
     create: nc('volunteers.create'),
     update: nc('volunteers.update'),
     delete: nc('volunteers.delete'),
-  });
+  }) as unknown as VolunteerRepository;
 }
 
 export function createStubContentRepository(): ContentRepository {
@@ -115,7 +115,7 @@ export function createStubContentRepository(): ContentRepository {
     getById: nc('content.getById'),
     getBySlug: nc('content.getBySlug'),
     list: nc('content.list'),
-  });
+  }) as unknown as ContentRepository;
 }
 
 export function createStubNotificationRepository(): NotificationRepository {
@@ -124,13 +124,13 @@ export function createStubNotificationRepository(): NotificationRepository {
     list: nc('notifications.list'),
     markRead: nc('notifications.markRead'),
     delete: nc('notifications.delete'),
-  });
+  }) as unknown as NotificationRepository;
 }
 
 export function createStubSearchRepository(): SearchRepository {
   return Object.freeze({
     search: nc('search.search'),
-  });
+  }) as unknown as SearchRepository;
 }
 
 export function createStubAuditRepository(): AuditRepository {
@@ -138,14 +138,14 @@ export function createStubAuditRepository(): AuditRepository {
     getById: nc('audit.getById'),
     list: nc('audit.list'),
     append: nc('audit.append'),
-  });
+  }) as unknown as AuditRepository;
 }
 
 export function createStubSettingsRepository(): SettingsRepository {
   return Object.freeze({
     get: nc('settings.get'),
     update: nc('settings.update'),
-  });
+  }) as unknown as SettingsRepository;
 }
 
 // Keep the unused import references for TypeScript to verify the stub shapes.
