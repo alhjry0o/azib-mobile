@@ -186,6 +186,3 @@ export function createNotConnectedContentProvider(): ContentProvider {
     listArticles: () => nc<ReadonlyArray<ContentArticle>>('content.listArticles'),
   });
 }
-
-// PlaceResult is imported for type-checking above; keep the reference to avoid unused import.
-void ({} as PlaceResult);
