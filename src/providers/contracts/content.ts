@@ -21,7 +21,7 @@ export interface ContentArticle {
   readonly titleKey: string;
   /** i18n key for the body (not literal text). */
   readonly bodyKey: string;
-  readonly blocks?: ReadonlyArray<ContentBlock>;
+  readonly blocks?: readonly ContentBlock;
 }
 
 export interface ContentProvider extends ProviderBase {
