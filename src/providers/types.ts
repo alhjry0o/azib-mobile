@@ -45,7 +45,7 @@ export interface ProviderBase {
    * Names of the methods this provider exposes beyond ProviderBase.
    * Must be a subset of Object.keys(provider). Verified by tests.
    */
-  readonly capabilities: ReadonlyArray<string>;
+  readonly capabilities: readonly string[];
   healthCheck(): Promise<HealthCheckResult>;
 }
 
@@ -56,7 +56,7 @@ export interface IntegrationRecord {
   readonly lastCheckedAt?: number;
 }
 
-export const ALL_PROVIDER_NAMES: ReadonlyArray<ProviderName> = [
+export const ALL_PROVIDER_NAMES: readonly ProviderName[] = [
   'auth',
   'database',
   'storage',
