@@ -61,7 +61,7 @@ export class IntegrationRegistry {
     return r;
   }
 
-  list(): ReadonlyArray<IntegrationRecord> {
+  list(): readonly IntegrationRecord[] {
     return ALL_PROVIDER_NAMES.map((n) => this.get(n));
   }
 
