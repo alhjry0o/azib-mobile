@@ -21,11 +21,11 @@ export interface ContentArticle {
   readonly titleKey: string;
   /** i18n key for the body (not literal text). */
   readonly bodyKey: string;
-  readonly blocks?: readonly ContentBlock;
+  readonly blocks?: readonly ContentBlock[];
 }
 
 export interface ContentProvider extends ProviderBase {
   readonly name: 'content';
   getArticleBySlug(slug: string): Promise<Result<ContentArticle | null>>;
-  listArticles(): Promise<Result<readonly<ContentArticle>>>;
+  listArticles(): Promise<Result<readonly ContentArticle[]>>;
 }
