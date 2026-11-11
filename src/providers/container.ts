@@ -99,7 +99,11 @@ function buildDemoContainer(
   const search = createMockSearchProvider(mockConfig);
   const ai = createMockAiProvider(mockConfig);
   const content = createMockContentProvider(mockConfig);
-  const repositories = createRepositoryContainer({ mode: 'demo', env });
+  const repositories = createRepositoryContainer({
+    mode: 'demo',
+    env,
+    searchProvider: search,
+  });
 
   for (const name of [
     'auth',
@@ -172,7 +176,11 @@ function buildBackendContainer(
   const search = createNotConnectedSearchProvider();
   const ai = createNotConnectedAiProvider();
   const content = createNotConnectedContentProvider();
-  const repositories = createRepositoryContainer({ mode: 'backend', env });
+  const repositories = createRepositoryContainer({
+    mode: 'backend',
+    env,
+    searchProvider: search,
+  });
 
   const status = env.isSupabaseConfigured ? 'configured' : 'disabled';
   for (const name of [
