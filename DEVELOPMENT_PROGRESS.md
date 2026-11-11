@@ -12,7 +12,7 @@
 |---|---------|--------|----------------|---------|
 | P01 | Requirements, Architecture & Agent Governance | Done | 2026-11-08 | وثائق فقط. | (`AGENT_RULES.md §6`). |
 | P02 | Init (Expo + TS strict + ESLint + Jest + i18n + بنية) | Done | 2026-11-09 | Expo SDK 58، React 19.3، RN 0.88.1، Node 26، ESLint 9. CI أخضر 2026-11-09. |
-| P03 | Core Platform (Types, Provider Abstraction, Errors, Env) | Not Started | — | لا كود خادم قبل عقد Provider واضح. |
+| P03 | Core Platform (Types, Provider Abstraction, Errors, Env, i18n, Repos, Seed) | Done | 2026-11-12 | 12 providers, 16 repos, seed, components, ARCHITECTURE. |
 | P04 | Design System (Royal Black / Purple / Mustard, Qamariya, 3D ثلاث طبقات) | Not Started | — | يستهلك توكنز فقط، لا قيم Hardcoded. |
 | P05 | Shell + Onboarding | Not Started | — | RTL أولاً، Logical Properties فقط. |
 | P06 | Auth / Profile / Settings / Legal | Not Started | — | التزام بسياسة الخصوصية وحقوق الأدوار. |
