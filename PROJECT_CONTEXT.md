@@ -3,7 +3,7 @@
 > هذا الملف يُقرأ في بداية كل مرحلة. يُحدَّث في نهاية كل مرحلة قبل إعلانها Done.
 > **عام المستودع:** لا أسرار، لا بيانات شخصية حقيقية.
 
-آخر تحديث: P02 — Project Init & Development Environment (مغلق نهائياً — 2026-11-09).
+آخر تحديث: P03 — Core Platform Layer (مغلق — 2026-11-12).
 ---
 
 ## 1) القرارات التقنية
@@ -72,6 +72,7 @@ azib-mobile/
 │ └─ index.tsx
 ├─ src/
 │ ├─ lib/ # Small internal helpers (i18n stub, etc.)
+│ ├─ components/          # Shared presentational components
 │ │ ├─ i18n.ts
 │ │ └─ __tests__/
 │ ├─ locales/ # Translation JSON (only place allowed for Arabic text)
@@ -94,6 +95,7 @@ azib-mobile/
 │ └─ core/ # Cross-cutting primitives
 ├─ tests/tests/ # Cross-cutting tests (scripts, tooling)
 ├─ mocks/ # Shared test mocks / fixtures
+│  └─ seed/                # Demo seed bundle (dataOrigin='demo')
 ├─ supabase/ # Migrations + RLS + pgTAP (P18)
 ├─ scripts/ # Dev & lint scripts
 ├─ assets/images/ # Placeholder icons (P04 replaces)
@@ -121,15 +123,22 @@ azib-mobile/
 | 2 | السياق الدائم (PROJECT_CONTEXT, DEVELOPMENT_PROGRESS, README) | P01 | جاهزة للتحديث مع كل مرحلة. |
 | 3 | مشروع Expo SDK 58 (TS strict, ESLint, Jest, i18n stub, CI) | P02 | CI أخضر 2026-11-09. |
 | 4 | شاشة Index مؤقتة تعرض `t('common.appName')` | P02 | تُستبدل في P05. |
+| 5 | Core Platform Layer (Result, AppError, logger, env, AppMode store) | P03 | يستهلكه كل ما بعده. |
+| 6 | 12 Provider contracts + NotConnected stubs + Registry | P03 | ADR-0005/0006 محققة. |
+| 7 | 12 Mock adapters + ProviderContainer | P03 | `dataOrigin='demo'` على كل سجل. |
+| 8 | 16 Repository contracts + mocks + Contract tests | P03 | جاهزة للاستبدال بـSupabase في P18. |
+| 9 | i18n كامل (i18next, formatters, RTL) + 14 namespace | P03 | استبدل الـstub من P02. |
+| 10 | Demo seed framework + DemoBadge + NotConnectedScreen | P03 | populator يغطي 13/16. |
+| 11 | `docs/ARCHITECTURE.md` | P03 | يوثّق كل ما سبق. |
 > لا شيء آخر مكتمل. أي جدول آخر يكون فارغاً حتى المرحلة المعنية.
 
 ---
 
 ## 5) غير المكتملة
 
-- ابتداءً من **P03 (Core Platform)** حتى **P24 (Final Integration)**.
-- لا يوجد Provider Abstraction فعلي، لا Zustand stores، لا i18next (النظام الحالي بديل مؤقت).
-- لا قاعدة بيانات، لا RLS، لا تكاملات خارجية.
+- ابتداءً من **P04 (Design System)** حتى **P24 (Final Integration)**.
+- P18 سيستبدل mocks بـSupabase adapters في backend mode.
+- P05 سيضيف Developer Settings لتبديل AppMode + عرض IntegrationRegistry.
 
 ---
 
@@ -163,10 +172,12 @@ azib-mobile/
 | 8 | `tsconfig.types = ["jest","node"]` | إن أُضيفت بيئات اختبار جديدة تُحدَّث القائمة | Accepted | إعداد داخلي، لا ADR. |
 | 9 | `prettier` غير مثبت رغم وجود سكربتَي `format`/`format:check` | `npm run format` و`npm run format:check` سيفشلان | Open | يُضاف في P03/P04. CI لا يشغّلهما حالياً. |
 | 10 | `@testing-library/react-native` و`react-test-renderer` غير مثبتين | اختبارات مكوّنات React غير ممكنة | Open | يُضافان مع أول اختبار مكوّن في P04/P05. |
+| 11 | `populateDemoSeed` لا يغطي content/notifications/search | تحتاج factory param غير موجود | Open | تُضاف في P05 عبر `createRepositoryContainer({ seedBundle })`. |
+| 12 | backend mode يستخدم mocks للـ16 repo حتى P18 | بيانات demo في وضع backend | Accepted | يُصحَّح في P18 (Supabase-backed). |
+| 13 | `@testing-library/react-native` + `react-test-renderer` غير مثبتين | لا اختبار مكوّنات | Open | يُضافان مع أول اختبار مكوّن في P04. |
+| 14 | لا Developer Settings UI بعد | لا يمكن تبديل AppMode من الواجهة | Open | P05. |
 
 ## 9) الخطوة التالية
 
-**P03 — Core Platform:** بانتظار برومبت المرحلة التفصيلي من المالك. النطاق المتوقع (وفق HRD): أنواع مشتركة، عقد Provider Abstraction، نموذج الأخطاء (`src/core/errors`)، وحدة إعداد بيئي (`src/config/env`) تقرأ `EXPO_PUBLIC_*` مع تحقق Zod، تفعيل i18next الحقيقي مع `ar` و`forceRTL`، أول Zustand store، وأول hooks مشتركة — دون أي اتصال فعلي بـ Supabase.
-
-**قبل بدء P03:** تثبيت `prettier` (فجوة §8 #9) لتفعيل سكربتَي `format`/`format:check` — قرار يُتخذ في P03.
+**P04 — Design System:** توكنز الثيم (Royal Black / Royal Purple / Electric / Mustard / Soft Gold)، مكوّنات أساسية (Button, Card, Input, Typography)، motif القمريات + الحلقتين المتداخلتين، 3 طبقات (Background/Parallax/Foreground)، مكوّنات تُستهلك i18n وRTL فقط. لا شاشات ميزات.
 
