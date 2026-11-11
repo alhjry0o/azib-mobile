@@ -1,4 +1,5 @@
 import type { AppEnv } from '@/config/env';
+import type { SearchProvider } from '@/providers/contracts';
 
 import type {
   ApplicationRepository,
@@ -20,21 +21,21 @@ import type {
 } from './contracts';
 import {
   createMockApplicationRepository,
+  createMockAuditRepository,
+  createMockContentRepository,
+  createMockDisbursementRepository,
+  createMockDonationRepository,
   createMockJobRepository,
+  createMockNotificationRepository,
   createMockOfferRepository,
   createMockPartnerRepository,
   createMockProfileRepository,
   createMockProgramRepository,
+  createMockSearchRepository,
+  createMockSettingsRepository,
   createMockSoukRepository,
   createMockVolunteerRepository,
   createMockWeddingRepository,
-  createStubAuditRepository,
-  createStubContentRepository,
-  createStubDisbursementRepository,
-  createStubDonationRepository,
-  createStubNotificationRepository,
-  createStubSearchRepository,
-  createStubSettingsRepository,
   type MockRepositoryOptions,
 } from './mock';
 
@@ -64,57 +65,41 @@ export interface CreateRepositoryContainerOptions {
   readonly mode: RepositoryMode;
   readonly env: AppEnv;
   readonly mockOptions?: MockRepositoryOptions;
+  /** SearchProvider used by SearchRepository (delegation, no duplication). */
+  readonly searchProvider: SearchProvider;
 }
 
 export function createRepositoryContainer(
   options: CreateRepositoryContainerOptions,
 ): RepositoryContainer {
   if (options.mode === 'demo') {
-    return Object.freeze(buildDemoRepositories(options.mockOptions));
+    return Object.freeze(buildRepositories('demo', options.mockOptions, options.searchProvider));
   }
-  return Object.freeze(buildBackendRepositories());
+  return Object.freeze(buildRepositories('backend', undefined, options.searchProvider));
 }
 
-function buildDemoRepositories(mockOptions?: MockRepositoryOptions): RepositoryContainer {
+function buildRepositories(
+  mode: RepositoryMode,
+  mockOptions: MockRepositoryOptions | undefined,
+  searchProvider: SearchProvider,
+): RepositoryContainer {
   return {
-    mode: 'demo',
+    mode,
     profiles: createMockProfileRepository(mockOptions),
     applications: createMockApplicationRepository(mockOptions),
     programs: createMockProgramRepository(mockOptions),
-    donations: createStubDonationRepository(),
-    disbursements: createStubDisbursementRepository(),
+    donations: createMockDonationRepository(mockOptions),
+    disbursements: createMockDisbursementRepository(mockOptions),
     weddings: createMockWeddingRepository(mockOptions),
     partners: createMockPartnerRepository(mockOptions),
     offers: createMockOfferRepository(mockOptions),
     souk: createMockSoukRepository(mockOptions),
     jobs: createMockJobRepository(mockOptions),
     volunteers: createMockVolunteerRepository(mockOptions),
-    content: createStubContentRepository(),
-    notifications: createStubNotificationRepository(),
-    search: createStubSearchRepository(),
-    audit: createStubAuditRepository(),
-    settings: createStubSettingsRepository(),
-  };
-}
-
-function buildBackendRepositories(): RepositoryContainer {
-  return {
-    mode: 'backend',
-    profiles: createMockProfileRepository(),
-    applications: createMockApplicationRepository(),
-    programs: createMockProgramRepository(),
-    donations: createStubDonationRepository(),
-    disbursements: createStubDisbursementRepository(),
-    weddings: createMockWeddingRepository(),
-    partners: createMockPartnerRepository(),
-    offers: createMockOfferRepository(),
-    souk: createMockSoukRepository(),
-    jobs: createMockJobRepository(),
-    volunteers: createMockVolunteerRepository(),
-    content: createStubContentRepository(),
-    notifications: createStubNotificationRepository(),
-    search: createStubSearchRepository(),
-    audit: createStubAuditRepository(),
-    settings: createStubSettingsRepository(),
+    content: createMockContentRepository(mockOptions),
+    notifications: createMockNotificationRepository(mockOptions),
+    search: createMockSearchRepository(searchProvider),
+    audit: createMockAuditRepository(mockOptions),
+    settings: createMockSettingsRepository(mockOptions),
   };
 }
