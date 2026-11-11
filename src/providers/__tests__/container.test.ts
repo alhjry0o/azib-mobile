@@ -67,7 +67,57 @@ describe('ProviderContainer', () => {
       expect(r.ok).toBe(true);
     });
 
-    it('repositories.donations is a stub (NotConnected)', async () => {
+    it('repositories.weddings works (fully implemented)', async () => {
+      const r = await container.repositories.weddings.create({
+        titleKey: 'weddings.test',
+        scheduledDate: '2026-12-01T10:00:00.000Z',
+        capacity: 50,
+      });
+      expect(r.ok).toBe(true);
+    });
+
+    it('repositories.partners works (fully implemented)', async () => {
+      const r = await container.repositories.partners.create({
+        displayName: 'Test Partner',
+        category: 'test',
+      });
+      expect(r.ok).toBe(true);
+    });
+
+    it('repositories.offers works (fully implemented)', async () => {
+      const r = await container.repositories.offers.create({
+        partnerId: 'p1',
+        titleKey: 'offers.test',
+        discountPercent: 10,
+      });
+      expect(r.ok).toBe(true);
+    });
+
+    it('repositories.souk works (fully implemented)', async () => {
+      const r = await container.repositories.souk.create({
+        titleKey: 'souk.test',
+        category: 'furniture',
+      });
+      expect(r.ok).toBe(true);
+    });
+
+    it('repositories.jobs works (fully implemented)', async () => {
+      const r = await container.repositories.jobs.create({
+        titleKey: 'jobs.test',
+        partnerId: 'p1',
+      });
+      expect(r.ok).toBe(true);
+    });
+
+    it('repositories.volunteers works (fully implemented)', async () => {
+      const r = await container.repositories.volunteers.create({
+        userId: 'u1',
+        skillKey: 'skills.test',
+      });
+      expect(r.ok).toBe(true);
+    });
+
+    it('repositories.donations is still a stub (NotConnected)', async () => {
       const r = await container.repositories.donations.list();
       expect(r.ok).toBe(false);
       if (!r.ok) expect(r.error.kind).toBe('NotConnected');
