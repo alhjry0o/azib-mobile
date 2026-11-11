@@ -8,3 +8,7 @@ export * from './offer';
 export * from './souk';
 export * from './job';
 export * from './volunteer';
+export * from './donation';
+export * from './disbursement';
+export * from './audit';
+export * from './settings';
