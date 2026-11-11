@@ -51,7 +51,6 @@
 - [x] لا كود تطبيق في P01.
 - [x] تأكيد المستخدم بتشغيل أوامر التحقق (بتاريخ 2026-11-8).
 
----
 
 ## قائمة تحقق P02 (تفصيل)
 
@@ -72,6 +71,55 @@
 - [ ] `prettier` غير مثبت رغم وجود سكربتَي `format`/`format:check` — يُضاف في P03/P04 (موثَّق في `PROJECT_CONTEXT §8 #9`).
 - [ ] `@testing-library/react-native` + `react-test-renderer` غير مثبتين — يُضافان مع أول اختبار مكوّن (موثَّق في `PROJECT_CONTEXT §8 #10`).
 - [x] `Expo Doctor` مُفعَّل في CI (بعد `Install`، قبل `Audit`).
+
+
+## قائمة تحقق P03 (تفصيل)
+
+### Core
+- [x] `Result<T, E>` + `AppError` (8 kinds) + `toAppError` + `logger` مع redaction.
+- [x] `env` محقق بـZod مع فشل مبكر.
+- [x] `useAppModeStore` (demo | backend) مع persist.
+
+### i18n
+- [x] i18next + react-i18next + expo-localization.
+- [x] 14 namespaces ar/en (28 JSON).
+- [x] Formatters (number/currency YER/date/percent) مع `Intl` + fallback.
+- [x] RTL helpers + `I18nManager.allowRTL`.
+- [x] Plurals عربية (6 صيغ).
+- [x] استبدال `src/lib/i18n.ts` القديم.
+
+### Providers
+- [x] 12 contracts + NotConnected stubs.
+- [x] 12 Mock adapters (dataOrigin='demo').
+- [x] `IntegrationRegistry` (5 status).
+- [x] `ProviderContainer` مع demo/backend mode.
+- [x] `ProviderContainerProvider` في `app/_layout.tsx`.
+- [x] `PaymentProvider` مطابق ADR-0005 (لا دفع فعلي).
+- [x] `AiProvider` مطابق ADR-0006 (`advisory: true` دائماً).
+
+### Repositories
+- [x] 16 contracts (CRUD/ReadOnly/AppendOnly).
+- [x] 16 Mocks (13 backend mode يُستخدمون مؤقتاً حتى P18).
+- [x] `createMockCrudRepository` generic factory (6 repos).
+- [x] Contract tests (`crud.contract`, `append-only.contract`, +3 متخصصة).
+- [x] `RepositoryContainer` مع `searchProvider` injection.
+- [x] حذف `stubs.ts` و`stubs.test.ts`.
+
+### Seed & Components
+- [x] 15 مجموعة seed بـ`dataOrigin='demo'`, لا PII حقيقي.
+- [x] `populateDemoSeed(container)` (13/16).
+- [x] `DemoBadge` + `NotConnectedScreen` (i18n + logical props).
+- [x] seed tests: PII, uniqueness, ISO, i18n keys.
+
+### Documentation
+- [x] `docs/ARCHITECTURE.md`.
+- [x] تحديث `PROJECT_CONTEXT.md` (§3, §4, §5, §8, §9).
+- [x] تحديث `DEVELOPMENT_PROGRESS.md`.
+- [x] تحديث `README.md`.
+
+### CI
+- [x] CI أخضر بعد كل جزء (بتقريرك).
+
 ---
 ## القرارات البشرية المفتوحة (Blockers محتملة)
 
