@@ -39,7 +39,7 @@ describe('MockSearchRepository', () => {
   });
 
   it('propagates provider errors', async () => {
-    const provider = createMockSearchProvider({ forceError: 'Network' });
+    const provider = createMockSearchProvider({ delayMs: 0, forceError: 'Network' });
     const repo = createMockSearchRepository(provider);
     const r = await repo.search('anything');
     expect(r.ok).toBe(false);
