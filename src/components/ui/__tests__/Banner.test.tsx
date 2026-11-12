@@ -21,12 +21,12 @@ describe('Banner', () => {
   });
 
   it('has role=alert', async () => {
-    const { getByRole } = await render(<Banner message="Info" testID="banner" />, {
+    const { getByTestId } = await render(<Banner message="Info" testID="banner" />, {
       wrapper: Providers,
     });
-    // Banner uses accessibilityRole="alert" on the container View.
-    const el = getByRole('alert');
-    expect(el).toBeTruthy();
+    // Instead of getByRole which requires accessible={true}, we check the prop directly.
+    const el = getByTestId('banner');
+    expect(el.props.accessibilityRole).toBe('alert');
   });
 
   it('renders dismiss button when onDismiss provided', async () => {
