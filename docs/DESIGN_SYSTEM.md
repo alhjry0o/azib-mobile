@@ -7,13 +7,14 @@
 
 | Part | Content | Status |
 |------|---------|--------|
-| 1 | Tokens (colors, typography, spacing, radius, shadows, motion), ThemeProvider, hooks, contrast utility | **Done** |
-| 2 | Icon wrapper, Text, Screen, Button (6 variants × 6 states) | **Done** |
-| 3 | Form components (Input, Search, Select, Phone, OTP, DatePicker, Textarea, Switch, Checkbox, Radio, Chip) | Pending |
-| 4 | Feedback & Overlay (Toast, Dialog, BottomSheet, Tabs, SegmentedControl, Badge, Banner, Card) | Pending |
-| 5 | Brand + 3D (ArchHero, QamariyaPattern, DoubleRing, GlowView, GlassView, Hero3D) | Pending |
-| 6 | Utility (Avatar, ProgressBar, RingProgress, Skeleton, EmptyState, ErrorState, NotConnectedState, ListItem, SectionHeader, Stepper, Divider) | Pending |
-| 7 | Full usage rules, tier matrix, do/don't, closing | Pending |
+| 1 | Tokens, ThemeProvider, hooks, contrast utility | **Done** |
+| 2 | Icon, Text, Screen, Button | **Done** |
+| 3a | Field, TextInput, Textarea, Search, Switch, Checkbox, Radio, Chip, PhoneInput | **Done** |
+| 3b | Select, OTPInput, DatePicker | Pending |
+| 4 | Feedback & Overlay | Pending |
+| 5 | Brand + 3D | Pending |
+| 6 | Utility | Pending |
+| 7 | Full rules & closing | Pending |
 
 ## Tokens (Part 1 — done)
 
