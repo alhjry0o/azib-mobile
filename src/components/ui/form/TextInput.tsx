@@ -36,6 +36,7 @@ export interface TextInputProps extends Omit<RNTextInputProps, 'style'> {
   readonly disabled?: boolean;
   readonly fullWidth?: boolean;
   readonly containerStyle?: StyleProp<ViewStyle>;
+  readonly inputStyle?: StyleProp<TextStyle>;
   readonly testID?: string;
 }
 
