@@ -21,8 +21,14 @@ export const Textarea = forwardRef<RNTextInput, TextareaProps>(function Textarea
       {...rest}
       multiline
       textAlignVertical="top"
-      containerStyle={[{ height: undefined, minHeight }, rest.containerStyle]}
-      style={{ minHeight: minHeight - theme.spacing[6] }}
+      containerStyle={[
+        { height: undefined, minHeight, alignItems: 'flex-start' },
+        rest.containerStyle,
+      ]}
+      inputStyle={[
+        { minHeight: minHeight - theme.spacing[4], paddingTop: theme.spacing[3] },
+        rest.inputStyle,
+      ]}
     />
   );
 });
