@@ -42,7 +42,7 @@
 
 | # | المجموعة | المصدر | الرخصة | تاريخ |
 |---|-----------|--------|--------|-------|
-| 1 | Lucide (React Native) | lucide-react-native | ISC (permissive) | Pending install in Part 2 |
+| 1 | Lucide (React Native) | lucide-react-native | ISC (permissive) | 2026-11-12 (Part 2) |
 | 2 | Qamariya, DoubleRing (custom SVG) | Internal design (AZIB) | Proprietary (AZIB) | 2026-11-12 (to be created in Part 5) |
 
 ---
