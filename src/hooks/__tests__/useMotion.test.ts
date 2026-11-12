@@ -1,4 +1,4 @@
-import { renderHook, waitFor, act } from '@testing-library/react-native';
+import { renderHook, waitFor } from '@testing-library/react-native';
 import { AccessibilityInfo } from 'react-native';
 
 import { useMotion } from '../useMotion';
@@ -26,7 +26,6 @@ describe('useMotion', () => {
   });
 
   it('starts with reduceMotion=false and enabled=true', async () => {
-    // renderHook is async in new testing-library versions. We await it.
     const { result } = await renderHook(() => useMotion());
     await waitFor(() => expect(result.current.enabled).toBe(true));
     expect(result.current.reduceMotion).toBe(false);
@@ -48,7 +47,10 @@ describe('useMotion', () => {
   it('subscribes and cleans up the listener', async () => {
     const { unmount } = await renderHook(() => useMotion());
     await waitFor(() => expect(addEventListenerSpy).toHaveBeenCalled());
-    unmount();
+    
+    // هنا الإصلاح: يجب أن ننتظر unmount لأنها أصبحت غير متزامنة
+    await unmount(); 
+    
     expect(removeListener).toHaveBeenCalled();
   });
 
