@@ -10,7 +10,7 @@
 | 1 | Tokens, ThemeProvider, hooks, contrast utility | **Done** |
 | 2 | Icon, Text, Screen, Button | **Done** |
 | 3a | Field, TextInput, Textarea, Search, Switch, Checkbox, Radio, Chip, PhoneInput | **Done** |
-| 3b | Select, OTPInput, DatePicker | Pending |
+| 3b | Select, OTPInput, DatePicker | **Done** |
 | 4 | Feedback & Overlay | Pending |
 | 5 | Brand + 3D | Pending |
 | 6 | Utility | Pending |
