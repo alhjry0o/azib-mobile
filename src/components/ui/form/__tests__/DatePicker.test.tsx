@@ -20,31 +20,32 @@ describe('DatePicker', () => {
   });
 
   it('opens calendar modal on press', async () => {
-    const { getByTestId, getByText } = await render(
+    const { getByTestId, findByText } = await render(
       <DatePicker value={null} onChange={() => {}} placeholder="Pick" testID="dp" />,
       { wrapper: Providers },
     );
     fireEvent.press(getByTestId('dp'));
-    expect(getByText('Today')).toBeTruthy();
-    expect(getByText('Clear')).toBeTruthy();
+    
+    // Await the modal buttons to appear
+    expect(await findByText('Today')).toBeTruthy();
+    expect(await findByText('Clear')).toBeTruthy();
   });
 
   it('selects a date and calls onChange', async () => {
     const onChange = jest.fn();
-    const { getByTestId, getAllByRole } = await render(
-      <DatePicker
-        value={new Date(2026, 0, 1)}
-        onChange={onChange}
-        testID="dp"
-      />,
+    const { getByTestId, findAllByRole } = await render(
+      <DatePicker value={new Date(2026, 0, 1)} onChange={onChange} testID="dp" />,
       { wrapper: Providers },
     );
     fireEvent.press(getByTestId('dp'));
-    // Day buttons include aria-label like "2026-01-XX"; pressing one calls onChange.
-    const dayButtons = getAllByRole('button').filter((b) => {
+    
+    // Await all buttons to be rendered in the modal
+    const buttons = await findAllByRole('button');
+    const dayButtons = buttons.filter((b) => {
       const label = b.props.accessibilityLabel;
       return typeof label === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(label);
     });
+    
     expect(dayButtons.length).toBeGreaterThan(0);
     fireEvent.press(dayButtons[0]!);
     expect(onChange).toHaveBeenCalled();
@@ -52,12 +53,13 @@ describe('DatePicker', () => {
 
   it('calls onChange(null) when Clear pressed', async () => {
     const onChange = jest.fn();
-    const { getByTestId, getByText } = await render(
+    const { getByTestId, findByText } = await render(
       <DatePicker value={new Date(2026, 0, 15)} onChange={onChange} testID="dp" />,
       { wrapper: Providers },
     );
     fireEvent.press(getByTestId('dp'));
-    fireEvent.press(getByText('Clear'));
+    const clearBtn = await findByText('Clear');
+    fireEvent.press(clearBtn);
     expect(onChange).toHaveBeenCalledWith(null);
   });
 
