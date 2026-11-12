@@ -14,7 +14,7 @@
 
 ## حالة المشروع
 
-**المرحلة الحالية:** P03 — Core Platform (قادمة). P02 مكتملة.
+**المرحلة الحالية:** P04 — Design System (قادمة). P03 مكتملة.
 
 | المؤشر | الحالة |
 |--------|--------|
@@ -22,7 +22,11 @@
 | React / React Native | 19.3 / 0.88.1 |
 | TypeScript | 6.0 (strict + noUncheckedIndexedAccess) |
 | Node | 26 |
-| CI | معرّف في `.github/workflows/ci.yml` (بانتظار أول تشغيل ناجح) |
+| Providers | 12 contracts + 12 mocks + 12 NotConnected stubs |
+| Repositories | 16 contracts + 16 mocks + contract tests |
+| i18n | 14 namespaces (ar + en) + formatters + RTL helpers |
+| Seed | 15 مجموعة demo (`dataOrigin='demo'`) |
+| CI | أخضر (Expo Doctor + Lint + Typecheck + Test + Web Export) |
 | قاعدة بيانات | غير متصلة (P18) |
 | خدمات خارجية | غير متصلة |
 ---
