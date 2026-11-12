@@ -47,8 +47,7 @@ export function Text({
 
   const resolvedColor = useMemo<string>(() => {
     const tokens = theme.colors.text as Record<string, string>;
-    if (color in tokens) return tokens[color];
-    return color;
+    return tokens[color] ?? color;
   }, [color, theme]);
 
   // 'auto' respects writing direction (start). 'end' needs explicit L/R swap.
