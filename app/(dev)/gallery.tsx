@@ -74,8 +74,7 @@ export default function GalleryScreen() {
           ['display', 'h1', 'h2', 'h3', 'body', 'bodyStrong', 'caption', 'captionStrong'] as const
         ).map((k) => (
           <Text key={k} variant={k}>
-            {/* i18n-allow-arabic */}
-            {k} — عازب AZIB
+            {k} — عازب AZIB {/* i18n-allow-arabic */}
           </Text>
         ))}
       </Section>
