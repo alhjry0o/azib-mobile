@@ -279,7 +279,7 @@ function FormsBaseSection() {
 }
 
 function FormsAdvancedSection() {
-  const [city, setCity] = useState<'sanaa' | 'aden' | 'taiz' | null>(null);
+  const [city, setCity] = useState<'sanaa' | 'aden' | 'taiz' | 'hodeidah' | null>(null);
   const [otp, setOtp] = useState('');
   const [date, setDate] = useState<Date | null>(null);
 
