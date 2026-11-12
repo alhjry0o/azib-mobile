@@ -157,4 +157,59 @@
   - − `eslint.config.js` مربوط بـ`tsconfig.json`؛ إن غاب الملف أو كسر، يفشل ESLint.
 - **معايير المراجعة:** إذا غيّر `eslint-plugin-import` واجهة الـsettings، أو إذا دعم ESLint 10 حل الـTypeScript aliases أصلاً.
 - **المراجع:** `eslint.config.js`، `tsconfig.json`، `docs/AGENT_RULES.md §1 #8`.
+
+---
+
+
+---
+
+## ADR-0009 — خطوط عربية: IBM Plex Sans Arabic (واجهة) + Cairo (عناوين)
+
+- **التاريخ:** 2026-11-12
+- **الحالة:** Accepted
+- **السياق:** نحتاج خطين عربيين مرخّصين OFL، بتشكيل صحيح لـRTL، يعملان على Android/iOS/Web، ويدعمان الأوزان 400/500/600/700. الاختيار يؤثر على 200+ مكوّن لاحقاً، لذا يجب تثبيته الآن.
+- **القرار:**
+  - **الواجهة (Body):** IBM Plex Sans Arabic (400/500/600/700) عبر `@expo-google-fonts/ibm-plex-sans-arabic`.
+  - **العناوين (Display):** Cairo (600/700) عبر `@expo-google-fonts/cairo`.
+  - **التحميل:** `useFonts` في `app/_layout.tsx` قبل الرسم. Fallback إلى النظام عند فشل التحميل.
+  - **الترخيص:** SIL OFL 1.1 — يُسجَّل في `docs/ASSET_LICENSES.md`.
+- **البدائل المدروسة:**
+  - Tajawal (لللواجهة): يعمل، لكن IBM Plex Sans Arabic أكثر اتساقاً مع أنظمة UI حديثة.
+  - Noto Sans Arabic (للجميع): ثقيل الحجم، مظهره أقل تميّزاً.
+  - Readex Pro (للعناوين): حديث لكن تشكيله على Android متوسط الجودة.
+- **التبعات:**
+  - + خطان موثوقان، OFL، تشكيل ممتاز، دعم كامل لـWeb.
+  - − حجم bundle إضافي (~400KB لكل وزن عند الويب الأول). يمكن tree-shaking الوزن غير المستخدم لاحقاً.
+  - − عند تبديل الخط لاحقاً، تحتاج كل الأنماط إعادة اختبار بصري.
+- **معايير المراجعة:** إذا تبيّن أن Cairo غير مقروء على شاشات Android صغيرة، أو إذا فرضت الجهة المالكة خطاً مؤسسياً.
+- **المراجع:** `src/theme/typography.ts`, `src/theme/__tests__/contrast.test.ts`.
+
+---
+
+## ADR-0010 — نظام الأيقونات: lucide-react-native
+
+- **التاريخ:** 2026-11-12
+- **الحالة:** Accepted
+- **السياق:** نحتاج مكتبة أيقونات:
+  - MIT مرخّصة.
+  - تعمل على Web + Android + iOS.
+  - قابلة للتلوين والتحجيم بـ`color`/`size`.
+  - تعتمد `react-native-svg` (المُعتمَد كتبعية مشتركة).
+- **القرار:**
+  - **lucide-react-native** كمصدر أساسي.
+  - التفاف عليها في `src/components/ui/Icon.tsx` (Part 2) يوفّر:
+    - `name` (الاسم فقط).
+    - `size` (افتراضي 20).
+    - `color` (افتراضي `text.secondary`).
+    - `mirrorInRTL` (افتراضي `true` لأيقونات الاتجاه مثل chevron).
+  - الأيقونات المخصصة (Qamariya, DoubleRing) في `src/components/brand/` كـSVG داخلي.
+- **البدائل المدروسة:**
+  - `@expo/vector-icons`: مدمج لكن جودة أيقوناته أقل وليس MIT للجميع.
+  - `react-native-vector-icons`: يحتاج ربط native، ويعطّل Expo managed workflow.
+  - Phosphor: MIT، جيد، لكن lucide أخف وبصرياً أنسب لفخامة هادئة.
+- **التبعات:**
+  - + أيقونات نظيفة، MIT، tree-shake-friendly.
+  - − قد لا تغطي بعض الأيقونات الخاصة (يُضاف SVG يدوياً عند الحاجة).
+- **معايير المراجعة:** إذا احتجنا أيقونات brand-identity خاصة واسعة، قد ننتقل لمكتبة مدفوعة (يُوثَّق كـADR بديل).
+- **المراجع:** `docs/ASSET_LICENSES.md` (يُسجَّل عند install في Part 2).
 ```
