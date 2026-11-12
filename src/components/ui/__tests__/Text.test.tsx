@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { render } from '@testing-library/react-native';
+import { render, act } from '@testing-library/react-native';
 
 import { darkTheme } from '@/theme';
 import { i18n } from '@/i18n';
@@ -7,10 +7,11 @@ import { i18n } from '@/i18n';
 import { Text } from '../Text';
 import { Providers } from './test-utils';
 
-describe('Text', () => {
-  afterEach(async () => {
+afterEach(async () => {
+  await act(async () => {
     await i18n.changeLanguage('ar');
   });
+});
 
   it('renders children as-is', async () => {
     const { getByText } = await render(<Text>Hello</Text>, { wrapper: Providers });
