@@ -2,7 +2,7 @@
 // Route: /gallery (group (dev) does not appear in the URL).
 // Arabic preview strings are intentionally wrapped with i18n-allow-arabic.
 
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import type { ReactNode } from 'react';
 
 import { ALL_ICON_NAMES, Button, Icon, Screen, Text } from '@/components/ui';
