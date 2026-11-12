@@ -62,7 +62,9 @@ describe('Toast', () => {
     );
     fireEvent.press(getByTestId('trigger'));
     const dismiss = await findByTestId('toast-dismiss');
+    await act(async () => {
     fireEvent.press(dismiss);
+    });
     await waitFor(() => {
       expect(queryByTestId('toast')).toBeNull();
     });
