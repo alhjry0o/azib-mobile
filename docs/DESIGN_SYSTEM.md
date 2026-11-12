@@ -185,4 +185,63 @@ Yemen-specific phone input with a fixed +967 prefix and numeric-only input. (Mul
 <PhoneInput label="Phone Number" value={phone} onChangeText={setPhone} />
 ```
 
+## Form — Advanced (Part 3b)
+
+### `<Select>`
+
+Single-choice picker. Uses `Modal` from RN (not BottomSheet — that lands in Part 4).
+
+```tsx
+<Select
+  value={city}
+  onChange={setCity}
+  placeholder="Choose a city"
+  options={[
+    { value: 'sanaa', label: 'Sanaa' },
+    { value: 'aden', label: 'Aden' },
+    { value: 'hodeidah', label: 'Hodeidah', disabled: true },
+  ]}
+/>
+```
+
+- Auto-disables when `options.length === 0`.
+- Modal centered, scrollable, RTL-aware.
+- Accessibility: trigger has `accessibilityState.expanded`; each option has `menuitem` role.
+
+### `<OTPInput>`
+
+N-digit code. Uses a single hidden `TextInput` overlaying visual cells.
+
+- Paste works (multi-digit).
+- iOS `textContentType="oneTimeCode"` and Android `autoComplete="sms-otp"` auto-fill.
+- Backspace & cursor behave naturally.
+- One accessibility target (screen readers announce "verification code, N digits").
+
+```tsx
+<OTPInput
+  label="Verification code"
+  value={otp}
+  onChangeText={setOtp}
+  onComplete={(code) => verify(code)}
+/>
+```
+
+### `<DatePicker>`
+
+Custom calendar modal (no external date picker). Works identically on iOS/Android/Web.
+
+- Month navigation, weekday headers (`Intl.DateTimeFormat`).
+- Today highlight, selected day highlight.
+- `minDate` / `maxDate` respected.
+- Clear / Today actions.
+- RTL-aware (grid reversed, chevrons mirrored).
+
+```tsx
+<DatePicker
+  label="Wedding date"
+  value={date}
+  onChange={setDate}
+  minDate={new Date()}
+/>
+```
 ```
