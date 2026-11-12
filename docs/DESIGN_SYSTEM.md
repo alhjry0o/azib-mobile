@@ -98,4 +98,90 @@ States: `default`, `pressed` (opacity 0.85), `disabled` (opacity 0.45), `loading
 <Button variant="icon" leftIcon="check" accessibilityLabel="Confirm" />
 <Button label="Saving" loading />
 ```
+## Components (Part 3a — done)
+
+### `<Field>`
+Wrapper for form inputs. Provides label, required asterisk, help text, and error text. Error text overrides help text.
+
+```tsx
+<Field label="Email" required helpText="We'll never share your email.">
+  <TextInput placeholder="you@example.com" />
+</Field>
+```
+
+<TextInput>
+
+Text input with 3 sizes (sm, md, lg), left/right icons, focus/error states, and RTL support. Numeric inputs remain LTR.
+
+```tsx
+<TextInput label="Full Name" placeholder="Enter your name" leftIcon="user" />
+<TextInput label="Phone" keyboardType="phone-pad" />
+<TextInput label="Email" errorText="Invalid email format" />
+```
+
+<Textarea>
+
+Multiline text input. Extends TextInput with multiline and a minHeight prop (default 96).
+
+```tsx
+<Textarea label="Notes" placeholder="Write your message here..." minHeight={120} />
+```
+
+<Search>
+
+Pre-configured TextInput with a search icon and an optional clear button when text is present.
+
+```tsx
+<Search value={query} onChangeText={setQuery} onClear={() => setQuery('')} placeholder="Search..." />
+```
+
+<Switch>
+
+Animated toggle switch. RTL-aware. Respects Reduce Motion.
+
+```tsx
+<Switch label="Enable Notifications" value={enabled} onValueChange={setEnabled} />
+```
+
+<Checkbox>
+
+Standard checkbox with support for indeterminate state. Includes label and haptics.
+
+```tsx
+<Checkbox label="I agree to the terms" checked={agreed} onCheckedChange={setAgreed} />
+<Checkbox label="Select All" indeterminate checked={false} onCheckedChange={handleSelectAll} />
+```
+
+<RadioGroup>
+
+Generic radio group (RadioGroup<V extends string>). Supports column or row layout.
+
+```tsx
+<RadioGroup
+  options={[
+    { value: 'male', label: 'Male' },
+    { value: 'female', label: 'Female' },
+  ]}
+  value={gender}
+  onValueChange={setGender}
+/>
+```
+
+<Chip>
+
+Small interactive tag. Can be static or pressable. Supports default, accent, and gold variants.
+
+```tsx
+<Chip label="Filter" selected={true} onPress={toggleFilter} />
+<Chip label="New" variant="accent" />
+```
+
+<PhoneInput>
+
+Yemen-specific phone input with a fixed +967 prefix and numeric-only input. (Multi-country picker planned for P06).
+
+```tsx
+<PhoneInput label="Phone Number" value={phone} onChangeText={setPhone} />
+```
+
 ```
