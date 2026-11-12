@@ -183,5 +183,3 @@ Yemen-specific phone input with a fixed +967 prefix and numeric-only input. (Mul
 ```tsx
 <PhoneInput label="Phone Number" value={phone} onChangeText={setPhone} />
 ```
-
-```
