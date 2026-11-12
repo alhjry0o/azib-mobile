@@ -1,21 +1,37 @@
-import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { useTheme } from '@/theme';
 
 export default function IndexScreen() {
   const insets = useSafeAreaInsets();
+  const theme = useTheme();
   const { t } = useTranslation();
+
   return (
     <View
       style={[
         styles.container,
-        { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 24 },
+        {
+          backgroundColor: theme.colors.bg.canvas,
+          paddingTop: insets.top + theme.spacing[6],
+          paddingBottom: insets.bottom + theme.spacing[6],
+          paddingHorizontal: theme.spacing[6],
+        },
       ]}
     >
-      <Text style={styles.title} accessibilityRole="header">
+      <Text
+        style={[styles.title, theme.typography.display, { color: theme.colors.text.gold }]}
+        accessibilityRole="header"
+      >
         {t('appName')}
       </Text>
-      <Text style={styles.subtitle}>{t('phaseLabel')}</Text>
+      <Text
+        style={[styles.subtitle, theme.typography.caption, { color: theme.colors.text.accent }]}
+      >
+        {t('phaseLabel')}
+      </Text>
     </View>
   );
 }
@@ -23,21 +39,14 @@ export default function IndexScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#09080F',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
-    paddingHorizontal: 24,
   },
   title: {
-    color: '#F0CA68',
-    fontSize: 48,
-    fontWeight: '700',
-    letterSpacing: 2,
+    textAlign: 'center',
   },
   subtitle: {
-    color: '#9B5CFF',
-    fontSize: 14,
     textAlign: 'center',
     opacity: 0.85,
   },
