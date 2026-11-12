@@ -1,4 +1,4 @@
-// Internal Design System Gallery. Grows in Parts 3b–7.
+// Internal Design System Gallery. Grows in Parts 4–7.
 // Route: /gallery (group (dev) does not appear in the URL).
 // Arabic preview strings are intentionally wrapped with i18n-allow-arabic.
 
@@ -10,11 +10,14 @@ import {
   Button,
   Checkbox,
   Chip,
+  DatePicker,
   Icon,
+  OTPInput,
   PhoneInput,
   RadioGroup,
   Screen,
   Search,
+  Select,
   Switch,
   Text,
   Textarea,
@@ -25,17 +28,25 @@ import { useDeviceTier, useDeviceTierStore, useDirection } from '@/hooks';
 import { setLanguage } from '@/i18n';
 import { useTheme } from '@/theme';
 
+const SELECT_OPTIONS = [
+  { value: 'a' as const, label: 'Option A' },
+  { value: 'b' as const, label: 'Option B' },
+  { value: 'c' as const, label: 'Option C' },
+];
+
 export default function GalleryScreen() {
   return (
     <Screen scroll testID="gallery-screen">
-      <ColorsAndTypography />
+      <DevOverrides />
+      <ColorsSection />
       <SpacingSection />
       <IconSection />
       <TextSection />
       <ButtonsSection />
-      <FormsSection />
+      <FormsBaseSection />
+      <FormsAdvancedSection />
       <Text variant="caption" color="tertiary" align="center" style={{ marginTop: 24 }}>
-        Parts 3b–7 will add Select, OTPInput, DatePicker, and more.
+        Parts 4–7 will add overlays, brand 3D, and utilities.
       </Text>
     </Screen>
   );
@@ -68,13 +79,12 @@ function DevOverrides() {
   );
 }
 
-function ColorsAndTypography() {
+function ColorsSection() {
   const theme = useTheme();
   const { direction } = useDirection();
   const { tier } = useDeviceTier();
   return (
     <>
-      <DevOverrides />
       <Text variant="caption" color="secondary" style={{ marginTop: 8 }}>
         dir: {direction} · tier: {tier}
       </Text>
@@ -197,7 +207,7 @@ function ButtonsSection() {
   );
 }
 
-function FormsSection() {
+function FormsBaseSection() {
   const [phone, setPhone] = useState('');
   const [gender, setGender] = useState<'male' | 'female' | null>(null);
   const [agree, setAgree] = useState(false);
@@ -263,6 +273,47 @@ function FormsSection() {
           <Chip label="With icon" leftIcon="check" onPress={() => {}} />
           <Chip label="Disabled" disabled onPress={() => {}} />
         </View>
+      </Section>
+    </>
+  );
+}
+
+function FormsAdvancedSection() {
+  const [city, setCity] = useState<'sanaa' | 'aden' | 'taiz' | null>(null);
+  const [otp, setOtp] = useState('');
+  const [date, setDate] = useState<Date | null>(null);
+
+  return (
+    <>
+      <Section title="Form — Select">
+        <Select
+          value={city}
+          onChange={setCity}
+          placeholder="Choose a city"
+          options={[
+            { value: 'sanaa' as const, label: 'Sanaa' },
+            { value: 'aden' as const, label: 'Aden' },
+            { value: 'taiz' as const, label: 'Taiz' },
+            { value: 'hodeidah' as const, label: 'Hodeidah (disabled)', disabled: true },
+          ]}
+        />
+      </Section>
+
+      <Section title="Form — OTPInput">
+        <OTPInput
+          label="Verification code"
+          value={otp}
+          onChangeText={setOtp}
+          onComplete={() => {}}
+          helpText="Enter the 6-digit code we sent you"
+        />
+        <Text variant="caption" color="secondary">
+          current: {otp || '—'}
+        </Text>
+      </Section>
+
+      <Section title="Form — DatePicker">
+        <DatePicker label="Wedding date" value={date} onChange={setDate} placeholder="Pick a date" />
       </Section>
     </>
   );
