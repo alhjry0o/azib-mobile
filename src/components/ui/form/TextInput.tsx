@@ -41,7 +41,7 @@ export interface TextInputProps extends Omit<RNTextInputProps, 'style'> {
   readonly testID?: string;
 }
 
-export const TextInput = forwardRef<RNTextInput, TextInputProps>(function TextInput(
+export const TextInput = forwardRef<ElementRef<typeof RNTextInput>, TextInputProps>(function TextInput(
   {
     size = 'md',
     error = false,
