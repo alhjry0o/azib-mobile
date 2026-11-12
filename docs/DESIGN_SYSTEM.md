@@ -110,7 +110,7 @@ Wrapper for form inputs. Provides label, required asterisk, help text, and error
 </Field>
 ```
 
-<TextInput>
+### `<TextInput>`
 
 Text input with 3 sizes (sm, md, lg), left/right icons, focus/error states, and RTL support. Numeric inputs remain LTR.
 
@@ -120,7 +120,7 @@ Text input with 3 sizes (sm, md, lg), left/right icons, focus/error states, and 
 <TextInput label="Email" errorText="Invalid email format" />
 ```
 
-<Textarea>
+### `<Textarea>`
 
 Multiline text input. Extends TextInput with multiline and a minHeight prop (default 96).
 
@@ -128,7 +128,7 @@ Multiline text input. Extends TextInput with multiline and a minHeight prop (def
 <Textarea label="Notes" placeholder="Write your message here..." minHeight={120} />
 ```
 
-<Search>
+### `<Search>`
 
 Pre-configured TextInput with a search icon and an optional clear button when text is present.
 
@@ -136,7 +136,7 @@ Pre-configured TextInput with a search icon and an optional clear button when te
 <Search value={query} onChangeText={setQuery} onClear={() => setQuery('')} placeholder="Search..." />
 ```
 
-<Switch>
+### `<Switch>`
 
 Animated toggle switch. RTL-aware. Respects Reduce Motion.
 
@@ -144,7 +144,7 @@ Animated toggle switch. RTL-aware. Respects Reduce Motion.
 <Switch label="Enable Notifications" value={enabled} onValueChange={setEnabled} />
 ```
 
-<Checkbox>
+### `<Checkbox>`
 
 Standard checkbox with support for indeterminate state. Includes label and haptics.
 
@@ -153,7 +153,7 @@ Standard checkbox with support for indeterminate state. Includes label and hapti
 <Checkbox label="Select All" indeterminate checked={false} onCheckedChange={handleSelectAll} />
 ```
 
-<RadioGroup>
+### `<RadioGroup>`
 
 Generic radio group (RadioGroup<V extends string>). Supports column or row layout.
 
@@ -168,7 +168,7 @@ Generic radio group (RadioGroup<V extends string>). Supports column or row layou
 />
 ```
 
-<Chip>
+### `<Chip>`
 
 Small interactive tag. Can be static or pressable. Supports default, accent, and gold variants.
 
@@ -177,7 +177,7 @@ Small interactive tag. Can be static or pressable. Supports default, accent, and
 <Chip label="New" variant="accent" />
 ```
 
-<PhoneInput>
+### `<PhoneInput>`
 
 Yemen-specific phone input with a fixed +967 prefix and numeric-only input. (Multi-country picker planned for P06).
 
