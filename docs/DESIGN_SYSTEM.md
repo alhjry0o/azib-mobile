@@ -7,12 +7,12 @@
 
 | Part | Content | Status |
 |------|---------|--------|
-| 1 | Tokens (colors, typography, spacing, radius, shadows, motion), ThemeProvider, hooks, contrast utility | Drafted |
-| 2 | Icon wrapper, Typography, Screen, Button | Pending |
-| 3 | Form components | Pending |
-| 4 | Feedback & Overlay components | Pending |
+| 1 | Tokens (colors, typography, spacing, radius, shadows, motion), ThemeProvider, hooks, contrast utility | **Done** |
+| 2 | Icon wrapper, Text, Screen, Button (6 variants × 6 states) | **Done** |
+| 3 | Form components (Input, Search, Select, Phone, OTP, DatePicker, Textarea, Switch, Checkbox, Radio, Chip) | Pending |
+| 4 | Feedback & Overlay (Toast, Dialog, BottomSheet, Tabs, SegmentedControl, Badge, Banner, Card) | Pending |
 | 5 | Brand + 3D (ArchHero, QamariyaPattern, DoubleRing, GlowView, GlassView, Hero3D) | Pending |
-| 6 | Utility components (Avatar, Progress, Skeleton, EmptyState, …) | Pending |
+| 6 | Utility (Avatar, ProgressBar, RingProgress, Skeleton, EmptyState, ErrorState, NotConnectedState, ListItem, SectionHeader, Stepper, Divider) | Pending |
 | 7 | Full usage rules, tier matrix, do/don't, closing | Pending |
 
 ## Tokens (Part 1 — done)
@@ -38,3 +38,63 @@
 - Small purple text on dark backgrounds uses `text.accent` (#9B5CFF) on canvas/surface, and `text.accentOnRaised` (#B88AFF) on raised cards. Never `#7136C9` for small text.
 - Buttons on `accent.fill` (purple) use `text.primary` (white). Buttons on `gold.fill` (mustard) use `text.inverse` (dark).
 - Tier low disables glows, shadows, parallax.
+
+## Components (Part 2 — done)
+
+### `<Icon>`
+
+Wraps `lucide-react-native` (ISC). 39 curated icons in `src/components/ui/icons.ts`.
+
+```tsx
+<Icon name="check" size={20} color={theme.colors.text.primary} />
+<Icon name="arrowRight" /> {/* mirrors automatically in RTL */}
+<Icon name="arrowRight" mirrorInRTL={false} /> {/* opt out */}
+```
+
+### `<Text>`
+
+Typography-aware text. Renders children OR `i18nKey` (mutually exclusive; i18nKey wins).
+
+```tsx
+<Text variant="h1">Title</Text>
+<Text variant="body" color="accent">Highlighted</Text>
+<Text i18nKey="appName" />
+<Text variant="caption" color="secondary" align="center">Centered</Text>
+```
+
+### `<Screen>`
+
+Safe-area container with theme background. Uses logical padding (`paddingStart`/`paddingEnd`).
+
+```tsx
+<Screen scroll>
+  <Text variant="h1">Home</Text>
+</Screen>
+
+<Screen safeTop={false} paddingX={false}>
+  {/* Full-bleed content */}
+</Screen>
+```
+
+### `<Button>`
+
+Six variants × six states. Min height 44dp. Haptics on press (opt-out via `haptic={false}` — not yet exposed; will be added in Part 6 if needed).
+
+| Variant | Background | Text | Glow |
+|---------|------------|------|------|
+| primary | accent.fill (purple) | text.primary (white) | On (high/mid tier) |
+| secondary | bg.raised | text.primary | No |
+| ghost | transparent | text.primary | No |
+| gold | gold.fill (mustard) | text.inverse (dark) | On (high/mid tier) |
+| danger | state.danger | text.primary | No |
+| icon | bg.raised | — | No |
+
+States: `default`, `pressed` (opacity 0.85), `disabled` (opacity 0.45), `loading` (spinner + `busy` a11y state), `error` (danger border), `focus` (accent border on web).
+
+```tsx
+<Button variant="primary" label="Confirm" onPress={handle} />
+<Button variant="gold" i18nKey="buttons.continue" size="lg" fullWidth />
+<Button variant="icon" leftIcon="check" accessibilityLabel="Confirm" />
+<Button label="Saving" loading />
+```
+```
