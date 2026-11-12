@@ -1,6 +1,5 @@
 import { forwardRef, type ElementRef } from 'react';
 
-
 import { useTheme } from '@/theme';
 
 import { TextInput, type TextInputProps } from './TextInput';
