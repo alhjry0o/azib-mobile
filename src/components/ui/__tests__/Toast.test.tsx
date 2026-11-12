@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { Pressable, Text as RNText } from 'react-native';
 
 import { ToastProvider, useToast } from '../Toast';
