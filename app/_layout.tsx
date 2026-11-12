@@ -12,6 +12,7 @@ import { I18nManager, StyleSheet, View } from 'react-native';
 import { I18nextProvider } from 'react-i18next';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { ToastProvider } from '@/components/ui';
 import { i18n } from '@/i18n';
 import { ProviderContainerProvider } from '@/providers';
 import { ThemeProvider } from '@/theme';
@@ -28,7 +29,6 @@ export default function RootLayout() {
     Cairo_700Bold,
   });
 
-  // If a font fails to load, we still render (fallback to system) to avoid a blank app.
   if (!fontsLoaded && !fontError) {
     return <View style={styles.root} />;
   }
@@ -36,19 +36,21 @@ export default function RootLayout() {
   return (
     <I18nextProvider i18n={i18n}>
       <ThemeProvider>
-        <ProviderContainerProvider>
-          <SafeAreaProvider>
-            <View style={styles.root}>
-              <StatusBar style="light" />
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: styles.content,
-                }}
-              />
-            </View>
-          </SafeAreaProvider>
-        </ProviderContainerProvider>
+        <SafeAreaProvider>
+          <ToastProvider>
+            <ProviderContainerProvider>
+              <View style={styles.root}>
+                <StatusBar style="light" />
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    contentStyle: styles.content,
+                  }}
+                />
+              </View>
+            </ProviderContainerProvider>
+          </ToastProvider>
+        </SafeAreaProvider>
       </ThemeProvider>
     </I18nextProvider>
   );
