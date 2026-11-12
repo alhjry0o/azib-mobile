@@ -1,5 +1,5 @@
-import { forwardRef, useMemo } from 'react';
-import type { TextInput as RNTextInput } from 'react-native';
+import { forwardRef, useMemo, type ElementRef } from 'react';
+
 import { StyleSheet, View } from 'react-native';
 
 import { useDirection } from '@/hooks';
@@ -24,7 +24,7 @@ export interface PhoneInputProps extends Omit<TextInputProps, 'leftIcon' | 'onCh
  * - Numeric digits only (max 9 for Yemen without country code).
  * - No country picker (P06 will add multi-country support).
  */
-export const PhoneInput = forwardRef<RNTextInput, PhoneInputProps>(function PhoneInput(
+export const PhoneInput = forwardRef<ElementRef<typeof TextInput>, PhoneInputProps>(function PhoneInput(
   { value, onChangeText, countryCode = '+967', ...rest },
   ref,
 ) {
