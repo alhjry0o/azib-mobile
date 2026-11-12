@@ -109,4 +109,52 @@
 - **التبعات:** + عدالة وشفافية. − حاجة لطاقة مراجعة بشرية.
 - **معايير المراجعة:** لا — قرار استراتيجي مرتبط بالمبادئ.
 - **المراجع:** HRD، `docs/PRODUCT_POLICIES.md`.
+---
+
+## ADR-0007 — تثبيت ESLint على 9.x (لا 10)
+
+- **التاريخ:** 2026-11-09
+- **الحالة:** Accepted
+- **السياق:** أثناء تنفيذ P02، تبيّن أن `eslint-config-expo` (المستخدم رسمياً في قالب Expo) لا يدعم ESLint 10 بعد؛ تشغيل `expo lint` مع ESLint 10 يفشل. القاعدة `AGENT_RULES §1 #6` (تحقق من توافق المكتبات) تمنع اعتماد نسخة غير متوافقة.
+- **القرار:**
+  - تثبيت `eslint@^9.0.0` في `devDependencies`.
+  - لا ترقية إلى ESLint 10 حتى تعلن `eslint-config-expo` رسمياً دعمها.
+  - CI يستخدم نفس النسخة.
+- **البدائل المدروسة:**
+  - ESLint 10 + إعداد يدوي بدل `eslint-config-expo`: يخالف `AGENT_RULES §1 #8` (لا مكتبة دون تحقق) ويضيف صيانة كبيرة في P02.
+  - تعليق الـlint كلياً حتى تدعم `eslint-config-expo`: يخالف `AGENT_RULES §1 #5` (لا تجاهل حالات/فحوص).
+- **التبعات:**
+  - + CI أخضر وإعداد قياسي متوافق مع Expo.
+  - − لن نستفيد من ميزات ESLint 10 (تحسينات أداء، قواعد جديدة) في الوقت الحالي.
+  - − عند الترقية مستقبلاً، قد نحتاج تعديلات في `eslint.config.js`.
+- **معايير المراجعة:** عندما تُصدر `eslint-config-expo` نسخة تدعم ESLint 10 رسمياً — يُفتح ADR بديل، ويُرقّى ESLint في PR منفصل مع اختبار CI.
+- **المراجع:** `eslint.config.js`، `package.json`، `docs/AGENT_RULES.md §1 #6, #8`.
+
+---
+
+## ADR-0008 — eslint-import-resolver-typescript لحل مسارات `@/`
+
+- **التاريخ:** 2026-11-09
+- **الحالة:** Accepted
+- **السياق:** إعداد `eslint-plugin-import` (المضمّن في `eslint-config-expo`) لا يفهم path aliases المعرّفة في `tsconfig.json` (`@/*`, `@/assets/*`) افتراضياً. نتيجة: قواعد `import/no-unresolved` تنتج أخطاء كاذبة على استيرادات مثل `import { t } from '@/lib/i18n'`.
+- **القرار:**
+  - إضافة `eslint-import-resolver-typescript` إلى `devDependencies`.
+  - في `eslint.config.js`، إعداد:
+    ```js
+    settings: {
+      'import/resolver': {
+        typescript: { project: './tsconfig.json' },
+      },
+    }
+    ```
+  - مصدر الحقيقة للمسارات يبقى `tsconfig.json` (لا تكرار في مكان آخر).
+- **البدائل المدروسة:**
+  - `eslint-import-resolver-alias` مع تعريف المسارات يدوياً في ESLint: يخالف مبدأ "مصدر حقيقة واحد" (ستُكرّر المسارات في مكانين).
+  - تعطيل قاعدة `import/no-unresolved`: يُفقد فحصاً مهماً على بقية الاستيرادات.
+- **التبعات:**
+  - + ESLint يفهم `@/` دون تكرار تعريفات.
+  - + أي تعديل على `tsconfig.paths` ينعكس تلقائياً على ESLint.
+  - − `eslint.config.js` مربوط بـ`tsconfig.json`؛ إن غاب الملف أو كسر، يفشل ESLint.
+- **معايير المراجعة:** إذا غيّر `eslint-plugin-import` واجهة الـsettings، أو إذا دعم ESLint 10 حل الـTypeScript aliases أصلاً.
+- **المراجع:** `eslint.config.js`، `tsconfig.json`، `docs/AGENT_RULES.md §1 #8`.
 ```
