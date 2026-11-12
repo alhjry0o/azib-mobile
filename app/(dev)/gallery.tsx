@@ -7,7 +7,10 @@ import { StyleSheet, View } from 'react-native';
 
 import {
   ALL_ICON_NAMES,
+  Badge,
+  Banner,
   Button,
+  Card,
   Checkbox,
   Chip,
   DatePicker,
@@ -22,6 +25,7 @@ import {
   Text,
   Textarea,
   TextInput,
+  useToast,
 } from '@/components/ui';
 import type { ButtonSize, ButtonVariant } from '@/components/ui';
 import { useDeviceTier, useDeviceTierStore, useDirection } from '@/hooks';
@@ -39,6 +43,8 @@ export default function GalleryScreen() {
       <ButtonsSection />
       <FormsBaseSection />
       <FormsAdvancedSection />
+      <FeedbackSection />
+      <DisplaySection />
       <Text variant="caption" color="tertiary" align="center" style={{ marginTop: 24 }}>
         Parts 4–7 will add overlays, brand 3D, and utilities.
       </Text>
@@ -308,6 +314,110 @@ function FormsAdvancedSection() {
 
       <Section title="Form — DatePicker">
         <DatePicker label="Wedding date" value={date} onChange={setDate} placeholder="Pick a date" />
+      </Section>
+    </>
+  );
+}
+
+function FeedbackSection() {
+  const toast = useToast();
+  return (
+    <Section title="Feedback — Toast">
+      <View style={styles.row}>
+        <Button
+          label="Success"
+          onPress={() => toast.show({ message: 'Saved', variant: 'success', duration: 2500 })}
+        />
+        <Button
+          label="Error"
+          variant="danger"
+          onPress={() => toast.show({ message: 'Something went wrong', variant: 'error' })}
+        />
+        <Button
+          label="Info"
+          variant="secondary"
+          onPress={() => toast.show({ message: 'FYI', variant: 'info' })}
+        />
+        <Button
+          label="Warning"
+          variant="secondary"
+          onPress={() => toast.show({ message: 'Careful', variant: 'warning' })}
+        />
+      </View>
+
+      <Text variant="h3" style={{ marginTop: 12 }}>
+        Banner — info
+      </Text>
+      <Banner
+        title="Heads up"
+        message="This is an informational banner."
+        actionLabel="Learn more"
+        onAction={() => {}}
+        onDismiss={() => {}}
+      />
+      <Text variant="h3" style={{ marginTop: 12 }}>
+        Banner — demo
+      </Text>
+      <Banner variant="demo" message="This data is for demonstration only." onDismiss={() => {}} />
+      <Text variant="h3" style={{ marginTop: 12 }}>
+        Banner — warning
+      </Text>
+      <Banner variant="warning" message="Something needs your attention." />
+      <Text variant="h3" style={{ marginTop: 12 }}>
+        Banner — error
+      </Text>
+      <Banner variant="error" title="Failed" message="Could not reach the server." actionLabel="Retry" onAction={() => {}} />
+    </Section>
+  );
+}
+
+function DisplaySection() {
+  return (
+    <>
+      <Section title="Badge">
+        <View style={styles.row}>
+          <Badge label="Neutral" />
+          <Badge label="Accent" variant="accent" />
+          <Badge label="Success" variant="success" />
+          <Badge label="Warning" variant="warning" />
+          <Badge label="Danger" variant="danger" />
+          <Badge label="Info" variant="info" />
+          <Badge label="Verified" variant="verified" />
+          <Badge label="Pending" variant="pending" />
+          <Badge label="Demo" variant="demo" />
+          <Badge label="Small" size="sm" variant="accent" />
+        </View>
+      </Section>
+
+      <Section title="Card">
+        <Card>
+          <Text variant="h3">Flat card</Text>
+          <Text variant="body" color="secondary">
+            Default card with subtle border.
+          </Text>
+        </Card>
+        <Card variant="crest">
+          <Text variant="h3" color="gold">
+            Crest card
+          </Text>
+          <Text variant="body" color="secondary">
+            Hero card with gold top accent.
+          </Text>
+        </Card>
+        <Card variant="pressable" onPress={() => {}} accessibilityLabel="open details">
+          <Text variant="bodyStrong">Pressable card</Text>
+          <Text variant="caption" color="secondary">
+            Tap to open
+          </Text>
+        </Card>
+        <View style={styles.row}>
+          <View style={{ flex: 1 }}>
+            <Card variant="stat" title="Total donations" value={1250} leftIcon="wallet" />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Card variant="stat" title="Applications" value="42" caption="this month" leftIcon="users" />
+          </View>
+        </View>
       </Section>
     </>
   );
