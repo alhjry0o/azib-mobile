@@ -1,5 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { fireEvent, render } from '@testing-library/react-native';
+import { darkTheme } from '@/theme';
+
+import { Button } from '../Button';
+import { Providers } from './test-utils';
 
 // expo-haptics is used by useHaptics; mock it so it doesn't touch native.
 jest.mock('expo-haptics', () => ({
@@ -8,11 +12,6 @@ jest.mock('expo-haptics', () => ({
   ImpactFeedbackStyle: { Light: 'Light', Medium: 'Medium' },
   NotificationFeedbackType: { Success: 'Success', Error: 'Error' },
 }));
-
-import { darkTheme } from '@/theme';
-
-import { Button } from '../Button';
-import { Providers } from './test-utils';
 
 describe('Button', () => {
   it('renders label text', async () => {
