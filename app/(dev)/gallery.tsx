@@ -71,11 +71,11 @@ export default function GalleryScreen() {
             key={k}
             style={[theme.typography[k], { color: theme.colors.text.primary, marginBottom: 8 }]}
           >
-            {k} — عازب AZIB
+            {k} — عازب AZIB {/* i18n-allow-arabic */}
           </Text>
         ))}
-      </Section>
-
+      </Section> 
+      
       <Section title="Spacing">
         <View style={styles.spacingRow}>
           {(['1', '2', '3', '4', '5', '6', '8', '10'] as const).map((k) => (
