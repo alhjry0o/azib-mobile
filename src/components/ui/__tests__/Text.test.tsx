@@ -7,11 +7,12 @@ import { i18n } from '@/i18n';
 import { Text } from '../Text';
 import { Providers } from './test-utils';
 
-afterEach(async () => {
-  await act(async () => {
-    await i18n.changeLanguage('ar');
+describe('Text', () => {
+  afterEach(async () => {
+    await act(async () => {
+      await i18n.changeLanguage('ar');
+    });
   });
-});
 
   it('renders children as-is', async () => {
     const { getByText } = await render(<Text>Hello</Text>, { wrapper: Providers });
