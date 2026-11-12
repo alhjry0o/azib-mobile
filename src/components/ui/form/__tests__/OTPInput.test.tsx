@@ -5,7 +5,7 @@ import { OTPInput } from '../OTPInput';
 
 describe('OTPInput', () => {
   it('renders N cells based on length', async () => {
-    const { UNSAFE_getAllByType } = await render(
+    const { } = await render(
       <OTPInput value="" onChangeText={() => {}} length={4} testID="otp" />,
       { wrapper: Providers },
     );
