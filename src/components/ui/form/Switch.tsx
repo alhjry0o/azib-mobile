@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
 
 import { useDirection, useHaptics, useMotion } from '@/hooks';
@@ -40,7 +40,7 @@ export function Switch({
   const spec = SIZES[size];
 
   const travel = spec.trackW - spec.thumb - spec.inset * 2;
-  const anim = useRef(new Animated.Value(value ? 1 : 0)).current;
+  const [anim] = useState(() => new Animated.Value(value ? 1 : 0));
 
   useEffect(() => {
     const toValue = value ? 1 : 0;
