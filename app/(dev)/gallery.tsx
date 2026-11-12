@@ -28,12 +28,6 @@ import { useDeviceTier, useDeviceTierStore, useDirection } from '@/hooks';
 import { setLanguage } from '@/i18n';
 import { useTheme } from '@/theme';
 
-const SELECT_OPTIONS = [
-  { value: 'a' as const, label: 'Option A' },
-  { value: 'b' as const, label: 'Option B' },
-  { value: 'c' as const, label: 'Option C' },
-];
-
 export default function GalleryScreen() {
   return (
     <Screen scroll testID="gallery-screen">
