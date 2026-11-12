@@ -26,7 +26,6 @@ export function Checkbox({
   testID,
 }: CheckboxProps) {
   const theme = useTheme();
-  const motion = useMotion();
   const haptics = useHaptics();
   // motion unused here; kept for future size transitions.
 
