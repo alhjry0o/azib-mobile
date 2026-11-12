@@ -33,7 +33,7 @@ describe('contrast utilities', () => {
 
 // WCAG AA test matrix for required semantic pairs.
 // Every pair here MUST pass 4.5:1 (normal text).
-const requiredPairs: ReadonlyArray<readonly [string, string, string]> = [
+const requiredPairs: readonly (readonly [string, string, string])[] = [
   ['text.primary / bg.canvas', semanticColors.text.primary, semanticColors.bg.canvas],
   ['text.primary / bg.surface', semanticColors.text.primary, semanticColors.bg.surface],
   ['text.primary / bg.raised', semanticColors.text.primary, semanticColors.bg.raised],
