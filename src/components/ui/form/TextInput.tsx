@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useState, type ElementRef } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   View,
   type StyleProp,
   type TextInputProps as RNTextInputProps,
+  type TextStyle,
   type ViewStyle,
 } from 'react-native';
 
