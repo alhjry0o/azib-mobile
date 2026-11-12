@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { useHaptics, useMotion } from '@/hooks';
+import { useHaptics } from '@/hooks';
 import { useTheme } from '@/theme';
 
 import { Icon } from '../Icon';
