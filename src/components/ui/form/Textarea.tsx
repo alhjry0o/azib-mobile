@@ -1,5 +1,5 @@
-import { forwardRef } from 'react';
-import type { TextInput as RNTextInput } from 'react-native';
+import { forwardRef, type ElementRef } from 'react';
+
 
 import { useTheme } from '@/theme';
 
@@ -10,7 +10,7 @@ export interface TextareaProps extends Omit<TextInputProps, 'size'> {
   readonly minHeight?: number;
 }
 
-export const Textarea = forwardRef<RNTextInput, TextareaProps>(function Textarea(
+export const Textarea = forwardRef<ElementRef<typeof TextInput>, TextareaProps>(function Textarea(
   { minHeight = 96, ...rest },
   ref,
 ) {
