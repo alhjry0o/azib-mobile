@@ -245,4 +245,57 @@ Custom calendar modal (no external date picker). Works identically on iOS/Androi
   minDate={new Date()}
 />
 ```
+## Feedback & Display (Part 4a)
+
+### `<ToastProvider>` + `useToast()`
+
+Global toast provider. Wrap the app once at `app/_layout.tsx`.
+
+```tsx
+const toast = useToast();
+toast.show({ message: t('saved'), variant: 'success' });
+toast.show({ message: 'Error!', variant: 'error', duration: 5000 });
+toast.show({ message: 'Stays until dismissed', duration: 0 });
+```
+
+- Renders at the top safe area.
+- One toast at a time (new replaces old).
+- Auto-dismiss after `duration` (default 3000). `0` disables.
+- `accessibilityRole="alert"` + `accessibilityLiveRegion="polite"`.
+- Dismiss button (X) in all toasts.
+
+### `<Banner>`
+
+Inline message block. Four variants: `info` (default), `demo` (gold/attention), `warning`, `error`.
+
+```tsx
+<Banner title="Note" message="Welcome back" onDismiss={() => {}} />
+<Banner variant="demo" message="This data is for demonstration only." onDismiss={() => {}} />
+<Banner variant="error" message="Could not save." actionLabel="Retry" onAction={retry} />
+```
+
+### `<Badge>`
+
+Small pill. Nine variants: `neutral`, `accent`, `success`, `warning`, `danger`, `info` (raw) + `verified`, `pending`, `demo` (presets with icons).
+
+```tsx
+<Badge label="Verified" variant="verified" />
+<Badge label="Draft" />
+<Badge label="Demo" variant="demo" size="sm" />
+```
+
+### `<Card>`
+
+Four variants:
+- `flat` (default): surface + subtle border.
+- `crest`: gold top accent — reserved for hero content.
+- `pressable`: flat + haptic + press feedback.
+- `stat`: title + big value + optional icon/caption.
+
+```tsx
+<Card><Text>Flat content</Text></Card>
+<Card variant="crest"><Text>Hero</Text></Card>
+<Card variant="pressable" onPress={open} accessibilityLabel="Open">…</Card>
+<Card variant="stat" title="Total donations" value={1250} leftIcon="wallet" />
+```
 ```
