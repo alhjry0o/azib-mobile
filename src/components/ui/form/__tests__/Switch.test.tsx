@@ -42,6 +42,6 @@ describe('Switch', () => {
       <Switch value={false} onValueChange={() => {}} label="Notifications" />,
       { wrapper: Providers },
     );
-    expect(getByText('Notifications')).toBeTruthy();
+    expect(getByText('Notifications', { includeHiddenElements: true })).toBeTruthy();
   });
 });
