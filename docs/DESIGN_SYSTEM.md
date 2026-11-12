@@ -98,6 +98,8 @@ States: `default`, `pressed` (opacity 0.85), `disabled` (opacity 0.45), `loading
 <Button variant="icon" leftIcon="check" accessibilityLabel="Confirm" />
 <Button label="Saving" loading />
 ```
+```
+
 ## Components (Part 3a — done)
 
 ### `<Field>`
@@ -182,4 +184,6 @@ Yemen-specific phone input with a fixed +967 prefix and numeric-only input. (Mul
 
 ```tsx
 <PhoneInput label="Phone Number" value={phone} onChangeText={setPhone} />
+```
+
 ```
