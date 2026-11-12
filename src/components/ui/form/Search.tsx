@@ -1,5 +1,4 @@
-import { forwardRef, useState } from 'react';
-import type { TextInput as RNTextInput } from 'react-native';
+import { forwardRef, useState, type ElementRef } from 'react';
 
 import { TextInput, type TextInputProps } from './TextInput';
 
@@ -9,7 +8,7 @@ export interface SearchProps
   readonly onClear?: () => void;
 }
 
-export const Search = forwardRef<RNTextInput, SearchProps>(function Search(
+export const Search = forwardRef<ElementRef<typeof TextInput>, SearchProps>(function Search(
   { value, onClear, onChangeText, ...rest },
   ref,
 ) {
