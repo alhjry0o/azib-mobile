@@ -22,17 +22,20 @@ function renderWithProvider(ui: React.ReactElement) {
 }
 
 describe('Toast', () => {
-  it('useToast throws outside provider', () => {
-    // Silence expected error
+  it('useToast throws when rendered outside provider', async () => {
     const originalError = console.error;
     console.error = jest.fn();
-    expect(() => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const _ = () => useToast();
-      // Trigger the hook synchronously via a minimal component
-      // Instead of rendering, call directly:
-      // (we rely on React context throwing; simulate by calling hook outside render)
-    }).not.toThrow();
+    function Bad() {
+      useToast();
+      return null;
+    }
+    await expect(async () => {
+      await render(
+        <Providers>
+          <Bad />
+        </Providers>,
+      );
+    }).rejects.toThrow();
     console.error = originalError;
   });
 
