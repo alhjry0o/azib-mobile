@@ -31,7 +31,8 @@
 
 | # | الخط | المصدر | الرخصة | مسموح في المستودع؟ | تاريخ |
 |---|-------|--------|--------|----------------------|-------|
-| — | (لا يوجد بعد) | — | — | — | — |
+| 1 | IBM Plex Sans Arabic (400/500/600/700) | @expo-google-fonts/ibm-plex-sans-arabic | SIL OFL 1.1 | نعم | 2026-11-12 |
+| 2 | Cairo (600/700) | @expo-google-fonts/cairo | SIL OFL 1.1 | نعم | 2026-11-12 |
 
 > أي خط عربي يُستخدم يجب أن يدعم تشكيل RTL بشكل سليم ويُختبر على أجهزة Android القديمة.
 
@@ -41,7 +42,8 @@
 
 | # | المجموعة | المصدر | الرخصة | تاريخ |
 |---|-----------|--------|--------|-------|
-| — | (لا يوجد بعد) | — | — | — |
+| 1 | Lucide (React Native) | lucide-react-native | ISC (permissive) | Pending install in Part 2 |
+| 2 | Qamariya, DoubleRing (custom SVG) | Internal design (AZIB) | Proprietary (AZIB) | 2026-11-12 (to be created in Part 5) |
 
 ---
 
