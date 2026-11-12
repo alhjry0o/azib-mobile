@@ -98,7 +98,6 @@ States: `default`, `pressed` (opacity 0.85), `disabled` (opacity 0.45), `loading
 <Button variant="icon" leftIcon="check" accessibilityLabel="Confirm" />
 <Button label="Saving" loading />
 ```
-```
 
 ## Components (Part 3a — done)
 
