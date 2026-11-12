@@ -5,12 +5,7 @@ import { OTPInput } from '../OTPInput';
 
 describe('OTPInput', () => {
   it('renders N cells based on length', async () => {
-    const { } = await render(
-      <OTPInput value="" onChangeText={() => {}} length={4} testID="otp" />,
-      { wrapper: Providers },
-    );
-    // Cells are Views; checking the input exists is enough signal of correctness.
-    // (Cell count is verified indirectly through the container children.)
+
     const { getByTestId } = await render(
       <OTPInput value="" onChangeText={() => {}} length={4} testID="otp" />,
       { wrapper: Providers },
