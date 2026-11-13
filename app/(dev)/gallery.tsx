@@ -680,7 +680,7 @@ function BrandMotionSection() {
             <View style={StyleSheet.absoluteFill}>
               <View
                 style={{
-                  ...StyleSheet.absoluteFillObject,
+                  ...StyleSheet.absoluteFill,
                   backgroundColor: theme.colors.bg.surface,
                 }}
               />
