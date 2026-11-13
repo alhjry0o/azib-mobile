@@ -4,6 +4,11 @@ import { Text as RNText } from 'react-native';
 import { BottomSheet } from '../BottomSheet';
 import { Providers } from './test-utils';
 
+jest.mock('@/hooks', () => ({
+  ...jest.requireActual('@/hooks'),
+  useMotion: () => ({ reduceMotion: true, enabled: false, duration: () => 0 }),
+}));
+
 describe('BottomSheet', () => {
   it('renders nothing when visible=false', async () => {
     const { queryByTestId } = await render(
