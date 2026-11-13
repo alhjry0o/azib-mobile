@@ -9,19 +9,23 @@ import {
   ALL_ICON_NAMES,
   Badge,
   Banner,
+  BottomSheet,
   Button,
   Card,
   Checkbox,
   Chip,
   DatePicker,
+  Dialog,
   Icon,
   OTPInput,
   PhoneInput,
   RadioGroup,
   Screen,
   Search,
+  SegmentedControl,
   Select,
   Switch,
+  Tabs,
   Text,
   Textarea,
   TextInput,
@@ -45,8 +49,10 @@ export default function GalleryScreen() {
       <FormsAdvancedSection />
       <FeedbackSection />
       <DisplaySection />
+      <OverlaysSection />
+      <NavSection />
       <Text variant="caption" color="tertiary" align="center" style={{ marginTop: 24 }}>
-        Parts 4–7 will add overlays, brand 3D, and utilities.
+        Parts 5-7 will add overlays, brand 3D, and utilities.
       </Text>
     </Screen>
   );
@@ -418,6 +424,108 @@ function DisplaySection() {
             <Card variant="stat" title="Applications" value="42" caption="this month" leftIcon="users" />
           </View>
         </View>
+      </Section>
+    </>
+  );
+}
+
+function OverlaysSection() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  return (
+    <>
+      <Section title="Overlays — Dialog">
+        <Button label="Open dialog" onPress={() => setDialogOpen(true)} />
+        <Dialog
+          visible={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          title="Delete account?"
+          description="This action cannot be undone."
+          testID="gal-dialog"
+        >
+          <View style={styles.row}>
+            <Button variant="ghost" label="Cancel" onPress={() => setDialogOpen(false)} />
+            <Button variant="danger" label="Delete" onPress={() => setDialogOpen(false)} />
+          </View>
+        </Dialog>
+      </Section>
+
+      <Section title="Overlays — BottomSheet">
+        <Button label="Open sheet" onPress={() => setSheetOpen(true)} />
+        <BottomSheet
+          visible={sheetOpen}
+          onClose={() => setSheetOpen(false)}
+          testID="gal-sheet"
+        >
+          <Text variant="h2" style={{ marginBottom: 12 }}>
+            Sheet content
+          </Text>
+          <Text variant="body" color="secondary" style={{ marginBottom: 16 }}>
+            Drag down or tap backdrop to dismiss.
+          </Text>
+          <Button label="Close" variant="secondary" onPress={() => setSheetOpen(false)} />
+        </BottomSheet>
+      </Section>
+    </>
+  );
+}
+
+function NavSection() {
+  const [tab, setTab] = useState<'overview' | 'activity' | 'settings'>('overview');
+  const [filter, setFilter] = useState<'all' | 'active' | 'done'>('all');
+  return (
+    <>
+      <Section title="Navigation — Tabs (default)">
+        <Tabs
+          tabs={[
+            { key: 'overview' as const, label: 'Overview' },
+            { key: 'activity' as const, label: 'Activity', badge: 3 },
+            { key: 'settings' as const, label: 'Settings' },
+          ]}
+          value={tab}
+          onChange={setTab}
+        />
+        <Text variant="body" color="secondary">
+          Content for: {tab}
+        </Text>
+      </Section>
+
+      <Section title="Navigation — Tabs (pills)">
+        <Tabs
+          variant="pills"
+          tabs={[
+            { key: 'overview' as const, label: 'Overview' },
+            { key: 'activity' as const, label: 'Activity' },
+            { key: 'settings' as const, label: 'Settings' },
+          ]}
+          value={tab}
+          onChange={setTab}
+        />
+      </Section>
+
+      <Section title="Navigation — SegmentedControl">
+        <SegmentedControl
+          segments={[
+            { value: 'all' as const, label: 'All' },
+            { value: 'active' as const, label: 'Active' },
+            { value: 'done' as const, label: 'Done' },
+          ]}
+          value={filter}
+          onChange={setFilter}
+        />
+        <SegmentedControl
+          segments={[
+            { value: 'all' as const, label: 'All' },
+            { value: 'active' as const, label: 'Active' },
+            { value: 'done' as const, label: 'Done' },
+          ]}
+          value={filter}
+          onChange={setFilter}
+          size="sm"
+        />
+        <Text variant="caption" color="secondary">
+          Filter: {filter}
+        </Text>
       </Section>
     </>
   );
