@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text as RNText, StyleProp, ViewStyle } from 'react-native';
-import { render } from '@testing-library/react-native';
+import { act, render } from '@testing-library/react-native';
+import { StyleProp, View, ViewStyle, Text as RNText } from 'react-native';
 
 import { useDeviceTierStore } from '@/hooks';
 import { Providers } from '@/components/ui/__tests__/test-utils';
@@ -12,18 +12,29 @@ jest.mock('expo-blur', () => {
   const React = require('react');
   const { View } = require('react-native');
   return {
-    BlurView: ({ children, style, testID }: { children?: React.ReactNode; style?: any; testID?: string }) =>
-      React.createElement(View, { style, testID }, children),
+    BlurView: ({
+      children,
+      style,
+      testID,
+    }: {
+      children?: React.ReactNode;
+      style?: StyleProp<ViewStyle>;
+      testID?: string;
+    }) => React.createElement(View, { style, testID }, children),
   };
 });
 
 describe('GlassView', () => {
-  beforeEach(() => {
-    useDeviceTierStore.setState({ override: 'high' });
+  beforeEach(async () => {
+    await act(async () => {
+      useDeviceTierStore.setState({ override: 'high' });
+    });
   });
 
-  afterEach(() => {
-    useDeviceTierStore.setState({ override: null });
+  afterEach(async () => {
+    await act(async () => {
+      useDeviceTierStore.setState({ override: null });
+    });
   });
 
   it('renders children', async () => {
@@ -47,7 +58,9 @@ describe('GlassView', () => {
   });
 
   it('renders fallback View on low tier', async () => {
-    useDeviceTierStore.setState({ override: 'low' });
+    await act(async () => {
+      useDeviceTierStore.setState({ override: 'low' });
+    });
     const { getByTestId } = await render(
       <GlassView testID="glass">
         <RNText>X</RNText>
