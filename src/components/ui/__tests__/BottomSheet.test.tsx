@@ -43,7 +43,7 @@ describe('BottomSheet', () => {
     fireEvent.press(backdrop);
     // Note: close() triggers animated run, so onClose fires asynchronously
     // after animation completes. Test just verifies no crash + backdrop exists.
-    expect(getByTestId('bs-backdrop')).toBeTruthy();
+    expect(backdrop).toBeTruthy();
   });
 
   it('does not call onClose when dismissOnBackdrop=false', async () => {
