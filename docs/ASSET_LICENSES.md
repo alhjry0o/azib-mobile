@@ -44,6 +44,8 @@
 |---|-----------|--------|--------|-------|
 | 1 | Lucide (React Native) | lucide-react-native | ISC (permissive) | 2026-11-12 (Part 2) |
 | 2 | Qamariya, DoubleRing (custom SVG) | Internal design (AZIB) | Proprietary (AZIB) | 2026-11-12 (to be created in Part 5) |
+| 3 | react-native-reanimated | الحركة (DoubleRing*, Hero3D) | MIT | 2026-11-14 |
+| 4 | react-native-gesture-handler | إيماءات (محفوظة للـP05+) | MIT | 2026-11-14 |
 
 ---
 
