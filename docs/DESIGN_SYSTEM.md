@@ -13,7 +13,8 @@
 | 3b | Select, OTPInput, DatePicker | **Done** |
 | 4a | Toast (provider + hook), Banner, Badge, Card | **Done** |
 | 4b | Dialog, BottomSheet (drag), Tabs, SegmentedControl | **Done** |
-| 5 | Brand + 3D | Pending |
+| 5a | ArchHero, QamariyaPattern, GlowView, GlassView | **Done** |
+| 5b | DoubleRingLoader, DoubleRingSuccess, Hero3D | Pending |
 | 6 | Utility | Pending |
 | 7 | Full rules & closing | Pending |
 
@@ -375,4 +376,69 @@ Material-style segmented control with animated indicator. Same role/state as Tab
 - Indicator animates via `Animated.timing` (respects Reduce Motion).
 - RTL-aware via `start: 0` + `translateX` flip.
 
+## Brand Components (Part 5a)
+
+### `<ArchHero>`
+
+Islamic/Yemeni-style arch frame (mihrab silhouette). Uses `borderTopLeftRadius: 9999` (clamped to `width/2` by RN), producing a perfect semicircle top without SVG.
+
+```tsx
+<ArchHero width={240}>
+  <Text variant="h2" color="gold">عازب</Text>
+</ArchHero>
+
+<ArchHero variant="outlined" width={200}>
+  <Text>Outlined</Text>
+</ArchHero>
+```
+
+- `width` is required (defines arch dimensions; height = `width * 4/3` via `aspectRatio`).
+- Two variants: `filled` (surface bg) and `outlined` (transparent).
+- Gold border by default; override via `borderColor`.
+- Symmetric — RTL-agnostic.
+
+### `<QamariyaPattern>`
+
+Repeated geometric motif (interlocking rings + center dot). Echoes the AZIB brand identity. Uses SVG `<Pattern>` for efficiency.
+
+```tsx
+<View style={{ height: 200, position: 'relative' }}>
+  <QamariyaPattern width={340} height={200} opacity={0.12} />
+  <View>{/* foreground content */}</View>
+</View>
+```
+
+- `color` default `#F0CA68` (soft gold).
+- `opacity` default `0.06` — subtle.
+- `pointerEvents="none"` — never intercepts touches.
+- Unique SVG id per instance (no clashes).
+- Tile size default 80dp.
+
+### `<GlowView>`
+
+Soft glow wrapper. **Disabled on Device Tier low** (ADR-0003). Uses `shadowColor`/`shadowRadius` on iOS, `elevation` on Android.
+
+```tsx
+<GlowView radius={20} intensity={0.5}>
+  <Button label="Primary" />
+</GlowView>
+```
+
+- `color`: `'accent'` (purple, default) or `'gold'`.
+- `radius` default 20, `intensity` default 0.45.
+- One glow per screen maximum per brief §7. Two only for ceremonial hero.
+
+### `<GlassView>`
+
+Glass blur surface via `expo-blur`. **Restricted to Dock and Sheet** per `AGENT_RULES`. Falls back to a semi-transparent surface on Tier low (blur disabled).
+
+```tsx
+<GlassView intensity={60} style={{ borderRadius: 24, padding: 16 }}>
+  <Text>Dock content</Text>
+</GlassView>
+```
+
+- `intensity` default 60, `tint` default `dark`.
+- On Web, uses `backdrop-filter` (Chrome 76+, Safari 9+, Firefox 103+).
+- On Android without GPU support (low-end), fallback engages automatically via `useDeviceTier`.
 ```
