@@ -11,11 +11,12 @@
 | 2 | Icon, Text, Screen, Button | **Done** |
 | 3a | Field, TextInput, Textarea, Search, Switch, Checkbox, Radio, Chip, PhoneInput | **Done** |
 | 3b | Select, OTPInput, DatePicker | **Done** |
-| 4a | Toast (provider + hook), Banner, Badge, Card | **Done** |
-| 4b | Dialog, BottomSheet (drag), Tabs, SegmentedControl | **Done** |
+| 4a | Toast, Banner, Badge, Card | **Done** |
+| 4b | Dialog, BottomSheet, Tabs, SegmentedControl | **Done** |
 | 5a | ArchHero, QamariyaPattern, GlowView, GlassView | **Done** |
-| 5b | DoubleRingLoader, DoubleRingSuccess, Hero3D (Reanimated) | **Done** |
-| 6 | Utility | Pending |
+| 5b | DoubleRingLoader, DoubleRingSuccess, Hero3D | **Done** |
+| 6a | Divider, SectionHeader, Skeleton, ProgressBar, Avatar | **Done** |
+| 6b | ListItem, Stepper, RingProgress, EmptyState, ErrorState, NotConnectedState | Pending |
 | 7 | Full rules & closing | Pending |
 
 ## Tokens (Part 1 — done)
@@ -490,3 +491,75 @@ useAnimatedScrollHandler((e) => { progress.value = e.contentOffset.y / 400; });
 - Disabled on Tier low and Reduce Motion (layers flat).
 - **One glow per screen maximum** per brief §7. Two only for ceremonial hero.
 
+## Utility Components (Part 6a)
+
+### `<Divider>`
+
+Thin separator. Hidden from accessibility tree by default.
+
+```tsx
+<Divider />
+<Divider inset />
+<Divider color={theme.colors.accent.fill} thickness={2} />
+<Divider orientation="vertical" />
+```
+
+- `orientation` default `horizontal`.
+- `inset` for `paddingStart/End` margin.
+- `accessibilityElementsHidden` — not announced by screen readers.
+
+### `<SectionHeader>`
+
+Section title + optional subtitle + optional action.
+
+```tsx
+<SectionHeader title="Recent" subtitle="Last 30 days" />
+<SectionHeader title="Recent" actionLabel="See all" onAction={openAll} />
+```
+
+- Action chevron mirrors in RTL.
+- `accessibilityRole="button"` on the action.
+
+### `<Skeleton>`
+
+Placeholder with shimmer (disabled on Tier low or Reduce Motion).
+
+```tsx
+<Skeleton variant="text" />
+<Skeleton variant="circle" size={48} />  {/* actually width=height=48 by default */}
+<Skeleton variant="rect" height={120} />
+<Skeleton width={120} height={24} />
+```
+
+- `variant`: `'text'` (14dp height), `'circle'` (48×48), `'rect'` (default).
+- Hidden from accessibility (`accessibilityElementsHidden`).
+- Shimmer uses Reanimated opacity pulse (0.35 ↔ 0.85, 900ms).
+
+### `<ProgressBar>`
+
+Linear progress bar. Determinate (with `value`) or indeterminate (omit `value`).
+
+```tsx
+<ProgressBar value={0.42} showLabel />
+<ProgressBar value={0.75} color="success" />
+<ProgressBar size="sm" /> {/* indeterminate */}
+```
+
+- `size`: `sm` (4dp), `md` (8dp), `lg` (12dp).
+- `color`: `accent`, `gold`, `success`, `danger`.
+- `accessibilityRole="progressbar"` + `accessibilityValue` (determinate only).
+- Indeterminate uses Reanimated opacity pulse (respects Reduce Motion).
+
+### `<Avatar>`
+
+Initials-based avatar (image support arrives in P06).
+
+```tsx
+<Avatar name="Ahmed Yemeni" size="md" />
+<Avatar name="Fatima" size="lg" ring />
+```
+
+- Initials: first letter of first word + first letter of last word. Falls back to `?` for empty.
+- `size`: `xs` (24), `sm` (32), `md` (44), `lg` (64), `xl` (96).
+- `ring` → gold border.
+- `accessibilityRole="image"` + `accessibilityLabel={name}`.
