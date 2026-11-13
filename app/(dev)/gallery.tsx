@@ -544,7 +544,7 @@ function BrandSection() {
         <View style={{ alignItems: 'center' }}>
           <ArchHero width={240}>
             <Text variant="h2" color="gold" align="center">
-              عازب
+              عازب {/* i18n-allow-arabic */}
             </Text>
             <Text variant="caption" color="secondary" align="center" style={{ marginTop: 4 }}>
               AZIB
