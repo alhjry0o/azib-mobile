@@ -49,7 +49,7 @@ describe('Dialog', () => {
 
   it('calls onClose when the backdrop is pressed (dismissOnBackdrop=true)', async () => {
     const onClose = jest.fn();
-    const { getByTestId } = await render(
+    const { findByTestId } = await render(
       <Dialog visible onClose={onClose} title="Hello" testID="dlg" />,
       { wrapper: Providers },
     );
@@ -59,7 +59,7 @@ describe('Dialog', () => {
 
   it('does not close on backdrop when dismissOnBackdrop=false', async () => {
     const onClose = jest.fn();
-    const { getByTestId } = await render(
+    const { findByTestId } = await render(
       <Dialog visible onClose={onClose} title="Hello" dismissOnBackdrop={false} testID="dlg" />,
       { wrapper: Providers },
     );
