@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text as RNText } from 'react-native';
+import { View, Text as RNText, StyleProp, ViewStyle } from 'react-native';
 import { render } from '@testing-library/react-native';
 
 import { useDeviceTierStore } from '@/hooks';
@@ -9,7 +9,7 @@ import { GlassView } from '../GlassView';
 
 // Mock expo-blur to a simple View so tests don't depend on native modules.
 jest.mock('expo-blur', () => ({
-  BlurView: ({ children, style, testID }: { children?: React.ReactNode; style?: unknown; testID?: string }) =>
+  BlurView: ({ children, style, testID }: { children?: React.ReactNode; style?: StyleProp<ViewStyle>; testID?: string }) =>
     React.createElement(View, { style, testID }, children),
 }));
 
