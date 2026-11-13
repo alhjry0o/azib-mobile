@@ -53,7 +53,8 @@ describe('Dialog', () => {
       <Dialog visible onClose={onClose} title="Hello" testID="dlg" />,
       { wrapper: Providers },
     );
-    fireEvent.press(getByTestId('dlg-backdrop'));
+    const backdrop = await findByTestId('dlg-backdrop');
+    fireEvent.press(backdrop);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
@@ -63,7 +64,8 @@ describe('Dialog', () => {
       <Dialog visible onClose={onClose} title="Hello" dismissOnBackdrop={false} testID="dlg" />,
       { wrapper: Providers },
     );
-    fireEvent.press(getByTestId('dlg-backdrop'));
+    const backdrop = await findByTestId('dlg-backdrop');
+    fireEvent.press(backdrop);
     expect(onClose).not.toHaveBeenCalled();
   });
 
