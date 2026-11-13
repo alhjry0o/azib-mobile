@@ -11,6 +11,11 @@ jest.mock('expo-haptics', () => ({
   NotificationFeedbackType: { Success: 'Success', Error: 'Error' },
 }));
 
+jest.mock('@/hooks', () => ({
+  ...jest.requireActual('@/hooks'),
+  useMotion: () => ({ reduceMotion: true, enabled: false, duration: () => 0 }),
+}));
+
 describe('Dialog', () => {
   it('renders nothing when visible=false', async () => {
     const { queryByTestId } = await render(
