@@ -212,4 +212,29 @@
   - − قد لا تغطي بعض الأيقونات الخاصة (يُضاف SVG يدوياً عند الحاجة).
 - **معايير المراجعة:** إذا احتجنا أيقونات brand-identity خاصة واسعة، قد ننتقل لمكتبة مدفوعة (يُوثَّق كـADR بديل).
 - **المراجع:** `docs/ASSET_LICENSES.md` (يُسجَّل عند install في Part 2).
-```
+
+---
+
+## ADR-0011 — Jest mock لـreact-native-reanimated
+
+- **التاريخ:** 2026-11-14
+- **الحالة:** Accepted
+- **السياق:** P04.5b هو أول استخدام لـ`react-native-reanimated` في المشروع. `jest-expo` preset لا يفعّل `react-native-worklets/plugin` في Babel/Jest، لذا أي `import` من `react-native-reanimated` في اختبار يفشل بخطأ "worklet not compiled". لا يوجد mock رسمي مضمّن لـReanimated 4 في `jest-expo`.
+- **القرار:** إضافة mock **يدوي كامل** في `jest.setup.ts` يُعيد:
+  - `Animated.View/Text/ScrollView/Image` → مكونات RN عادية.
+  - `useSharedValue(v)` → `{ value: v }` (كائن عادي، ليس ref).
+  - `useAnimatedStyle(fn)` → `fn()` (تنفيذ مرة واحدة عند الرندر).
+  - `withTiming/withSpring/withRepeat/etc.` → إرجاع القيمة النهائية مباشرة.
+  - `useAnimatedRef` → `{ current: null }`.
+  - `Gesture.*` + `GestureDetector` → كائنات chainable no-op.
+- **البدائل المدروسة:**
+  - `require('react-native-reanimated').setUpTests()` — يفشل مع Reanimated 4 في `jest-expo`.
+  - `react-native-reanimated/mock` — مسار قديم غير مضمون في v4.
+  - عدم استخدام Reanimated أصلاً — يخالف brief §8 "الحركة عبر Worklets".
+- **التبعات:**
+  - + كل اختبارات المكونات المتحركة تعمل بثبات (487 + ~20 اختبار P04.5b).
+  - − الحركة الفعلية **لا تُختبر** في Jest. تُختبر على الأجهزة الفعلية + E2E في P21 (Playwright).
+  - − إذا احتاجت أي ميزة قياس قيم متوسطة من `SharedValue` (مثلاً، قيمة أثناء الحركة)، Jest لن يعكسها.
+  - − ترقيات Reanimated المستقبلية (v5) قد تكسر هذا الـmock. موثَّق للصيانة.
+- **معايير المراجعة:** عندما يوفّر `jest-expo` رسمياً mock لـReanimated 4، أو عندما يصبح `setUpTests()` يعمل بثبات. عندها يُزال هذا الـmock.
+- **المراجع:** `jest.setup.ts`, `src/components/brand/DoubleRingLoader.tsx`, `src/components/brand/Hero3D.tsx`.
