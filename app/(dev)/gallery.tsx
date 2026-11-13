@@ -30,6 +30,11 @@ import {
   Textarea,
   TextInput,
   useToast,
+  Avatar,
+  Divider,
+  ProgressBar,
+  SectionHeader,
+  Skeleton,
 } from '@/components/ui';
 
 import {
@@ -64,8 +69,9 @@ export default function GalleryScreen() {
       <NavSection />
       <BrandSection />
       <BrandMotionSection />
+      <UtilitySection />
       <Text variant="caption" color="tertiary" align="center" style={{ marginTop: 24 }}>
-        Parts 6–7 will add utilities and full docs.
+        Part 7 will finalize docs/DESIGN_SYSTEM.md.
       </Text>
     </Screen>
   );
@@ -716,6 +722,85 @@ function BrandMotionSection() {
             </ArchHero>
           }
         />
+      </Section>
+    </>
+  );
+}
+
+function UtilitySection() {
+  const theme = useTheme();
+  return (
+    <>
+      <Section title="Utility — Divider">
+        <Text variant="body">Above</Text>
+        <Divider />
+        <Text variant="body">Below</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', height: 40 }}>
+          <Text variant="body">Left</Text>
+          <Divider orientation="vertical" />
+          <Text variant="body">Right</Text>
+        </View>
+        <Text variant="caption" color="secondary">
+          Custom color:
+        </Text>
+        <Divider color={theme.colors.accent.fill} thickness={2} />
+      </Section>
+
+      <Section title="Utility — SectionHeader">
+        <SectionHeader title="Recent" subtitle="Last 30 days" />
+        <SectionHeader
+          title="Recent"
+          actionLabel="See all"
+          onAction={() => {}}
+        />
+        <SectionHeader
+          title="Notifications"
+          subtitle="You have 3 unread"
+          actionLabel="Mark read"
+          onAction={() => {}}
+        />
+      </Section>
+
+      <Section title="Utility — Skeleton">
+        <Skeleton variant="text" />
+        <Skeleton variant="text" width="60%" />
+        <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+          <Skeleton variant="circle" />
+          <View style={{ flex: 1, gap: 8 }}>
+            <Skeleton variant="text" width="80%" />
+            <Skeleton variant="text" width="60%" />
+          </View>
+        </View>
+        <Skeleton variant="rect" height={120} />
+      </Section>
+
+      <Section title="Utility — ProgressBar">
+        <ProgressBar value={0.25} />
+        <ProgressBar value={0.5} showLabel />
+        <ProgressBar value={0.75} color="success" showLabel />
+        <ProgressBar value={0.9} color="gold" showLabel />
+        <ProgressBar color="danger" />
+        <Text variant="caption" color="secondary">
+          Sizes:
+        </Text>
+        <ProgressBar value={0.4} size="sm" />
+        <ProgressBar value={0.4} size="md" />
+        <ProgressBar value={0.4} size="lg" />
+      </Section>
+
+      <Section title="Utility — Avatar">
+        <View style={styles.row}>
+          <Avatar name="Ahmed Yemeni" size="xs" />
+          <Avatar name="Fatima Sanaa" size="sm" />
+          <Avatar name="Khalid" size="md" />
+          <Avatar name="Samira Taiz" size="lg" />
+          <Avatar name="Yemen Family" size="xl" />
+        </View>
+        <View style={styles.row}>
+          <Avatar name="Ahmed Yemeni" size="md" ring />
+          <Avatar name="Fatima Sanaa" size="lg" ring />
+          <Avatar name="Test" size="md" ring />
+        </View>
       </Section>
     </>
   );
