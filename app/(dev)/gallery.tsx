@@ -25,16 +25,19 @@ import {
   SegmentedControl,
   Select,
   Switch,
-  ArchHero,
-  GlassView,
-  GlowView,
-  QamariyaPattern,
   Tabs,
   Text,
   Textarea,
   TextInput,
   useToast,
 } from '@/components/ui';
+
+import {
+  ArchHero,
+  GlassView,
+  GlowView,
+  QamariyaPattern,
+} from '@/components/brand';
 import type { ButtonSize, ButtonVariant } from '@/components/ui';
 import { useDeviceTier, useDeviceTierStore, useDirection } from '@/hooks';
 import { setLanguage } from '@/i18n';
