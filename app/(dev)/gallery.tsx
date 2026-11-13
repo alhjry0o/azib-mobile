@@ -34,10 +34,14 @@ import {
 
 import {
   ArchHero,
+  DoubleRingLoader,
+  DoubleRingSuccess,
   GlassView,
   GlowView,
+  Hero3D,
   QamariyaPattern,
 } from '@/components/brand';
+import { useSharedValue } from 'react-native-reanimated';
 import type { ButtonSize, ButtonVariant } from '@/components/ui';
 import { useDeviceTier, useDeviceTierStore, useDirection } from '@/hooks';
 import { setLanguage } from '@/i18n';
@@ -59,8 +63,9 @@ export default function GalleryScreen() {
       <OverlaysSection />
       <NavSection />
       <BrandSection />
+      <BrandMotionSection />
       <Text variant="caption" color="tertiary" align="center" style={{ marginTop: 24 }}>
-        Parts 5b–7 will add overlays, brand 3D, and utilities.
+        Parts 6–7 will add utilities and full docs.
       </Text>
     </Screen>
   );
@@ -612,6 +617,103 @@ function BrandSection() {
             </Text>
           </GlassView>
         </View>
+      </Section>
+    </>
+  );
+}
+
+function BrandMotionSection() {
+  const theme = useTheme();
+  const progress = useSharedValue(0);
+  return (
+    <>
+      <Section title="Brand — DoubleRingLoader">
+        <View style={styles.row}>
+          <DoubleRingLoader size={48} />
+          <DoubleRingLoader size={64} />
+          <DoubleRingLoader size={80} color={theme.colors.gold.fill} />
+        </View>
+      </Section>
+
+      <Section title="Brand — DoubleRingSuccess">
+        <View style={styles.row}>
+          <DoubleRingSuccess size={56} />
+          <DoubleRingSuccess size={72} />
+          <DoubleRingSuccess size={88} color={theme.colors.text.accent} />
+        </View>
+      </Section>
+
+      <Section title="Brand — Hero3D (progress-driven parallax)">
+        <View style={styles.row}>
+          <Button
+            size="sm"
+            variant="secondary"
+            label="0%"
+            onPress={() => {
+              progress.value = 0;
+            }}
+          />
+          <Button
+            size="sm"
+            variant="secondary"
+            label="50%"
+            onPress={() => {
+              progress.value = 0.5;
+            }}
+          />
+          <Button
+            size="sm"
+            variant="secondary"
+            label="100%"
+            onPress={() => {
+              progress.value = 1;
+            }}
+          />
+        </View>
+        <Hero3D
+          progress={progress}
+          height={320}
+          background={
+            <View style={StyleSheet.absoluteFill}>
+              <View
+                style={{
+                  ...StyleSheet.absoluteFillObject,
+                  backgroundColor: theme.colors.bg.surface,
+                }}
+              />
+              <QamariyaPattern width={400} height={320} opacity={0.15} />
+            </View>
+          }
+          midground={
+            <View style={styles.row} pointerEvents="none">
+              <View
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 40,
+                  backgroundColor: theme.colors.accent.fill,
+                  opacity: 0.4,
+                }}
+              />
+              <View
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 30,
+                  backgroundColor: theme.colors.gold.fill,
+                  opacity: 0.4,
+                }}
+              />
+            </View>
+          }
+          foreground={
+            <ArchHero width={200} variant="outlined">
+              <Text variant="h2" color="gold" align="center">
+                عازب {/* i18n-allow-arabic */}
+              </Text>
+            </ArchHero>
+          }
+        />
       </Section>
     </>
   );
