@@ -25,6 +25,10 @@ import {
   SegmentedControl,
   Select,
   Switch,
+  ArchHero,
+  GlassView,
+  GlowView,
+  QamariyaPattern,
   Tabs,
   Text,
   Textarea,
@@ -51,8 +55,9 @@ export default function GalleryScreen() {
       <DisplaySection />
       <OverlaysSection />
       <NavSection />
+      <BrandSection />
       <Text variant="caption" color="tertiary" align="center" style={{ marginTop: 24 }}>
-        Parts 5-7 will add overlays, brand 3D, and utilities.
+        Parts 5b–7 will add overlays, brand 3D, and utilities.
       </Text>
     </Screen>
   );
@@ -526,6 +531,84 @@ function NavSection() {
         <Text variant="caption" color="secondary">
           Filter: {filter}
         </Text>
+      </Section>
+    </>
+  );
+}
+
+function BrandSection() {
+  const theme = useTheme();
+  return (
+    <>
+      <Section title="Brand — ArchHero">
+        <View style={{ alignItems: 'center' }}>
+          <ArchHero width={240}>
+            <Text variant="h2" color="gold" align="center">
+              عازب
+            </Text>
+            <Text variant="caption" color="secondary" align="center" style={{ marginTop: 4 }}>
+              AZIB
+            </Text>
+          </ArchHero>
+        </View>
+        <View style={{ alignItems: 'center', marginTop: 12 }}>
+          <ArchHero variant="outlined" width={200}>
+            <Text variant="bodyStrong" color="primary" align="center">
+              Outlined
+            </Text>
+          </ArchHero>
+        </View>
+      </Section>
+
+      <Section title="Brand — QamariyaPattern">
+        <View
+          style={{
+            height: 200,
+            backgroundColor: theme.colors.bg.surface,
+            borderRadius: theme.radius.lg,
+            overflow: 'hidden',
+            position: 'relative',
+          }}
+        >
+          <QamariyaPattern width={340} height={200} opacity={0.12} />
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text variant="h2" color="gold">
+              Qamariya
+            </Text>
+          </View>
+        </View>
+      </Section>
+
+      <Section title="Brand — GlowView">
+        <View style={styles.row}>
+          <GlowView radius={20} intensity={0.5}>
+            <Button label="Primary glow" />
+          </GlowView>
+          <GlowView color="gold" radius={20} intensity={0.55}>
+            <Button variant="gold" label="Gold glow" />
+          </GlowView>
+        </View>
+      </Section>
+
+      <Section title="Brand — GlassView">
+        <View style={{ alignItems: 'stretch' }}>
+          <GlassView
+            intensity={60}
+            style={{
+              height: 100,
+              borderRadius: theme.radius.xl,
+              padding: 16,
+              justifyContent: 'center',
+            }}
+          >
+            <Text variant="bodyStrong" color="primary">
+              Glass surface
+            </Text>
+            <Text variant="caption" color="secondary">
+              Dock / Sheet only per AGENT_RULES.
+            </Text>
+          </GlassView>
+        </View>
       </Section>
     </>
   );
