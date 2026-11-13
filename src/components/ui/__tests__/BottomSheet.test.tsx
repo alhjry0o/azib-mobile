@@ -33,13 +33,14 @@ describe('BottomSheet', () => {
 
   it('calls onClose when backdrop is pressed', async () => {
     const onClose = jest.fn();
-    const { getByTestId } = await render(
+    const { findByTestId } = await render(
       <BottomSheet visible onClose={onClose} testID="bs">
         <RNText>Body</RNText>
       </BottomSheet>,
       { wrapper: Providers },
     );
-    fireEvent.press(getByTestId('bs-backdrop'));
+    const backdrop = await findByTestId('bs-backdrop');
+    fireEvent.press(backdrop);
     // Note: close() triggers animated run, so onClose fires asynchronously
     // after animation completes. Test just verifies no crash + backdrop exists.
     expect(getByTestId('bs-backdrop')).toBeTruthy();
@@ -47,13 +48,14 @@ describe('BottomSheet', () => {
 
   it('does not call onClose when dismissOnBackdrop=false', async () => {
     const onClose = jest.fn();
-    const { getByTestId } = await render(
+    const { findByTestId } = await render(
       <BottomSheet visible onClose={onClose} dismissOnBackdrop={false} testID="bs">
         <RNText>Body</RNText>
       </BottomSheet>,
       { wrapper: Providers },
     );
-    fireEvent.press(getByTestId('bs-backdrop'));
+    const backdrop = await findByTestId('bs-backdrop');
+    fireEvent.press(backdrop);
     expect(onClose).not.toHaveBeenCalled();
   });
 
