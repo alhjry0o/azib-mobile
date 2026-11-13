@@ -12,7 +12,7 @@
 | 3a | Field, TextInput, Textarea, Search, Switch, Checkbox, Radio, Chip, PhoneInput | **Done** |
 | 3b | Select, OTPInput, DatePicker | **Done** |
 | 4a | Toast (provider + hook), Banner, Badge, Card | **Done** |
-| 4b | Dialog, BottomSheet, Tabs, SegmentedControl | Pending |
+| 4b | Dialog, BottomSheet (drag), Tabs, SegmentedControl | **Done** |
 | 5 | Brand + 3D | Pending |
 | 6 | Utility | Pending |
 | 7 | Full rules & closing | Pending |
@@ -298,4 +298,81 @@ Four variants:
 <Card variant="pressable" onPress={open} accessibilityLabel="Open">…</Card>
 <Card variant="stat" title="Total donations" value={1250} leftIcon="wallet" />
 ```
+## Feedback & Overlay (Part 4b)
+
+### `<Dialog>`
+
+Modal centered dialog with backdrop. Do not open a Dialog and a BottomSheet simultaneously — iOS Modal stacking is fragile.
+
+```tsx
+<Dialog
+  visible={open}
+  onClose={() => setOpen(false)}
+  title="Delete account?"
+  description="This action cannot be undone."
+>
+  <View style={{ flexDirection: 'row', gap: 8 }}>
+    <Button variant="ghost" label="Cancel" onPress={cancel} />
+    <Button variant="danger" label="Delete" onPress={confirm} />
+  </View>
+</Dialog>
+```
+
+- `dismissOnBackdrop` default true; `showCloseButton` default true.
+- `accessibilityViewIsModal` on surface.
+- Fade + scale animation, respects Reduce Motion.
+
+### `<BottomSheet>`
+
+Modal bottom sheet. Single snap (maxHeightPercent of screen, default 85). Drag down to dismiss (threshold 100px or vy > 0.5). Do not open simultaneously with a Dialog.
+
+```tsx
+<BottomSheet visible={open} onClose={() => setOpen(false)}>
+  <Text variant="h2">Sheet content</Text>
+</BottomSheet>
+```
+
+- `dismissOnBackdrop` default true; `showHandle` default true.
+- Uses `PanResponder` (not Reanimated) — kept simple and testable. Migration to Reanimated deferred until P20 if performance requires.
+
+### `<Tabs>`
+
+Tab header. Content rendering is the caller's responsibility.
+
+```tsx
+<Tabs
+  tabs={[
+    { key: 'overview', label: 'Overview' },
+    { key: 'activity', label: 'Activity', badge: 3 },
+    { key: 'settings', label: 'Settings' },
+  ]}
+  value={tab}
+  onChange={setTab}
+  variant="default" // or "pills"
+/>
+```
+
+- `accessibilityRole="tablist"` + `role="tab"` per tab.
+- Equal width via `flex: 1`. Scrollable tabs deferred to P07+.
+
+### `<SegmentedControl>`
+
+Material-style segmented control with animated indicator. Same role/state as Tabs.
+
+```tsx
+<SegmentedControl
+  segments={[
+    { value: 'all', label: 'All' },
+    { value: 'active', label: 'Active' },
+    { value: 'done', label: 'Done' },
+  ]}
+  value={filter}
+  onChange={setFilter}
+  size="md" // or "sm"
+/>
+```
+
+- Indicator animates via `Animated.timing` (respects Reduce Motion).
+- RTL-aware via `start: 0` + `translateX` flip.
+
 ```
