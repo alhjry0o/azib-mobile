@@ -47,9 +47,27 @@
 
 ---
 
+## 4b) Motifs & Patterns (SVG)
+
+| # | Motif | المصدر | الرخصة | تاريخ |
+|---|-------|--------|--------|-------|
+| 1 | QamariyaPattern (two interlocking rings + center dot) | Internal design (AZIB) | Proprietary (AZIB) | 2026-11-14 |
+| 2 | ArchHero silhouette | Internal design (AZIB) | Proprietary (AZIB) | 2026-11-14 |
+
+> هذه الأشكال مرسومة داخلياً بـSVG primitives، وليست مقتبسة من أي مصدر خارجي. لا قيود ترخيص.
+---
+
 ## 5) الأصوات والفيديو
 
 | # | الأصل | المصدر | الرخصة | تاريخ |
 |---|--------|--------|--------|-------|
 | — | (لا يوجد بعد) | — | — | — |
+---
+
+## 6) مكتبات مرئية (Native/UI Libraries)
+
+| # | المكتبة | الغرض | الرخصة | تاريخ |
+|---|---------|--------|--------|-------|
+| 1 | expo-blur | GlassView (BlurView) | MIT (Expo) | 2026-11-14 |
+| 2 | react-native-svg | SVG rendering (Icon, QamariyaPattern) | MIT | 2026-11-12 |
 ```
