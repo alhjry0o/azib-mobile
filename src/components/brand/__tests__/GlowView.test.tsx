@@ -1,5 +1,5 @@
 import { StyleSheet, Text as RNText } from 'react-native';
-import { render } from '@testing-library/react-native';
+import { act, render } from '@testing-library/react-native';
 
 import { useDeviceTierStore } from '@/hooks';
 import { Providers } from '@/components/ui/__tests__/test-utils';
@@ -8,11 +8,15 @@ import { GlowView } from '../GlowView';
 
 describe('GlowView', () => {
   beforeEach(() => {
-    useDeviceTierStore.setState({ override: 'high' });
+    act(() => {
+      useDeviceTierStore.setState({ override: 'high' });
+    });
   });
 
   afterEach(() => {
-    useDeviceTierStore.setState({ override: null });
+    act(() => {
+      useDeviceTierStore.setState({ override: null });
+    });
   });
 
   it('renders children', async () => {
@@ -60,6 +64,6 @@ describe('GlowView', () => {
     );
     const el = getByTestId('glow');
     const flat = StyleSheet.flatten(el.props.style);
-    expect(flat.shadowColor).toBe('#F0CA68');
+    expect(flat.shadowColor).toBe('rgba(240, 202, 104, 0.45)');
   });
 });
