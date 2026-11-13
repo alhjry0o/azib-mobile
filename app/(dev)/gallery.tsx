@@ -650,7 +650,6 @@ function BrandMotionSection() {
             variant="secondary"
             label="0%"
             onPress={() => {
-              // eslint-disable-next-line react-hooks/immutability
               progress.value = 0;
             }}
           />
