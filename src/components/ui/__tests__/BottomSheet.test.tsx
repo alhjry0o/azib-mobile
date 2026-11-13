@@ -39,7 +39,7 @@ describe('BottomSheet', () => {
       </BottomSheet>,
       { wrapper: Providers },
     );
-    const backdrop = await findByTestId('bs-backdrop');
+    const backdrop = await findByTestId('bs-backdrop', { includeHiddenElements: true });
     fireEvent.press(backdrop);
     // Note: close() triggers animated run, so onClose fires asynchronously
     // after animation completes. Test just verifies no crash + backdrop exists.
@@ -54,7 +54,7 @@ describe('BottomSheet', () => {
       </BottomSheet>,
       { wrapper: Providers },
     );
-    const backdrop = await findByTestId('bs-backdrop');
+    const backdrop = await findByTestId('bs-backdrop', { includeHiddenElements: true });
     fireEvent.press(backdrop);
     expect(onClose).not.toHaveBeenCalled();
   });
