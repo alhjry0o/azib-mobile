@@ -1,7 +1,5 @@
-// GlowView — soft glow wrapper. Fully disabled on Device Tier low (ADR-0003).
-
 import type { ReactNode } from 'react';
-import { Platform, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { useDeviceTier } from '@/hooks';
 import { useTheme } from '@/theme';
@@ -11,9 +9,7 @@ export type GlowColor = 'accent' | 'gold';
 export interface GlowViewProps {
   readonly children: ReactNode;
   readonly color?: GlowColor;
-  /** Shadow radius in dp. Default 20. */
   readonly radius?: number;
-  /** 0–1 shadow opacity. Default 0.45. */
   readonly intensity?: number;
   readonly style?: StyleProp<ViewStyle>;
   readonly testID?: string;
@@ -56,5 +52,3 @@ export function GlowView({
     </View>
   );
 }
-
-const _styles = StyleSheet.create({});
