@@ -1,6 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text as RNText } from 'react-native';
 import { render } from '@testing-library/react-native';
-import { Text as RNText } from 'react-native';
 
 import { useDeviceTierStore } from '@/hooks';
 import { Providers } from '@/components/ui/__tests__/test-utils';
