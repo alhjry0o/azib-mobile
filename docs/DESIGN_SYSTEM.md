@@ -14,7 +14,7 @@
 | 4a | Toast (provider + hook), Banner, Badge, Card | **Done** |
 | 4b | Dialog, BottomSheet (drag), Tabs, SegmentedControl | **Done** |
 | 5a | ArchHero, QamariyaPattern, GlowView, GlassView | **Done** |
-| 5b | DoubleRingLoader, DoubleRingSuccess, Hero3D | Pending |
+| 5b | DoubleRingLoader, DoubleRingSuccess, Hero3D (Reanimated) | **Done** |
 | 6 | Utility | Pending |
 | 7 | Full rules & closing | Pending |
 
@@ -441,4 +441,52 @@ Glass blur surface via `expo-blur`. **Restricted to Dock and Sheet** per `AGENT_
 - `intensity` default 60, `tint` default `dark`.
 - On Web, uses `backdrop-filter` (Chrome 76+, Safari 9+, Firefox 103+).
 - On Android without GPU support (low-end), fallback engages automatically via `useDeviceTier`.
+
+## Brand Motion (Part 5b)
+
+### `<DoubleRingLoader>`
+
+Two interlocking rings rotating continuously. Reanimated `withRepeat` driven.
+
+```tsx
+<DoubleRingLoader size={64} />
+<DoubleRingLoader size={80} color={theme.colors.gold.fill} />
 ```
+
+- Respects Reduce Motion (static when enabled).
+- SVG stroke-dasharray for 70%/62% partial rings.
+- `accessibilityRole="progressbar"` + label "loading".
+
+### `<DoubleRingSuccess>`
+
+One-shot success animation on mount.
+- Phase 1 (0→0.6): rings visible, pulse in.
+- Phase 2 (0.6→1): rings fade out, checkmark scales in.
+- Respects Reduce Motion (jumps to final state: checkmark visible).
+
+```tsx
+<DoubleRingSuccess size={72} />
+```
+
+### `<Hero3D>`
+
+Three-layer parallax hero (ADR-0003). Caller controls the `progress: SharedValue<number>` (0..1).
+
+```tsx
+const progress = useSharedValue(0);
+useAnimatedScrollHandler((e) => { progress.value = e.contentOffset.y / 400; });
+
+<Hero3D
+  progress={progress}
+  height={400}
+  background={<QamariyaPattern width={400} height={400} opacity={0.15} />}
+  midground={<View>{/* decorative layer */}</View>}
+  foreground={<ArchHero width={220}>{/* title/CTA */}</ArchHero>}
+/>
+```
+
+- Three layers with translateY rates: 12 / 36 / 72 dp per progress unit.
+- Background scaled 1.08× to prevent edge gaps.
+- Disabled on Tier low and Reduce Motion (layers flat).
+- **One glow per screen maximum** per brief §7. Two only for ceremonial hero.
+
