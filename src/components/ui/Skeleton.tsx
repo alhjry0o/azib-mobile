@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { StyleSheet, View, type DimensionValue, type StyleProp, type ViewStyle } from 'react-native';
+import { type DimensionValue, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, {
   cancelAnimation,
   useAnimatedStyle,
@@ -80,5 +80,3 @@ export function Skeleton({
     />
   );
 }
-
-const _styles = StyleSheet.create({});
