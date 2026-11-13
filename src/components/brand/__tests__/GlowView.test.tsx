@@ -1,5 +1,5 @@
-import { StyleSheet, Text as RNText } from 'react-native';
 import { act, render } from '@testing-library/react-native';
+import { StyleSheet, Text as RNText } from 'react-native';
 
 import { useDeviceTierStore } from '@/hooks';
 import { Providers } from '@/components/ui/__tests__/test-utils';
@@ -7,14 +7,14 @@ import { Providers } from '@/components/ui/__tests__/test-utils';
 import { GlowView } from '../GlowView';
 
 describe('GlowView', () => {
-  beforeEach(() => {
-    act(() => {
+  beforeEach(async () => {
+    await act(async () => {
       useDeviceTierStore.setState({ override: 'high' });
     });
   });
 
-  afterEach(() => {
-    act(() => {
+  afterEach(async () => {
+    await act(async () => {
       useDeviceTierStore.setState({ override: null });
     });
   });
@@ -38,12 +38,13 @@ describe('GlowView', () => {
     );
     const el = getByTestId('glow');
     const flat = StyleSheet.flatten(el.props.style);
-    // On jest-expo default platform, shadow props should be applied.
     expect(flat.shadowColor).toBeDefined();
   });
 
   it('disables glow on low tier', async () => {
-    useDeviceTierStore.setState({ override: 'low' });
+    await act(async () => {
+      useDeviceTierStore.setState({ override: 'low' });
+    });
     const { getByTestId } = await render(
       <GlowView testID="glow">
         <RNText>X</RNText>
