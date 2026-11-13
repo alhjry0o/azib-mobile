@@ -27,6 +27,12 @@ jest.mock('lucide-react-native', () => {
 // ============================================================
 // react-native-reanimated — static Jest mock (no worklets).
 // Used only in test env. On device, the real library takes over.
+// This mock replaces:
+//   - Animated.View/Text/ScrollView/Image  → RN components
+//   - useSharedValue(v)                     → { value: v } (plain object)
+//   - useAnimatedStyle(fn)                  → fn() (evaluated once)
+//   - withTiming/withSpring/withRepeat/etc. → returns final value
+// Result: no animations in Jest, but components render with final styles.
 // ============================================================
 jest.mock('react-native-reanimated', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -41,15 +47,32 @@ jest.mock('react-native-reanimated', () => {
   const chainableGesture = (): Record<string, unknown> => {
     const g: Record<string, unknown> = {};
     const self = () => g;
-    g.onStart = self; g.onUpdate = self; g.onEnd = self; g.onBegin = self;
-    g.onFinalize = self; g.onChange = self; g.enabled = self; g.minDistance = self;
+    g.onStart = self;
+    g.onUpdate = self;
+    g.onEnd = self;
+    g.onBegin = self;
+    g.onFinalize = self;
+    g.onChange = self;
+    g.enabled = self;
+    g.minDistance = self;
     return g;
   };
 
   return {
     __esModule: true,
-    default: { View: AnimatedView, Text: AnimatedText, ScrollView: AnimatedScrollView, Image: AnimatedImage, createAnimatedComponent: identity },
-    View: AnimatedView, Text: AnimatedText, ScrollView: AnimatedScrollView, Image: AnimatedImage, createAnimatedComponent: identity,
+    default: {
+      View: AnimatedView,
+      Text: AnimatedText,
+      ScrollView: AnimatedScrollView,
+      Image: AnimatedImage,
+      createAnimatedComponent: identity,
+    },
+    View: AnimatedView,
+    Text: AnimatedText,
+    ScrollView: AnimatedScrollView,
+    Image: AnimatedImage,
+    createAnimatedComponent: identity,
+
     useSharedValue: (v: unknown) => shared(v),
     useAnimatedStyle: (fn: () => object) => fn(),
     useAnimatedProps: (fn: () => object) => fn(),
@@ -58,14 +81,37 @@ jest.mock('react-native-reanimated', () => {
     useAnimatedScrollHandler: (fn: unknown) => fn,
     useAnimatedReaction: () => {},
     useAnimatedGestureHandler: () => ({}),
-    withTiming: (v: unknown) => v, withSpring: (v: unknown) => v, withRepeat: (v: unknown) => v,
-    withDelay: (_d: number, v: unknown) => v, withSequence: (...v: unknown[]) => v[v.length - 1],
-    withDecay: (v: unknown) => v, cancelAnimation: () => {},
-    runOnJS: (fn: (...args: unknown[]) => unknown) => fn, runOnUI: (fn: (...args: unknown[]) => unknown) => fn,
+
+    withTiming: (v: unknown) => v,
+    withSpring: (v: unknown) => v,
+    withRepeat: (v: unknown) => v,
+    withDelay: (_d: number, v: unknown) => v,
+    withSequence: (...v: unknown[]) => v[v.length - 1],
+    withDecay: (v: unknown) => v,
+    cancelAnimation: () => {},
+    runOnJS: (fn: (...args: unknown[]) => unknown) => fn,
+    runOnUI: (fn: (...args: unknown[]) => unknown) => fn,
     interpolate: identity,
     Extrapolation: { CLAMP: 'clamp', EXTEND: 'extend', IDENTITY: 'identity' },
-    Easing: { linear: identity, ease: identity, inOut: (v: unknown) => v, bezier: () => identity, out: (v: unknown) => v, in: (v: unknown) => v, elastic: () => identity, quad: identity, cubic: identity },
-    Gesture: { Pan: chainableGesture, Tap: chainableGesture, LongPress: chainableGesture, Pinch: chainableGesture, Rotation: chainableGesture },
+    Easing: {
+      linear: identity,
+      ease: identity,
+      inOut: (v: unknown) => v,
+      bezier: () => identity,
+      out: (v: unknown) => v,
+      in: (v: unknown) => v,
+      elastic: () => identity,
+      quad: identity,
+      cubic: identity,
+    },
+
+    Gesture: {
+      Pan: chainableGesture,
+      Tap: chainableGesture,
+      LongPress: chainableGesture,
+      Pinch: chainableGesture,
+      Rotation: chainableGesture,
+    },
     GestureDetector: ({ children }: { children: unknown }) => children,
   };
 });
