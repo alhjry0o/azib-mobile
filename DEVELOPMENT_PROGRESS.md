@@ -13,7 +13,7 @@
 | P01 | Requirements, Architecture & Agent Governance | Done | 2026-11-08 | وثائق فقط. | (`AGENT_RULES.md §6`). |
 | P02 | Init (Expo + TS strict + ESLint + Jest + i18n + بنية) | Done | 2026-11-09 | Expo SDK 58، React 19.3، RN 0.88.1، Node 26، ESLint 9. CI أخضر 2026-11-09. |
 | P03 | Core Platform (Types, Provider Abstraction, Errors, Env, i18n, Repos, Seed) | Done | 2026-11-12 | 12 providers, 16 repos, seed, components, ARCHITECTURE. |
-| P04 | Design System (Royal Black / Purple / Mustard, Qamariya, 3D ثلاث طبقات) | Not Started | — | يستهلك توكنز فقط، لا قيم Hardcoded. |
+| P04 | Design System (Tokens + 42 components + 4 hooks + Gallery + docs) | Done | 2026-11-14 | Reanimated 4 مُختبَر عبر mock (ADR-0011). 565 اختبار، 71 suite. |
 | P05 | Shell + Onboarding | Not Started | — | RTL أولاً، Logical Properties فقط. |
 | P06 | Auth / Profile / Settings / Legal | Not Started | — | التزام بسياسة الخصوصية وحقوق الأدوار. |
 | P07 | Home | Not Started | — | كل بلاطة إما تعمل أو `Not Connected`. |
@@ -120,6 +120,47 @@
 ### CI
 - [x] CI أخضر بعد كل جزء (بتقريرك).
 
+## قائمة تحقق P04 (تفصيل)
+
+### Foundations
+- [x] Tokens: colors (semantic + palette), typography (8 variants × 2 families), spacing (13), radius (6), shadows (4), glows (3), motion (durations/easings/springs).
+- [x] `ThemeProvider` + `useTheme`.
+- [x] Hooks: `useDeviceTier`, `useMotion`, `useHaptics`, `useDirection`.
+- [x] Contrast utility + 17 WCAG AA pairs verified in `contrast.test.ts`.
+
+### Components (42)
+- [x] Primitives (4): Icon, Text, Screen, Button.
+- [x] Forms (12): Field, TextInput, Textarea, Search, Switch, Checkbox, Radio, Chip, PhoneInput, Select, OTPInput, DatePicker.
+- [x] Feedback (3): Toast (+ provider), Banner, Badge.
+- [x] Display (8): Card, ListItem, SectionHeader, Divider, Avatar, ProgressBar, RingProgress, Skeleton.
+- [x] Overlays (2): Dialog, BottomSheet.
+- [x] Navigation (3): Tabs, SegmentedControl, Stepper.
+- [x] Brand (7): ArchHero, QamariyaPattern, GlowView, GlassView, DoubleRingLoader, DoubleRingSuccess, Hero3D.
+- [x] States (3): EmptyState, ErrorState, NotConnectedState + internal StateView base.
+
+### Gallery & Docs
+- [x] Gallery at `/gallery` (all components + tier toggle + language toggle).
+- [x] `docs/DESIGN_SYSTEM.md` كامل (Tokens, catalog, Rules, Tier matrix, RTL + A11y checklists).
+- [x] ADR-0009 (fonts), ADR-0010 (lucide), ADR-0011 (Reanimated Jest mock).
+
+### Sub-part CI
+- [x] P04.1 foundations — green.
+- [x] P04.2 primitives — green.
+- [x] P04.3a forms base — green.
+- [x] P04.3b forms advanced — green.
+- [x] P04.4a feedback/display — green.
+- [x] P04.4b overlays/nav — green.
+- [x] P04.5a brand base — green.
+- [x] P04.5b brand motion — green.
+- [x] P04.6a utility — green.
+- [x] P04.6b composite/state — green.
+
+### Known deferred (in PROJECT_CONTEXT §8)
+- [ ] `RingProgress` animation → P05+.
+- [ ] `BottomSheet` multi-snap → P20 if needed.
+- [ ] `Tabs` scrollable → P07+ if needed.
+- [ ] `Avatar` image → P06.
+- [ ] Gallery gating for production → P22.
 ---
 ## القرارات البشرية المفتوحة (Blockers محتملة)
 
