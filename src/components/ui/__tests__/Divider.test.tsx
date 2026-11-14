@@ -18,12 +18,12 @@ describe('Divider', () => {
     const { getByTestId } = await render(<Divider orientation="vertical" testID="d" />, {
       wrapper: Providers,
     });
-    expect(getByTestId('d')).toBeTruthy();
+    expect(getByTestId('d', { includeHiddenElements: true })).toBeTruthy();
   });
 
   it('is hidden from accessibility tree', async () => {
     const { getByTestId } = await render(<Divider testID="d" />, { wrapper: Providers });
-    const el = getByTestId('d');
+    const el = getByTestId('d', { includeHiddenElements: true });
     expect(el.props.accessibilityElementsHidden).toBe(true);
     expect(el.props.importantForAccessibility).toBe('no-hide-descendants');
   });
@@ -32,7 +32,7 @@ describe('Divider', () => {
     const { getByTestId } = await render(<Divider thickness={2} testID="d" />, {
       wrapper: Providers,
     });
-    const container = getByTestId('d');
+    const container = getByTestId('d', { includeHiddenElements: true });
     // Container's first child is the line View
     const line = Array.isArray(container.children) ? container.children[0] : null;
     if (line && typeof line !== 'string') {
