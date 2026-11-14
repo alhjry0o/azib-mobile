@@ -3,7 +3,7 @@
 > هذا الملف يُقرأ في بداية كل مرحلة. يُحدَّث في نهاية كل مرحلة قبل إعلانها Done.
 > **عام المستودع:** لا أسرار، لا بيانات شخصية حقيقية.
 
-آخر تحديث: P03 — Core Platform Layer (مغلق — 2026-11-12).
+آخر تحديث: P04 — Design System (مغلق — 2026-11-14).
 ---
 
 ## 1) القرارات التقنية
@@ -78,7 +78,9 @@ azib-mobile/
 │ ├─ locales/ # Translation JSON (only place allowed for Arabic text)
 │ │ ├─ ar.json
 │ │ └─ en.json
-│ ├─ components/ # Shared presentational components
+│ ├─ components/          # Shared presentational components
+│ │  ├─ ui/               # Design System components (P04, 42 components)
+│ │  └─ brand/            # Brand & motion (ArchHero, Qamariya, DoubleRing, Hero3D)
 │ ├─ features/ # Feature modules
 │ ├─ hooks/ # Shared hooks
 │ ├─ services/ # Use-case services
@@ -100,6 +102,7 @@ azib-mobile/
 ├─ scripts/ # Dev & lint scripts
 ├─ assets/images/ # Placeholder icons (P04 replaces)
 ├─ docs/ # Governance (P01)
+├─ docs/DESIGN_SYSTEM.md   # Full reference (finalized in P04)
 ├─ .github/workflows/ # CI
 ├─ app.config.ts
 ├─ eslint.config.js
@@ -130,15 +133,23 @@ azib-mobile/
 | 9 | i18n كامل (i18next, formatters, RTL) + 14 namespace | P03 | استبدل الـstub من P02. |
 | 10 | Demo seed framework + DemoBadge + NotConnectedScreen | P03 | populator يغطي 13/16. |
 | 11 | `docs/ARCHITECTURE.md` | P03 | يوثّق كل ما سبق. |
+| 12 | Theme tokens + ThemeProvider + 4 hooks (device tier, motion, haptics, direction) | P04 | WCAG AA verified. |
+| 13 | Primitives + Forms (16 components) | P04 | Icon, Text, Screen, Button + 12 form components. |
+| 14 | Feedback & Display (11 components) | P04 | Toast, Banner, Badge, Card, ListItem, SectionHeader, Divider, Avatar, ProgressBar, RingProgress, Skeleton. |
+| 15 | Overlays + Navigation (5 components) | P04 | Dialog, BottomSheet, Tabs, SegmentedControl, Stepper. |
+| 16 | Brand & Motion (7 components) | P04 | ArchHero, QamariyaPattern, GlowView, GlassView, DoubleRingLoader, DoubleRingSuccess, Hero3D. |
+| 17 | States (3) + StateView base | P04 | EmptyState, ErrorState, NotConnectedState. |
+| 18 | `docs/DESIGN_SYSTEM.md` كامل | P04 | Tokens, catalog, rules, tier matrix, RTL + A11y checklists. |
+| 19 | Gallery at `/gallery` | P04 | Internal Showcase. Gating deferred to P22. |
 > لا شيء آخر مكتمل. أي جدول آخر يكون فارغاً حتى المرحلة المعنية.
 
 ---
 
 ## 5) غير المكتملة
 
-- ابتداءً من **P04 (Design System)** حتى **P24 (Final Integration)**.
-- P18 سيستبدل mocks بـSupabase adapters في backend mode.
-- P05 سيضيف Developer Settings لتبديل AppMode + عرض IntegrationRegistry.
+- ابتداءً من **P05 (Shell + Onboarding)** حتى **P24 (Final Integration)**.
+- P18 سيستبدل mocks بـSupabase adapters.
+- P05 سيضيف Developer Settings لتبديل AppMode + عرض IntegrationRegistry + بوابة Gallery.
 
 ---
 
@@ -163,21 +174,25 @@ azib-mobile/
 | # | المشكلة | التأثير | الحالة | ملاحظات |
 |---|---------|---------|--------|---------|
 | 1 | قرارات `docs/PRODUCT_POLICIES.md` غير معتمدة | تحجب P08/P10/P11/P15 | Open | قرارات بشرية مطلوبة. |
-| 2 | i18n نظام مؤقت في `src/lib/i18n.ts` (بدون i18next) | لا يدعم تبديل اللغة في الواجهة بعد | Open | يُستبدل في P03. |
-| 3 | `I18nManager.forceRTL` غير مُفعَّل | تبديل اللغة لا يعكس التخطيط بعد | Open | يُفعَّل في P03 مع i18n. |
-| 4 | أيقونات Placeholder من قالب Expo | لا تعكس الهوية البصرية | Open | تُستبدل في P04. |
-| 5 | لا تحقق آلي من وجود ملفات الحوكمة | يدوي فقط | Open | قائمة تحقق في `AGENT_RULES.md §6`. |
-| 6 | ESLint مثبّت على 9.x (ADR-0007) | لا تستفيد من ميزات ESLint 10 | Accepted | يُفتح ADR بديل عند دعم `eslint-config-expo` لـ10. |
-| 7 | `src/lib/__tests__/i18n.test.ts:11` يستخدم `// i18n-allow-arabic` | مقبول (نص غير UI)، قابل للتنظيف | Accepted | في P21: استيراد `ar.json` بدل النص الحرفي. |
-| 8 | `tsconfig.types = ["jest","node"]` | إن أُضيفت بيئات اختبار جديدة تُحدَّث القائمة | Accepted | إعداد داخلي، لا ADR. |
-| 9 | `prettier` غير مثبت رغم وجود سكربتَي `format`/`format:check` | `npm run format` و`npm run format:check` سيفشلان | Open | يُضاف في P03/P04. CI لا يشغّلهما حالياً. |
-| 10 | `@testing-library/react-native` و`react-test-renderer` غير مثبتين | اختبارات مكوّنات React غير ممكنة | Open | يُضافان مع أول اختبار مكوّن في P04/P05. |
-| 11 | `populateDemoSeed` لا يغطي content/notifications/search | تحتاج factory param غير موجود | Open | تُضاف في P05 عبر `createRepositoryContainer({ seedBundle })`. |
-| 12 | backend mode يستخدم mocks للـ16 repo حتى P18 | بيانات demo في وضع backend | Accepted | يُصحَّح في P18 (Supabase-backed). |
-| 13 | `@testing-library/react-native` + `react-test-renderer` غير مثبتين | لا اختبار مكوّنات | Open | يُضافان مع أول اختبار مكوّن في P04. |
-| 14 | لا Developer Settings UI بعد | لا يمكن تبديل AppMode من الواجهة | Open | P05. |
+| 2 | `I18nManager.forceRTL` غير مُفعَّل عند تبديل اللغة | تبديل اللغة لا يعكس التخطيط حتى reload | Open | يُفعَّل في P05 Developer Settings. |
+| 3 | أيقونات Placeholder من قالب Expo | لا تعكس الهوية البصرية | Open | تُستبدل في P04+؛ تُستكمل في P05. |
+| 4 | لا تحقق آلي من وجود ملفات الحوكمة | يدوي فقط | Open | قائمة تحقق في `AGENT_RULES.md §6`. |
+| 5 | ESLint مثبّت على 9.x (ADR-0007) | لا تستفيد من ميزات ESLint 10 | Accepted | يُفتح ADR بديل عند دعم `eslint-config-expo` لـ10. |
+| 6 | `src/lib/__tests__/i18n.test.ts` يستخدم `// i18n-allow-arabic` | مقبول (نص غير UI)، قابل للتنظيف | Accepted | في P21: استيراد `ar.json` بدل النص الحرفي. |
+| 7 | `tsconfig.types = ["jest","node"]` | إن أُضيفت بيئات اختبار جديدة تُحدَّث القائمة | Accepted | إعداد داخلي، لا ADR. |
+| 8 | `populateDemoSeed` لا يغطي content/notifications/search | تحتاج factory param غير موجود | Open | تُضاف في P05 عبر `createRepositoryContainer({ seedBundle })`. |
+| 9 | backend mode يستخدم mocks للـ16 repo حتى P18 | بيانات demo في وضع backend | Accepted | يُصحَّح في P18. |
+| 10 | لا Developer Settings UI بعد | لا يمكن تبديل AppMode من الواجهة | Open | P05. |
+| 11 | `RingProgress` بلا animation (قيم فورية) | تجربة أقل نعومة عند التحديث | Accepted | animation في P05+ عبر Reanimated. |
+| 12 | `BottomSheet` single-snap فقط | لا يدعم نقاط توقف متعددة | Accepted | multi-snap في P20 إن لزم. |
+| 13 | `Tabs` غير scrollable | يقتصر على ≤5 تبويبات مرئية | Accepted | scrollable في P07+ إن لزم. |
+| 14 | `Avatar` initials فقط (لا دعم صورة) | لا يستطيع عرض صور المستخدم | Open | image support في P06 (رفع الملفات). |
+| 15 | Gallery متاح في الإنتاج عبر `/gallery` | surface للتشويش | Open | بوابة dev-only في P22. |
+| 16 | اختبارات Reanimated تستخدم mock static (ADR-0011) | الحركة الحقيقية لا تُختبر في Jest | Accepted | E2E في P21 + device tests.|
 
 ## 9) الخطوة التالية
 
-**P04 — Design System:** توكنز الثيم (Royal Black / Royal Purple / Electric / Mustard / Soft Gold)، مكوّنات أساسية (Button, Card, Input, Typography)، motif القمريات + الحلقتين المتداخلتين، 3 طبقات (Background/Parallax/Foreground)، مكوّنات تُستهلك i18n وRTL فقط. لا شاشات ميزات.
+**P05 — Shell + Onboarding:** الهيكل العام (Dock, RootShell)، شاشات Onboarding الأولى (3-4 خطوات)، Developer Settings (تبديل AppMode + عرض IntegrationRegistry)، تفعيل `I18nManager.forceRTL` عند تبديل اللغة، بوابة Gallery (dev-only)، وتحديث §2 من هذا الملف.
+
+**قبل بدء P05:** التأكد من أن قرارات `docs/PRODUCT_POLICIES.md` الحرجة لقرارات Onboarding (مدة الاحتفاظ، حدود الاستحقاق) لا تحجب تصميم الخطوات.
 
