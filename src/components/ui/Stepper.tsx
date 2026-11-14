@@ -37,7 +37,6 @@ export function Stepper({ steps, currentStep, testID }: StepperProps) {
       {steps.map((label, index) => {
         const isCompleted = index < currentStep;
         const isCurrent = index === currentStep;
-        const isPending = index > currentStep;
 
         const circleBg = isCompleted ? theme.colors.accent.fill : 'transparent';
         const circleBorder = isCompleted || isCurrent
