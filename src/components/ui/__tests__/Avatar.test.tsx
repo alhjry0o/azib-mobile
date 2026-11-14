@@ -50,7 +50,7 @@ describe('Avatar', () => {
         { wrapper: Providers },
       );
       expect(getByTestId('av')).toBeTruthy();
-      unmount();
+      await unmount();
     }
   });
 });
