@@ -11,7 +11,7 @@ function flatten(style: unknown): Record<string, unknown> {
 describe('Divider', () => {
   it('renders horizontal by default', async () => {
     const { getByTestId } = await render(<Divider testID="d" />, { wrapper: Providers });
-    expect(getByTestId('d')).toBeTruthy();
+    expect(getByTestId('d', { includeHiddenElements: true })).toBeTruthy();
   });
 
   it('renders vertical variant', async () => {
