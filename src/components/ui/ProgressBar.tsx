@@ -81,6 +81,7 @@ export function ProgressBar({
   return (
     <View style={[styles.container, style]} testID={testID}>
       <View
+        accessible={true}
         accessibilityRole="progressbar"
         accessibilityValue={
           isIndeterminate
