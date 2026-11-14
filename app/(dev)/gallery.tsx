@@ -35,6 +35,12 @@ import {
   ProgressBar,
   SectionHeader,
   Skeleton,
+  EmptyState,
+  ErrorState,
+  ListItem,
+  NotConnectedState,
+  RingProgress,
+  Stepper,
 } from '@/components/ui';
 
 import {
@@ -70,8 +76,10 @@ export default function GalleryScreen() {
       <BrandSection />
       <BrandMotionSection />
       <UtilitySection />
+      <CompositeSection />
+      <StateScreensSection />
       <Text variant="caption" color="tertiary" align="center" style={{ marginTop: 24 }}>
-        Part 7 will finalize docs/DESIGN_SYSTEM.md.
+        Part 7 will finalize docs/DESIGN_SYSTEM.md and close P04.
       </Text>
     </Screen>
   );
@@ -801,6 +809,83 @@ function UtilitySection() {
           <Avatar name="Fatima Sanaa" size="lg" ring />
           <Avatar name="Test" size="md" ring />
         </View>
+      </Section>
+    </>
+  );
+}
+
+function CompositeSection() {
+  const theme = useTheme();
+  const [step] = useState(1);
+  return (
+    <>
+      <Section title="Composite — ListItem">
+        <ListItem title="Account settings" subtitle="Email, password, 2FA" onPress={() => {}} />
+        <ListItem
+          title="Notifications"
+          subtitle="Push, email, SMS"
+          onPress={() => {}}
+          trailing={<Badge label="3 new" variant="accent" size="sm" />}
+        />
+        <ListItem
+          title="Delete account"
+          subtitle="This cannot be undone"
+          onPress={() => {}}
+          destructive
+        />
+        <ListItem title="Disabled row" onPress={() => {}} disabled />
+        <ListItem title="Static row (no press)" subtitle="Informational only" />
+        <View style={{ marginTop: 8 }}>
+          <ListItem title="Card row" subtitle="With surface" variant="card" onPress={() => {}} />
+        </View>
+      </Section>
+
+      <Section title="Composite — Stepper">
+        <Stepper steps={['Account', 'Profile', 'Verify', 'Done']} currentStep={step} />
+        <Stepper steps={['Step 1', 'Step 2', 'Step 3']} currentStep={0} />
+        <Stepper steps={['One', 'Two', 'Three', 'Four', 'Five']} currentStep={3} />
+      </Section>
+
+      <Section title="Composite — RingProgress">
+        <View style={styles.row}>
+          <RingProgress value={0.25} showLabel />
+          <RingProgress value={0.5} showLabel />
+          <RingProgress value={0.75} showLabel color={theme.colors.state.success} />
+          <RingProgress value={0.9} showLabel color={theme.colors.gold.fill} />
+          <RingProgress value={0.3} size={48} strokeWidth={4} />
+        </View>
+        <RingProgress value={0.65} size={160} strokeWidth={10} showLabel />
+      </Section>
+    </>
+  );
+}
+
+function StateScreensSection() {
+  return (
+    <>
+      <Section title="State — EmptyState">
+        <EmptyState
+          title="No items yet"
+          description="When you add items, they'll appear here."
+          action={{ label: 'Add item', onPress: () => {} }}
+          secondaryAction={{ label: 'Learn more', onPress: () => {} }}
+        />
+      </Section>
+
+      <Section title="State — ErrorState">
+        <ErrorState
+          title="Could not load"
+          description="Something went wrong while fetching your data."
+          onRetry={() => {}}
+        />
+      </Section>
+
+      <Section title="State — NotConnectedState">
+        <NotConnectedState
+          title="Not connected"
+          description="This feature will activate once the backend is configured."
+          onRetry={() => {}}
+        />
       </Section>
     </>
   );
