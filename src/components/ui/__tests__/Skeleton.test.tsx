@@ -11,14 +11,14 @@ function flatten(style: unknown): Record<string, unknown> {
 describe('Skeleton', () => {
   it('renders with default rect variant', async () => {
     const { getByTestId } = await render(<Skeleton testID="sk" />, { wrapper: Providers });
-    expect(getByTestId('sk')).toBeTruthy();
+    expect(getByTestId('sk', { includeHiddenElements: true })).toBeTruthy();
   });
 
   it('renders text variant with default height', async () => {
     const { getByTestId } = await render(<Skeleton variant="text" testID="sk" />, {
       wrapper: Providers,
     });
-    const flat = flatten(getByTestId('sk').props.style);
+    const flat = flatten(getByTestId('sk', { includeHiddenElements: true }).props.style);
     expect(flat.height).toBe(14);
   });
 
@@ -26,7 +26,7 @@ describe('Skeleton', () => {
     const { getByTestId } = await render(<Skeleton variant="circle" testID="sk" />, {
       wrapper: Providers,
     });
-    const flat = flatten(getByTestId('sk').props.style);
+    const flat = flatten(getByTestId('sk', { includeHiddenElements: true }).props.style);
     expect(flat.width).toBe(48);
     expect(flat.height).toBe(48);
   });
@@ -36,14 +36,14 @@ describe('Skeleton', () => {
       <Skeleton width={120} height={24} testID="sk" />,
       { wrapper: Providers },
     );
-    const flat = flatten(getByTestId('sk').props.style);
+    const flat = flatten(getByTestId('sk', { includeHiddenElements: true }).props.style);
     expect(flat.width).toBe(120);
     expect(flat.height).toBe(24);
   });
 
   it('is hidden from accessibility', async () => {
     const { getByTestId } = await render(<Skeleton testID="sk" />, { wrapper: Providers });
-    const el = getByTestId('sk');
+    const el = getByTestId('sk', { includeHiddenElements: true });
     expect(el.props.accessibilityElementsHidden).toBe(true);
   });
 });
