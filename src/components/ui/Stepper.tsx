@@ -27,6 +27,7 @@ export function Stepper({ steps, currentStep, testID }: StepperProps) {
 
   return (
     <View
+      accessible={true}
       accessibilityRole="progressbar"
       accessibilityValue={{ min: 0, max: steps.length, now: currentStep + 1 }}
       accessibilityLabel={`${currentStep + 1} / ${steps.length}`}
