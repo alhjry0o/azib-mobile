@@ -16,9 +16,8 @@
 | 5a | ArchHero, QamariyaPattern, GlowView, GlassView | **Done** |
 | 5b | DoubleRingLoader, DoubleRingSuccess, Hero3D | **Done** |
 | 6a | Divider, SectionHeader, Skeleton, ProgressBar, Avatar | **Done** |
-| 6b | ListItem, Stepper, RingProgress, EmptyState, ErrorState, NotConnectedState | Pending |
+| 6b | ListItem, Stepper, RingProgress, EmptyState, ErrorState, NotConnectedState | **Done** |
 | 7 | Full rules & closing | Pending |
-
 ## Tokens (Part 1 — done)
 
 - **Colors:** palette + semantic tokens in `src/theme/colors.ts`. WCAG AA pairs are tested in `src/theme/__tests__/contrast.test.ts`.
@@ -563,3 +562,81 @@ Initials-based avatar (image support arrives in P06).
 - `size`: `xs` (24), `sm` (32), `md` (44), `lg` (64), `xl` (96).
 - `ring` → gold border.
 - `accessibilityRole="image"` + `accessibilityLabel={name}`.
+
+## Composite & State (Part 6b)
+
+### `<ListItem>`
+
+Row with leading/trailing content + title + subtitle. Interactive or static.
+
+```tsx
+<ListItem title="Account" subtitle="Manage" onPress={open} />
+<ListItem title="Notifications" onPress={open} trailing={<Badge label="3" variant="accent" />} />
+<ListItem title="Delete account" destructive onPress={confirm} />
+<ListItem title="Info" subtitle="Read-only" />
+```
+
+- Variants: `default` (transparent) / `card` (surface + border).
+- `onPress` → interactive (button role, haptic). `showChevron` defaults to true when `onPress` present and `trailing` absent.
+- `destructive` → title in `state.danger`.
+- Disabled → 45% opacity, ignores press.
+- RTL: chevron mirrored automatically.
+
+### `<Stepper>`
+
+Horizontal multi-step progress. 3 states per step: completed / current / pending.
+
+```tsx
+<Stepper steps={['Account', 'Profile', 'Verify', 'Done']} currentStep={1} />
+```
+
+- `accessibilityRole="progressbar"` + `accessibilityValue`.
+- RTL: flex direction reversed.
+- Vertical variant planned for P14 if needed.
+
+### `<RingProgress>`
+
+Circular determinate progress. Echoes the DoubleRing brand motif.
+
+```tsx
+<RingProgress value={0.42} showLabel />
+<RingProgress value={0.75} color={theme.colors.state.success} />
+<RingProgress value={0.3} size={48} strokeWidth={4} />
+```
+
+- `value` clamped to 0..1.
+- `size` (default 80), `strokeWidth` (default 6).
+- `showLabel` renders center percent; `label` overrides text.
+- Uses `react-native-svg` directly — no Reanimated in P04 (values snap). Smooth transitions when wired in P05+.
+- Accessibility: `role="progressbar"` + `accessibilityValue`.
+
+### `<EmptyState>`, `<ErrorState>`, `<NotConnectedState>`
+
+Three canonical states, all built on an internal `<StateView>` base.
+
+| Component | Tone | Default title | Actions |
+|-----------|------|---------------|---------|
+| EmptyState | neutral | `common.states.empty` | Primary + optional secondary |
+| ErrorState | danger | `errors.unknown` | Retry (primary) + optional secondary |
+| NotConnectedState | accent | `errors.notConnected` | Retry (primary) + optional secondary |
+
+```tsx
+<EmptyState
+  title="No items yet"
+  description="When you add items, they'll appear here."
+  action={{ label: 'Add item', onPress: add }}
+/>
+
+<ErrorState onRetry={refetch} retrying={isFetching} />
+
+<NotConnectedState
+  title="Not connected"
+  description="This feature will activate later."
+  onRetry={retry}
+/>
+```
+
+- `title`/`description` override the i18n defaults.
+- `illustration` overrides the default icon circle (for custom visuals).
+- `secondaryAction` accepts `{ label, onPress, variant? }`.
+- **NotConnectedState vs NotConnectedScreen:** `NotConnectedState` is a composable block (inside a card / section). The P03 `NotConnectedScreen` remains for full-screen use in P05+.
