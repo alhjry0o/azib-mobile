@@ -1,5 +1,5 @@
 import { StyleSheet, Text as RNText } from 'react-native';
-import { render } from '@testing-library/react-native';
+import { act, render } from '@testing-library/react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
 import { useDeviceTierStore } from '@/hooks';
@@ -12,8 +12,10 @@ function flattenStyle(style: unknown): Record<string, unknown> {
 }
 
 describe('Hero3D', () => {
-  afterEach(() => {
-    useDeviceTierStore.setState({ override: null });
+  afterEach(async () => {
+    await act(async () => {
+      useDeviceTierStore.setState({ override: null });
+    });
   });
 
   it('renders foreground', async () => {
