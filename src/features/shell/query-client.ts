@@ -1,0 +1,17 @@
+// TanStack Query client (ADR-0002: server state only).
+// One app-wide instance; tests create their own via makeQueryClient().
+import { QueryClient } from '@tanstack/react-query';
+
+export function makeQueryClient(): QueryClient {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+        staleTime: 30_000,
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
+}
+
+export const appQueryClient = makeQueryClient();
