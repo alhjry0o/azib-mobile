@@ -47,6 +47,7 @@ export function RingProgress({
   return (
     <View
       style={{ width: size, height: size }}
+      accessible={true}
       accessibilityRole="progressbar"
       accessibilityValue={{ min: 0, max: 100, now: percent }}
       accessibilityLabel={`${percent}%`}
