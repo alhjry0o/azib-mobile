@@ -1,642 +1,306 @@
 # DESIGN SYSTEM — عازب | AZIB
 
-> **Stub.** This file is being filled across Parts 1–7 of Phase P04.
-> Full content (usage rules, do/don't, tier matrix) is finalized in Part 7.
+> **النسخة النهائية — P04 مغلقة.**
+> يوافق كل قرار في هذا المستند ما هو مُنفَّذ في الكود. أي تعديل يستدعي تحديث هذا الملف.
+> **عام المستودع:** لا أسرار، لا بيانات شخصية.
 
-## Status by Part
+---
 
-| Part | Content | Status |
-|------|---------|--------|
-| 1 | Tokens, ThemeProvider, hooks, contrast utility | **Done** |
-| 2 | Icon, Text, Screen, Button | **Done** |
-| 3a | Field, TextInput, Textarea, Search, Switch, Checkbox, Radio, Chip, PhoneInput | **Done** |
-| 3b | Select, OTPInput, DatePicker | **Done** |
-| 4a | Toast, Banner, Badge, Card | **Done** |
-| 4b | Dialog, BottomSheet, Tabs, SegmentedControl | **Done** |
-| 5a | ArchHero, QamariyaPattern, GlowView, GlassView | **Done** |
-| 5b | DoubleRingLoader, DoubleRingSuccess, Hero3D | **Done** |
-| 6a | Divider, SectionHeader, Skeleton, ProgressBar, Avatar | **Done** |
-| 6b | ListItem, Stepper, RingProgress, EmptyState, ErrorState, NotConnectedState | **Done** |
-| 7 | Full rules & closing | Pending |
-## Tokens (Part 1 — done)
+## 1) Foundations
 
-- **Colors:** palette + semantic tokens in `src/theme/colors.ts`. WCAG AA pairs are tested in `src/theme/__tests__/contrast.test.ts`.
-- **Typography:** IBM Plex Sans Arabic (body) + Cairo (display), letter-spacing 0. See `src/theme/typography.ts`.
-- **Spacing:** 4pt scale. Min touch target 44dp.
-- **Radius:** xs 4 → xl 24 → full 9999.
-- **Shadows:** sm/md/lg (elevation for Android). **Glows:** purple/gold via shadowColor — disable on Tier low.
-- **Motion:** durations 90/160/240/360/560, easings (standard/decelerate/accelerate), springs (gentle/bouncy). All durations honored via `useMotion().duration(ms)`.
+### 1.1 Colors
 
-## Hooks (Part 1 — done)
+Palette and semantic tokens live in `src/theme/colors.ts`. All required semantic pairs pass WCAG AA (4.5:1) — verified by `src/theme/__tests__/contrast.test.ts` (17 pairs).
 
-- `useDeviceTier()` → `{ tier, isHigh, isMid, isLow }` + `useDeviceTierStore.setOverride()` for the Gallery.
-- `useMotion()` → `{ reduceMotion, enabled, duration(ms) }` — respects Reduce Motion.
+| Token | Value | Notes |
+|-------|-------|-------|
+| `bg.canvas` | `#09080F` | Royal Black |
+| `bg.surface` | `#100D19` | Inputs, standard card bg |
+| `bg.raised` | `#1E1832` | Modal surface, disabled track |
+| `bg.overlay` | `rgba(9,8,15,0.72)` | Modal backdrops |
+| `border.subtle` | `rgba(255,255,255,0.08)` | Standard borders |
+| `border.strong` | `rgba(255,255,255,0.16)` | Emphasized borders |
+| `text.primary` | `#FFFFFF` | Body text |
+| `text.secondary` | `#A7A2B3` | Labels, captions |
+| `text.tertiary` | `#6B6776` | Only for large text (≥18pt) or decorative |
+| `text.inverse` | `#09080F` | Text on gold surfaces |
+| `text.accent` | `#9B5CFF` | Purple text on **canvas/surface only** |
+| `text.accentOnRaised` | `#B88AFF` | Purple text on **raised cards** |
+| `text.gold` | `#F0CA68` | Brand gold text |
+| `accent.fill` | `#7136C9` | Primary button bg |
+| `accent.fillPressed` | `#5B2AA5` | Primary press state |
+| `accent.glow` | `rgba(155,92,255,0.45)` | Glow shadow color |
+| `gold.fill` | `#D9A928` | Gold button / banner / crest |
+| `gold.glow` | `rgba(240,202,104,0.45)` | Gold glow color |
+| `state.success` | `#3FCF8E` | |
+| `state.danger` | `#FF5C7A` | |
+| `state.info` | `#5CA8FF` | |
+
+**Documented exceptions (do NOT use):**
+- `text.inverse` on `accent.fill` → ~3.1:1 (fails AA). Use `text.primary` on purple.
+- `text.tertiary` on `bg.canvas` → ~3.6:1 (large text only). Never for body.
+
+### 1.2 Typography
+
+- **Display font:** Cairo (600, 700) — for `display`, `h1`, `h2`, `h3`.
+- **Body font:** IBM Plex Sans Arabic (400, 500, 600, 700) — for `body`, `caption`.
+- **Letter-spacing:** `0` for all.
+- **Loading:** `useFonts` in `app/_layout.tsx` before render.
+
+| Variant | Size / Line height | Weight |
+|---------|--------------------|--------|
+| `display` | 34 / 44 | 700 |
+| `h1` | 28 / 38 | 700 |
+| `h2` | 22 / 32 | 700 |
+| `h3` | 18 / 28 | 600 |
+| `body` | 16 / 27 | 400 |
+| `bodyStrong` | 16 / 27 | 600 |
+| `caption` | 13 / 21 | 400 |
+| `captionStrong` | 13 / 21 | 600 |
+
+### 1.3 Spacing
+
+4pt scale: `0, 4, 8, 12, 16, 20, 24, 28, 32, 40, 48, 64, 80`. **Minimum touch target: 44dp** (`MIN_TOUCH_TARGET`).
+
+### 1.4 Radius
+
+`xs: 4`, `sm: 8`, `md: 12`, `lg: 16`, `xl: 24`, `full: 9999`.
+
+### 1.5 Shadows / Glows
+
+- **Shadows** (`sm`, `md`, `lg`): plain black shadows for depth. Used by Card, Button, Dialog.
+- **Glows** (`purple`, `gold`): colored shadow. **Disabled on Tier low** (ADR-0003). **Max 1 glow per screen** (2 only for ceremonial hero).
+
+### 1.6 Motion
+
+| Token | ms |
+|-------|-----|
+| `instant` | 90 |
+| `fast` | 160 |
+| `base` | 240 |
+| `slow` | 360 |
+| `extraSlow` | 560 |
+
+Easings: `standard` (`[0.2,0,0,1]`), `decelerate`, `accelerate`. Springs: `gentle` (damping 20), `bouncy` (damping 12). **All durations pass through `useMotion().duration(ms)` which returns 0 under Reduce Motion.**
+
+### 1.7 ThemeProvider & Hooks
+
+```tsx
+import { useTheme } from '@/theme';
+import { useDeviceTier, useMotion, useHaptics, useDirection } from '@/hooks';
+```
+
+- `useTheme()` → tokens (colors, typography, spacing, radius, shadows, glows, durations).
+- `useDeviceTier()` → `{ tier: 'high' | 'mid' | 'low', isHigh, isMid, isLow }`.
+- `useMotion()` → `{ reduceMotion, enabled, duration(ms) }` — respects OS Reduce Motion.
 - `useHaptics()` → `{ enabled, setEnabled, light, medium, success, error }`.
-- `useDirection()` → `{ isRTL, direction }` from current i18n language.
-
-## Rules
-
-- One glow per screen maximum (two only for ceremonial hero).
-- Glass surfaces only on Dock and Sheet (Part 5).
-- Small purple text on dark backgrounds uses `text.accent` (#9B5CFF) on canvas/surface, and `text.accentOnRaised` (#B88AFF) on raised cards. Never `#7136C9` for small text.
-- Buttons on `accent.fill` (purple) use `text.primary` (white). Buttons on `gold.fill` (mustard) use `text.inverse` (dark).
-- Tier low disables glows, shadows, parallax.
-
-## Components (Part 2 — done)
-
-### `<Icon>`
-
-Wraps `lucide-react-native` (ISC). 39 curated icons in `src/components/ui/icons.ts`.
-
-```tsx
-<Icon name="check" size={20} color={theme.colors.text.primary} />
-<Icon name="arrowRight" /> {/* mirrors automatically in RTL */}
-<Icon name="arrowRight" mirrorInRTL={false} /> {/* opt out */}
-```
-
-### `<Text>`
-
-Typography-aware text. Renders children OR `i18nKey` (mutually exclusive; i18nKey wins).
-
-```tsx
-<Text variant="h1">Title</Text>
-<Text variant="body" color="accent">Highlighted</Text>
-<Text i18nKey="appName" />
-<Text variant="caption" color="secondary" align="center">Centered</Text>
-```
-
-### `<Screen>`
-
-Safe-area container with theme background. Uses logical padding (`paddingStart`/`paddingEnd`).
-
-```tsx
-<Screen scroll>
-  <Text variant="h1">Home</Text>
-</Screen>
-
-<Screen safeTop={false} paddingX={false}>
-  {/* Full-bleed content */}
-</Screen>
-```
-
-### `<Button>`
-
-Six variants × six states. Min height 44dp. Haptics on press (opt-out via `haptic={false}` — not yet exposed; will be added in Part 6 if needed).
-
-| Variant | Background | Text | Glow |
-|---------|------------|------|------|
-| primary | accent.fill (purple) | text.primary (white) | On (high/mid tier) |
-| secondary | bg.raised | text.primary | No |
-| ghost | transparent | text.primary | No |
-| gold | gold.fill (mustard) | text.inverse (dark) | On (high/mid tier) |
-| danger | state.danger | text.primary | No |
-| icon | bg.raised | — | No |
-
-States: `default`, `pressed` (opacity 0.85), `disabled` (opacity 0.45), `loading` (spinner + `busy` a11y state), `error` (danger border), `focus` (accent border on web).
-
-```tsx
-<Button variant="primary" label="Confirm" onPress={handle} />
-<Button variant="gold" i18nKey="buttons.continue" size="lg" fullWidth />
-<Button variant="icon" leftIcon="check" accessibilityLabel="Confirm" />
-<Button label="Saving" loading />
-```
-
-## Components (Part 3a — done)
-
-### `<Field>`
-Wrapper for form inputs. Provides label, required asterisk, help text, and error text. Error text overrides help text.
-
-```tsx
-<Field label="Email" required helpText="We'll never share your email.">
-  <TextInput placeholder="you@example.com" />
-</Field>
-```
-
-### `<TextInput>`
-
-Text input with 3 sizes (sm, md, lg), left/right icons, focus/error states, and RTL support. Numeric inputs remain LTR.
-
-```tsx
-<TextInput label="Full Name" placeholder="Enter your name" leftIcon="user" />
-<TextInput label="Phone" keyboardType="phone-pad" />
-<TextInput label="Email" errorText="Invalid email format" />
-```
-
-### `<Textarea>`
-
-Multiline text input. Extends TextInput with multiline and a minHeight prop (default 96).
-
-```tsx
-<Textarea label="Notes" placeholder="Write your message here..." minHeight={120} />
-```
-
-### `<Search>`
-
-Pre-configured TextInput with a search icon and an optional clear button when text is present.
-
-```tsx
-<Search value={query} onChangeText={setQuery} onClear={() => setQuery('')} placeholder="Search..." />
-```
-
-### `<Switch>`
-
-Animated toggle switch. RTL-aware. Respects Reduce Motion.
-
-```tsx
-<Switch label="Enable Notifications" value={enabled} onValueChange={setEnabled} />
-```
-
-### `<Checkbox>`
-
-Standard checkbox with support for indeterminate state. Includes label and haptics.
-
-```tsx
-<Checkbox label="I agree to the terms" checked={agreed} onCheckedChange={setAgreed} />
-<Checkbox label="Select All" indeterminate checked={false} onCheckedChange={handleSelectAll} />
-```
-
-### `<RadioGroup>`
-
-Generic radio group (RadioGroup<V extends string>). Supports column or row layout.
-
-```tsx
-<RadioGroup
-  options={[
-    { value: 'male', label: 'Male' },
-    { value: 'female', label: 'Female' },
-  ]}
-  value={gender}
-  onValueChange={setGender}
-/>
-```
-
-### `<Chip>`
-
-Small interactive tag. Can be static or pressable. Supports default, accent, and gold variants.
-
-```tsx
-<Chip label="Filter" selected={true} onPress={toggleFilter} />
-<Chip label="New" variant="accent" />
-```
-
-### `<PhoneInput>`
-
-Yemen-specific phone input with a fixed +967 prefix and numeric-only input. (Multi-country picker planned for P06).
-
-```tsx
-<PhoneInput label="Phone Number" value={phone} onChangeText={setPhone} />
-```
-
-## Form — Advanced (Part 3b)
-
-### `<Select>`
-
-Single-choice picker. Uses `Modal` from RN (not BottomSheet — that lands in Part 4).
-
-```tsx
-<Select
-  value={city}
-  onChange={setCity}
-  placeholder="Choose a city"
-  options={[
-    { value: 'sanaa', label: 'Sanaa' },
-    { value: 'aden', label: 'Aden' },
-    { value: 'hodeidah', label: 'Hodeidah', disabled: true },
-  ]}
-/>
-```
-
-- Auto-disables when `options.length === 0`.
-- Modal centered, scrollable, RTL-aware.
-- Accessibility: trigger has `accessibilityState.expanded`; each option has `menuitem` role.
-
-### `<OTPInput>`
-
-N-digit code. Uses a single hidden `TextInput` overlaying visual cells.
-
-- Paste works (multi-digit).
-- iOS `textContentType="oneTimeCode"` and Android `autoComplete="sms-otp"` auto-fill.
-- Backspace & cursor behave naturally.
-- One accessibility target (screen readers announce "verification code, N digits").
-
-```tsx
-<OTPInput
-  label="Verification code"
-  value={otp}
-  onChangeText={setOtp}
-  onComplete={(code) => verify(code)}
-/>
-```
-
-### `<DatePicker>`
-
-Custom calendar modal (no external date picker). Works identically on iOS/Android/Web.
-
-- Month navigation, weekday headers (`Intl.DateTimeFormat`).
-- Today highlight, selected day highlight.
-- `minDate` / `maxDate` respected.
-- Clear / Today actions.
-- RTL-aware (grid reversed, chevrons mirrored).
-
-```tsx
-<DatePicker
-  label="Wedding date"
-  value={date}
-  onChange={setDate}
-  minDate={new Date()}
-/>
-```
-## Feedback & Display (Part 4a)
-
-### `<ToastProvider>` + `useToast()`
-
-Global toast provider. Wrap the app once at `app/_layout.tsx`.
-
-```tsx
-const toast = useToast();
-toast.show({ message: t('saved'), variant: 'success' });
-toast.show({ message: 'Error!', variant: 'error', duration: 5000 });
-toast.show({ message: 'Stays until dismissed', duration: 0 });
-```
-
-- Renders at the top safe area.
-- One toast at a time (new replaces old).
-- Auto-dismiss after `duration` (default 3000). `0` disables.
-- `accessibilityRole="alert"` + `accessibilityLiveRegion="polite"`.
-- Dismiss button (X) in all toasts.
-
-### `<Banner>`
-
-Inline message block. Four variants: `info` (default), `demo` (gold/attention), `warning`, `error`.
-
-```tsx
-<Banner title="Note" message="Welcome back" onDismiss={() => {}} />
-<Banner variant="demo" message="This data is for demonstration only." onDismiss={() => {}} />
-<Banner variant="error" message="Could not save." actionLabel="Retry" onAction={retry} />
-```
-
-### `<Badge>`
-
-Small pill. Nine variants: `neutral`, `accent`, `success`, `warning`, `danger`, `info` (raw) + `verified`, `pending`, `demo` (presets with icons).
-
-```tsx
-<Badge label="Verified" variant="verified" />
-<Badge label="Draft" />
-<Badge label="Demo" variant="demo" size="sm" />
-```
-
-### `<Card>`
-
-Four variants:
-- `flat` (default): surface + subtle border.
-- `crest`: gold top accent — reserved for hero content.
-- `pressable`: flat + haptic + press feedback.
-- `stat`: title + big value + optional icon/caption.
-
-```tsx
-<Card><Text>Flat content</Text></Card>
-<Card variant="crest"><Text>Hero</Text></Card>
-<Card variant="pressable" onPress={open} accessibilityLabel="Open">…</Card>
-<Card variant="stat" title="Total donations" value={1250} leftIcon="wallet" />
-```
-## Feedback & Overlay (Part 4b)
-
-### `<Dialog>`
-
-Modal centered dialog with backdrop. Do not open a Dialog and a BottomSheet simultaneously — iOS Modal stacking is fragile.
-
-```tsx
-<Dialog
-  visible={open}
-  onClose={() => setOpen(false)}
-  title="Delete account?"
-  description="This action cannot be undone."
->
-  <View style={{ flexDirection: 'row', gap: 8 }}>
-    <Button variant="ghost" label="Cancel" onPress={cancel} />
-    <Button variant="danger" label="Delete" onPress={confirm} />
-  </View>
-</Dialog>
-```
-
-- `dismissOnBackdrop` default true; `showCloseButton` default true.
-- `accessibilityViewIsModal` on surface.
-- Fade + scale animation, respects Reduce Motion.
-
-### `<BottomSheet>`
-
-Modal bottom sheet. Single snap (maxHeightPercent of screen, default 85). Drag down to dismiss (threshold 100px or vy > 0.5). Do not open simultaneously with a Dialog.
-
-```tsx
-<BottomSheet visible={open} onClose={() => setOpen(false)}>
-  <Text variant="h2">Sheet content</Text>
-</BottomSheet>
-```
-
-- `dismissOnBackdrop` default true; `showHandle` default true.
-- Uses `PanResponder` (not Reanimated) — kept simple and testable. Migration to Reanimated deferred until P20 if performance requires.
-
-### `<Tabs>`
-
-Tab header. Content rendering is the caller's responsibility.
-
-```tsx
-<Tabs
-  tabs={[
-    { key: 'overview', label: 'Overview' },
-    { key: 'activity', label: 'Activity', badge: 3 },
-    { key: 'settings', label: 'Settings' },
-  ]}
-  value={tab}
-  onChange={setTab}
-  variant="default" // or "pills"
-/>
-```
-
-- `accessibilityRole="tablist"` + `role="tab"` per tab.
-- Equal width via `flex: 1`. Scrollable tabs deferred to P07+.
-
-### `<SegmentedControl>`
-
-Material-style segmented control with animated indicator. Same role/state as Tabs.
-
-```tsx
-<SegmentedControl
-  segments={[
-    { value: 'all', label: 'All' },
-    { value: 'active', label: 'Active' },
-    { value: 'done', label: 'Done' },
-  ]}
-  value={filter}
-  onChange={setFilter}
-  size="md" // or "sm"
-/>
-```
-
-- Indicator animates via `Animated.timing` (respects Reduce Motion).
-- RTL-aware via `start: 0` + `translateX` flip.
-
-## Brand Components (Part 5a)
-
-### `<ArchHero>`
-
-Islamic/Yemeni-style arch frame (mihrab silhouette). Uses `borderTopLeftRadius: 9999` (clamped to `width/2` by RN), producing a perfect semicircle top without SVG.
-
-```tsx
-<ArchHero width={240}>
-  <Text variant="h2" color="gold">عازب</Text>
-</ArchHero>
-
-<ArchHero variant="outlined" width={200}>
-  <Text>Outlined</Text>
-</ArchHero>
-```
-
-- `width` is required (defines arch dimensions; height = `width * 4/3` via `aspectRatio`).
-- Two variants: `filled` (surface bg) and `outlined` (transparent).
-- Gold border by default; override via `borderColor`.
-- Symmetric — RTL-agnostic.
-
-### `<QamariyaPattern>`
-
-Repeated geometric motif (interlocking rings + center dot). Echoes the AZIB brand identity. Uses SVG `<Pattern>` for efficiency.
-
-```tsx
-<View style={{ height: 200, position: 'relative' }}>
-  <QamariyaPattern width={340} height={200} opacity={0.12} />
-  <View>{/* foreground content */}</View>
-</View>
-```
-
-- `color` default `#F0CA68` (soft gold).
-- `opacity` default `0.06` — subtle.
-- `pointerEvents="none"` — never intercepts touches.
-- Unique SVG id per instance (no clashes).
-- Tile size default 80dp.
-
-### `<GlowView>`
-
-Soft glow wrapper. **Disabled on Device Tier low** (ADR-0003). Uses `shadowColor`/`shadowRadius` on iOS, `elevation` on Android.
-
-```tsx
-<GlowView radius={20} intensity={0.5}>
-  <Button label="Primary" />
-</GlowView>
-```
-
-- `color`: `'accent'` (purple, default) or `'gold'`.
-- `radius` default 20, `intensity` default 0.45.
-- One glow per screen maximum per brief §7. Two only for ceremonial hero.
-
-### `<GlassView>`
-
-Glass blur surface via `expo-blur`. **Restricted to Dock and Sheet** per `AGENT_RULES`. Falls back to a semi-transparent surface on Tier low (blur disabled).
-
-```tsx
-<GlassView intensity={60} style={{ borderRadius: 24, padding: 16 }}>
-  <Text>Dock content</Text>
-</GlassView>
-```
-
-- `intensity` default 60, `tint` default `dark`.
-- On Web, uses `backdrop-filter` (Chrome 76+, Safari 9+, Firefox 103+).
-- On Android without GPU support (low-end), fallback engages automatically via `useDeviceTier`.
-
-## Brand Motion (Part 5b)
-
-### `<DoubleRingLoader>`
-
-Two interlocking rings rotating continuously. Reanimated `withRepeat` driven.
-
-```tsx
-<DoubleRingLoader size={64} />
-<DoubleRingLoader size={80} color={theme.colors.gold.fill} />
-```
-
-- Respects Reduce Motion (static when enabled).
-- SVG stroke-dasharray for 70%/62% partial rings.
-- `accessibilityRole="progressbar"` + label "loading".
-
-### `<DoubleRingSuccess>`
-
-One-shot success animation on mount.
-- Phase 1 (0→0.6): rings visible, pulse in.
-- Phase 2 (0.6→1): rings fade out, checkmark scales in.
-- Respects Reduce Motion (jumps to final state: checkmark visible).
-
-```tsx
-<DoubleRingSuccess size={72} />
-```
-
-### `<Hero3D>`
-
-Three-layer parallax hero (ADR-0003). Caller controls the `progress: SharedValue<number>` (0..1).
-
-```tsx
-const progress = useSharedValue(0);
-useAnimatedScrollHandler((e) => { progress.value = e.contentOffset.y / 400; });
-
-<Hero3D
-  progress={progress}
-  height={400}
-  background={<QamariyaPattern width={400} height={400} opacity={0.15} />}
-  midground={<View>{/* decorative layer */}</View>}
-  foreground={<ArchHero width={220}>{/* title/CTA */}</ArchHero>}
-/>
-```
-
-- Three layers with translateY rates: 12 / 36 / 72 dp per progress unit.
-- Background scaled 1.08× to prevent edge gaps.
-- Disabled on Tier low and Reduce Motion (layers flat).
-- **One glow per screen maximum** per brief §7. Two only for ceremonial hero.
-
-## Utility Components (Part 6a)
-
-### `<Divider>`
-
-Thin separator. Hidden from accessibility tree by default.
-
-```tsx
-<Divider />
-<Divider inset />
-<Divider color={theme.colors.accent.fill} thickness={2} />
-<Divider orientation="vertical" />
-```
-
-- `orientation` default `horizontal`.
-- `inset` for `paddingStart/End` margin.
-- `accessibilityElementsHidden` — not announced by screen readers.
-
-### `<SectionHeader>`
-
-Section title + optional subtitle + optional action.
-
-```tsx
-<SectionHeader title="Recent" subtitle="Last 30 days" />
-<SectionHeader title="Recent" actionLabel="See all" onAction={openAll} />
-```
-
-- Action chevron mirrors in RTL.
-- `accessibilityRole="button"` on the action.
-
-### `<Skeleton>`
-
-Placeholder with shimmer (disabled on Tier low or Reduce Motion).
-
-```tsx
-<Skeleton variant="text" />
-<Skeleton variant="circle" size={48} />  {/* actually width=height=48 by default */}
-<Skeleton variant="rect" height={120} />
-<Skeleton width={120} height={24} />
-```
-
-- `variant`: `'text'` (14dp height), `'circle'` (48×48), `'rect'` (default).
-- Hidden from accessibility (`accessibilityElementsHidden`).
-- Shimmer uses Reanimated opacity pulse (0.35 ↔ 0.85, 900ms).
-
-### `<ProgressBar>`
-
-Linear progress bar. Determinate (with `value`) or indeterminate (omit `value`).
-
-```tsx
-<ProgressBar value={0.42} showLabel />
-<ProgressBar value={0.75} color="success" />
-<ProgressBar size="sm" /> {/* indeterminate */}
-```
-
-- `size`: `sm` (4dp), `md` (8dp), `lg` (12dp).
-- `color`: `accent`, `gold`, `success`, `danger`.
-- `accessibilityRole="progressbar"` + `accessibilityValue` (determinate only).
-- Indeterminate uses Reanimated opacity pulse (respects Reduce Motion).
-
-### `<Avatar>`
-
-Initials-based avatar (image support arrives in P06).
-
-```tsx
-<Avatar name="Ahmed Yemeni" size="md" />
-<Avatar name="Fatima" size="lg" ring />
-```
-
-- Initials: first letter of first word + first letter of last word. Falls back to `?` for empty.
-- `size`: `xs` (24), `sm` (32), `md` (44), `lg` (64), `xl` (96).
-- `ring` → gold border.
-- `accessibilityRole="image"` + `accessibilityLabel={name}`.
-
-## Composite & State (Part 6b)
-
-### `<ListItem>`
-
-Row with leading/trailing content + title + subtitle. Interactive or static.
-
-```tsx
-<ListItem title="Account" subtitle="Manage" onPress={open} />
-<ListItem title="Notifications" onPress={open} trailing={<Badge label="3" variant="accent" />} />
-<ListItem title="Delete account" destructive onPress={confirm} />
-<ListItem title="Info" subtitle="Read-only" />
-```
-
-- Variants: `default` (transparent) / `card` (surface + border).
-- `onPress` → interactive (button role, haptic). `showChevron` defaults to true when `onPress` present and `trailing` absent.
-- `destructive` → title in `state.danger`.
-- Disabled → 45% opacity, ignores press.
-- RTL: chevron mirrored automatically.
-
-### `<Stepper>`
-
-Horizontal multi-step progress. 3 states per step: completed / current / pending.
-
-```tsx
-<Stepper steps={['Account', 'Profile', 'Verify', 'Done']} currentStep={1} />
-```
-
-- `accessibilityRole="progressbar"` + `accessibilityValue`.
-- RTL: flex direction reversed.
-- Vertical variant planned for P14 if needed.
-
-### `<RingProgress>`
-
-Circular determinate progress. Echoes the DoubleRing brand motif.
-
-```tsx
-<RingProgress value={0.42} showLabel />
-<RingProgress value={0.75} color={theme.colors.state.success} />
-<RingProgress value={0.3} size={48} strokeWidth={4} />
-```
-
-- `value` clamped to 0..1.
-- `size` (default 80), `strokeWidth` (default 6).
-- `showLabel` renders center percent; `label` overrides text.
-- Uses `react-native-svg` directly — no Reanimated in P04 (values snap). Smooth transitions when wired in P05+.
-- Accessibility: `role="progressbar"` + `accessibilityValue`.
-
-### `<EmptyState>`, `<ErrorState>`, `<NotConnectedState>`
-
-Three canonical states, all built on an internal `<StateView>` base.
-
-| Component | Tone | Default title | Actions |
-|-----------|------|---------------|---------|
-| EmptyState | neutral | `common.states.empty` | Primary + optional secondary |
-| ErrorState | danger | `errors.unknown` | Retry (primary) + optional secondary |
-| NotConnectedState | accent | `errors.notConnected` | Retry (primary) + optional secondary |
-
-```tsx
-<EmptyState
-  title="No items yet"
-  description="When you add items, they'll appear here."
-  action={{ label: 'Add item', onPress: add }}
-/>
-
-<ErrorState onRetry={refetch} retrying={isFetching} />
-
-<NotConnectedState
-  title="Not connected"
-  description="This feature will activate later."
-  onRetry={retry}
-/>
-```
-
-- `title`/`description` override the i18n defaults.
-- `illustration` overrides the default icon circle (for custom visuals).
-- `secondaryAction` accepts `{ label, onPress, variant? }`.
-- **NotConnectedState vs NotConnectedScreen:** `NotConnectedState` is a composable block (inside a card / section). The P03 `NotConnectedScreen` remains for full-screen use in P05+.
+- `useDirection()` → `{ isRTL, direction }`.
+
+---
+
+## 2) Component Catalog
+
+### 2.1 Primitives
+- **`<Icon>`** — 39 lucide icons, RTL-aware (`MIRRORED_IN_RTL` set for direction icons).
+- **`<Text>`** — typography-aware, `color` token or raw, `align` logical, `i18nKey` support.
+- **`<Screen>`** — SafeArea container with logical padding; `scroll` prop.
+- **`<Button>`** — 6 variants (primary, secondary, ghost, gold, danger, icon) × 3 sizes × 6 states.
+
+### 2.2 Forms
+- **`<Field>`** — label / required / help / error wrapper.
+- **`<TextInput>`** — 3 sizes, left/right icons, focus border, error border, LTR for numeric.
+- **`<Textarea>`** — multiline with min height.
+- **`<Search>`** — search icon + clear button.
+- **`<Switch>`** — custom, RTL-aware, honors reduceMotion.
+- **`<Checkbox>`** — checked / indeterminate / disabled.
+- **`<RadioGroup>`** — generic, disabled options.
+- **`<Chip>`** — static or interactive; default, accent, gold.
+- **`<PhoneInput>`** — YEM context (+967 prefix), digits only, max 9.
+- **`<Select>`** — Modal-based picker, RTL-aware, disabled options.
+- **`<OTPInput>`** — hidden-input pattern, paste, iOS/Android autofill.
+- **`<DatePicker>`** — custom calendar modal, RTL-aware, min/max dates.
+
+### 2.3 Feedback
+- **`<ToastProvider>` + `useToast()`** — global toast, 4 variants, auto-dismiss, single at a time.
+- **`<Banner>`** — inline block, 4 variants (info, demo, warning, error).
+- **`<Badge>`** — 9 variants (neutral, accent, success, warning, danger, info + verified, pending, demo presets with icons).
+
+### 2.4 Display
+- **`<Card>`** — flat / crest (gold top accent) / pressable / stat.
+- **`<ListItem>`** — default or card; interactive or static; destructive; leading/trailing.
+- **`<SectionHeader>`** — title + subtitle + action chevron (mirrored in RTL).
+- **`<Divider>`** — horizontal / vertical, hidden from a11y.
+- **`<Avatar>`** — initials-based, 5 sizes, optional gold ring. **No image support until P06.**
+- **`<ProgressBar>`** — linear, determinate / indeterminate, 3 sizes, 4 colors, a11y value.
+- **`<RingProgress>`** — circular determinate, a11y value, center label. **No animation until P05+.**
+- **`<Skeleton>`** — text / circle / rect; shimmer respects reduceMotion; hidden from a11y.
+
+### 2.5 Overlays
+- **`<Dialog>`** — modal centered surface + backdrop. `accessibilityViewIsModal`. **Do not stack Dialog + BottomSheet** (iOS Modal fragility).
+- **`<BottomSheet>`** — modal bottom sheet, single snap (default 85%), drag-down-to-dismiss. **Do not stack with Dialog.**
+
+### 2.6 Navigation
+- **`<Tabs>`** — header only (default / pills), badges, disabled, a11y role `tablist` + `tab`. **Equal-width; non-scrollable until P07+ if needed.**
+- **`<SegmentedControl>`** — Material-style, animated indicator, RTL-aware.
+- **`<Stepper>`** — horizontal multi-step (completed / current / pending), a11y `progressbar`.
+
+### 2.7 Brand
+- **`<ArchHero>`** — Islamic/Yemeni arch frame (mihrab silhouette).
+- **`<QamariyaPattern>`** — repeated motif SVG; `pointerEvents="none"`; hidden IDs per instance.
+- **`<GlowView>`** — soft glow wrapper; **disabled on Tier low**.
+- **`<GlassView>`** — `expo-blur` surface; **Dock + Sheet only**; falls back to solid on low tier.
+- **`<DoubleRingLoader>`** — rotating interlocking rings; respects reduceMotion.
+- **`<DoubleRingSuccess>`** — one-shot success animation; respects reduceMotion.
+- **`<Hero3D>`** — three-layer parallax (Background / Midground / Foreground); caller drives `progress: SharedValue<number>`; disabled on Tier low + reduceMotion.
+
+### 2.8 States
+- **`<EmptyState>`** — neutral tone; default title `common.states.empty`.
+- **`<ErrorState>`** — danger tone; default title `errors.unknown`; optional `onRetry` + `retrying`.
+- **`<NotConnectedState>`** — accent tone; default title `errors.notConnected`; optional `onRetry` + secondary.
+- All three built on the internal `<StateView>` base (not exported).
+
+**Note:** `NotConnectedState` (Part 6b) is the composable version for placing **inside** a card or section. The full-screen `NotConnectedScreen` from P03 remains available for full-screen use.
+
+---
+
+## 3) Rules
+
+### 3.1 Global Do/Don't
+
+**Do:**
+- Use semantic tokens from `useTheme()` — never hex literals in components.
+- Pass i18n keys through `i18nKey` prop on `<Text>`, or pre-translate with `t()` before passing `label`/`title`/`message`.
+- Use logical properties (`paddingStart/End`, `marginStart/End`, `start`/`end`) — never `left`/`right`.
+- Test on Tier low: no glows, no heavy motion, no blur.
+- Ensure every interactive element has `accessibilityRole` + accessible label.
+- Ensure every interactive target is ≥44dp (`MIN_TOUCH_TARGET`).
+
+**Don't:**
+- Hardcode Arabic (or any) UI strings in components — put them in `src/locales/*.json`.
+- Stack `<Dialog>` and `<BottomSheet>` simultaneously.
+- Use `<GlowView>` for decorative purposes — only for hero emphasis.
+- Use `<GlassView>` outside Dock and Sheet contexts.
+- Use `text.accent` on `bg.raised` — use `text.accentOnRaised` instead.
+- Rely on color alone to convey state (always pair with icon or text).
+- Use `prettier` skip comments to avoid reformatting — run `format` instead.
+
+### 3.2 Glow
+
+**Maximum 1 glow per screen. 2 only for ceremonial hero (e.g., onboarding completion).**
+- Button `primary` / `gold` variants apply glow automatically on Tier high/mid — do not double-wrap in `<GlowView>`.
+- Use `<GlowView>` only when the button's own glow is insufficient (e.g., wrapping an illustration or card).
+- On Tier low, glows are disabled. **Never** compensate with stronger shadows — the intent is a lighter surface for slow devices.
+
+### 3.3 Glass
+
+**Only for Dock + Sheet.**
+- `<GlassView>` uses `expo-blur` on Tier high/mid, and a solid `rgba(30,24,50,0.92)` fallback on Tier low.
+- Do not use `<GlassView>` for lists, forms, or cards — they should be on `bg.surface` or `bg.raised` for readability.
+- On Web, uses `backdrop-filter` — verify visibility on older browsers before shipping.
+
+### 3.4 Motion
+
+- **Every animation duration must pass through `useMotion().duration(ms)`.** This ensures Reduce Motion is respected.
+- Do not introduce an animation that changes the layout of `Pressable` targets (breaks focus).
+- Skeleton / ProgressBar indeterminate pulses are default-on; skip on Tier low via `useDeviceTier`.
+- Reanimated worklets compile via `babel-preset-expo` (SDK 58) — no config needed. Test in Jest uses a static mock (ADR-0011).
+
+### 3.5 RTL Checklist
+
+Every component must satisfy all of these before merge:
+- [ ] `flexDirection: isRTL ? 'row-reverse' : 'row'` on horizontal layouts.
+- [ ] `paddingStart`/`paddingEnd` — never `paddingLeft`/`paddingRight`.
+- [ ] `marginStart`/`marginEnd` — never `marginLeft`/`marginRight`.
+- [ ] Directional icons (`chevronLeft`, `chevronRight`, `arrowLeft`, `arrowRight`) pass through `<Icon>`'s auto-mirror.
+- [ ] `textAlign: 'auto'` for start-aligned text.
+- [ ] Numeric inputs (`keyboardType: 'numeric'|'phone-pad'|'email-address'`) force `textAlign: 'left'` + `writingDirection: 'ltr'`.
+- [ ] Tab / Segment indicator uses `start: 0` + translated `translateX` (flipped for RTL).
+- [ ] Any `Absolute` positioning uses `start`/`end` (not `left`/`right`).
+
+### 3.6 Accessibility Checklist
+
+Every component must satisfy all of these before merge:
+- [ ] `accessibilityRole` set on interactive elements (`button`, `link`, `checkbox`, `switch`, `radio`, `tab`, `progressbar`, `alert`, `image`, `header`).
+- [ ] `accessibilityLabel` set on icon-only buttons and complex images.
+- [ ] `accessibilityState` reflects real state (`{ checked, disabled, selected, busy, expanded }`).
+- [ ] `accessibilityValue` for progress elements (`{ min, max, now }`).
+- [ ] `accessibilityViewIsModal` on Dialog and BottomSheet.
+- [ ] Decorative elements (Divider, Skeleton) are hidden via `accessibilityElementsHidden` + `importantForAccessibility="no-hide-descendants"`.
+- [ ] Every interactive target ≥44dp (`hitSlop` when needed).
+- [ ] Focus states visible on Web (`Button`, `TextInput`, Tabs).
+- [ ] No text conveyed only via color (pair with icon or label).
+- [ ] Contrast: all text passes WCAG AA (4.5:1 for body, 3:1 for large ≥18pt).
+
+### 3.7 Tier Matrix
+
+| Component | High | Mid | Low |
+|-----------|------|-----|-----|
+| Button (primary/gold) glow | ✅ | ✅ | ❌ |
+| GlowView | ✅ | ✅ | ❌ (flat) |
+| GlassView | ✅ blur | ✅ blur | ✅ solid fallback |
+| Hero3D parallax | ✅ | ✅ | ❌ (flat layers) |
+| Skeleton shimmer | ✅ | ✅ | ❌ (static 0.5) |
+| ProgressBar indeterminate pulse | ✅ | ✅ | ❌ (static 0.7) |
+| DoubleRingLoader / Success | ✅ | ✅ | ✅ (respects reduceMotion, not tier) |
+| QamariyaPattern opacity | ✅ | ✅ | ✅ (SVG, low cost) |
+
+### 3.8 Performance Notes
+
+- **SVG-heavy components** (`QamariyaPattern`, `ArchHero`, `RingProgress`, `DoubleRing*`) render cheaply on all tiers.
+- **Blur** (`GlassView`) is the most expensive surface — restricted to Dock + Sheet, disabled on Tier low.
+- **Reanimated worklets** used in `DoubleRing*`, `Hero3D`, `Skeleton`, `ProgressBar` — small, focused, driven by SharedValues. No layout animations.
+- **Gallery** lives at `/gallery` — excluded from production bundle? **No.** Deferred to P22 (development-only gating).
+- **Bundle size**: `lucide-react-native` is tree-shaken by Metro; only 39 icons imported. `react-native-svg` is shared by all SVG components.
+
+---
+
+## 4) Testing
+
+### 4.1 What's covered by Jest
+- All 42 components render without crashing.
+- Press handlers, state transitions, disabled states.
+- RTL behavior (flexDirection assertions where observable).
+- Accessibility attributes (roles, states, labels, values).
+- Form validation paths (Zod errors surface via props).
+- Color contrast pairs (`__tests__/contrast.test.ts`).
+- Seed integrity (dataOrigin='demo', no PII).
+
+### 4.2 What's NOT covered by Jest (deferred)
+- **Animation playback** — Reanimated is mocked (ADR-0011). Real motion is verified on devices + E2E (P21).
+- **Gesture interactions** — `PanResponder` in BottomSheet is not directly tested. Verified on devices.
+- **Blur rendering** — `expo-blur` mocked. Web/Mobile blur verified visually.
+- **SVG rendering correctness** — `react-native-svg` renders in Jest, but visual layout is checked manually via Gallery.
+- **Font loading** — Real font files not loaded in Jest; layout of Arabic glyphs verified visually.
+
+**Total test count at P04 close: 565 tests, 71 suites.**
+
+---
+
+## 5) Summary
+
+**Components shipped in P04:** 42
+- 4 primitives
+- 12 forms
+- 3 feedback
+- 8 display
+- 2 overlays
+- 3 navigation
+- 7 brand
+- 3 states
+
+**Hooks:** 4 (`useDeviceTier`, `useMotion`, `useHaptics`, `useDirection`)
+
+**Tokens:** colors (semantic + palette), typography (8 variants × 2 families), spacing (13), radius (6), shadows (4), glows (3), motion (durations, easings, springs).
+
+**Coverage:**
+- 565 Jest tests, 71 suites.
+- 17 WCAG AA pairs verified.
+- 42 components exercised for render + a11y.
+- Full RTL support via logical properties + auto-mirrored icons.
+
+**Known deferred items** (tracked in `PROJECT_CONTEXT §8`):
+- RingProgress animation → P05+
+- BottomSheet multi-snap → P20 if needed
+- Tabs scrollable → P07+ if needed
+- Avatar image → P06
+- Gallery gating for production → P22
