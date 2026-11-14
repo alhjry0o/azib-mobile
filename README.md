@@ -23,6 +23,7 @@
 | TypeScript | 6.0 (strict + noUncheckedIndexedAccess) |
 | Node | 26 |
 | Providers | 12 contracts + 12 mocks + 12 NotConnected stubs |
+| Design System | ✅ 42 components, 4 hooks, Gallery, tokens |
 | Repositories | 16 contracts + 16 mocks + contract tests |
 | i18n | 14 namespaces (ar + en) + formatters + RTL helpers |
 | Seed | 15 مجموعة demo (`dataOrigin='demo'`) |
