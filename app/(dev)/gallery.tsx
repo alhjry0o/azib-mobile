@@ -30,7 +30,29 @@ import {
   Textarea,
   TextInput,
   useToast,
+  Avatar,
+  Divider,
+  ProgressBar,
+  SectionHeader,
+  Skeleton,
+  EmptyState,
+  ErrorState,
+  ListItem,
+  NotConnectedState,
+  RingProgress,
+  Stepper,
 } from '@/components/ui';
+
+import {
+  ArchHero,
+  DoubleRingLoader,
+  DoubleRingSuccess,
+  GlassView,
+  GlowView,
+  Hero3D,
+  QamariyaPattern,
+} from '@/components/brand';
+import { useSharedValue } from 'react-native-reanimated';
 import type { ButtonSize, ButtonVariant } from '@/components/ui';
 import { useDeviceTier, useDeviceTierStore, useDirection } from '@/hooks';
 import { setLanguage } from '@/i18n';
@@ -51,8 +73,13 @@ export default function GalleryScreen() {
       <DisplaySection />
       <OverlaysSection />
       <NavSection />
+      <BrandSection />
+      <BrandMotionSection />
+      <UtilitySection />
+      <CompositeSection />
+      <StateScreensSection />
       <Text variant="caption" color="tertiary" align="center" style={{ marginTop: 24 }}>
-        Parts 5-7 will add overlays, brand 3D, and utilities.
+        Part 7 will finalize docs/DESIGN_SYSTEM.md and close P04.
       </Text>
     </Screen>
   );
@@ -526,6 +553,339 @@ function NavSection() {
         <Text variant="caption" color="secondary">
           Filter: {filter}
         </Text>
+      </Section>
+    </>
+  );
+}
+
+function BrandSection() {
+  const theme = useTheme();
+  return (
+    <>
+      <Section title="Brand — ArchHero">
+        <View style={{ alignItems: 'center' }}>
+          <ArchHero width={240}>
+            <Text variant="h2" color="gold" align="center">
+              عازب {/* i18n-allow-arabic */}
+            </Text>
+            <Text variant="caption" color="secondary" align="center" style={{ marginTop: 4 }}>
+              AZIB
+            </Text>
+          </ArchHero>
+        </View>
+        <View style={{ alignItems: 'center', marginTop: 12 }}>
+          <ArchHero variant="outlined" width={200}>
+            <Text variant="bodyStrong" color="primary" align="center">
+              Outlined
+            </Text>
+          </ArchHero>
+        </View>
+      </Section>
+
+      <Section title="Brand — QamariyaPattern">
+        <View
+          style={{
+            height: 200,
+            backgroundColor: theme.colors.bg.surface,
+            borderRadius: theme.radius.lg,
+            overflow: 'hidden',
+            position: 'relative',
+          }}
+        >
+          <QamariyaPattern width={340} height={200} opacity={0.12} />
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text variant="h2" color="gold">
+              Qamariya
+            </Text>
+          </View>
+        </View>
+      </Section>
+
+      <Section title="Brand — GlowView">
+        <View style={styles.row}>
+          <GlowView radius={20} intensity={0.5}>
+            <Button label="Primary glow" />
+          </GlowView>
+          <GlowView color="gold" radius={20} intensity={0.55}>
+            <Button variant="gold" label="Gold glow" />
+          </GlowView>
+        </View>
+      </Section>
+
+      <Section title="Brand — GlassView">
+        <View style={{ alignItems: 'stretch' }}>
+          <GlassView
+            intensity={60}
+            style={{
+              height: 100,
+              borderRadius: theme.radius.xl,
+              padding: 16,
+              justifyContent: 'center',
+            }}
+          >
+            <Text variant="bodyStrong" color="primary">
+              Glass surface
+            </Text>
+            <Text variant="caption" color="secondary">
+              Dock / Sheet only per AGENT_RULES.
+            </Text>
+          </GlassView>
+        </View>
+      </Section>
+    </>
+  );
+}
+
+function BrandMotionSection() {
+  const theme = useTheme();
+  const progress = useSharedValue(0);
+  return (
+    <>
+      <Section title="Brand — DoubleRingLoader">
+        <View style={styles.row}>
+          <DoubleRingLoader size={48} />
+          <DoubleRingLoader size={64} />
+          <DoubleRingLoader size={80} color={theme.colors.gold.fill} />
+        </View>
+      </Section>
+
+      <Section title="Brand — DoubleRingSuccess">
+        <View style={styles.row}>
+          <DoubleRingSuccess size={56} />
+          <DoubleRingSuccess size={72} />
+          <DoubleRingSuccess size={88} color={theme.colors.text.accent} />
+        </View>
+      </Section>
+
+      <Section title="Brand — Hero3D (progress-driven parallax)">
+        <View style={styles.row}>
+          <Button
+            size="sm"
+            variant="secondary"
+            label="0%"
+            onPress={() => {
+              progress.value = 0;
+            }}
+          />
+          <Button
+            size="sm"
+            variant="secondary"
+            label="50%"
+            onPress={() => {
+              // eslint-disable-next-line react-hooks/immutability
+              progress.value = 0.5;
+            }}
+          />
+          <Button
+            size="sm"
+            variant="secondary"
+            label="100%"
+            onPress={() => {
+              // eslint-disable-next-line react-hooks/immutability
+              progress.value = 1;
+            }}
+          />
+        </View>
+        <Hero3D
+          progress={progress}
+          height={320}
+          background={
+            <View style={StyleSheet.absoluteFill}>
+              <View
+                style={{
+                  ...StyleSheet.absoluteFill,
+                  backgroundColor: theme.colors.bg.surface,
+                }}
+              />
+              <QamariyaPattern width={400} height={320} opacity={0.15} />
+            </View>
+          }
+          midground={
+            <View style={styles.row} pointerEvents="none">
+              <View
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 40,
+                  backgroundColor: theme.colors.accent.fill,
+                  opacity: 0.4,
+                }}
+              />
+              <View
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 30,
+                  backgroundColor: theme.colors.gold.fill,
+                  opacity: 0.4,
+                }}
+              />
+            </View>
+          }
+          foreground={
+            <ArchHero width={200} variant="outlined">
+              <Text variant="h2" color="gold" align="center">
+                عازب {/* i18n-allow-arabic */}
+              </Text>
+            </ArchHero>
+          }
+        />
+      </Section>
+    </>
+  );
+}
+
+function UtilitySection() {
+  const theme = useTheme();
+  return (
+    <>
+      <Section title="Utility — Divider">
+        <Text variant="body">Above</Text>
+        <Divider />
+        <Text variant="body">Below</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', height: 40 }}>
+          <Text variant="body">Left</Text>
+          <Divider orientation="vertical" />
+          <Text variant="body">Right</Text>
+        </View>
+        <Text variant="caption" color="secondary">
+          Custom color:
+        </Text>
+        <Divider color={theme.colors.accent.fill} thickness={2} />
+      </Section>
+
+      <Section title="Utility — SectionHeader">
+        <SectionHeader title="Recent" subtitle="Last 30 days" />
+        <SectionHeader
+          title="Recent"
+          actionLabel="See all"
+          onAction={() => {}}
+        />
+        <SectionHeader
+          title="Notifications"
+          subtitle="You have 3 unread"
+          actionLabel="Mark read"
+          onAction={() => {}}
+        />
+      </Section>
+
+      <Section title="Utility — Skeleton">
+        <Skeleton variant="text" />
+        <Skeleton variant="text" width="60%" />
+        <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+          <Skeleton variant="circle" />
+          <View style={{ flex: 1, gap: 8 }}>
+            <Skeleton variant="text" width="80%" />
+            <Skeleton variant="text" width="60%" />
+          </View>
+        </View>
+        <Skeleton variant="rect" height={120} />
+      </Section>
+
+      <Section title="Utility — ProgressBar">
+        <ProgressBar value={0.25} />
+        <ProgressBar value={0.5} showLabel />
+        <ProgressBar value={0.75} color="success" showLabel />
+        <ProgressBar value={0.9} color="gold" showLabel />
+        <ProgressBar color="danger" />
+        <Text variant="caption" color="secondary">
+          Sizes:
+        </Text>
+        <ProgressBar value={0.4} size="sm" />
+        <ProgressBar value={0.4} size="md" />
+        <ProgressBar value={0.4} size="lg" />
+      </Section>
+
+      <Section title="Utility — Avatar">
+        <View style={styles.row}>
+          <Avatar name="Ahmed Yemeni" size="xs" />
+          <Avatar name="Fatima Sanaa" size="sm" />
+          <Avatar name="Khalid" size="md" />
+          <Avatar name="Samira Taiz" size="lg" />
+          <Avatar name="Yemen Family" size="xl" />
+        </View>
+        <View style={styles.row}>
+          <Avatar name="Ahmed Yemeni" size="md" ring />
+          <Avatar name="Fatima Sanaa" size="lg" ring />
+          <Avatar name="Test" size="md" ring />
+        </View>
+      </Section>
+    </>
+  );
+}
+
+function CompositeSection() {
+  const theme = useTheme();
+  const [step] = useState(1);
+  return (
+    <>
+      <Section title="Composite — ListItem">
+        <ListItem title="Account settings" subtitle="Email, password, 2FA" onPress={() => {}} />
+        <ListItem
+          title="Notifications"
+          subtitle="Push, email, SMS"
+          onPress={() => {}}
+          trailing={<Badge label="3 new" variant="accent" size="sm" />}
+        />
+        <ListItem
+          title="Delete account"
+          subtitle="This cannot be undone"
+          onPress={() => {}}
+          destructive
+        />
+        <ListItem title="Disabled row" onPress={() => {}} disabled />
+        <ListItem title="Static row (no press)" subtitle="Informational only" />
+        <View style={{ marginTop: 8 }}>
+          <ListItem title="Card row" subtitle="With surface" variant="card" onPress={() => {}} />
+        </View>
+      </Section>
+
+      <Section title="Composite — Stepper">
+        <Stepper steps={['Account', 'Profile', 'Verify', 'Done']} currentStep={step} />
+        <Stepper steps={['Step 1', 'Step 2', 'Step 3']} currentStep={0} />
+        <Stepper steps={['One', 'Two', 'Three', 'Four', 'Five']} currentStep={3} />
+      </Section>
+
+      <Section title="Composite — RingProgress">
+        <View style={styles.row}>
+          <RingProgress value={0.25} showLabel />
+          <RingProgress value={0.5} showLabel />
+          <RingProgress value={0.75} showLabel color={theme.colors.state.success} />
+          <RingProgress value={0.9} showLabel color={theme.colors.gold.fill} />
+          <RingProgress value={0.3} size={48} strokeWidth={4} />
+        </View>
+        <RingProgress value={0.65} size={160} strokeWidth={10} showLabel />
+      </Section>
+    </>
+  );
+}
+
+function StateScreensSection() {
+  return (
+    <>
+      <Section title="State — EmptyState">
+        <EmptyState
+          title="No items yet"
+          description="When you add items, they'll appear here."
+          action={{ label: 'Add item', onPress: () => {} }}
+          secondaryAction={{ label: 'Learn more', onPress: () => {} }}
+        />
+      </Section>
+
+      <Section title="State — ErrorState">
+        <ErrorState
+          title="Could not load"
+          description="Something went wrong while fetching your data."
+          onRetry={() => {}}
+        />
+      </Section>
+
+      <Section title="State — NotConnectedState">
+        <NotConnectedState
+          title="Not connected"
+          description="This feature will activate once the backend is configured."
+          onRetry={() => {}}
+        />
       </Section>
     </>
   );
