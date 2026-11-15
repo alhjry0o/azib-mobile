@@ -1,6 +1,6 @@
 // Live IntegrationRegistry view. Reads real provider status and runs the
 // container's actual healthCheckAll(). No invented connection states.
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import {
@@ -42,10 +42,6 @@ export function IntegrationsScreen() {
     container.registry.list(),
   );
   const [checking, setChecking] = useState(false);
-
-  useEffect(() => {
-    setRecords(container.registry.list());
-  }, [container]);
 
   const runHealthChecks = async (): Promise<void> => {
     setChecking(true);
