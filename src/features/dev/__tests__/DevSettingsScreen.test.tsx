@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 import { DialogHost } from '@/components/shell';
 import { ShellProviders, resetShellStores } from '@/features/shell/__tests__/test-utils';
 import { getLanguage, setLanguage } from '@/i18n';
@@ -36,15 +36,7 @@ describe('DevSettingsScreen', () => {
     });
   });
 
-  afterEach(async () => {
-    cleanup();
-    await act(async () => {
-      useDeviceTierStore.setState({ override: null });
-      useHapticsStore.setState({ enabled: true });
-      useLanguageStore.setState({ language: 'ar', hydrated: true });
-      await setLanguage('ar');
-    });
-  });
+  // تم حذف afterEach و cleanup هنا
 
   it('renders the developer badge and all sections', async () => {
     await renderDev();
@@ -62,7 +54,9 @@ describe('DevSettingsScreen', () => {
   it('switches AppMode to backend and clears the query cache', async () => {
     await renderDev();
     const tabs = within(screen.getByTestId('dev-mode-control')).getAllByRole('tab');
-    fireEvent.press(tabs[1]!);
+    await act(async () => {
+      fireEvent.press(tabs[1]!);
+    });
     await waitFor(() => {
       expect(screen.getByTestId('dev-mode-control')).toBeTruthy();
     });
@@ -127,7 +121,9 @@ describe('DevSettingsScreen', () => {
     await renderDev();
     fireEvent.press(screen.getByTestId('dev-reset-onboarding'));
     expect(useShellStore.getState().dialog).not.toBeNull();
-    fireEvent.press(screen.getByTestId('shell-dialog-confirm'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('shell-dialog-confirm'));
+    });
     await waitFor(() => {
       expect(useOnboardingStore.getState().completed).toBe(false);
     });
