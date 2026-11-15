@@ -24,7 +24,7 @@ describe('GateScreen', () => {
   });
 
   it('shows loading first, then redirects to onboarding on first launch', async () => {
-    render(
+    await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
