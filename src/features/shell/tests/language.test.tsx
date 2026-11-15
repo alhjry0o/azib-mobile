@@ -23,7 +23,7 @@ describe('useLanguageSwitch', () => {
 
   it('persists the choice, switches i18n and applies the native direction', async () => {
     const forceSpy = jest.spyOn(I18nManager, 'forceRTL');
-    const { result } = renderHook(() => useLanguageSwitch());
+    const { result } = await renderHook(() => useLanguageSwitch());
 
     await act(async () => {
       await result.current.switchLanguage('en');
