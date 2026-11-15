@@ -1,6 +1,6 @@
 {
   "appName": "AZIB",
-  "phaseLabel": "Current phase: P03 — Core Platform",
+  "phaseLabel": "Current phase: P05 — Shell & Navigation",
   "buttons": {
     "ok": "OK",
     "cancel": "Cancel",
@@ -29,5 +29,121 @@
     "items_zero": "No items",
     "items_one": "One item",
     "items_other": "{{count}} items"
+  },
+  "shell": {
+    "offline": "No internet connection. Some features may not work.",
+    "notConnected": {
+      "title": "Not connected to the server",
+      "description": "The backend is not wired yet. Full connectivity arrives in a later phase; demo mode is available now."
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "The operation could not be completed. Please try again."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The link you opened is invalid or no longer available."
+    },
+    "maintenance": {
+      "title": "Temporary maintenance",
+      "description": "The app is temporarily under maintenance. Please try again later."
+    },
+    "forbidden": {
+      "title": "Access denied",
+      "description": "This area is restricted to authorized roles and is also enforced on the server."
+    },
+    "errorBoundary": {
+      "title": "Something went wrong",
+      "description": "Sorry about that. Retry to continue."
+    },
+    "auth": {
+      "title": "Sign in",
+      "description": "Real sign-in ships in P06. For now you can enter a clearly-labeled demo mode.",
+      "demoAction": "Enter demo mode",
+      "backendTitle": "Sign in not connected",
+      "backendDescription": "Authentication is not wired yet (P06/P18). Use demo mode to continue."
+    },
+    "account": {
+      "title": "My account",
+      "description": "Account and profile management ships in P06.",
+      "signOut": "Sign out",
+      "notifications": "Notifications",
+      "signedInAs": "Signed in as"
+    },
+    "tabs": {
+      "home": "Home",
+      "services": "Services",
+      "weddings": "Our Wedding",
+      "partners": "Partners",
+      "account": "Account"
+    },
+    "placeholder": {
+      "builtIn": "Built in {{phase}}",
+      "backHome": "Back to home",
+      "openServices": "Explore services"
+    },
+    "features": {
+      "home": {
+        "title": "Home",
+        "description": "The home dashboard with summaries and tiles ships in P07."
+      },
+      "services": {
+        "title": "Services",
+        "description": "Each service opens its own screen. Unbuilt services honestly show their status."
+      },
+      "weddings": {
+        "title": "Our Wedding",
+        "description": "Group weddings: registration and tracking ship in P10."
+      },
+      "partners": {
+        "title": "Partners",
+        "description": "The partners and discounts directory ships in P11."
+      },
+      "assistance": {
+        "title": "Assistance",
+        "description": "Assistance requests and eligibility verification ship in P08 with human review."
+      },
+      "souk": {
+        "title": "Souk Khair",
+        "description": "In-kind donations between families ship in P12."
+      },
+      "jobs": {
+        "title": "Jobs",
+        "description": "Community jobs ship in P13."
+      },
+      "volunteers": {
+        "title": "Volunteers",
+        "description": "Volunteering opportunities ship in P13."
+      },
+      "learn": {
+        "title": "Learn",
+        "description": "Awareness content and the community charter ship in P15."
+      },
+      "calculator": {
+        "title": "Cost calculator",
+        "description": "The advisory wedding cost calculator ships in P14."
+      },
+      "guide": {
+        "title": "Marriage guide",
+        "description": "The step-by-step advisory guide ships in P14."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "The notification center ships in P16. No real notifications before that."
+      },
+      "search": {
+        "title": "Search",
+        "description": "Private-first search ships in P16."
+      },
+      "staff": {
+        "title": "Staff console",
+        "description": "Review and administration tools ship in P17 with explicit roles."
+      },
+      "onboarding": {
+        "title": "Welcome to AZIB",
+        "description": "The full introduction tour ships in the next step of P05. You can continue now.",
+        "action": "Continue"
+      }
+    }
   }
 }
