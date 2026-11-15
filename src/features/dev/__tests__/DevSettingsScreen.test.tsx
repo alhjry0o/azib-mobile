@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 import { DialogHost } from '@/components/shell';
 import { ShellProviders, resetShellStores } from '@/features/shell/__tests__/test-utils';
 import { getLanguage, setLanguage } from '@/i18n';
@@ -37,6 +37,7 @@ describe('DevSettingsScreen', () => {
   });
 
   afterEach(async () => {
+    cleanup();
     await act(async () => {
       useDeviceTierStore.setState({ override: null });
       useHapticsStore.setState({ enabled: true });
@@ -65,23 +66,27 @@ describe('DevSettingsScreen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('dev-mode-control')).toBeTruthy();
     });
-    const { useAppModeStore } = jest.requireMock('@/stores') as never;
-    void useAppModeStore;
   });
 
   it('overrides the device tier', async () => {
     await renderDev();
     const tabs = within(screen.getByTestId('dev-tier-control')).getAllByRole('tab');
-    fireEvent.press(tabs[3]!);
+    await act(async () => {
+      fireEvent.press(tabs[3]!);
+    });
     expect(useDeviceTierStore.getState().override).toBe('low');
-    fireEvent.press(tabs[0]!);
+    await act(async () => {
+      fireEvent.press(tabs[0]!);
+    });
     expect(useDeviceTierStore.getState().override).toBeNull();
   });
 
   it('switches language to English and persists it', async () => {
     await renderDev();
     const tabs = within(screen.getByTestId('dev-language-control')).getAllByRole('tab');
-    fireEvent.press(tabs[1]!);
+    await act(async () => {
+      fireEvent.press(tabs[1]!);
+    });
     await waitFor(() => {
       expect(getLanguage()).toBe('en');
     });
@@ -91,16 +96,22 @@ describe('DevSettingsScreen', () => {
   it('toggles haptics', async () => {
     await renderDev();
     expect(useHapticsStore.getState().enabled).toBe(true);
-    fireEvent.press(screen.getByTestId('dev-haptics-switch'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('dev-haptics-switch'));
+    });
     expect(useHapticsStore.getState().enabled).toBe(false);
   });
 
   it('adjusts the Dock badge counter (dev-only) with a real floor at zero', async () => {
     await renderDev();
     expect(screen.getByTestId('dev-badge-minus').props.accessibilityState.disabled).toBe(true);
-    fireEvent.press(screen.getByTestId('dev-badge-plus'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('dev-badge-plus'));
+    });
     expect(useShellStore.getState().unreadNotifications).toBe(1);
-    fireEvent.press(screen.getByTestId('dev-badge-minus'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('dev-badge-minus'));
+    });
     expect(useShellStore.getState().unreadNotifications).toBe(0);
   });
 
