@@ -29,7 +29,6 @@ describe('GateScreen', () => {
         <GateScreen />
       </ShellProviders>,
     );
-    // await render() waits for effects; loading view is skipped
     await waitFor(() => {
       expect(screen.getByTestId('redirect:/(onboarding)')).toBeTruthy();
     });
