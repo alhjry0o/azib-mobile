@@ -21,7 +21,9 @@ function renderFlow() {
 
 async function goToLanguageStep(): Promise<void> {
   for (let i = 0; i < 4; i += 1) {
-    fireEvent.press(screen.getByTestId('onboarding-continue'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('onboarding-continue'));
+    });
   }
   expect(screen.getByTestId('onboarding-step-language')).toBeTruthy();
 }
@@ -44,51 +46,63 @@ describe('OnboardingFlow', () => {
     jest.restoreAllMocks();
   });
 
-  it('starts at the brand step with an always-visible skip and no back button', () => {
-    renderFlow();
+  it('starts at the brand step with an always-visible skip and no back button', async () => {
+    await renderFlow();
     expect(screen.getByTestId('onboarding-step-brand')).toBeTruthy();
     expect(screen.getByTestId('onboarding-skip')).toBeTruthy();
     expect(screen.getByTestId('onboarding-progress')).toBeTruthy();
     expect(screen.queryByTestId('onboarding-back', { includeHiddenElements: true })).toBeNull();
   });
 
-  it('walks through all five steps in order', () => {
-    renderFlow();
+  it('walks through all five steps in order', async () => {
+    await renderFlow();
     const order = ['mission', 'features', 'privacy', 'language'] as const;
     for (const step of order) {
-      fireEvent.press(screen.getByTestId('onboarding-continue'));
+      await act(async () => {
+        fireEvent.press(screen.getByTestId('onboarding-continue'));
+      });
       expect(screen.getByTestId(`onboarding-step-${step}`)).toBeTruthy();
     }
   });
 
-  it('goes back to the previous step', () => {
-    renderFlow();
-    fireEvent.press(screen.getByTestId('onboarding-continue'));
+  it('goes back to the previous step', async () => {
+    await renderFlow();
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('onboarding-continue'));
+    });
     expect(screen.getByTestId('onboarding-step-mission')).toBeTruthy();
-    fireEvent.press(screen.getByTestId('onboarding-back'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('onboarding-back'));
+    });
     expect(screen.getByTestId('onboarding-step-brand')).toBeTruthy();
   });
 
-  it('skip completes onboarding and navigates to sign-in', () => {
-    renderFlow();
-    fireEvent.press(screen.getByTestId('onboarding-skip'));
+  it('skip completes onboarding and navigates to sign-in', async () => {
+    await renderFlow();
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('onboarding-skip'));
+    });
     expect(useOnboardingStore.getState().completed).toBe(true);
     expect(mockReplace).toHaveBeenCalledWith('/(auth)/sign-in');
   });
 
   it('finish on the last step completes onboarding and navigates to sign-in', async () => {
-    renderFlow();
+    await renderFlow();
     await goToLanguageStep();
-    fireEvent.press(screen.getByTestId('onboarding-continue'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('onboarding-continue'));
+    });
     expect(useOnboardingStore.getState().completed).toBe(true);
     expect(mockReplace).toHaveBeenCalledWith('/(auth)/sign-in');
   });
 
   it('switches language to English, persists it and applies forceRTL(false)', async () => {
     const forceSpy = jest.spyOn(I18nManager, 'forceRTL');
-    renderFlow();
+    await renderFlow();
     await goToLanguageStep();
-    fireEvent.press(screen.getByText('English'));
+    await act(async () => {
+      fireEvent.press(screen.getByText('English'));
+    });
     await waitFor(() => {
       expect(getLanguage()).toBe('en');
     });
