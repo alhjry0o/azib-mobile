@@ -144,6 +144,67 @@
         "description": "The full introduction tour ships in the next step of P05. You can continue now.",
         "action": "Continue"
       }
+    },
+    "dev": {
+      "title": "Developer settings",
+      "badgeLabel": "Development mode",
+      "description": "Internal tools for testing the shell. This screen is hidden in production.",
+      "backToAccount": "Back to account",
+      "mode": {
+        "title": "App mode",
+        "description": "Switch between demo data and the not-connected backend mode until P18.",
+        "demo": "Demo",
+        "backend": "Backend"
+      },
+      "tier": {
+        "title": "Device tier",
+        "description": "Effective tier: {{tier}}. Controls shadows, glow and parallax.",
+        "auto": "Auto",
+        "high": "High",
+        "mid": "Mid",
+        "low": "Low"
+      },
+      "language": {
+        "title": "Language & direction",
+        "description": "Current direction: {{direction}}.",
+        "note": "Texts switch immediately; the native layout direction fully applies after reopening the app."
+      },
+      "haptics": {
+        "title": "Haptics",
+        "description": "Enable or disable haptic feedback across the app.",
+        "toggle": "Enable haptics"
+      },
+      "dockBadge": {
+        "title": "Notifications badge",
+        "description": "A local counter to test the Dock badge until the real source is wired in P16.",
+        "decrease": "Decrease counter",
+        "increase": "Increase counter"
+      },
+      "links": {
+        "title": "Tools",
+        "integrations": "Integration states",
+        "gallery": "Design gallery"
+      },
+      "integrations": {
+        "title": "Integrations",
+        "description": "Each provider's state from IntegrationRegistry. The check calls every provider's real healthCheck.",
+        "runChecks": "Run connection check",
+        "notChecked": "Not checked yet",
+        "mode": "Mode: {{mode}}",
+        "status": {
+          "mock": "Mock",
+          "configured": "Configured",
+          "connected": "Connected",
+          "disabled": "Disabled",
+          "error": "Error"
+        }
+      },
+      "resetOnboarding": {
+        "title": "Reset onboarding",
+        "description": "The introduction screens will be shown again from the start.",
+        "confirm": "Reset",
+        "action": "Reset onboarding"
+      }
     }
   }
 }
