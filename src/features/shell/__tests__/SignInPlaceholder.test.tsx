@@ -34,7 +34,7 @@ describe('SignInPlaceholder', () => {
   });
 
   it('signs in through the mock provider in demo mode and navigates to tabs', async () => {
-    render(
+    await render(
       <ShellProviders>
         <SignInPlaceholder />
       </ShellProviders>,
