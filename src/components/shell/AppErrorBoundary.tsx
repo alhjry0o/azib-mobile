@@ -17,25 +17,18 @@ export class AppErrorBoundary extends Component<
   AppErrorBoundaryProps,
   AppErrorBoundaryState
 > {
-  state: AppErrorBoundaryState = { hasError: false };
+  override state: AppErrorBoundaryState = { hasError: false };
 
-  export class AppErrorBoundary extends Component<
-    AppErrorBoundaryProps,
-    AppErrorBoundaryState
-  > {
-    
-    override state: AppErrorBoundaryState = { hasError: false };
+  static getDerivedStateFromError(): AppErrorBoundaryState {
+    return { hasError: true };
+  }
 
-    static getDerivedStateFromError(): AppErrorBoundaryState {
-      return { hasError: true };
-    }
+  private readonly handleReset = (): void => {
+    this.setState({ hasError: false });
+  };
 
-    private readonly handleReset = (): void => {
-      this.setState({ hasError: false });
-    };
-
-    override render(): ReactNode {
-      if (!this.state.hasError) return this.props.children;
+  override render(): ReactNode {
+    if (!this.state.hasError) return this.props.children;
 
     return (
       <View style={styles.fallback} testID="error-boundary">
