@@ -1,5 +1,5 @@
-import { OnboardingPlaceholder } from '@/features/shell';
+import { OnboardingFlow } from '@/features/onboarding';
 
 export default function OnboardingScreen() {
-  return <OnboardingPlaceholder />;
+  return <OnboardingFlow />;
 }
