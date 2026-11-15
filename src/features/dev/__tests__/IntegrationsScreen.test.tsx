@@ -25,7 +25,7 @@ describe('IntegrationsScreen', () => {
     await resetShellStores();
   });
 
-  it('lists all twelve providers with their initial mock status', () => {
+  it('lists all twelve providers with their initial mock status', async () => {
     await renderIntegrations();
     expect(screen.getByTestId('integrations-mode-badge')).toBeTruthy();
     for (const name of ALL_PROVIDER_NAMES) {
@@ -55,7 +55,8 @@ describe('IntegrationsScreen', () => {
     await act(async () => {
       useAppModeStore.setState({ mode: 'backend', hydrated: true });
     });
-    renderIntegrations();
+    
+    await renderIntegrations();
     const authRow = screen.getByTestId('integration-auth');
     expect(
       within(authRow).getByText(translate('common:shell.dev.integrations.status.disabled')),
@@ -70,7 +71,7 @@ describe('IntegrationsScreen', () => {
     });
   });
 
-  it('navigates back to developer settings', () => {
+  it('navigates back to developer settings', async () => {
     await renderIntegrations();
     fireEvent.press(screen.getByTestId('integrations-back'));
     expect(mockReplace).toHaveBeenCalledWith('/(dev)');
