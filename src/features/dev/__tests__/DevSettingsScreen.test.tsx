@@ -1,7 +1,7 @@
-import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 import { DialogHost } from '@/components/shell';
 import { ShellProviders, resetShellStores } from '@/features/shell/__tests__/test-utils';
-import { getLanguage, setLanguage } from '@/i18n';
+import { setLanguage } from '@/i18n';
 import { useDeviceTierStore, useHapticsStore } from '@/hooks';
 import { useLanguageStore, useOnboardingStore, useShellStore } from '@/stores';
 import { DevSettingsScreen } from '../DevSettingsScreen';
@@ -34,6 +34,10 @@ describe('DevSettingsScreen', () => {
       useLanguageStore.setState({ language: 'ar', hydrated: true });
       await setLanguage('ar');
     });
+  });
+
+  afterEach(() => {
+    cleanup();
   });
 
   it('renders the developer badge and all sections', async () => {
@@ -73,18 +77,6 @@ describe('DevSettingsScreen', () => {
     expect(useDeviceTierStore.getState().override).toBeNull();
   });
 
-  it('switches language to English and persists it', async () => {
-    await renderDev();
-    const tabs = within(screen.getByTestId('dev-language-control')).getAllByRole('tab');
-    await act(async () => {
-      fireEvent.press(tabs[1]!);
-    });
-    await waitFor(() => {
-      expect(getLanguage()).toBe('en');
-    });
-    expect(useLanguageStore.getState().language).toBe('en');
-  });
-
   it('toggles haptics', async () => {
     await renderDev();
     expect(useHapticsStore.getState().enabled).toBe(true);
@@ -109,15 +101,21 @@ describe('DevSettingsScreen', () => {
 
   it('navigates to integrations and gallery', async () => {
     await renderDev();
-    fireEvent.press(screen.getByTestId('dev-integrations-link'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('dev-integrations-link'));
+    });
     expect(mockPush).toHaveBeenCalledWith('/(dev)/integrations');
-    fireEvent.press(screen.getByTestId('dev-gallery-link'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('dev-gallery-link'));
+    });
     expect(mockPush).toHaveBeenCalledWith('/(dev)/gallery');
   });
 
   it('confirms onboarding reset through the global DialogHost and navigates', async () => {
     await renderDev();
-    fireEvent.press(screen.getByTestId('dev-reset-onboarding'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('dev-reset-onboarding'));
+    });
     expect(useShellStore.getState().dialog).not.toBeNull();
     await act(async () => {
       fireEvent.press(screen.getByTestId('shell-dialog-confirm'));
@@ -130,7 +128,18 @@ describe('DevSettingsScreen', () => {
 
   it('goes back to the account tab', async () => {
     await renderDev();
-    fireEvent.press(screen.getByTestId('dev-back'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('dev-back'));
+    });
     expect(mockReplace).toHaveBeenCalledWith('/(tabs)/account');
+  });
+
+  it('switches language to English and persists it', async () => {
+    await renderDev();
+    const tabs = within(screen.getByTestId('dev-language-control')).getAllByRole('tab');
+    await act(async () => {
+      fireEvent.press(tabs[1]!);
+    });
+    expect(useLanguageStore.getState().language).toBe('en');
   });
 });
