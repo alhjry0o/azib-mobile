@@ -2,6 +2,7 @@
 
 > **النسخة النهائية — P04 مغلقة.**
 > يوافق كل قرار في هذا المستند ما هو مُنفَّذ في الكود. أي تعديل يستدعي تحديث هذا الملف.
+> **تحديث P05 (2026-11-16):** بوابة Gallery للإنتاج نُفّذت في **P05.1** (كانت مؤجلة لـP22). لا تغيير في أي مكوّن من P04.
 > **عام المستودع:** لا أسرار، لا بيانات شخصية.
 
 ---
@@ -101,12 +102,14 @@ import { useDeviceTier, useMotion, useHaptics, useDirection } from '@/hooks';
 ## 2) Component Catalog
 
 ### 2.1 Primitives
+
 - **`<Icon>`** — 39 lucide icons, RTL-aware (`MIRRORED_IN_RTL` set for direction icons).
 - **`<Text>`** — typography-aware, `color` token or raw, `align` logical, `i18nKey` support.
 - **`<Screen>`** — SafeArea container with logical padding; `scroll` prop.
 - **`<Button>`** — 6 variants (primary, secondary, ghost, gold, danger, icon) × 3 sizes × 6 states.
 
 ### 2.2 Forms
+
 - **`<Field>`** — label / required / help / error wrapper.
 - **`<TextInput>`** — 3 sizes, left/right icons, focus border, error border, LTR for numeric.
 - **`<Textarea>`** — multiline with min height.
@@ -121,11 +124,13 @@ import { useDeviceTier, useMotion, useHaptics, useDirection } from '@/hooks';
 - **`<DatePicker>`** — custom calendar modal, RTL-aware, min/max dates.
 
 ### 2.3 Feedback
+
 - **`<ToastProvider>` + `useToast()`** — global toast, 4 variants, auto-dismiss, single at a time.
 - **`<Banner>`** — inline block, 4 variants (info, demo, warning, error).
 - **`<Badge>`** — 9 variants (neutral, accent, success, warning, danger, info + verified, pending, demo presets with icons).
 
 ### 2.4 Display
+
 - **`<Card>`** — flat / crest (gold top accent) / pressable / stat.
 - **`<ListItem>`** — default or card; interactive or static; destructive; leading/trailing.
 - **`<SectionHeader>`** — title + subtitle + action chevron (mirrored in RTL).
@@ -136,15 +141,18 @@ import { useDeviceTier, useMotion, useHaptics, useDirection } from '@/hooks';
 - **`<Skeleton>`** — text / circle / rect; shimmer respects reduceMotion; hidden from a11y.
 
 ### 2.5 Overlays
+
 - **`<Dialog>`** — modal centered surface + backdrop. `accessibilityViewIsModal`. **Do not stack Dialog + BottomSheet** (iOS Modal fragility).
 - **`<BottomSheet>`** — modal bottom sheet, single snap (default 85%), drag-down-to-dismiss. **Do not stack with Dialog.**
 
 ### 2.6 Navigation
+
 - **`<Tabs>`** — header only (default / pills), badges, disabled, a11y role `tablist` + `tab`. **Equal-width; non-scrollable until P07+ if needed.**
 - **`<SegmentedControl>`** — Material-style, animated indicator, RTL-aware.
 - **`<Stepper>`** — horizontal multi-step (completed / current / pending), a11y `progressbar`.
 
 ### 2.7 Brand
+
 - **`<ArchHero>`** — Islamic/Yemeni arch frame (mihrab silhouette).
 - **`<QamariyaPattern>`** — repeated motif SVG; `pointerEvents="none"`; hidden IDs per instance.
 - **`<GlowView>`** — soft glow wrapper; **disabled on Tier low**.
@@ -154,6 +162,7 @@ import { useDeviceTier, useMotion, useHaptics, useDirection } from '@/hooks';
 - **`<Hero3D>`** — three-layer parallax (Background / Midground / Foreground); caller drives `progress: SharedValue<number>`; disabled on Tier low + reduceMotion.
 
 ### 2.8 States
+
 - **`<EmptyState>`** — neutral tone; default title `common.states.empty`.
 - **`<ErrorState>`** — danger tone; default title `errors.unknown`; optional `onRetry` + `retrying`.
 - **`<NotConnectedState>`** — accent tone; default title `errors.notConnected`; optional `onRetry` + secondary.
@@ -197,6 +206,7 @@ import { useDeviceTier, useMotion, useHaptics, useDirection } from '@/hooks';
 - `<GlassView>` uses `expo-blur` on Tier high/mid, and a solid `rgba(30,24,50,0.92)` fallback on Tier low.
 - Do not use `<GlassView>` for lists, forms, or cards — they should be on `bg.surface` or `bg.raised` for readability.
 - On Web, uses `backdrop-filter` — verify visibility on older browsers before shipping.
+- **P05 usage:** the only consumer in shipped app code is `FloatingDock` (`src/components/shell/FloatingDock.tsx`).
 
 ### 3.4 Motion
 
@@ -208,6 +218,7 @@ import { useDeviceTier, useMotion, useHaptics, useDirection } from '@/hooks';
 ### 3.5 RTL Checklist
 
 Every component must satisfy all of these before merge:
+
 - [ ] `flexDirection: isRTL ? 'row-reverse' : 'row'` on horizontal layouts.
 - [ ] `paddingStart`/`paddingEnd` — never `paddingLeft`/`paddingRight`.
 - [ ] `marginStart`/`marginEnd` — never `marginLeft`/`marginRight`.
@@ -220,6 +231,7 @@ Every component must satisfy all of these before merge:
 ### 3.6 Accessibility Checklist
 
 Every component must satisfy all of these before merge:
+
 - [ ] `accessibilityRole` set on interactive elements (`button`, `link`, `checkbox`, `switch`, `radio`, `tab`, `progressbar`, `alert`, `image`, `header`).
 - [ ] `accessibilityLabel` set on icon-only buttons and complex images.
 - [ ] `accessibilityState` reflects real state (`{ checked, disabled, selected, busy, expanded }`).
@@ -249,14 +261,15 @@ Every component must satisfy all of these before merge:
 - **SVG-heavy components** (`QamariyaPattern`, `ArchHero`, `RingProgress`, `DoubleRing*`) render cheaply on all tiers.
 - **Blur** (`GlassView`) is the most expensive surface — restricted to Dock + Sheet, disabled on Tier low.
 - **Reanimated worklets** used in `DoubleRing*`, `Hero3D`, `Skeleton`, `ProgressBar` — small, focused, driven by SharedValues. No layout animations.
-- **Gallery** lives at `/gallery` — excluded from production bundle? **No.** Deferred to P22 (development-only gating).
-- **Bundle size**: `lucide-react-native` is tree-shaken by Metro; only 39 icons imported. `react-native-svg` is shared by all SVG components.
+- **Gallery** lives at `/gallery` inside the `(dev)` group. **Production gating shipped in P05.1** (was deferred to P22): `app/(dev)/_layout.tsx` renders `<Redirect href="/+not-found" />` for every `(dev)` route when `env.APP_MODE === 'production'`. The gallery file itself is untouched and still bundled — it is **unreachable**, not tree-shaken. Deep links to `/gallery` are classified `guarded` by the allowlist (ADR-0014) and hit the same gate.
+- **Bundle size**: `lucide-react-native` is tree-shaken by Metro; only the curated icons in `src/components/ui/icons.ts` are imported. `react-native-svg` is shared by all SVG components.
 
 ---
 
 ## 4) Testing
 
 ### 4.1 What's covered by Jest
+
 - All 42 components render without crashing.
 - Press handlers, state transitions, disabled states.
 - RTL behavior (flexDirection assertions where observable).
@@ -266,6 +279,7 @@ Every component must satisfy all of these before merge:
 - Seed integrity (dataOrigin='demo', no PII).
 
 ### 4.2 What's NOT covered by Jest (deferred)
+
 - **Animation playback** — Reanimated is mocked (ADR-0011). Real motion is verified on devices + E2E (P21).
 - **Gesture interactions** — `PanResponder` in BottomSheet is not directly tested. Verified on devices.
 - **Blur rendering** — `expo-blur` mocked. Web/Mobile blur verified visually.
@@ -273,6 +287,7 @@ Every component must satisfy all of these before merge:
 - **Font loading** — Real font files not loaded in Jest; layout of Arabic glyphs verified visually.
 
 **Total test count at P04 close: 565 tests, 71 suites.**
+**Project-wide count at P05 close: 623 tests passing** (CI green, per owner report 2026-11-16). Device verification for P05 has **not** been performed yet.
 
 ---
 
@@ -293,14 +308,14 @@ Every component must satisfy all of these before merge:
 **Tokens:** colors (semantic + palette), typography (8 variants × 2 families), spacing (13), radius (6), shadows (4), glows (3), motion (durations, easings, springs).
 
 **Coverage:**
-- 565 Jest tests, 71 suites.
+- 565 Jest tests, 71 suites at P04 close.
 - 17 WCAG AA pairs verified.
 - 42 components exercised for render + a11y.
 - Full RTL support via logical properties + auto-mirrored icons.
 
 **Known deferred items** (tracked in `PROJECT_CONTEXT §8`):
-- RingProgress animation → P05+
+- RingProgress animation → P05+ (not implemented in P05; still deferred)
 - BottomSheet multi-snap → P20 if needed
 - Tabs scrollable → P07+ if needed
 - Avatar image → P06
-- Gallery gating for production → P22
+- ~~Gallery gating for production → P22~~ → **Closed in P05.1** via `app/(dev)/_layout.tsx`
