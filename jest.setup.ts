@@ -1,4 +1,3 @@
-// @ts-expect-error - React 19 testing environment flag
 global.IS_REACT_ACT_ENVIRONMENT = true;
 
 // Mock expo-blur globally to prevent act warnings in tests
