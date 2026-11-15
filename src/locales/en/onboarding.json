@@ -1,0 +1,60 @@
+{
+  "splash": {
+    "tagline": "Making marriage easier — with dignity and privacy"
+  },
+  "steps": {
+    "brand": "Brand",
+    "mission": "Mission",
+    "features": "Features",
+    "privacy": "Privacy",
+    "language": "Language"
+  },
+  "brand": {
+    "subtitle": "A non-profit platform for easier marriage",
+    "description": "We unite good efforts to reduce marriage costs in Yemen, starting from Sanaa."
+  },
+  "mission": {
+    "title": "Our mission",
+    "description": "Easier marriage through disciplined assistance, group weddings and trusted partners. Choosing a spouse is the families' responsibility; the platform never mediates it."
+  },
+  "features": {
+    "title": "What we offer",
+    "assistance": {
+      "title": "Assistance",
+      "description": "Disciplined financial assistance with human eligibility review."
+    },
+    "weddings": {
+      "title": "Our Wedding",
+      "description": "Group weddings that reduce costs for families."
+    },
+    "partners": {
+      "title": "Partners",
+      "description": "Discounts from trusted partners serving couples-to-be."
+    },
+    "souk": {
+      "title": "Souk Khair",
+      "description": "In-kind donations between families. No money inside the app."
+    }
+  },
+  "privacy": {
+    "title": "Your privacy first",
+    "noDating": {
+      "title": "No dating",
+      "description": "No dating services and no partner search inside the app."
+    },
+    "encrypted": {
+      "title": "Your data is encrypted and protected",
+      "description": "We protect your data. We never sell it or share it without consent."
+    },
+    "noPublicProfiles": {
+      "title": "No public profiles",
+      "description": "No public personal profiles; access is minimal and restricted to authorized roles."
+    }
+  },
+  "language": {
+    "title": "Choose your language",
+    "description": "Arabic is the default language. English is foundational.",
+    "directionNote": "Texts switch immediately; the native layout direction fully applies after reopening the app."
+  },
+  "finish": "Get started"
+}
