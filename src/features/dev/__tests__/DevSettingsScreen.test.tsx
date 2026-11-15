@@ -36,8 +36,6 @@ describe('DevSettingsScreen', () => {
     });
   });
 
-  // تم حذف afterEach و cleanup هنا
-
   it('renders the developer badge and all sections', async () => {
     await renderDev();
     expect(screen.getByTestId('dev-badge')).toBeTruthy();
