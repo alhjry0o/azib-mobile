@@ -41,7 +41,7 @@ export function TabsShell() {
 
   return (
     <View style={styles.root}>
-      <Tabs screenOptions={{ headerShown: false, tabBar: hiddenTabBar }}>
+      <Tabs tabBar={hiddenTabBar} screenOptions={{ headerShown: false }}>
         <Tabs.Screen name="index" />
         <Tabs.Screen name="services" />
         <Tabs.Screen name="weddings" />
@@ -51,7 +51,7 @@ export function TabsShell() {
       <FloatingDock />
     </View>
   );
-}
+)
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
