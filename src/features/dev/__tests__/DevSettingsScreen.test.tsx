@@ -45,7 +45,7 @@ describe('DevSettingsScreen', () => {
     });
   });
 
-  it('renders the developer badge and all sections', () => {
+  it('renders the developer badge and all sections', async () => {
     await renderDev();
     expect(screen.getByTestId('dev-badge')).toBeTruthy();
     expect(screen.getByTestId('dev-mode-control')).toBeTruthy();
@@ -59,7 +59,7 @@ describe('DevSettingsScreen', () => {
   });
 
   it('switches AppMode to backend and clears the query cache', async () => {
-    renderDev();
+    await renderDev();
     const tabs = within(screen.getByTestId('dev-mode-control')).getAllByRole('tab');
     fireEvent.press(tabs[1]!);
     await waitFor(() => {
@@ -69,8 +69,8 @@ describe('DevSettingsScreen', () => {
     void useAppModeStore;
   });
 
-  it('overrides the device tier', () => {
-    renderDev();
+  it('overrides the device tier', async () => {
+    await renderDev();
     const tabs = within(screen.getByTestId('dev-tier-control')).getAllByRole('tab');
     fireEvent.press(tabs[3]!);
     expect(useDeviceTierStore.getState().override).toBe('low');
@@ -79,7 +79,7 @@ describe('DevSettingsScreen', () => {
   });
 
   it('switches language to English and persists it', async () => {
-    renderDev();
+    await renderDev();
     const tabs = within(screen.getByTestId('dev-language-control')).getAllByRole('tab');
     fireEvent.press(tabs[1]!);
     await waitFor(() => {
@@ -88,15 +88,15 @@ describe('DevSettingsScreen', () => {
     expect(useLanguageStore.getState().language).toBe('en');
   });
 
-  it('toggles haptics', () => {
-    renderDev();
+  it('toggles haptics', async () => {
+    await renderDev();
     expect(useHapticsStore.getState().enabled).toBe(true);
     fireEvent.press(screen.getByTestId('dev-haptics-switch'));
     expect(useHapticsStore.getState().enabled).toBe(false);
   });
 
-  it('adjusts the Dock badge counter (dev-only) with a real floor at zero', () => {
-    renderDev();
+  it('adjusts the Dock badge counter (dev-only) with a real floor at zero', async () => {
+    await renderDev();
     expect(screen.getByTestId('dev-badge-minus').props.accessibilityState.disabled).toBe(true);
     fireEvent.press(screen.getByTestId('dev-badge-plus'));
     expect(useShellStore.getState().unreadNotifications).toBe(1);
@@ -104,8 +104,8 @@ describe('DevSettingsScreen', () => {
     expect(useShellStore.getState().unreadNotifications).toBe(0);
   });
 
-  it('navigates to integrations and gallery', () => {
-    renderDev();
+  it('navigates to integrations and gallery', async () => {
+    await renderDev();
     fireEvent.press(screen.getByTestId('dev-integrations-link'));
     expect(mockPush).toHaveBeenCalledWith('/(dev)/integrations');
     fireEvent.press(screen.getByTestId('dev-gallery-link'));
@@ -113,7 +113,7 @@ describe('DevSettingsScreen', () => {
   });
 
   it('confirms onboarding reset through the global DialogHost and navigates', async () => {
-    renderDev();
+    await renderDev();
     fireEvent.press(screen.getByTestId('dev-reset-onboarding'));
     expect(useShellStore.getState().dialog).not.toBeNull();
     fireEvent.press(screen.getByTestId('shell-dialog-confirm'));
@@ -123,8 +123,8 @@ describe('DevSettingsScreen', () => {
     expect(mockReplace).toHaveBeenCalledWith('/(onboarding)');
   });
 
-  it('goes back to the account tab', () => {
-    renderDev();
+  it('goes back to the account tab', async () => {
+    await renderDev();
     fireEvent.press(screen.getByTestId('dev-back'));
     expect(mockReplace).toHaveBeenCalledWith('/(tabs)/account');
   });
