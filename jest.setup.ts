@@ -1,5 +1,4 @@
 // Global test setup. Extend as testing grows (P21).
-
 // Test-mode environment variables (parsed by src/config/env.ts).
 process.env.EXPO_PUBLIC_ENV = 'local';
 process.env.EXPO_PUBLIC_APP_MODE = 'development';
@@ -11,6 +10,21 @@ jest.mock('@react-native-async-storage/async-storage', () =>
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
+
+// NetInfo mock (P05): online by default; tests override addEventListener/fetch.
+jest.mock('@react-native-community/netinfo', () => ({
+  __esModule: true,
+  default: {
+    addEventListener: jest.fn(() => jest.fn()),
+    fetch: jest.fn(() => Promise.resolve({ isConnected: true, isInternetReachable: true })),
+  },
+}));
+
+// expo-splash-screen mock (P05): no native splash in Jest.
+jest.mock('expo-splash-screen', () => ({
+  preventAutoHideAsync: jest.fn(() => Promise.resolve(true)),
+  hideAsync: jest.fn(() => Promise.resolve(true)),
+}));
 
 // Mock lucide-react-native to avoid ESM parsing errors in Jest.
 /* eslint-disable @typescript-eslint/no-require-imports */
@@ -43,7 +57,6 @@ jest.mock('react-native-reanimated', () => {
   const AnimatedText = RN.Text;
   const AnimatedScrollView = RN.ScrollView;
   const AnimatedImage = RN.Image;
-
   const chainableGesture = (): Record<string, unknown> => {
     const g: Record<string, unknown> = {};
     const self = () => g;
@@ -57,7 +70,6 @@ jest.mock('react-native-reanimated', () => {
     g.minDistance = self;
     return g;
   };
-
   return {
     __esModule: true,
     default: {
@@ -72,7 +84,6 @@ jest.mock('react-native-reanimated', () => {
     ScrollView: AnimatedScrollView,
     Image: AnimatedImage,
     createAnimatedComponent: identity,
-
     useSharedValue: (v: unknown) => shared(v),
     useAnimatedStyle: (fn: () => object) => fn(),
     useAnimatedProps: (fn: () => object) => fn(),
@@ -81,7 +92,6 @@ jest.mock('react-native-reanimated', () => {
     useAnimatedScrollHandler: (fn: unknown) => fn,
     useAnimatedReaction: () => {},
     useAnimatedGestureHandler: () => ({}),
-
     withTiming: (v: unknown) => v,
     withSpring: (v: unknown) => v,
     withRepeat: (v: unknown) => v,
@@ -104,7 +114,6 @@ jest.mock('react-native-reanimated', () => {
       quad: identity,
       cubic: identity,
     },
-
     Gesture: {
       Pan: chainableGesture,
       Tap: chainableGesture,
