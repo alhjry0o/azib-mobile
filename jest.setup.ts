@@ -1,3 +1,18 @@
+// @ts-expect-error - React 19 testing environment flag
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
+// Mock expo-blur globally to prevent act warnings in tests
+jest.mock('expo-blur', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const React = require('react');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+  return {
+    BlurView: ({ children, style, testID }: any) =>
+      React.createElement(View, { style, testID }, children),
+  };
+});
+
 // Global test setup. Extend as testing grows (P21).
 // Test-mode environment variables (parsed by src/config/env.ts).
 process.env.EXPO_PUBLIC_ENV = 'local';
