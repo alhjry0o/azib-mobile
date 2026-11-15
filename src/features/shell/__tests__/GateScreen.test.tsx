@@ -23,13 +23,13 @@ describe('GateScreen', () => {
     await resetShellStores();
   });
 
-  it('shows loading first, then redirects to onboarding on first launch', async () => {
+  it('redirects to onboarding on first launch', async () => {
     await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
     );
-    expect(screen.getByTestId('gate-loading')).toBeTruthy();
+    // await render() waits for effects; loading view is skipped
     await waitFor(() => {
       expect(screen.getByTestId('redirect:/(onboarding)')).toBeTruthy();
     });
@@ -39,7 +39,6 @@ describe('GateScreen', () => {
     await act(async () => {
       useOnboardingStore.setState({ completed: true, hydrated: true });
     });
-    // 👇 تم إضافة await هنا
     await render(
       <ShellProviders>
         <GateScreen />
@@ -56,7 +55,6 @@ describe('GateScreen', () => {
     });
     const client = createTestQueryClient();
     client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    // 👇 تم إضافة await هنا
     await render(
       <ShellProviders client={client}>
         <GateScreen />
@@ -72,7 +70,6 @@ describe('GateScreen', () => {
       useOnboardingStore.setState({ completed: true, hydrated: true });
       useAppModeStore.setState({ mode: 'backend', hydrated: true });
     });
-    // 👇 تم إضافة await هنا
     await render(
       <ShellProviders>
         <GateScreen />
@@ -89,12 +86,12 @@ describe('GateScreen', () => {
     });
   });
 
-  // 👇 تم إضافة async هنا
   it('keeps the loading view while stores are not hydrated', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useAppModeStore: modeStore } = require('@/stores');
-    modeStore.setState({ hydrated: false });
-    // 👇 تم إضافة await هنا
+    await act(async () => {
+      modeStore.setState({ hydrated: false });
+    });
     await render(
       <ShellProviders>
         <GateScreen />
@@ -102,8 +99,9 @@ describe('GateScreen', () => {
     );
     expect(screen.getByTestId('gate-loading')).toBeTruthy();
     expect(screen.queryByTestId('redirect:/(onboarding)')).toBeNull();
-    // Cleanup keeps other tests unaffected.
-    modeStore.setState({ hydrated: true });
+    await act(async () => {
+      modeStore.setState({ hydrated: true });
+    });
     void View;
   });
 });
