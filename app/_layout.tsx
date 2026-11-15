@@ -10,25 +10,26 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { I18nManager, StyleSheet, View } from 'react-native';
 import { I18nextProvider } from 'react-i18next';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
+  AnimatedSplash,
   AppErrorBoundary,
   BottomSheetHost,
   DialogHost,
   ShellBanners,
 } from '@/components/shell';
 import { ToastProvider } from '@/components/ui';
-import { DeepLinkGuard, appQueryClient } from '@/features/shell';
+import { DeepLinkGuard, LanguageBootstrap, appQueryClient } from '@/features/shell';
 import { i18n } from '@/i18n';
 import { ProviderContainerProvider } from '@/providers';
 import { ThemeProvider, palette } from '@/theme';
 
 I18nManager.allowRTL(true);
-// Keep the native splash visible until fonts are ready.
-// P05.2 adds the animated brand splash on top of this handoff.
+// Keep the native splash visible until fonts are ready, then hand off
+// to the animated brand splash (skippable, Reduce Motion aware).
 void SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -40,6 +41,7 @@ export default function RootLayout() {
     Cairo_600SemiBold,
     Cairo_700Bold,
   });
+  const [splashDone, setSplashDone] = useState(false);
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
@@ -61,6 +63,7 @@ export default function RootLayout() {
                 <ToastProvider>
                   <View style={styles.root}>
                     <StatusBar style="light" />
+                    <LanguageBootstrap />
                     <DeepLinkGuard />
                     <ShellBanners />
                     <Stack
@@ -71,6 +74,9 @@ export default function RootLayout() {
                     />
                     <DialogHost />
                     <BottomSheetHost />
+                    {!splashDone ? (
+                      <AnimatedSplash onFinish={() => setSplashDone(true)} />
+                    ) : null}
                   </View>
                 </ToastProvider>
               </ProviderContainerProvider>
