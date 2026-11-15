@@ -1,10 +1,8 @@
 // i18n entry: creates the i18next instance and exposes translate() + useTranslation.
 // All namespaces are bundled (no lazy loading) — appropriate for a mobile app.
-
 import { createInstance } from 'i18next';
 import * as Localization from 'expo-localization';
 import { initReactI18next } from 'react-i18next';
-
 import arCommon from '@/locales/ar/common.json';
 import arErrors from '@/locales/ar/errors.json';
 import arAuth from '@/locales/ar/auth.json';
@@ -19,7 +17,7 @@ import arTools from '@/locales/ar/tools.json';
 import arLearn from '@/locales/ar/learn.json';
 import arStaff from '@/locales/ar/staff.json';
 import arLegal from '@/locales/ar/legal.json';
-
+import arOnboarding from '@/locales/ar/onboarding.json';
 import enCommon from '@/locales/en/common.json';
 import enErrors from '@/locales/en/errors.json';
 import enAuth from '@/locales/en/auth.json';
@@ -34,7 +32,7 @@ import enTools from '@/locales/en/tools.json';
 import enLearn from '@/locales/en/learn.json';
 import enStaff from '@/locales/en/staff.json';
 import enLegal from '@/locales/en/legal.json';
-
+import enOnboarding from '@/locales/en/onboarding.json';
 import {
   DEFAULT_LANGUAGE,
   DEFAULT_NAMESPACE,
@@ -60,6 +58,7 @@ const resources = {
     learn: arLearn,
     staff: arStaff,
     legal: arLegal,
+    onboarding: arOnboarding,
   },
   en: {
     common: enCommon,
@@ -76,11 +75,11 @@ const resources = {
     learn: enLearn,
     staff: enStaff,
     legal: enLegal,
+    onboarding: enOnboarding,
   },
 } as const;
 
 const instance = createInstance();
-
 instance.use(initReactI18next);
 void instance.init({
   resources,
@@ -113,7 +112,7 @@ export function translate(
   key: string,
   options?: Record<string, unknown> & { ns?: string },
 ): string {
-  // TypeScript: i18next's t() can return TFunctionDetailedResult. 
+  // TypeScript: i18next's t() can return TFunctionDetailedResult.
   // We cast via unknown to force the compiler to accept it.
   return instance.t(key, options as never) as unknown as string;
 }
