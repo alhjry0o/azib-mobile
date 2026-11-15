@@ -9,3 +9,5 @@ export type { RoutePlaceholderAction, RoutePlaceholderProps } from './RoutePlace
 export { RoutePlaceholder } from './RoutePlaceholder';
 export { GateLoading } from './GateLoading';
 export { ForbiddenView } from './ForbiddenView';
+export type { AnimatedSplashProps } from './AnimatedSplash';
+export { AnimatedSplash } from './AnimatedSplash';
