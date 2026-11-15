@@ -28,6 +28,7 @@ export const ROUTES = {
   },
   staff: '/(staff)',
   dev: '/(dev)',
+  devIntegrations: '/(dev)/integrations',
   gallery: '/(dev)/gallery',
   maintenance: '/maintenance',
   notFound: '/+not-found',
