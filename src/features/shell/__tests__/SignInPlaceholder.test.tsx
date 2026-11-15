@@ -53,7 +53,8 @@ describe('SignInPlaceholder', () => {
     await act(async () => {
       useAppModeStore.setState({ mode: 'backend', hydrated: true });
     });
-    render(
+    // 👇 تم إضافة await هنا
+    await render(
       <ShellProviders>
         <SignInPlaceholder />
       </ShellProviders>,
@@ -68,7 +69,8 @@ describe('SignInPlaceholder', () => {
   it('redirects to tabs when a session already exists', async () => {
     const client = createTestQueryClient();
     client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    render(
+    // 👇 تم إضافة await هنا
+    await render(
       <ShellProviders client={client}>
         <SignInPlaceholder />
       </ShellProviders>,
