@@ -1,7 +1,6 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { View } from 'react-native';
 import { useAppModeStore, useOnboardingStore } from '@/stores';
-import { act } from '@testing-library/react-native';
 import { GateScreen } from '../GateScreen';
 import { sessionQueryKey } from '../use-session';
 import {
