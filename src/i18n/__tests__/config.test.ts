@@ -20,11 +20,12 @@ describe('i18n config', () => {
   });
 
   it('namespaces list matches the spec', () => {
-    expect(NAMESPACES.length).toBe(14);
+    expect(NAMESPACES.length).toBe(15);
     expect(NAMESPACES).toContain('common');
     expect(NAMESPACES).toContain('errors');
     expect(NAMESPACES).toContain('staff');
     expect(NAMESPACES).toContain('legal');
+    expect(NAMESPACES).toContain('onboarding');
   });
 
   it('isSupportedLanguage narrows correctly', () => {
