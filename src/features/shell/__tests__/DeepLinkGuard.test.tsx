@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react-native';
 import { DeepLinkGuard } from '../DeepLinkGuard';
 
 const mockReplace = jest.fn();
@@ -18,27 +18,29 @@ describe('DeepLinkGuard', () => {
     mockUseURL.mockReset();
   });
 
-  it('replaces unknown azib links with the not-found route', () => {
+  it('replaces unknown azib links with the not-found route', async () => {
     mockUseURL.mockReturnValue('azib://secret-admin-panel');
-    render(<DeepLinkGuard />);
-    expect(mockReplace).toHaveBeenCalledWith('/+not-found');
+    await render(<DeepLinkGuard />);
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith('/+not-found');
+    });
   });
 
-  it('leaves allowed links to the router', () => {
+  it('leaves allowed links to the router', async () => {
     mockUseURL.mockReturnValue('azib://services');
-    render(<DeepLinkGuard />);
+    await render(<DeepLinkGuard />);
     expect(mockReplace).not.toHaveBeenCalled();
   });
 
-  it('leaves guarded links to their layout guards', () => {
+  it('leaves guarded links to their layout guards', async () => {
     mockUseURL.mockReturnValue('azib://staff');
-    render(<DeepLinkGuard />);
+    await render(<DeepLinkGuard />);
     expect(mockReplace).not.toHaveBeenCalled();
   });
 
-  it('does nothing without a URL', () => {
+  it('does nothing without a URL', async () => {
     mockUseURL.mockReturnValue(null);
-    render(<DeepLinkGuard />);
+    await render(<DeepLinkGuard />);
     expect(mockReplace).not.toHaveBeenCalled();
   });
 });
