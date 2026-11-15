@@ -51,7 +51,7 @@ export function TabsShell() {
       <FloatingDock />
     </View>
   );
-)
+} 
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
