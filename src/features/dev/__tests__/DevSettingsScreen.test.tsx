@@ -46,7 +46,7 @@ describe('DevSettingsScreen', () => {
   });
 
   it('renders the developer badge and all sections', () => {
-    renderDev();
+    await renderDev();
     expect(screen.getByTestId('dev-badge')).toBeTruthy();
     expect(screen.getByTestId('dev-mode-control')).toBeTruthy();
     expect(screen.getByTestId('dev-tier-control')).toBeTruthy();
