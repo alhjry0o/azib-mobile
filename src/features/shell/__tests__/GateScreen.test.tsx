@@ -39,7 +39,8 @@ describe('GateScreen', () => {
     await act(async () => {
       useOnboardingStore.setState({ completed: true, hydrated: true });
     });
-    render(
+    // 👇 تم إضافة await هنا
+    await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
@@ -55,7 +56,8 @@ describe('GateScreen', () => {
     });
     const client = createTestQueryClient();
     client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    render(
+    // 👇 تم إضافة await هنا
+    await render(
       <ShellProviders client={client}>
         <GateScreen />
       </ShellProviders>,
@@ -70,7 +72,8 @@ describe('GateScreen', () => {
       useOnboardingStore.setState({ completed: true, hydrated: true });
       useAppModeStore.setState({ mode: 'backend', hydrated: true });
     });
-    render(
+    // 👇 تم إضافة await هنا
+    await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
@@ -86,11 +89,13 @@ describe('GateScreen', () => {
     });
   });
 
-  it('keeps the loading view while stores are not hydrated', () => {
+  // 👇 تم إضافة async هنا
+  it('keeps the loading view while stores are not hydrated', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useAppModeStore: modeStore } = require('@/stores');
     modeStore.setState({ hydrated: false });
-    render(
+    // 👇 تم إضافة await هنا
+    await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
