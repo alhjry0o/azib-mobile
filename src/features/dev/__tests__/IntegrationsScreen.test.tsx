@@ -26,7 +26,7 @@ describe('IntegrationsScreen', () => {
   });
 
   it('lists all twelve providers with their initial mock status', () => {
-    renderIntegrations();
+    await renderIntegrations();
     expect(screen.getByTestId('integrations-mode-badge')).toBeTruthy();
     for (const name of ALL_PROVIDER_NAMES) {
       const row = screen.getByTestId(`integration-${name}`);
@@ -38,7 +38,7 @@ describe('IntegrationsScreen', () => {
   });
 
   it('runs real health checks and updates statuses to connected in demo mode', async () => {
-    renderIntegrations();
+    await renderIntegrations();
     fireEvent.press(screen.getByTestId('run-health-checks'));
     await waitFor(
       () => {
@@ -71,7 +71,7 @@ describe('IntegrationsScreen', () => {
   });
 
   it('navigates back to developer settings', () => {
-    renderIntegrations();
+    await renderIntegrations();
     fireEvent.press(screen.getByTestId('integrations-back'));
     expect(mockReplace).toHaveBeenCalledWith('/(dev)');
   });
