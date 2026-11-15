@@ -1,9 +1,11 @@
 // Account tab placeholder (full account management ships in P06).
 // Working parts today: session identity, demo badge, notifications link, sign-out.
+// Developer settings link is visible only outside production builds.
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Badge, Button, Card, Icon, ListItem, Screen, Text } from '@/components/ui';
+import { env } from '@/config';
 import { ROUTES, href } from '@/constants/routes';
 import { useProviderContainer } from '@/providers';
 import { useTheme } from '@/theme';
@@ -59,6 +61,15 @@ export function AccountPlaceholder() {
         onPress={() => router.push(href(ROUTES.features.notifications))}
         testID="account-notifications"
       />
+      {env.APP_MODE !== 'production' ? (
+        <ListItem
+          variant="card"
+          title={t('common:shell.dev.title')}
+          leading={<Icon name="settings" size={20} />}
+          onPress={() => router.push(href(ROUTES.dev))}
+          testID="account-dev-settings"
+        />
+      ) : null}
       <Button
         variant="secondary"
         fullWidth
