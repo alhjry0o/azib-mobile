@@ -1,0 +1,117 @@
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { ShellProviders, resetShellStores } from '@/features/shell/__tests__/test-utils';
+import { useAuthStore } from '@/stores';
+import { useProviderContainer } from '@/providers';
+import type { ProviderContainer } from '@/providers';
+import { VerifyScreen } from '../screens/VerifyScreen';
+
+const mockReplace = jest.fn();
+let container: ProviderContainer | null = null;
+
+jest.mock('expo-router', () => ({
+  Redirect: ({ href }: { href: string }) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { View } = require('react-native');
+    return <View testID={`redirect:${href}`} />;
+  },
+  useRouter: () => ({ replace: mockReplace, push: jest.fn(), navigate: jest.fn() }),
+}));
+
+function Probe() {
+  container = useProviderContainer();
+  return null;
+}
+
+async function seedPendingAccount(): Promise<string> {
+  const auth = container!.auth;
+  const created = await auth.signUp({
+    displayName: 'Verify Person',
+    email: 'verify@azib.invalid',
+    password: 'pass1234',
+    roleIntent: 'applicant',
+    consents: [],
+  });
+  if (!created.ok) throw new Error('setup failed');
+  const issued = await auth.requestVerification({
+    channel: 'email',
+    target: 'verify@azib.invalid',
+  });
+  if (!issued.ok) throw new Error('challenge failed');
+  useAuthStore.setState({
+    challenge: {
+      id: issued.value.id,
+      channel: 'email',
+      target: issued.value.target,
+      expiresAt: issued.value.expiresAt,
+      demoCode: issued.value.demoCode ?? null,
+    },
+  });
+  return issued.value.demoCode ?? '';
+}
+
+describe('VerifyScreen', () => {
+  beforeEach(async () => {
+    mockReplace.mockClear();
+    await resetShellStores();
+    await act(async () => {
+      useAuthStore.setState({ guestActive: false, hydrated: true, challenge: null });
+    });
+  });
+
+  it('redirects to welcome when there is no pending verification', async () => {
+    render(
+      <ShellProviders>
+        <Probe />
+        <VerifyScreen />
+      </ShellProviders>,
+    );
+    expect(await screen.findByTestId('redirect:/(auth)/welcome')).toBeTruthy();
+  });
+
+  it('verifies the demo code and enters the tabs', async () => {
+    render(
+      <ShellProviders>
+        <Probe />
+        <VerifyScreen />
+      </ShellProviders>,
+    );
+    let code = '';
+    await act(async () => {
+      code = await seedPendingAccount();
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('verify-demo-code')).toBeTruthy();
+    });
+    await act(async () => {
+      fireEvent.changeText(screen.getByTestId('verify-code'), code);
+    });
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('verify-submit'));
+    });
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith('/(tabs)');
+    });
+    expect(useAuthStore.getState().challenge).toBeNull();
+  });
+
+  it('disables resend during the cooldown window', async () => {
+    render(
+      <ShellProviders>
+        <Probe />
+        <VerifyScreen />
+      </ShellProviders>,
+    );
+    await act(async () => {
+      await seedPendingAccount();
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('verify-resend')).toBeTruthy();
+    });
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('verify-resend'));
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('verify-resend').props.accessibilityState.disabled).toBe(true);
+    });
+  });
+});
