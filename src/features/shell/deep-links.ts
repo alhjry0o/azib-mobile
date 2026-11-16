@@ -1,4 +1,4 @@
-// Deep-link allowlist for the azib:// scheme (P05).
+// Deep-link allowlist for the azib:// scheme (P05 + P06).
 // - allow:    public destinations; the router handles them normally.
 // - guarded:  protected areas; their layout guards decide (staff/dev/onboarding).
 // - not-found: everything else -> +not-found.
@@ -14,7 +14,12 @@ export type DeepLinkResolution =
 const ALLOWED: ReadonlySet<string> = new Set([
   '/',
   '/index',
+  '/welcome',
   '/sign-in',
+  '/sign-up',
+  '/verify',
+  '/forgot-password',
+  '/reset-password',
   '/maintenance',
   '/services',
   '/weddings',
