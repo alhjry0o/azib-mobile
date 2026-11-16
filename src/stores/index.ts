@@ -6,3 +6,5 @@ export type { ShellDialogOptions, ShellSheetOptions, ShellState } from './shell.
 export { useShellStore } from './shell.store';
 export type { LanguageState } from './language.store';
 export { useLanguageStore, LANGUAGE_STORAGE_KEY } from './language.store';
+export type { AuthChallengeState, AuthState } from './auth.store';
+export { useAuthStore, AUTH_STORAGE_KEY } from './auth.store';
