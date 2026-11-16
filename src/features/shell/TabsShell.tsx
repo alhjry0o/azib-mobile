@@ -1,4 +1,5 @@
 // Tabs group shell: gate + native Tabs (hidden bar) + FloatingDock overlay.
+// Guests pass the gate (public browsing); pending verification does not.
 import { Redirect, Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -16,6 +17,7 @@ export function TabsShell() {
   if (gate.status === 'loading') return <GateLoading />;
   if (gate.status === 'onboarding') return <Redirect href={href(ROUTES.onboarding)} />;
   if (gate.status === 'auth') return <Redirect href={href(ROUTES.signIn)} />;
+  if (gate.status === 'verify') return <Redirect href={href(ROUTES.auth.verify)} />;
   if (gate.status === 'not-connected') {
     return (
       <Screen testID="tabs-not-connected" style={styles.center}>
@@ -51,7 +53,7 @@ export function TabsShell() {
       <FloatingDock />
     </View>
   );
-} 
+}
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
