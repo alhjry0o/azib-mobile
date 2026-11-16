@@ -40,6 +40,22 @@ jest.mock('expo-splash-screen', () => ({
   hideAsync: jest.fn(() => Promise.resolve(true)),
 }));
 
+// expo-secure-store mock (P06): in-memory keychain, no native module in Jest.
+jest.mock('expo-secure-store', () => {
+  const store = new Map<string, string>();
+  return {
+    WHEN_UNLOCKED: 'WHEN_UNLOCKED',
+    AFTER_FIRST_UNLOCK: 'AFTER_FIRST_UNLOCK',
+    setItemAsync: jest.fn(async (key: string, value: string) => {
+      store.set(key, value);
+    }),
+    getItemAsync: jest.fn(async (key: string) => store.get(key) ?? null),
+    deleteItemAsync: jest.fn(async (key: string) => {
+      store.delete(key);
+    }),
+  };
+});
+
 // Mock lucide-react-native to avoid ESM parsing errors in Jest.
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-explicit-any */
