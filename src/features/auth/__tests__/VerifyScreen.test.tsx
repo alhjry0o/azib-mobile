@@ -64,7 +64,7 @@ describe('VerifyScreen', () => {
   });
 
   it('redirects to welcome when there is no pending verification', async () => {
-    render(
+    await render(
       <ShellProviders>
         <Probe />
         <VerifyScreen />
@@ -74,7 +74,7 @@ describe('VerifyScreen', () => {
   });
 
   it('verifies the demo code and enters the tabs', async () => {
-    render(
+    await render(
       <ShellProviders>
         <Probe />
         <VerifyScreen />
@@ -87,12 +87,8 @@ describe('VerifyScreen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('verify-demo-code')).toBeTruthy();
     });
-    await act(async () => {
-      fireEvent.changeText(screen.getByTestId('verify-code'), code);
-    });
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('verify-submit'));
-    });
+    await fireEvent.changeText(screen.getByTestId('verify-code'), code);
+    await fireEvent.press(screen.getByTestId('verify-submit'));
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith('/(tabs)');
     });
@@ -100,7 +96,7 @@ describe('VerifyScreen', () => {
   });
 
   it('disables resend during the cooldown window', async () => {
-    render(
+    await render(
       <ShellProviders>
         <Probe />
         <VerifyScreen />
@@ -112,9 +108,7 @@ describe('VerifyScreen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('verify-resend')).toBeTruthy();
     });
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('verify-resend'));
-    });
+    await fireEvent.press(screen.getByTestId('verify-resend'));
     await waitFor(() => {
       expect(screen.getByTestId('verify-resend').props.accessibilityState.disabled).toBe(true);
     });
