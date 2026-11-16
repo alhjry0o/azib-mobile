@@ -1,6 +1,5 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
-import { View } from 'react-native';
-import { useAppModeStore, useOnboardingStore } from '@/stores';
+import { useAppModeStore, useAuthStore, useOnboardingStore } from '@/stores';
 import { GateScreen } from '../GateScreen';
 import { sessionQueryKey } from '../use-session';
 import {
@@ -13,38 +12,42 @@ import {
 jest.mock('expo-router', () => ({
   Redirect: ({ href }: { href: string }) => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { View: RNView } = require('react-native');
-    return <RNView testID={`redirect:${href}`} />;
+    const { View } = require('react-native');
+    return <View testID={`redirect:${href}`} />;
   },
 }));
 
 describe('GateScreen', () => {
   beforeEach(async () => {
     await resetShellStores();
+    await act(async () => {
+      useAuthStore.setState({ guestActive: false, hydrated: true, challenge: null });
+    });
   });
 
-  it('redirects to onboarding on first launch', async () => {
-    await render(
+  it('shows loading first, then redirects to onboarding on first launch', async () => {
+    render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
     );
+    expect(screen.getByTestId('gate-loading')).toBeTruthy();
     await waitFor(() => {
       expect(screen.getByTestId('redirect:/(onboarding)')).toBeTruthy();
     });
   });
 
-  it('redirects to sign-in when onboarding is completed and no session exists', async () => {
+  it('redirects to welcome when onboarding is completed and there is no session', async () => {
     await act(async () => {
       useOnboardingStore.setState({ completed: true, hydrated: true });
     });
-    await render(
+    render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
     );
     await waitFor(() => {
-      expect(screen.getByTestId('redirect:/(auth)/sign-in')).toBeTruthy();
+      expect(screen.getByTestId('redirect:/(auth)/welcome')).toBeTruthy();
     });
   });
 
@@ -54,8 +57,23 @@ describe('GateScreen', () => {
     });
     const client = createTestQueryClient();
     client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    await render(
+    render(
       <ShellProviders client={client}>
+        <GateScreen />
+      </ShellProviders>,
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId('redirect:/(tabs)')).toBeTruthy();
+    });
+  });
+
+  it('redirects a local guest to the tabs', async () => {
+    await act(async () => {
+      useOnboardingStore.setState({ completed: true, hydrated: true });
+      useAuthStore.setState({ guestActive: true, hydrated: true });
+    });
+    render(
+      <ShellProviders>
         <GateScreen />
       </ShellProviders>,
     );
@@ -69,7 +87,7 @@ describe('GateScreen', () => {
       useOnboardingStore.setState({ completed: true, hydrated: true });
       useAppModeStore.setState({ mode: 'backend', hydrated: true });
     });
-    await render(
+    render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
@@ -79,28 +97,25 @@ describe('GateScreen', () => {
     });
     const buttons = screen.getAllByRole('button');
     expect(buttons.length).toBeGreaterThan(0);
-    fireEvent.press(buttons[0]!);
-    await waitFor(() => {
-      expect(screen.getByTestId('gate-not-connected')).toBeTruthy();
+    await act(async () => {
+      fireEvent.press(buttons[0]!);
     });
+    expect(screen.getByTestId('gate-not-connected')).toBeTruthy();
   });
 
   it('keeps the loading view while stores are not hydrated', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { useAppModeStore: modeStore } = require('@/stores');
     await act(async () => {
-      modeStore.setState({ hydrated: false });
+      useAppModeStore.setState({ hydrated: false });
     });
-    await render(
+    render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
     );
     expect(screen.getByTestId('gate-loading')).toBeTruthy();
-    expect(screen.queryByTestId('redirect:/(onboarding)')).toBeNull();
+    expect(screen.queryByTestId('redirect:/(auth)/welcome')).toBeNull();
     await act(async () => {
-      modeStore.setState({ hydrated: true });
+      useAppModeStore.setState({ hydrated: true });
     });
-    void View;
   });
 });
