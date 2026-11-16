@@ -1,4 +1,4 @@
-// Single source of truth for all app routes (P05).
+// Single source of truth for all app routes (P05 + P06).
 // No Arabic strings here. href() casts to expo-router's Href so typed-routes
 // generation (when present) stays satisfied without duplicating path literals.
 import type { Href } from 'expo-router';
@@ -8,6 +8,14 @@ export const ROUTES = {
   root: '/',
   onboarding: '/(onboarding)',
   signIn: '/(auth)/sign-in',
+  auth: {
+    welcome: '/(auth)/welcome',
+    signIn: '/(auth)/sign-in',
+    signUp: '/(auth)/sign-up',
+    verify: '/(auth)/verify',
+    forgotPassword: '/(auth)/forgot-password',
+    resetPassword: '/(auth)/reset-password',
+  },
   tabs: {
     home: '/(tabs)',
     services: '/(tabs)/services',
@@ -29,6 +37,7 @@ export const ROUTES = {
   staff: '/(staff)',
   dev: '/(dev)',
   devIntegrations: '/(dev)/integrations',
+  devAuth: '/(dev)/auth',
   gallery: '/(dev)/gallery',
   maintenance: '/maintenance',
   notFound: '/+not-found',
