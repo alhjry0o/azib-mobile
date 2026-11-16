@@ -17,7 +17,9 @@ export function GateScreen() {
     case 'onboarding':
       return <Redirect href={href(ROUTES.onboarding)} />;
     case 'auth':
-      return <Redirect href={href(ROUTES.signIn)} />;
+      return <Redirect href={href(ROUTES.auth.welcome)} />;
+    case 'verify':
+      return <Redirect href={href(ROUTES.auth.verify)} />;
     case 'ready':
       return <Redirect href={href(ROUTES.tabs.home)} />;
     case 'not-connected':
