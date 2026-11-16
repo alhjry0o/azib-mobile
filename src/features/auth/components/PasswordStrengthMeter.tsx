@@ -26,7 +26,7 @@ export function PasswordStrengthMeter({ value, testID }: PasswordStrengthMeterPr
     <View style={styles.container} testID={testID}>
       <ProgressBar value={score / 4} color={COLORS[score]} size="sm" />
       <Text variant="caption" color="secondary">
-        {`${t('auth:strength.label')}: ${t(LABEL_KEYS[score])}`}
+        {`${t('auth:strength.label')}: ${t(LABEL_KEYS[score] ?? LABEL_KEYS[0])}`}
       </Text>
     </View>
   );
