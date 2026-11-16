@@ -1,5 +1,5 @@
-import { SignInPlaceholder } from '@/features/shell';
+import { SignInScreen } from '@/features/auth';
 
-export default function SignInScreen() {
-  return <SignInPlaceholder />;
+export default function SignInRoute() {
+  return <SignInScreen />;
 }
