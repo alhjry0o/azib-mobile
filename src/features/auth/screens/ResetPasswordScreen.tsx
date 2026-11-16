@@ -1,4 +1,4 @@
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Redirect, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -17,16 +17,19 @@ export function ResetPasswordScreen() {
   const auth = useAuth();
   const toast = useToast();
   const challenge = useAuthStore((s) => s.challenge);
-  const { control, handleSubmit, formState, watch } = useForm({
+  const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(ResetPasswordSchema),
     defaultValues: { code: '', password: '', confirm: '' },
+  });
+
+  const password = useWatch({
+    control,
+    name: 'password',
   });
 
   if (!challenge) {
     return <Redirect href={href(ROUTES.auth.forgotPassword)} />;
   }
-
-  const password = watch('password');
 
   const onSubmit = handleSubmit(async (values) => {
     const result = await auth.resetPassword(values.code, values.password);
