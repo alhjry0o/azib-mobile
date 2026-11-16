@@ -4,6 +4,7 @@ import { useProviderContainer } from '@/providers';
 import type { ProviderContainer } from '@/providers';
 import { useAuthStore } from '@/stores';
 import { DevAuthScreen } from '../DevAuthScreen';
+import { useEffect } from 'react';
 
 const mockReplace = jest.fn();
 let container: ProviderContainer | null = null;
@@ -13,7 +14,12 @@ jest.mock('expo-router', () => ({
 }));
 
 function Probe() {
-  container = useProviderContainer();
+  const providerContainer = useProviderContainer();
+
+  useEffect(() => {
+    container = providerContainer;
+  }, [providerContainer]);
+
   return null;
 }
 
