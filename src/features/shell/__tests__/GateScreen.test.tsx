@@ -26,7 +26,7 @@ describe('GateScreen', () => {
   });
 
   it('shows loading first, then redirects to onboarding on first launch', async () => {
-    render(
+    await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
@@ -41,7 +41,7 @@ describe('GateScreen', () => {
     await act(async () => {
       useOnboardingStore.setState({ completed: true, hydrated: true });
     });
-    render(
+    await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
@@ -57,7 +57,7 @@ describe('GateScreen', () => {
     });
     const client = createTestQueryClient();
     client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    render(
+    await render(
       <ShellProviders client={client}>
         <GateScreen />
       </ShellProviders>,
@@ -72,7 +72,7 @@ describe('GateScreen', () => {
       useOnboardingStore.setState({ completed: true, hydrated: true });
       useAuthStore.setState({ guestActive: true, hydrated: true });
     });
-    render(
+    await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
@@ -87,7 +87,7 @@ describe('GateScreen', () => {
       useOnboardingStore.setState({ completed: true, hydrated: true });
       useAppModeStore.setState({ mode: 'backend', hydrated: true });
     });
-    render(
+    await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
@@ -97,9 +97,7 @@ describe('GateScreen', () => {
     });
     const buttons = screen.getAllByRole('button');
     expect(buttons.length).toBeGreaterThan(0);
-    await act(async () => {
-      fireEvent.press(buttons[0]!);
-    });
+    await fireEvent.press(buttons[0]!);
     expect(screen.getByTestId('gate-not-connected')).toBeTruthy();
   });
 
@@ -107,7 +105,7 @@ describe('GateScreen', () => {
     await act(async () => {
       useAppModeStore.setState({ hydrated: false });
     });
-    render(
+    await render(
       <ShellProviders>
         <GateScreen />
       </ShellProviders>,
