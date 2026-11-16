@@ -27,8 +27,8 @@ describe('WelcomeScreen', () => {
     });
   });
 
-  it('shows the three entry points and the guest limitations notice', () => {
-    render(
+  it('shows the three entry points and the guest limitations notice', async () => {
+  await render(
       <ShellProviders>
         <WelcomeScreen />
       </ShellProviders>,
@@ -40,30 +40,24 @@ describe('WelcomeScreen', () => {
   });
 
   it('navigates to sign-in and sign-up', async () => {
-    render(
+    await render(
       <ShellProviders>
         <WelcomeScreen />
       </ShellProviders>,
     );
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('welcome-sign-in'));
-    });
+    await fireEvent.press(screen.getByTestId('welcome-sign-in'));
     expect(mockPush).toHaveBeenCalledWith('/(auth)/sign-in');
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('welcome-sign-up'));
-    });
+    await fireEvent.press(screen.getByTestId('welcome-sign-up'));
     expect(mockPush).toHaveBeenCalledWith('/(auth)/sign-up');
   });
 
   it('starts a local guest session and enters the tabs', async () => {
-    render(
+    await render(
       <ShellProviders>
         <WelcomeScreen />
       </ShellProviders>,
     );
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('welcome-guest'));
-    });
+    await fireEvent.press(screen.getByTestId('welcome-guest'));
     expect(useAuthStore.getState().guestActive).toBe(true);
     expect(mockReplace).toHaveBeenCalledWith('/(tabs)');
   });
@@ -78,7 +72,7 @@ describe('RequireAuth (guest guard)', () => {
   });
 
   it('redirects guests to welcome instead of rendering protected content', async () => {
-    render(
+    await render(
       <ShellProviders>
         <RequireAuth>
           <Text testID="protected">secret</Text>
