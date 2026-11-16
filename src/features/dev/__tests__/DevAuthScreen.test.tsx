@@ -33,7 +33,7 @@ describe('DevAuthScreen', () => {
   });
 
   it('reports honestly when there is no demo session', async () => {
-    render(
+    await render(
       <ShellProviders>
         <Probe />
         <DevAuthScreen />
@@ -44,7 +44,7 @@ describe('DevAuthScreen', () => {
   });
 
   it('loads the session and toggles a staff role on the demo provider', async () => {
-    render(
+    await render(
       <ShellProviders>
         <Probe />
         <DevAuthScreen />
@@ -53,15 +53,11 @@ describe('DevAuthScreen', () => {
     await act(async () => {
       await container!.auth.signIn({ email: 'dev@azib.invalid', password: 'pass1234' });
     });
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('dev-auth-refresh'));
-    });
+    await fireEvent.press(screen.getByTestId('dev-auth-refresh'));
     await waitFor(() => {
       expect(screen.getByTestId('dev-auth-session-card')).toBeTruthy();
     });
-    await act(async () => {
-      fireEvent(screen.getByTestId('dev-role-reviewer'), 'valueChange', true);
-    });
+    await fireEvent(screen.getByTestId('dev-role-reviewer'), 'valueChange', true);
     await waitFor(() => {
       expect(screen.getByTestId('dev-role-reviewer').props.accessibilityState.checked).toBe(true);
     });
@@ -71,15 +67,13 @@ describe('DevAuthScreen', () => {
   });
 
   it('goes back to the account tab', async () => {
-    render(
+    await render(
       <ShellProviders>
         <Probe />
         <DevAuthScreen />
       </ShellProviders>,
     );
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('dev-auth-back'));
-    });
+    await fireEvent.press(screen.getByTestId('dev-auth-back'));
     expect(mockReplace).toHaveBeenCalledWith('/(tabs)/account');
   });
 });
