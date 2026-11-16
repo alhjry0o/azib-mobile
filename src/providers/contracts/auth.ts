@@ -52,6 +52,10 @@ export interface AuthTokens {
 export interface PendingVerification {
   readonly channel: AuthChannel;
   readonly target: string;
+  /** Demo adapters only: challenge id so clients can verify without re-requesting. */
+  readonly challengeId?: string;
+  /** Demo adapters only: never present in a real backend response. */
+  readonly demoCode?: string;
 }
 
 export interface AuthUser {
