@@ -93,6 +93,18 @@ export function createMockAuthProvider(
   const makeSession = (u: DemoUser): AuthSession => {
     const expiresAt = new Date(Date.now() + SESSION_TTL_MS).toISOString();
     const seed = stableHash(`${u.id}:${Date.now()}`);
+    let pendingVerification: AuthSession['pendingVerification'] = null;
+    if (!u.verified) {
+      const found = [...challenges.values()]
+        .reverse()
+        .find((c) => c.kind === 'verify' && c.target === u.email);
+      pendingVerification = {
+        channel: 'email' as const,
+        target: u.email,
+        challengeId: found?.id,
+        demoCode: found?.code,
+      };
+    }
     return Object.freeze({
       user: toUser(u),
       expiresAt,
@@ -101,7 +113,7 @@ export function createMockAuthProvider(
         refreshToken: `demo-refresh-${seed}`,
         expiresAt,
       }),
-      pendingVerification: u.verified ? null : { channel: 'email' as const, target: u.email },
+      pendingVerification,
     });
   };
 
