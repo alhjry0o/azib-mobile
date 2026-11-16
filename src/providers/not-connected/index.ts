@@ -3,16 +3,15 @@
 //
 // Every method returns a `Result` with `AppError.notConnected()`.
 // healthCheck() returns 'unavailable'.
-
 import { AppError } from '@/core/errors';
 import type { Result } from '@/core/result';
-
 import type {
   AiProvider,
   AiScoreInput,
   AiScoreOutput,
   AnalyticsEvent,
   AnalyticsProvider,
+  AuthChallenge,
   AuthProvider,
   AuthSession,
   ContentArticle,
@@ -30,13 +29,18 @@ import type {
   PermissionStatus,
   PledgeRecord,
   PushNotificationPayload,
+  RequestPasswordResetInput,
+  RequestVerificationInput,
+  ResetPasswordInput,
   SearchHit,
   SearchProvider,
   SearchQuery,
   SignInCredentials,
+  SignUpInput,
   SmsMessage,
   SmsProvider,
   UploadedFile,
+  VerifyInput,
 } from '../contracts';
 import type { HealthCheckResult, ProviderBase, ProviderName } from '../types';
 
@@ -69,13 +73,31 @@ function base(name: ProviderName, capabilities: readonly string[]): ProviderBase
 
 export function createNotConnectedAuthProvider(): AuthProvider {
   return Object.freeze({
-    ...base('auth', ['signIn', 'signOut', 'getSession', 'refreshSession']),
+    ...base('auth', [
+      'signIn',
+      'signOut',
+      'getSession',
+      'refreshSession',
+      'signUp',
+      'requestVerification',
+      'verify',
+      'requestPasswordReset',
+      'resetPassword',
+    ]),
     name: 'auth' as const,
     mode: 'backend' as const,
+    channels: [] as const,
     signIn: (_c: SignInCredentials) => nc<AuthSession>('auth.signIn'),
     signOut: () => nc<void>('auth.signOut'),
     getSession: () => nc<AuthSession | null>('auth.getSession'),
     refreshSession: () => nc<AuthSession | null>('auth.refreshSession'),
+    signUp: (_i: SignUpInput) => nc<AuthSession>('auth.signUp'),
+    requestVerification: (_i: RequestVerificationInput) =>
+      nc<AuthChallenge>('auth.requestVerification'),
+    verify: (_i: VerifyInput) => nc<AuthSession>('auth.verify'),
+    requestPasswordReset: (_i: RequestPasswordResetInput) =>
+      nc<AuthChallenge>('auth.requestPasswordReset'),
+    resetPassword: (_i: ResetPasswordInput) => nc<void>('auth.resetPassword'),
   });
 }
 
