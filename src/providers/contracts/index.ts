@@ -1,4 +1,22 @@
-export type { AuthProvider, AuthSession, AuthUser, SignInCredentials } from './auth';
+export type {
+  AuthChallenge,
+  AuthChannel,
+  AuthConsent,
+  AuthProvider,
+  AuthRole,
+  AuthSession,
+  AuthTokens,
+  AuthUser,
+  PendingVerification,
+  RequestPasswordResetInput,
+  RequestVerificationInput,
+  ResetPasswordInput,
+  RoleIntent,
+  SignInCredentials,
+  SignUpInput,
+  VerifyInput,
+} from './auth';
+export { AUTH_ROLES, STAFF_ROLES } from './auth';
 export type { DatabaseProvider } from './database';
 export type {
   FileStorageProvider,
