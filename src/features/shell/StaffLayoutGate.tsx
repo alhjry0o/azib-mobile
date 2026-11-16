@@ -1,5 +1,5 @@
 // Staff group guard. UI convenience only; real enforcement is RLS (P18).
-// Deny-by-default until roles exist (P06/P17) — see routing.hasStaffRole.
+// Requires an explicit staff role on the session (P06 delivers roles).
 import { Redirect, Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
@@ -18,6 +18,7 @@ export function StaffLayoutGate() {
   if (gate.status === 'loading') return <GateLoading />;
   if (gate.status === 'onboarding') return <Redirect href={href(ROUTES.onboarding)} />;
   if (gate.status === 'auth') return <Redirect href={href(ROUTES.signIn)} />;
+  if (gate.status === 'verify') return <Redirect href={href(ROUTES.auth.verify)} />;
   if (gate.status === 'not-connected') {
     return (
       <Screen testID="staff-not-connected" style={styles.center}>
