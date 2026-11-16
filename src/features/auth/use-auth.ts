@@ -129,17 +129,19 @@ export function useAuth(): AuthApi {
         await persist(result.value);
         setSessionData(result.value);
         const pending = result.value.pendingVerification;
-        if (pending) {
-          const issued = await container.auth.requestVerification({
+        if (pending?.challengeId) {
+          setChallenge({
+            id: pending.challengeId,
             channel: pending.channel,
             target: pending.target,
+            expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+            demoCode: pending.demoCode ?? null,
           });
-          if (issued.ok) storeChallenge(issued.value);
         }
       }
       return result;
     },
-    [container, run, endGuest, persist, setSessionData, storeChallenge],
+    [container, run, endGuest, persist, setSessionData, setChallenge],
   );
 
   const verify = useCallback(
