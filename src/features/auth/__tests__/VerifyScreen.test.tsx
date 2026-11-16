@@ -18,7 +18,10 @@ jest.mock('expo-router', () => ({
 }));
 
 function Probe() {
-  container = useProviderContainer();
+  const value = useProviderContainer();
+  useEffect(() => {
+    container = value;
+  }, [value]);
   return null;
 }
 
