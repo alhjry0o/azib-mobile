@@ -28,7 +28,7 @@ describe('WelcomeScreen', () => {
   });
 
   it('shows the three entry points and the guest limitations notice', async () => {
-  await render(
+    await render(
       <ShellProviders>
         <WelcomeScreen />
       </ShellProviders>,
