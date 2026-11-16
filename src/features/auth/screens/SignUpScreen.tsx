@@ -1,4 +1,4 @@
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ export function SignUpScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const auth = useAuth();
-  const { control, handleSubmit, formState, watch } = useForm({
+  const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       displayName: '',
@@ -28,8 +28,10 @@ export function SignUpScreen() {
     },
   });
 
-  const password = watch('password');
-
+  const password = useWatch({
+    control,
+    name: 'password',
+  });
   const onSubmit = handleSubmit(async (values) => {
     const result = await auth.signUp({
       displayName: values.displayName,
