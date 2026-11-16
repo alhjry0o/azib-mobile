@@ -32,13 +32,9 @@ describe('SignInScreen', () => {
         <SignInScreen />
       </ShellProviders>,
     );
-    await act(async () => {
-      fireEvent.changeText(screen.getByTestId('sign-in-email'), 'not-an-email');
-      fireEvent.changeText(screen.getByTestId('sign-in-password'), 'pass1234');
-    });
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('sign-in-submit'));
-    });
+    await fireEvent.changeText(screen.getByTestId('sign-in-email'), 'not-an-email');
+    await fireEvent.changeText(screen.getByTestId('sign-in-password'), 'pass1234');
+    await fireEvent.press(screen.getByTestId('sign-in-submit'));
     await waitFor(() => {
       expect(screen.getByText(translate('auth:validation.emailInvalid'))).toBeTruthy();
     });
@@ -51,13 +47,9 @@ describe('SignInScreen', () => {
         <SignInScreen />
       </ShellProviders>,
     );
-    await act(async () => {
-      fireEvent.changeText(screen.getByTestId('sign-in-email'), 'demo@azib.invalid');
-      fireEvent.changeText(screen.getByTestId('sign-in-password'), 'pass1234');
-    });
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('sign-in-submit'));
-    });
+    await fireEvent.changeText(screen.getByTestId('sign-in-email'), 'demo@azib.invalid');
+    await fireEvent.changeText(screen.getByTestId('sign-in-password'), 'pass1234');
+    await fireEvent.press(screen.getByTestId('sign-in-submit'));
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith('/(tabs)');
     });
