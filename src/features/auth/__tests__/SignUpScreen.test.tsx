@@ -16,11 +16,9 @@ jest.mock('expo-router', () => ({
 }));
 
 async function fillValidForm(): Promise<void> {
-  await act(async () => {
-    fireEvent.changeText(screen.getByTestId('sign-up-name'), 'Demo Person');
-    fireEvent.changeText(screen.getByTestId('sign-up-email'), 'new@azib.invalid');
-    fireEvent.changeText(screen.getByTestId('sign-up-password'), 'pass1234');
-  });
+  await fireEvent.changeText(screen.getByTestId('sign-up-name'), 'Demo Person');
+  await fireEvent.changeText(screen.getByTestId('sign-up-email'), 'new@azib.invalid');
+  await fireEvent.changeText(screen.getByTestId('sign-up-password'), 'pass1234');
 }
 
 describe('SignUpScreen', () => {
@@ -33,15 +31,13 @@ describe('SignUpScreen', () => {
   });
 
   it('blocks submission until both consents are accepted', async () => {
-    render(
+    await render(
       <ShellProviders>
         <SignUpScreen />
       </ShellProviders>,
     );
     await fillValidForm();
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('sign-up-submit'));
-    });
+    await fireEvent.press(screen.getByTestId('sign-up-submit'));
     await waitFor(() => {
       expect(screen.getByTestId('sign-up-consent-error')).toBeTruthy();
     });
@@ -50,19 +46,15 @@ describe('SignUpScreen', () => {
   });
 
   it('creates the account, records consents and moves to verification', async () => {
-    render(
+    await render(
       <ShellProviders>
         <SignUpScreen />
       </ShellProviders>,
     );
     await fillValidForm();
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('sign-up-terms'));
-      fireEvent.press(screen.getByTestId('sign-up-privacy'));
-    });
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('sign-up-submit'));
-    });
+    await fireEvent.press(screen.getByTestId('sign-up-terms'));
+    await fireEvent.press(screen.getByTestId('sign-up-privacy'));
+    await fireEvent.press(screen.getByTestId('sign-up-submit'));
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith('/(auth)/verify');
     });
@@ -72,7 +64,7 @@ describe('SignUpScreen', () => {
   });
 
   it('renders the password strength meter', async () => {
-    render(
+    await render(
       <ShellProviders>
         <SignUpScreen />
       </ShellProviders>,
