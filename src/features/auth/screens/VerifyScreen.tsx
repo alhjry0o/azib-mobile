@@ -39,8 +39,8 @@ export function VerifyScreen() {
   });
 
   const onResend = async (): Promise<void> => {
-    const result = await auth.resend();
-    if (result.ok) otp.markSent();
+    await auth.resend();
+    otp.markSent();
   };
 
   return (
