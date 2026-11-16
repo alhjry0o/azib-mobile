@@ -27,7 +27,7 @@ describe('SignInScreen', () => {
   });
 
   it('shows an inline validation error for a malformed email', async () => {
-    render(
+    await render(
       <ShellProviders>
         <SignInScreen />
       </ShellProviders>,
@@ -46,7 +46,7 @@ describe('SignInScreen', () => {
   });
 
   it('signs in through the demo provider and enters the tabs', async () => {
-    render(
+    await render(
       <ShellProviders>
         <SignInScreen />
       </ShellProviders>,
@@ -68,7 +68,7 @@ describe('SignInScreen', () => {
     await act(async () => {
       useAppModeStore.setState({ mode: 'backend', hydrated: true });
     });
-    render(
+    await render(
       <ShellProviders>
         <SignInScreen />
       </ShellProviders>,
