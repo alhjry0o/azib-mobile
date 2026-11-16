@@ -38,21 +38,20 @@ async function seedPendingAccount(): Promise<string> {
     consents: [],
   });
   if (!created.ok) throw new Error('setup failed');
-  const issued = await auth.requestVerification({
-    channel: 'email',
-    target: 'verify@azib.invalid',
+  const pending = created.value.pendingVerification;
+  if (!pending?.challengeId) throw new Error('no pending verification');
+  await act(() => {
+    useAuthStore.setState({
+      challenge: {
+        id: pending.challengeId!,
+        channel: pending.channel,
+        target: pending.target,
+        expiresAt: new Date(Date.now() + 600_000).toISOString(),
+        demoCode: pending.demoCode ?? null,
+      },
+    });
   });
-  if (!issued.ok) throw new Error('challenge failed');
-  useAuthStore.setState({
-    challenge: {
-      id: issued.value.id,
-      channel: 'email',
-      target: issued.value.target,
-      expiresAt: issued.value.expiresAt,
-      demoCode: issued.value.demoCode ?? null,
-    },
-  });
-  return issued.value.demoCode ?? '';
+  return pending.demoCode ?? '';
 }
 
 describe('VerifyScreen', () => {
