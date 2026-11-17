@@ -65,15 +65,18 @@ export async function pickAvatar(): Promise<Result<PickedImage | null>> {
  */
 export async function normalizeAvatar(image: PickedImage): Promise<Result<string>> {
   try {
-    const context = ImageManipulator.manipulate(image.uri);
-    context.crop(centerSquare(image.width, image.height));
-    context.resize({ width: AVATAR_SIZE, height: AVATAR_SIZE });
-    const rendered = await context.renderAsync();
-    const saved = await rendered.saveAsync({
-      compress: 0.85,
-      format: ImageManipulator.SaveFormat.JPEG,
-    });
-    return { ok: true, value: saved.uri };
+    const result = await ImageManipulator.manipulateAsync(
+      image.uri,
+      [
+        { crop: centerSquare(image.width, image.height) },
+        { resize: { width: AVATAR_SIZE, height: AVATAR_SIZE } },
+      ],
+      {
+        compress: 0.85,
+        format: ImageManipulator.SaveFormat.JPEG,
+      },
+    );
+    return { ok: true, value: result.uri };
   } catch (caught) {
     return {
       ok: false,
