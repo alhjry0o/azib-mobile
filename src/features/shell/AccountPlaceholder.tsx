@@ -1,5 +1,4 @@
-// Account tab placeholder (full account management ships in P06.2).
-// Working parts today: session identity, demo badge, notifications link, sign-out.
+// Account tab hub. Profile and settings are real screens from P06.2.
 // Developer links are visible only outside production builds.
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
@@ -54,6 +53,20 @@ export function AccountPlaceholder() {
           ) : null}
         </Card>
       ) : null}
+      <ListItem
+        variant="card"
+        title={t('profile:title')}
+        leading={<Icon name="userCheck" size={20} />}
+        onPress={() => router.push(href(ROUTES.profile.root))}
+        testID="account-profile"
+      />
+      <ListItem
+        variant="card"
+        title={t('profile:settings.title')}
+        leading={<Icon name="settings" size={20} />}
+        onPress={() => router.push(href(ROUTES.settings.root))}
+        testID="account-settings"
+      />
       <ListItem
         variant="card"
         title={t('common:shell.account.notifications')}
