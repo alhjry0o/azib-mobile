@@ -6,6 +6,8 @@
 import { AppError } from '@/core/errors';
 import type { Result } from '@/core/result';
 import type {
+  AccountDeletionRequest,
+  AccountExport,
   AiProvider,
   AiScoreInput,
   AiScoreOutput,
@@ -14,10 +16,13 @@ import type {
   AuthChallenge,
   AuthProvider,
   AuthSession,
+  AuthSessionInfo,
+  ChangePasswordInput,
   ContentArticle,
   ContentProvider,
   Coordinates,
   DatabaseProvider,
+  DeleteAccountInput,
   DonationPledge,
   EmailMessage,
   EmailProvider,
@@ -83,6 +88,12 @@ export function createNotConnectedAuthProvider(): AuthProvider {
       'verify',
       'requestPasswordReset',
       'resetPassword',
+      'changePassword',
+      'listSessions',
+      'revokeSession',
+      'requestAccountDeletion',
+      'cancelAccountDeletion',
+      'exportAccountData',
     ]),
     name: 'auth' as const,
     mode: 'backend' as const,
@@ -98,6 +109,13 @@ export function createNotConnectedAuthProvider(): AuthProvider {
     requestPasswordReset: (_i: RequestPasswordResetInput) =>
       nc<AuthChallenge>('auth.requestPasswordReset'),
     resetPassword: (_i: ResetPasswordInput) => nc<void>('auth.resetPassword'),
+    changePassword: (_i: ChangePasswordInput) => nc<void>('auth.changePassword'),
+    listSessions: () => nc<readonly AuthSessionInfo[]>('auth.listSessions'),
+    revokeSession: (_id: string) => nc<void>('auth.revokeSession'),
+    requestAccountDeletion: (_i: DeleteAccountInput) =>
+      nc<AccountDeletionRequest>('auth.requestAccountDeletion'),
+    cancelAccountDeletion: () => nc<void>('auth.cancelAccountDeletion'),
+    exportAccountData: () => nc<AccountExport>('auth.exportAccountData'),
   });
 }
 
