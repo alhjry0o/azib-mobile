@@ -82,8 +82,7 @@ describe('normalizeAvatar', () => {
   });
 
   it('never returns the original uri when processing fails', async () => {
-    const context = ImageManipulator.manipulate('file://x.jpg');
-    (context.renderAsync as jest.Mock).mockRejectedValueOnce(new Error('unsupported'));
+    (ImageManipulator.manipulateAsync as jest.Mock).mockRejectedValueOnce(new Error('unsupported'));
     const result = await normalizeAvatar({ uri: 'file://in.jpg', width: AVATAR_SIZE, height: AVATAR_SIZE });
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error.meta.code).toBe('IMAGE_PROCESSING_FAILED');
