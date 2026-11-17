@@ -6,6 +6,7 @@ import { translate } from '@/i18n';
 import { useProviderContainer, type ProviderContainer } from '@/providers';
 import { useAuthStore } from '@/stores';
 import { EditProfileScreen } from '../screens/EditProfileScreen';
+import { profileQueryKey } from '../use-profile';
 
 const mockReplace = jest.fn();
 let container: ProviderContainer | null = null;
@@ -28,7 +29,7 @@ jest.mock('../components/LocationCascade', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View, Text } = require('react-native');
   return {
-    LocationCascade: ({ onGovernorateChange, onDistrictChange }: any) => (
+    LocationCascade: ({ onGovernorateChange, onDistrictChange, errors }: any) => (
       <View>
         <Text testID="mock-gov" onPress={() => onGovernorateChange('sanaa')}>
           Mock Gov
@@ -36,6 +37,8 @@ jest.mock('../components/LocationCascade', () => {
         <Text testID="mock-dist" onPress={() => onDistrictChange('maeen')}>
           Mock Dist
         </Text>
+        {errors?.governorate && <Text testID="mock-err-gov">{errors.governorate}</Text>}
+        {errors?.district && <Text testID="mock-err-dist">{errors.district}</Text>}
       </View>
     ),
   };
@@ -51,37 +54,47 @@ describe('EditProfileScreen', () => {
     });
   });
 
-  async function setup() {
-    const client = createTestQueryClient();
-    client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    await render(
-      <ShellProviders client={client}>
-        <Probe />
-        <EditProfileScreen />
-      </ShellProviders>,
-    );
-    await act(async () => {
-      await container!.repositories.profiles.create({
-        userId: 'demo-user-test',
-        displayName: 'Demo User',
-        gender: 'unspecified',
-        maritalStatus: 'single',
-      });
+async function setup() {
+  const client = createTestQueryClient();
+  const demoSession = makeDemoSession();
+  client.setQueryData(sessionQueryKey('demo'), { ok: true, value: demoSession });
+  
+  await render(
+    <ShellProviders client={client}>
+      <Probe />
+      <EditProfileScreen />
+    </ShellProviders>,
+  );
+  
+  await act(async () => {
+    const created = await container!.repositories.profiles.create({
+      userId: demoSession.user.id,
+      displayName: 'Demo User',
+      gender: 'unspecified',
+      maritalStatus: 'single',
     });
-    await act(async () => {
-      await client.invalidateQueries();
-    });
-    await waitFor(() => {
-      expect(screen.getByTestId('edit-display-name')).toBeTruthy();
-    });
-    return client;
-  }
+    if (created.ok) {
+      client.setQueryData(profileQueryKey('demo', demoSession.user.id), created);
+    }
+  });
 
+  await waitFor(() => {
+    expect(screen.getByTestId('edit-display-name').props.value).toBe('Demo User');
+  });
+  
+  return client;
+}
+  
   it('loads existing values and saves a new display name', async () => {
     await setup();
     await fireEvent.changeText(screen.getByTestId('edit-display-name'), 'Updated Name');
+  
     await fireEvent.press(screen.getByTestId('mock-gov'));
     await fireEvent.press(screen.getByTestId('mock-dist'));
+  
+    await act(async () => {
+    });
+  
     await fireEvent.press(screen.getByTestId('edit-profile-save'));
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith('/profile');
@@ -92,7 +105,9 @@ describe('EditProfileScreen', () => {
     await setup();
     await fireEvent.changeText(screen.getByTestId('edit-display-name'), 'Valid Name');
     await fireEvent.press(screen.getByTestId('edit-profile-save'));
+  
     await waitFor(() => {
+      expect(screen.getByTestId('mock-err-gov')).toBeTruthy();
       expect(screen.getByText(translate('profile:validation.governorateRequired'))).toBeTruthy();
     });
     expect(mockReplace).not.toHaveBeenCalled();
