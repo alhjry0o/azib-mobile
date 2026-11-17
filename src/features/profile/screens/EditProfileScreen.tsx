@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +34,7 @@ export function EditProfileScreen() {
   const profileApi = useProfile();
   const profile = profileApi.profile;
 
-  const { control, handleSubmit, formState, reset, setValue, watch } = useForm({
+  const { control, handleSubmit, formState, reset, setValue } = useForm({
     resolver: zodResolver(ProfileFormSchema),
     defaultValues: {
       displayName: '',
@@ -59,10 +59,10 @@ export function EditProfileScreen() {
     });
   }, [profile, reset]);
 
-  const governorateId = watch('governorateId');
-  const districtId = watch('districtId');
-  const areaId = watch('areaId');
-  const displayName = watch('displayName');
+  const governorateId = useWatch({ control, name: 'governorateId' });
+  const districtId = useWatch({ control, name: 'districtId' });
+  const areaId = useWatch({ control, name: 'areaId' });
+  const displayName = useWatch({ control, name: 'displayName' });
 
   if (container.mode === 'backend') {
     return (
