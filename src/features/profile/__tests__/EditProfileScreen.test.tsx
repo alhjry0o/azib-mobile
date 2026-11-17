@@ -62,11 +62,19 @@ describe('EditProfileScreen', () => {
     await setup();
     await fireEvent.changeText(screen.getByTestId('edit-display-name'), 'Updated Name');
     await fireEvent.press(screen.getByTestId('edit-governorate'));
+    await waitFor(() => {
+      expect(screen.getByText(translate('profile:locations.sanaa'))).toBeTruthy();
+    });
     await fireEvent.press(screen.getByText(translate('profile:locations.sanaa')));
     await fireEvent.press(screen.getByTestId('edit-district'));
+    await waitFor(() => {
+      expect(screen.getByText(translate('profile:locations.maeen'))).toBeTruthy();
+    });
     await fireEvent.press(screen.getByText(translate('profile:locations.maeen')));
     await fireEvent.press(screen.getByTestId('edit-profile-save'));
     await waitFor(() => {
+      expect(screen.queryByText(translate('profile:validation.governorateRequired'))).toBeNull();
+      expect(screen.queryByText(translate('profile:validation.districtRequired'))).toBeNull();
       expect(mockReplace).toHaveBeenCalledWith('/profile');
     });
   });
