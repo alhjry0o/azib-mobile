@@ -23,6 +23,21 @@ export const ROUTES = {
     partners: '/(tabs)/partners',
     account: '/(tabs)/account',
   },
+  profile: {
+    root: '/profile',
+    edit: '/profile/edit',
+  },
+  settings: {
+    root: '/settings',
+    account: '/settings/account',
+    language: '/settings/language',
+    appearance: '/settings/appearance',
+    numbers: '/settings/numbers',
+    notifications: '/settings/notifications',
+    privacy: '/settings/privacy',
+    help: '/settings/help',
+    about: '/settings/about',
+  },
   features: {
     assistance: '/(features)/assistance',
     souk: '/(features)/souk',
