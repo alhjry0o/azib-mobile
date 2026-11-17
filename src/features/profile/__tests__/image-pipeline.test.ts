@@ -74,7 +74,11 @@ describe('normalizeAvatar', () => {
     const result = await normalizeAvatar({ uri: 'file://in.jpg', width: 1200, height: 800 });
     expect(result.ok).toBe(true);
     if (result.ok) expect(result.value).toBe('file://azib-avatar.jpg');
-    expect(ImageManipulator.manipulate).toHaveBeenCalledWith('file://in.jpg');
+    expect(ImageManipulator.manipulateAsync).toHaveBeenCalledWith(
+      'file://in.jpg',
+      expect.any(Array),
+      expect.any(Object),
+    );
   });
 
   it('never returns the original uri when processing fails', async () => {
