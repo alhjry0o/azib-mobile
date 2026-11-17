@@ -22,6 +22,25 @@ function Probe() {
   return null;
 }
 
+jest.mock('../components/LocationCascade', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const React = require('react');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View, Text } = require('react-native');
+  return {
+    LocationCascade: ({ onGovernorateChange, onDistrictChange }: any) => (
+      <View>
+        <Text testID="mock-gov" onPress={() => onGovernorateChange('sanaa')}>
+          Mock Gov
+        </Text>
+        <Text testID="mock-dist" onPress={() => onDistrictChange('maeen')}>
+          Mock Dist
+        </Text>
+      </View>
+    ),
+  };
+});
+
 describe('EditProfileScreen', () => {
   beforeEach(async () => {
     mockReplace.mockClear();
@@ -61,9 +80,8 @@ describe('EditProfileScreen', () => {
   it('loads existing values and saves a new display name', async () => {
     await setup();
     await fireEvent.changeText(screen.getByTestId('edit-display-name'), 'Updated Name');
-    await fireEvent(screen.getByTestId('edit-governorate'), 'onChange', 'sanaa');
-    await fireEvent(screen.getByTestId('edit-district'), 'onChange', 'maeen');
-  
+    await fireEvent.press(screen.getByTestId('mock-gov'));
+    await fireEvent.press(screen.getByTestId('mock-dist'));
     await fireEvent.press(screen.getByTestId('edit-profile-save'));
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith('/profile');
