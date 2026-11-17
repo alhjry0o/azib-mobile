@@ -99,7 +99,7 @@ describe('settings preferences', () => {
       </ShellProviders>,
     );
     expect(screen.getByTestId('notifications-no-push')).toBeTruthy();
-    await fireEvent.press(screen.getByTestId('notifications-master'));
+    await fireEvent(screen.getByTestId('notifications-master'), 'valueChange', false);
     await waitFor(() => {
       expect(useSettingsStore.getState().notifications.enabled).toBe(false);
     });
@@ -114,7 +114,7 @@ describe('settings preferences', () => {
         <PrivacySettingsScreen />
       </ShellProviders>,
     );
-    await fireEvent.press(screen.getByTestId('privacy-stories'));
+    await fireEvent(screen.getByTestId('privacy-stories'), 'valueChange', true);
     await waitFor(() => {
       expect(useSettingsStore.getState().storiesConsent).toBe(true);
     });
