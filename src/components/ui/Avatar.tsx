@@ -1,11 +1,7 @@
-// Avatar — initials-based display. Image URI support arrives in P06.
-// Initials work for Arabic and Latin names using .charAt(0) — no
-// localized strings rendered; caller provides the name.
-
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
-
+// Avatar — initials by default, optional image URI (P06.2, additive prop).
+// Initials work for Arabic and Latin names using .charAt(0).
+import { Image, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { useTheme } from '@/theme';
-
 import { Text } from './Text';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -23,6 +19,8 @@ export interface AvatarProps {
   readonly size?: AvatarSize;
   /** Show a gold ring around the avatar. */
   readonly ring?: boolean;
+  /** Optional image URI. Falls back to initials when null/undefined. */
+  readonly uri?: string | null;
   readonly style?: StyleProp<ViewStyle>;
   readonly testID?: string;
 }
@@ -36,7 +34,7 @@ function getInitials(name: string): string {
   return (first + last).toUpperCase();
 }
 
-export function Avatar({ name, size = 'md', ring = false, style, testID }: AvatarProps) {
+export function Avatar({ name, size = 'md', ring = false, uri, style, testID }: AvatarProps) {
   const theme = useTheme();
   const spec = SIZES[size];
   const initials = getInitials(name);
@@ -72,9 +70,18 @@ export function Avatar({ name, size = 'md', ring = false, style, testID }: Avata
           },
         ]}
       >
-        <Text variant={spec.font} color="primary">
-          {initials}
-        </Text>
+        {uri ? (
+          <Image
+            source={{ uri }}
+            resizeMode="cover"
+            style={{ width: spec.size, height: spec.size, borderRadius: spec.size / 2 }}
+            testID={testID ? `${testID}-image` : undefined}
+          />
+        ) : (
+          <Text variant={spec.font} color="primary">
+            {initials}
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -88,5 +95,6 @@ const styles = StyleSheet.create({
   circle: {
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
 });
