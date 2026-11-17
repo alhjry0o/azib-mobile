@@ -1,18 +1,28 @@
-// In-memory demo AuthProvider (P06.1).
+// In-memory demo AuthProvider (P06.1 + P06.3).
 // Honest demo: no real credentials, no SMS, no network. Passwords live only in
-// memory for verification and are NEVER logged or returned in any Result.
+// memory for verification and are NEVER logged, returned, or exported.
 // Backward compatible: signIn still accepts any non-empty email + password for
 // an unknown address (P03/P05 behaviour and tests).
+//
+// Size note (AGENT_RULES §1 #11): this module exceeds ~300 lines because every
+// method shares the same in-memory state (users / challenges / sessions).
+// Splitting it now would risk the green P06.1 suite; it is decomposed in P18
+// when the Supabase adapter replaces this file.
 import { AppError } from '@/core/errors';
 import type { Result } from '@/core/result';
-import { SignUpSchema } from '@/schemas/auth';
+import { NewPasswordSchema, SignUpSchema } from '@/schemas/auth';
 import type {
+  AccountDeletionRequest,
+  AccountExport,
   AuthChallenge,
   AuthConsent,
   AuthProvider,
   AuthRole,
   AuthSession,
+  AuthSessionInfo,
   AuthUser,
+  ChangePasswordInput,
+  DeleteAccountInput,
   RequestPasswordResetInput,
   RequestVerificationInput,
   ResetPasswordInput,
@@ -29,6 +39,9 @@ const RESEND_COOLDOWN_MS = 30_000;
 const MAX_OTP_ATTEMPTS = 5;
 const MAX_SIGN_IN_FAILURES = 5;
 const LOCK_MS = 60_000;
+/** PENDING_POLICY: the retention window awaits a human decision (PRODUCT_POLICIES #7). */
+export const DELETION_GRACE_DAYS = 30;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 interface DemoUser {
   id: string;
@@ -49,6 +62,14 @@ interface Challenge {
   expiresAt: number;
   attempts: number;
   sentAt: number;
+}
+
+interface SessionRecord {
+  id: string;
+  userId: string;
+  deviceLabel: string;
+  createdAt: string;
+  lastSeenAt: string;
 }
 
 export interface MockAuthProvider extends AuthProvider {
@@ -76,7 +97,11 @@ export function createMockAuthProvider(
   const users = new Map<string, DemoUser>();
   const challenges = new Map<string, Challenge>();
   const failures = new Map<string, { count: number; lockedUntil: number }>();
+  const sessions = new Map<string, SessionRecord>();
   let session: AuthSession | null = null;
+  let currentSessionId: string | null = null;
+  let sessionCounter = 0;
+  let deletion: AccountDeletionRequest | null = null;
 
   const toUser = (u: DemoUser): AuthUser =>
     Object.freeze({
@@ -116,6 +141,36 @@ export function createMockAuthProvider(
       pendingVerification,
     });
   };
+
+  const registerSession = (userId: string): string => {
+    sessionCounter += 1;
+    const id = `demo-session-${sessionCounter}`;
+    const now = new Date().toISOString();
+    sessions.set(id, {
+      id,
+      userId,
+      deviceLabel: `demo-device-${sessionCounter}`,
+      createdAt: now,
+      lastSeenAt: now,
+    });
+    currentSessionId = id;
+    return id;
+  };
+
+  const sessionInfos = (userId: string): readonly AuthSessionInfo[] =>
+    Object.freeze(
+      [...sessions.values()]
+        .filter((s) => s.userId === userId)
+        .map((s) =>
+          Object.freeze({
+            id: s.id,
+            deviceLabel: s.deviceLabel,
+            createdAt: s.createdAt,
+            lastSeenAt: s.lastSeenAt,
+            current: s.id === currentSessionId,
+          }),
+        ),
+    );
 
   const issue = (kind: Challenge['kind'], target: string): Result<AuthChallenge> => {
     for (const c of challenges.values()) {
@@ -178,6 +233,12 @@ export function createMockAuthProvider(
     return { ok: true, value: found };
   };
 
+  const currentUser = (): DemoUser | null => {
+    const email = session?.user.email;
+    if (!email) return null;
+    return users.get(email) ?? null;
+  };
+
   return Object.freeze({
     name: 'auth' as const,
     mode: 'mock' as const,
@@ -192,6 +253,12 @@ export function createMockAuthProvider(
       'verify',
       'requestPasswordReset',
       'resetPassword',
+      'changePassword',
+      'listSessions',
+      'revokeSession',
+      'requestAccountDeletion',
+      'cancelAccountDeletion',
+      'exportAccountData',
     ] as const,
 
     async healthCheck(): Promise<HealthCheckResult> {
@@ -233,6 +300,7 @@ export function createMockAuthProvider(
       }
       failures.delete(email);
       session = makeSession(user);
+      registerSession(user.id);
       return { ok: true, value: session };
     },
 
@@ -260,6 +328,7 @@ export function createMockAuthProvider(
       users.set(email, user);
       issue('verify', email);
       session = makeSession(user);
+      registerSession(user.id);
       return { ok: true, value: session };
     },
 
@@ -304,10 +373,98 @@ export function createMockAuthProvider(
       return { ok: true, value: undefined };
     },
 
+    async changePassword(input: ChangePasswordInput): Promise<Result<void>> {
+      const failure = await simulateMockIO(config);
+      if (failure) return { ok: false, error: failure };
+      const user = currentUser();
+      if (!user) return { ok: false, error: AppError.auth({ code: 'NO_SESSION' }) };
+      if (user.password !== input.currentPassword) {
+        return { ok: false, error: AppError.auth({ code: 'INVALID_CREDENTIALS' }) };
+      }
+      const parsed = NewPasswordSchema.safeParse(input.newPassword);
+      if (!parsed.success) {
+        return { ok: false, error: AppError.validation({ cause: parsed.error }) };
+      }
+      user.password = parsed.data;
+      return { ok: true, value: undefined };
+    },
+
+    async listSessions(): Promise<Result<readonly AuthSessionInfo[]>> {
+      const failure = await simulateMockIO(config);
+      if (failure) return { ok: false, error: failure };
+      const user = currentUser();
+      if (!user) return { ok: true, value: Object.freeze([]) };
+      return { ok: true, value: sessionInfos(user.id) };
+    },
+
+    async revokeSession(sessionId: string): Promise<Result<void>> {
+      const failure = await simulateMockIO(config);
+      if (failure) return { ok: false, error: failure };
+      if (!sessions.has(sessionId)) {
+        return { ok: false, error: AppError.notFound({ code: 'SESSION_NOT_FOUND' }) };
+      }
+      sessions.delete(sessionId);
+      if (sessionId === currentSessionId) {
+        session = null;
+        currentSessionId = null;
+      }
+      return { ok: true, value: undefined };
+    },
+
+    async requestAccountDeletion(
+      input: DeleteAccountInput,
+    ): Promise<Result<AccountDeletionRequest>> {
+      const failure = await simulateMockIO(config);
+      if (failure) return { ok: false, error: failure };
+      const user = currentUser();
+      if (!user) return { ok: false, error: AppError.auth({ code: 'NO_SESSION' }) };
+      if (user.password !== input.password) {
+        return { ok: false, error: AppError.auth({ code: 'INVALID_CREDENTIALS' }) };
+      }
+      const now = Date.now();
+      deletion = Object.freeze({
+        requestedAt: new Date(now).toISOString(),
+        scheduledFor: new Date(now + DELETION_GRACE_DAYS * DAY_MS).toISOString(),
+        gracePeriodDays: DELETION_GRACE_DAYS,
+        status: 'pending' as const,
+        policyStatus: 'pending-human-approval' as const,
+      });
+      return { ok: true, value: deletion };
+    },
+
+    async cancelAccountDeletion(): Promise<Result<void>> {
+      const failure = await simulateMockIO(config);
+      if (failure) return { ok: false, error: failure };
+      if (!deletion) {
+        return { ok: false, error: AppError.notFound({ code: 'NO_DELETION_REQUEST' }) };
+      }
+      deletion = null;
+      return { ok: true, value: undefined };
+    },
+
+    async exportAccountData(): Promise<Result<AccountExport>> {
+      const failure = await simulateMockIO(config);
+      if (failure) return { ok: false, error: failure };
+      const user = currentUser();
+      if (!user) return { ok: false, error: AppError.auth({ code: 'NO_SESSION' }) };
+      return {
+        ok: true,
+        value: Object.freeze({
+          generatedAt: new Date().toISOString(),
+          dataOrigin: 'demo' as const,
+          user: toUser(user),
+          consents: user.consents,
+          sessions: sessionInfos(user.id),
+          deletionRequest: deletion,
+        }),
+      };
+    },
+
     async signOut(): Promise<Result<void>> {
       const failure = await simulateMockIO(config);
       if (failure) return { ok: false, error: failure };
       session = null;
+      currentSessionId = null;
       return { ok: true, value: undefined };
     },
 
@@ -324,6 +481,8 @@ export function createMockAuthProvider(
       const user = users.get(session.user.email ?? '');
       if (!user) return { ok: true, value: null };
       session = makeSession(user);
+      const record = currentSessionId ? sessions.get(currentSessionId) : null;
+      if (record) record.lastSeenAt = new Date().toISOString();
       return { ok: true, value: session };
     },
 
@@ -346,7 +505,11 @@ export function createMockAuthProvider(
       users.clear();
       challenges.clear();
       failures.clear();
+      sessions.clear();
       session = null;
+      currentSessionId = null;
+      sessionCounter = 0;
+      deletion = null;
     },
   });
 }
