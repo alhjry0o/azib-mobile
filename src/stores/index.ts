@@ -8,3 +8,12 @@ export type { LanguageState } from './language.store';
 export { useLanguageStore, LANGUAGE_STORAGE_KEY } from './language.store';
 export type { AuthChallengeState, AuthState } from './auth.store';
 export { useAuthStore, AUTH_STORAGE_KEY } from './auth.store';
+export type {
+  AppearanceMode,
+  NotificationCategory,
+  NotificationPrefs,
+  NumberSystem,
+  ProfileVisibility,
+  SettingsState,
+} from './settings.store';
+export { useSettingsStore, SETTINGS_STORAGE_KEY } from './settings.store';
