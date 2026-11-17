@@ -29,7 +29,7 @@ export default ({ config: _config }: ConfigContext): ExpoConfig => ({
     output: 'static',
     favicon: './assets/images/favicon.png',
   },
-  plugins: ['expo-router', 'expo-localization', 'expo-splash-screen'],
+  plugins: ['expo-router', 'expo-localization', 'expo-splash-screen', 'expo-image-picker'],
   experiments: {
     typedRoutes: true,
     reactCompiler: true,
