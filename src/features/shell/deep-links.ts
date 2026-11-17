@@ -1,5 +1,5 @@
 // Deep-link allowlist for the azib:// scheme (P05 + P06).
-// - allow:    public destinations; the router handles them normally.
+// - allow:    public destinations; the router handles them (screen guards still run).
 // - guarded:  protected areas; their layout guards decide (staff/dev/onboarding).
 // - not-found: everything else -> +not-found.
 // Query strings and fragments are dropped entirely: no sensitive data in links.
@@ -25,6 +25,17 @@ const ALLOWED: ReadonlySet<string> = new Set([
   '/weddings',
   '/partners',
   '/account',
+  '/profile',
+  '/profile/edit',
+  '/settings',
+  '/settings/account',
+  '/settings/language',
+  '/settings/appearance',
+  '/settings/numbers',
+  '/settings/notifications',
+  '/settings/privacy',
+  '/settings/help',
+  '/settings/about',
   '/assistance',
   '/souk',
   '/jobs',
