@@ -1,6 +1,7 @@
 export * from './common';
 export * from './auth';
 export * from './profile';
+export * from './profile-form';
 export * from './application';
 export * from './program';
 export * from './wedding';
