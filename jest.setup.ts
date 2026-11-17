@@ -79,27 +79,15 @@ jest.mock('expo-image-picker', () => ({
   MediaTypeOptions: { Images: 'Images', Videos: 'Videos', All: 'All' },
 }));
 
-// expo-image-manipulator mock (P06.2): object API, no native rendering in Jest.
-jest.mock('expo-image-manipulator', () => {
-  const context = {
-    crop: jest.fn(),
-    resize: jest.fn(),
-    renderAsync: jest.fn(),
-  };
-  context.crop.mockReturnValue(context);
-  context.resize.mockReturnValue(context);
-  context.renderAsync.mockResolvedValue({
-    saveAsync: jest.fn().mockResolvedValue({
-      uri: 'file://azib-avatar.jpg',
-      width: 512,
-      height: 512,
-    }),
-  });
-  return {
-    manipulate: jest.fn(() => context),
-    SaveFormat: { JPEG: 'jpeg', PNG: 'png', WEBP: 'webp' },
-  };
-});
+// expo-image-manipulator mock (P06.2): legacy API, no native rendering in Jest.
+jest.mock('expo-image-manipulator', () => ({
+  manipulateAsync: jest.fn(async (uri: string) => ({
+    uri: uri === 'file://in.jpg' ? 'file://azib-avatar.jpg' : uri,
+    width: 512,
+    height: 512,
+  })),
+  SaveFormat: { JPEG: 'jpeg', PNG: 'png', WEBP: 'webp' },
+}));
 
 // Mock lucide-react-native to avoid ESM parsing errors in Jest.
 /* eslint-disable @typescript-eslint/no-require-imports */
