@@ -1,4 +1,182 @@
 {
   "title": "Profile",
-  "notConnectedYet": "Profile will be built in P06."
+  "notConnectedYet": "Profile activates once the backend is connected.",
+  "loading": "Loading profile…",
+  "error": {
+    "title": "Could not load profile",
+    "description": "Something went wrong while fetching your profile. Please try again."
+  },
+  "empty": {
+    "title": "No profile yet",
+    "description": "Create your profile to complete your details. You can edit it anytime.",
+    "action": "Create profile"
+  },
+  "fields": {
+    "displayName": "Display name",
+    "gender": "Gender",
+    "maritalStatus": "Marital status",
+    "governorate": "Governorate",
+    "district": "District",
+    "area": "Area"
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female",
+    "unspecified": "Unspecified"
+  },
+  "marital": {
+    "single": "Single",
+    "engaged": "Engaged",
+    "married": "Married",
+    "divorced": "Divorced",
+    "widowed": "Widowed"
+  },
+  "verification": {
+    "verified": "Verified account",
+    "pending": "Pending verification"
+  },
+  "view": {
+    "edit": "Edit profile",
+    "location": "Location",
+    "none": "Not set",
+    "accountType": "Account type"
+  },
+  "edit": {
+    "title": "Edit profile",
+    "subtitle": "Demo data: nothing is sent to a server; it stays in memory until Supabase is wired.",
+    "save": "Save changes",
+    "success": "Profile saved."
+  },
+  "avatar": {
+    "change": "Change photo",
+    "remove": "Remove photo",
+    "permissionDenied": "Photo library permission was not granted.",
+    "tooLarge": "The image is too large (8 MB max).",
+    "processingFailed": "Image processing failed, so nothing was uploaded — for your privacy.",
+    "failed": "Could not upload the photo. Please try again.",
+    "sessionNote": "The photo is center-cropped and re-encoded to drop EXIF. Its URL lives in this session only until P18."
+  },
+  "validation": {
+    "displayNameMin": "Name is too short (at least 2 characters).",
+    "displayNameMax": "Name is too long (60 characters max).",
+    "governorateRequired": "Choose a governorate.",
+    "districtRequired": "Choose a district.",
+    "chain": "The location chain is incomplete. Pick a governorate, then a district."
+  },
+  "locations": {
+    "pending": "Location data is demo data awaiting human verification before real use.",
+    "sanaa": "Sanaa",
+    "aden": "Aden",
+    "taiz": "Taiz",
+    "hodeidah": "Hodeidah",
+    "ibb": "Ibb",
+    "dhamar": "Dhamar",
+    "maeen": "Ma'een",
+    "sabain": "Al-Sabain",
+    "thawra": "Al-Thawra",
+    "shuaub": "Shu'aub",
+    "azal": "Azal",
+    "khormaksar": "Khormaksar",
+    "qahira": "Al-Qahira",
+    "hawak": "Al-Hawak",
+    "ibb-city": "Ibb City",
+    "dhamar-city": "Dhamar City",
+    "hadda": "Hadda",
+    "shumaila": "Shumaila",
+    "hasaba": "Al-Hasaba",
+    "hurriya": "Al-Hurriya",
+    "jeruf": "Al-Jeruf",
+    "bab-salam": "Bab Al-Salam",
+    "khormaksar-1": "Khormaksar 1"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Account and app preferences. Some items activate in the third part of P06.",
+    "notConnected": "This screen is not connected",
+    "serverNote": "Server persistence activates in P18. Local preferences are stored on your device.",
+    "comingSoon": "Built in P06.3",
+    "sections": {
+      "account": "Account",
+      "preferences": "Preferences",
+      "about": "About & help",
+      "upcoming": "Coming in P06.3"
+    },
+    "rows": {
+      "account": "Account details",
+      "profile": "Profile",
+      "privacy": "Privacy & consents",
+      "language": "Language",
+      "appearance": "Appearance",
+      "numbers": "Numbers",
+      "notifications": "Notifications",
+      "help": "Help",
+      "about": "About the app",
+      "security": "Security",
+      "devices": "Devices & sessions",
+      "deleteAccount": "Delete account",
+      "exportData": "Export data",
+      "terms": "Terms and conditions",
+      "privacyDoc": "Privacy policy"
+    },
+    "signOut": {
+      "title": "Sign out",
+      "description": "Your session ends and sensitive local data is cleared.",
+      "confirm": "Sign out",
+      "action": "Sign out"
+    },
+    "appearance": {
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System",
+      "note": "Dark is the platform's approved identity.",
+      "unavailable": "Light and system modes are not available yet; no approved light palette exists."
+    },
+    "numbers": {
+      "latn": "Western (1234)",
+      "arab": "Arabic-Indic (١٢٣٤)",
+      "note": "Affects screens that use the number formatter."
+    },
+    "notifications": {
+      "master": "Enable notifications",
+      "assistance": "Assistance",
+      "weddings": "Our Wedding",
+      "marketplace": "Souk Khair",
+      "noPushYet": "No real notifications are sent until P16. These preferences are saved now and used later."
+    },
+    "privacy": {
+      "visibilityTitle": "Who can see your display name",
+      "private": "Only me",
+      "reviewers": "Authorized reviewers",
+      "visibilityNote": "There are no public individual profiles. This is enforced server-side in P18.",
+      "storiesTitle": "Success stories",
+      "storiesToggle": "Allow publishing my story",
+      "storiesNote": "An optional consent you can withdraw anytime; it never affects your eligibility.",
+      "consentsTitle": "Recorded consents",
+      "noConsents": "No consents recorded on this account.",
+      "withdrawNote": "Withdrawing essential consents (terms/privacy) means closing the account, available via account deletion in P06.3.",
+      "doc": {
+        "terms": "Terms and conditions",
+        "privacy": "Privacy policy"
+      }
+    },
+    "help": {
+      "what": {
+        "q": "What is AZIB?",
+        "a": "A non-profit platform for easier marriage through disciplined assistance, group weddings, partners and Souk Khair."
+      },
+      "privacy": {
+        "q": "Is my data visible to others?",
+        "a": "No. There are no public profiles; beneficiary data is restricted to authorized roles on a minimum basis."
+      },
+      "assistance": {
+        "q": "How do I get assistance?",
+        "a": "Requests are submitted in the Assistance section and reviewed by a human. Automated scoring is advisory only."
+      }
+    },
+    "about": {
+      "version": "Version {{version}}",
+      "principlesTitle": "Principles",
+      "principles": "Non-profit, no dating services, spouse choice belongs to families, and no assistance without human verification."
+    }
+  }
 }
