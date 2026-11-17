@@ -1,6 +1,6 @@
 // AuthProvider contract. Mock in demo; Supabase Auth in backend (P18).
-// P06.1 extends it ADDITIVELY: existing signatures are unchanged and all new
-// AuthUser/AuthSession fields are optional so P03/P05 callers stay valid.
+// P06.1 extended it additively; P06.3 adds security/session/deletion/export.
+// All new fields stay optional so P03/P05 callers remain valid.
 import type { Result } from '@/core/result';
 import type { ProviderBase } from '../types';
 
@@ -123,6 +123,49 @@ export interface ResetPasswordInput {
   readonly password: string;
 }
 
+/** P06.3 — re-authentication happens inside changePassword. */
+export interface ChangePasswordInput {
+  readonly currentPassword: string;
+  readonly newPassword: string;
+}
+
+export interface AuthSessionInfo {
+  readonly id: string;
+  readonly deviceLabel: string;
+  /** ISO 8601. */
+  readonly createdAt: string;
+  /** ISO 8601. */
+  readonly lastSeenAt: string;
+  readonly current: boolean;
+}
+
+export interface DeleteAccountInput {
+  /** Re-authentication before scheduling deletion. */
+  readonly password: string;
+}
+
+export interface AccountDeletionRequest {
+  /** ISO 8601. */
+  readonly requestedAt: string;
+  /** ISO 8601. */
+  readonly scheduledFor: string;
+  readonly gracePeriodDays: number;
+  readonly status: 'pending' | 'cancelled';
+  /** The retention window is a human policy decision, not yet approved. */
+  readonly policyStatus: 'pending-human-approval';
+}
+
+/** Everything the account owner may export. Never contains tokens or passwords. */
+export interface AccountExport {
+  /** ISO 8601. */
+  readonly generatedAt: string;
+  readonly dataOrigin: 'real' | 'demo';
+  readonly user: AuthUser;
+  readonly consents: readonly AuthConsent[];
+  readonly sessions: readonly AuthSessionInfo[];
+  readonly deletionRequest: AccountDeletionRequest | null;
+}
+
 export interface AuthProvider extends ProviderBase {
   readonly name: 'auth';
   /** Channels this provider can actually deliver to. Never assume SMS. */
@@ -136,4 +179,10 @@ export interface AuthProvider extends ProviderBase {
   verify(input: VerifyInput): Promise<Result<AuthSession>>;
   requestPasswordReset(input: RequestPasswordResetInput): Promise<Result<AuthChallenge>>;
   resetPassword(input: ResetPasswordInput): Promise<Result<void>>;
+  changePassword(input: ChangePasswordInput): Promise<Result<void>>;
+  listSessions(): Promise<Result<readonly AuthSessionInfo[]>>;
+  revokeSession(sessionId: string): Promise<Result<void>>;
+  requestAccountDeletion(input: DeleteAccountInput): Promise<Result<AccountDeletionRequest>>;
+  cancelAccountDeletion(): Promise<Result<void>>;
+  exportAccountData(): Promise<Result<AccountExport>>;
 }
