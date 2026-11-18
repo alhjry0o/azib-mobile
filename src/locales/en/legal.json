@@ -1,4 +1,111 @@
 {
   "title": "Terms & Privacy",
-  "notConnectedYet": "Legal documents will be built in P06."
+  "notConnectedYet": "Legal documents will be built in P06.",
+  "reviewBanner": "Temporary draft text — requires human legal review before launch. Do not rely on it as a binding document.",
+  "version": "Version: {{version}}",
+  "footer": "These documents are initial templates. Final texts are approved after legal review and an owner decision.",
+  "missing": {
+    "title": "Document not found",
+    "description": "The link you opened does not match any known legal document."
+  },
+  "docs": {
+    "terms": {
+      "title": "Terms and conditions",
+      "summary": "Rules for using the non-profit AZIB platform for easier marriage.",
+      "sections": {
+        "scope": {
+          "heading": "Scope of service",
+          "body": "The platform is non-profit and charges no commissions or subscriptions. It offers no dating services and no partner search; choosing a spouse is the families' responsibility alone."
+        },
+        "accounts": {
+          "heading": "Accounts",
+          "body": "You must provide accurate information at sign-up. You are responsible for keeping your password secret and for all activity under your account."
+        },
+        "conduct": {
+          "heading": "Acceptable use",
+          "body": "Impersonation, abusive content, and attempts to access other beneficiaries' data are prohibited. Violations may lead to suspension after human review."
+        },
+        "liability": {
+          "heading": "Limitation of liability",
+          "body": "The platform is an organizing intermediary: it holds no funds and guarantees no application outcome. Monetary donations happen outside the app through a licensed provider."
+        }
+      }
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "summary": "How we collect, protect, and expose your data.",
+      "sections": {
+        "collection": {
+          "heading": "What we collect",
+          "body": "Display name, email, approximate location, and application data when you submit one. We never collect payment card data."
+        },
+        "use": {
+          "heading": "How we use it",
+          "body": "To run your account, review eligibility, and contact you about your request. We never sell data or use it for advertising."
+        },
+        "sharing": {
+          "heading": "Who can see it",
+          "body": "There are no public individual profiles. Beneficiary data is restricted to authorized roles on a strict minimum basis."
+        },
+        "rights": {
+          "heading": "Your rights",
+          "body": "You can export your data, edit your profile, withdraw optional consents, and request account deletion with a cancellable confirmation period."
+        }
+      }
+    },
+    "eligibility": {
+      "title": "Eligibility policy",
+      "summary": "How assistance requests are reviewed and who decides.",
+      "sections": {
+        "basis": {
+          "heading": "Basis of eligibility",
+          "body": "Eligibility rests on documented need and supporting evidence. Income bands and eligibility thresholds are human decisions not yet approved."
+        },
+        "review": {
+          "heading": "Human review",
+          "body": "Automated scoring is advisory only; it neither grants nor blocks a right. The final decision belongs to a human reviewer who records a reason."
+        },
+        "appeal": {
+          "heading": "Appeals",
+          "body": "You may appeal a decision within a window to be set by the owner. Appeals are reviewed by an independent committee."
+        }
+      }
+    },
+    "weddings-withdrawal": {
+      "title": "Group wedding withdrawal policy",
+      "summary": "Registration, withdrawal, and financial impact rules.",
+      "sections": {
+        "registration": {
+          "heading": "Registration",
+          "body": "Registering for a group wedding is free and creates no payment obligation to the platform. Seats are limited and assigned after human verification."
+        },
+        "withdrawal": {
+          "heading": "Withdrawal",
+          "body": "You may withdraw before a defined deadline. The final withdrawal policy (notice period and priority impact) awaits a human decision."
+        },
+        "costs": {
+          "heading": "Costs",
+          "body": "The platform does not cover external costs on your behalf and collects no fees. Any partner contribution is documented separately."
+        }
+      }
+    },
+    "souk": {
+      "title": "Souk Khair policy",
+      "summary": "Rules for in-kind donations between families.",
+      "sections": {
+        "donations": {
+          "heading": "In-kind donations",
+          "body": "Souk Khair is for physical items only. No money inside the app, no wallet, and no internal transfer."
+        },
+        "safety": {
+          "heading": "Safety",
+          "body": "Hand over items in a public place and verify their condition before accepting. Contact details are never published."
+        },
+        "disputes": {
+          "heading": "Disputes",
+          "body": "Complaints are reviewed by a human. The platform does not guarantee item quality and is not liable for agreements between parties."
+        }
+      }
+    }
+  }
 }
