@@ -2,9 +2,9 @@
 // Native: write the JSON into the app document directory, then open the share
 // sheet when available. Web: Blob download (no native module needed).
 import { Platform } from 'react-native';
-import * as FileSystem from 'expo-file-system';
+import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-import { AppError, toAppError } from '@/core/errors';
+import { toAppError } from '@/core/errors';
 import type { Result } from '@/core/result';
 
 export interface SavedExport {
@@ -33,14 +33,10 @@ export async function saveAndShareExport(
 ): Promise<Result<SavedExport>> {
   if (Platform.OS === 'web') return downloadOnWeb(fileName, json);
   try {
-    const directory = FileSystem.documentDirectory;
-    if (!directory) {
-      return { ok: false, error: AppError.unknown({ code: 'NO_DOCUMENT_DIRECTORY' }) };
-    }
-    const uri = `${directory}${fileName}`;
-    await FileSystem.writeAsStringAsync(uri, json, {
-      encoding: FileSystem.EncodingType.UTF8,
-    });
+    const file = new File(Paths.document, fileName);
+    file.create({ overwrite: true });
+    await file.write(json);
+    const uri = file.uri;
     const available = await Sharing.isAvailableAsync();
     if (!available) return { ok: true, value: { uri, shared: false } };
     await Sharing.shareAsync(uri, {
