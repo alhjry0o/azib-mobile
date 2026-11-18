@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
-import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import {
   ShellProviders,
@@ -14,10 +13,16 @@ import { ExportDataScreen } from '../screens/ExportDataScreen';
 
 let container: ProviderContainer | null = null;
 
+const mockCreate = jest.fn();
+const mockWrite = jest.fn(async () => undefined);
+
 jest.mock('expo-file-system', () => ({
-  documentDirectory: 'file:///documents/',
-  EncodingType: { UTF8: 'utf8' },
-  writeAsStringAsync: jest.fn(async () => undefined),
+  Paths: { document: { uri: 'file:///documents/' } },
+  File: jest.fn().mockImplementation((directory: { uri: string }, name: string) => ({
+    uri: `${directory.uri}${name}`,
+    create: mockCreate,
+    write: mockWrite,
+  })),
 }));
 
 jest.mock('expo-sharing', () => ({
@@ -80,12 +85,14 @@ describe('ExportDataScreen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('export-success')).toBeTruthy();
     });
-    expect(FileSystem.writeAsStringAsync).toHaveBeenCalledTimes(1);
-    const call = (FileSystem.writeAsStringAsync as jest.Mock).mock.calls[0];
-    expect(String(call?.[0])).toContain('azib-export-');
-    expect(String(call?.[1])).toContain('"schemaVersion": 1');
-    expect(String(call?.[1])).not.toContain('accessToken');
+    expect(mockWrite).toHaveBeenCalledTimes(1);
+    expect(mockCreate).toHaveBeenCalledWith({ overwrite: true });
+    const writeCall = (mockWrite as jest.Mock).mock.calls[0];
+    expect(String(writeCall?.[0])).toContain('"schemaVersion": 1');
+    expect(String(writeCall?.[0])).not.toContain('accessToken');
     expect(Sharing.shareAsync).toHaveBeenCalledTimes(1);
+    const shareCall = (Sharing.shareAsync as jest.Mock).mock.calls[0];
+    expect(String(shareCall?.[0])).toContain('azib-export-');
   });
 
   it('reports honestly when sharing is unavailable', async () => {
@@ -99,7 +106,7 @@ describe('ExportDataScreen', () => {
   });
 
   it('surfaces a write failure without claiming success', async () => {
-    (FileSystem.writeAsStringAsync as jest.Mock).mockRejectedValueOnce(new Error('disk full'));
+    mockWrite.mockRejectedValueOnce(new Error('disk full'));
     await setup();
     await fireEvent.press(screen.getByTestId('export-run'));
     await waitFor(() => {
