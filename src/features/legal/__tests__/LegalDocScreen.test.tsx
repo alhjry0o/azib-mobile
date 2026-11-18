@@ -32,16 +32,16 @@ describe('LegalDocScreen', () => {
 
   it('renders every registered document', async () => {
     for (const slug of ['privacy', 'eligibility', 'weddings-withdrawal', 'souk']) {
-      mockDoc = slug;
-      const view = await render(
+      mockDoc = slug
+      const { unmount } = render(
         <Providers>
           <LegalDocScreen />
         </Providers>,
-      );
-      expect(screen.getByTestId('legal-review-banner')).toBeTruthy();
-      view.unmount();
+      )
+      await waitFor(() => expect(screen.getByTestId('legal-review-banner')).toBeTruthy())
+      unmount()
     }
-  });
+  })
 
   it('shows an honest missing state for an unknown slug', async () => {
     mockDoc = 'unknown-doc';
