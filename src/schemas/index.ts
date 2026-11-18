@@ -1,5 +1,6 @@
 export * from './common';
 export * from './auth';
+export * from './security';
 export * from './profile';
 export * from './profile-form';
 export * from './application';
