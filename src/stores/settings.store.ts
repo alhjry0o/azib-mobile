@@ -24,6 +24,8 @@ export interface SettingsState {
   /** Optional consent: publishing success stories. Default off. */
   storiesConsent: boolean;
   notifications: NotificationPrefs;
+  /** Optional biometric lock for sensitive screens (P06.3). */
+  biometricLock: boolean;
   hydrated: boolean;
   setNumberSystem: (value: NumberSystem) => void;
   setAppearance: (value: AppearanceMode) => void;
@@ -31,6 +33,7 @@ export interface SettingsState {
   setStoriesConsent: (value: boolean) => void;
   setNotificationsEnabled: (value: boolean) => void;
   setNotificationCategory: (category: NotificationCategory, value: boolean) => void;
+  setBiometricLock: (value: boolean) => void;
   /** Internal: used by persist middleware only. */
   _setHydrated: (hydrated: boolean) => void;
 }
@@ -52,6 +55,7 @@ export const useSettingsStore = create<SettingsState>()(
       visibility: 'private',
       storiesConsent: false,
       notifications: DEFAULT_NOTIFICATIONS,
+      biometricLock: false,
       hydrated: false,
       setNumberSystem: (numberSystem) => set({ numberSystem }),
       setAppearance: (appearance) => set({ appearance }),
@@ -61,6 +65,7 @@ export const useSettingsStore = create<SettingsState>()(
         set((state) => ({ notifications: { ...state.notifications, enabled: value } })),
       setNotificationCategory: (category, value) =>
         set((state) => ({ notifications: { ...state.notifications, [category]: value } })),
+      setBiometricLock: (biometricLock) => set({ biometricLock }),
       _setHydrated: (hydrated) => set({ hydrated }),
     }),
     {
@@ -72,6 +77,7 @@ export const useSettingsStore = create<SettingsState>()(
         visibility: state.visibility,
         storiesConsent: state.storiesConsent,
         notifications: state.notifications,
+        biometricLock: state.biometricLock,
       }),
       onRehydrateStorage: () => (state) => {
         state?._setHydrated(true);
