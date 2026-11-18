@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { Providers } from '@/components/ui/__tests__/test-utils';
 import { translate } from '@/i18n';
 import { LegalDocScreen } from '../LegalDocScreen';
@@ -32,16 +32,18 @@ describe('LegalDocScreen', () => {
 
   it('renders every registered document', async () => {
     for (const slug of ['privacy', 'eligibility', 'weddings-withdrawal', 'souk']) {
-      mockDoc = slug
-      const { unmount } = render(
+      mockDoc = slug;
+      const view = await render(
         <Providers>
           <LegalDocScreen />
         </Providers>,
-      )
-      await waitFor(() => expect(screen.getByTestId('legal-review-banner')).toBeTruthy())
-      unmount()
+      );
+      await waitFor(() => {
+        expect(screen.getByTestId('legal-review-banner')).toBeTruthy();
+      });
+      await view.unmount();
     }
-  })
+  });
 
   it('shows an honest missing state for an unknown slug', async () => {
     mockDoc = 'unknown-doc';
