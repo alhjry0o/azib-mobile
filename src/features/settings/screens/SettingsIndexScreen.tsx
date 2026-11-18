@@ -79,7 +79,7 @@ const renderUpcomingRow = (key: string, icon: IconName, destructive = false) => 
       {renderUpcomingRow('security', 'shield')}
       {renderRows(SECURITY_ROWS)}
       {renderUpcomingRow('deleteAccount', 'xCircle', true)}
-      />
+      
       <Text variant="h3">{t('profile:settings.sections.preferences')}</Text>
       {renderRows(PREFERENCE_ROWS)}
       <Text variant="h3">{t('profile:settings.sections.about')}</Text>
