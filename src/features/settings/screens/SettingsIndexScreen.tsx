@@ -19,7 +19,6 @@ const ACCOUNT_ROWS: readonly Row[] = [
 ];
 
 const SECURITY_ROWS: readonly Row[] = [
-  { key: 'security', route: ROUTES.settings.security, icon: 'shield' },
   { key: 'devices', route: ROUTES.settings.devices, icon: 'phone' },
   { key: 'exportData', route: ROUTES.settings.exportData, icon: 'creditCard' },
 ];
@@ -55,6 +54,18 @@ export function SettingsIndexScreen() {
       />
     ));
 
+const renderUpcomingRow = (key: string, icon: IconName, destructive = false) => (
+    <ListItem
+      variant="card"
+      destructive={destructive}
+      title={t(`profile:settings.rows.${key}`)}
+      subtitle={t('profile:settings.comingSoon')}
+      leading={<Icon name={icon} size={20} />}
+      disabled
+      testID={`settings-upcoming-${key}`}
+    />
+  );
+  
   return (
     <SettingsScaffold
       testID="settings-screen"
@@ -65,14 +76,9 @@ export function SettingsIndexScreen() {
       <Text variant="h3">{t('profile:settings.sections.account')}</Text>
       {renderRows(ACCOUNT_ROWS)}
       <Text variant="h3">{t('auth:security.section')}</Text>
+      {renderUpcomingRow('security', 'shield')}
       {renderRows(SECURITY_ROWS)}
-      <ListItem
-        variant="card"
-        destructive
-        title={t('profile:settings.rows.deleteAccount')}
-        leading={<Icon name="xCircle" size={20} />}
-        onPress={() => router.push(href(ROUTES.settings.deleteAccount))}
-        testID="settings-row-deleteAccount"
+      {renderUpcomingRow('deleteAccount', 'xCircle', true)}
       />
       <Text variant="h3">{t('profile:settings.sections.preferences')}</Text>
       {renderRows(PREFERENCE_ROWS)}
