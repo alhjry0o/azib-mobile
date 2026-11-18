@@ -37,6 +37,17 @@ export const ROUTES = {
     privacy: '/settings/privacy',
     help: '/settings/help',
     about: '/settings/about',
+    security: '/settings/security',
+    devices: '/settings/devices',
+    deleteAccount: '/settings/delete-account',
+    exportData: '/settings/export-data',
+  },
+  legal: {
+    terms: '/legal/terms',
+    privacy: '/legal/privacy',
+    eligibility: '/legal/eligibility',
+    weddingsWithdrawal: '/legal/weddings-withdrawal',
+    souk: '/legal/souk',
   },
   features: {
     assistance: '/(features)/assistance',
@@ -60,6 +71,10 @@ export const ROUTES = {
 
 export function href(path: string): Href {
   return path as Href;
+}
+
+export function legalDocPath(slug: string): string {
+  return `/legal/${slug}`;
 }
 
 export const TAB_ORDER = ['home', 'services', 'weddings', 'partners', 'account'] as const;
