@@ -10,196 +10,176 @@
 
 | # | المرحلة | الحالة | تاريخ الإنجاز | ملاحظات |
 |---|---------|--------|----------------|---------|
-| P01 | Requirements, Architecture & Agent Governance | Done | 2026-11-08 | وثائق فقط (`AGENT_RULES.md §6`). |
-| P02 | Init (Expo + TS strict + ESLint + Jest + i18n + بنية) | Done | 2026-11-09 | Expo SDK 58، React 19.3، RN 0.88.1، Node 26، ESLint 9. CI أخضر. |
-| P03 | Core Platform (Types, Provider Abstraction, Errors, Env, i18n, Repos, Seed) | Done | 2026-11-12 | 12 providers, 16 repos, seed, ARCHITECTURE. |
-| P04 | Design System (Tokens + 42 components + 4 hooks + Gallery + docs) | Done | 2026-11-14 | Reanimated 4 عبر mock (ADR-0011). 565 اختباراً، 71 suite. |
-| P05 | Shell + Onboarding (Navigation, App Shell, Splash & Onboarding) | **Done** | **2026-11-16** | 3 أجزاء. **623 اختباراً ناجحاً، CI أخضر بالكامل** (بتقرير المستخدم). ADR-0012…0015. |
-| P06 | Auth / Profile / Settings / Legal | Not Started | — | التزام بسياسة الخصوصية وحقوق الأدوار. |
+| P01 | Requirements, Architecture & Agent Governance | Done | 2026-11-08 | وثائق فقط (`AGENT_RULES §6`). |
+| P02 | Init (Expo + TS strict + ESLint + Jest + i18n + بنية) | Done | 2026-11-09 | SDK 58، React 19.3، RN 0.88.1، Node 26، ESLint 9. |
+| P03 | Core Platform | Done | 2026-11-12 | 12 providers، 16 repos، seed، ARCHITECTURE. |
+| P04 | Design System | Done | 2026-11-14 | 42 مكوّناً، 565 اختباراً، 71 suite. |
+| P05 | Shell + Onboarding | Done | 2026-11-16 | 3 أجزاء. 623 اختباراً. ADR-0012…0015. |
+| P06 | **Auth / Profile / Settings / Legal** | **Done** | **2026-11-16** | 3 أجزاء. **110/110 suites · 780/780 tests · CI أخضر بلا تحذيرات** (بتقرير المالك). ADR-0016…0022 + `docs/INTEGRATIONS.md`. |
 | P07 | Home | Not Started | — | كل بلاطة إما تعمل أو `Not Connected`. |
-| P08 | Assistance + Eligibility | Not Started | — | **محجوب** حتى قرارات الاستحقاق ونطاقات الدخل وأوزان التقييم. |
-| P09 | Financial Architecture | Not Started | — | Non-Custodial، لا محفظة ولا Escrow، لا دفع تجريبي. |
+| P08 | Assistance + Eligibility | Not Started | — | **محجوب** حتى قرارات الاستحقاق والدخل والأوزان. |
+| P09 | Financial Architecture | Not Started | — | Non-Custodial، لا دفع تجريبي. |
 | P10 | Group Weddings | Not Started | — | **محجوب** حتى سياسة الانسحاب. |
-| P11 | Partners + Ambassadors | Not Started | — | **محجوب** حتى قرار فئة خصومات الشركاء. |
-| P12 | Souk | Not Started | — | تبرعات عينية فقط، لا دفع داخلي. |
+| P11 | Partners + Ambassadors | Not Started | — | **محجوب** حتى فئة خصومات الشركاء. |
+| P12 | Souk | Not Started | — | تبرعات عينية فقط. |
 | P13 | Jobs + Volunteers | Not Started | — | لا بيانات تواصل عامة. |
-| P14 | Calculator + Guide | Not Started | — | الحاسبة إرشادية، والتقييم Advisory فقط. |
-| P15 | Education + Charter + Impact | Not Started | — | **محجوب** حتى الحد الأدنى لإخفاء الإحصاءات. |
-| P16 | Notifications + Search | Not Started | — | Private-first؛ يربط مصدر شارة Dock. |
-| P17 | Staff Console | Not Started | — | أدوار صريحة + RLS لاحقاً؛ يستفيد من حارس P05. |
-| P18 | Supabase (Schema + RLS + pgTAP) | Not Started | — | لا `service_role` في التطبيق. |
-| P19 | Security (Threat Model + ضوابط) | Not Started | — | يستهلك `docs/THREAT_MODEL.md`. |
-| P20 | Offline / Perf / A11y | Not Started | — | RTL وA11y جزء من DoD. |
-| P21 | Testing (Jest + RNTL + Playwright + pgTAP) | Not Started | — | لا «اختبار شكلي» بدون قيمة. |
-| P22 | GitHub Actions (CI + فحوص) | Not Started | — | فاحص الأزرار الميتة أُضيف مبكراً في P05. |
-| P23 | Docs (استكمال README + تشغيل الأدلة) | Not Started | — | يُحدَّث README هنا. |
-| P24 | Final Integration | Not Started | — | مسار كامل من Onboarding → إجراء حقيقي. |
+| P14 | Calculator + Guide | Not Started | — | إرشادي فقط. |
+| P15 | Education + Charter + Impact | Not Started | — | **محجوب** حتى حد إخفاء الإحصاءات. |
+| P16 | Notifications + Search | Not Started | — | يربط مصدر شارة Dock. |
+| P17 | Staff Console | Not Started | — | يستفيد من أدوار P06 وحارسه. |
+| P18 | Supabase (Schema + RLS + pgTAP) | Not Started | — | ينفّذ الحذف، يحفظ الصورة، يستعيد الجلسة. |
+| P19 | Security | Not Started | — | يستهلك `THREAT_MODEL.md`. |
+| P20 | Offline / Perf / A11y | Not Started | — | يشمل تحقق الأجهزة المؤجل. |
+| P21 | Testing | Not Started | — | Playwright + pgTAP. |
+| P22 | GitHub Actions | Not Started | — | الفاحص أُضيف مبكراً في P05. |
+| P23 | Docs | Not Started | — | يُستكمل README. |
+| P24 | Final Integration | Not Started | — | مسار كامل حقيقي. |
 
 ---
 
 ## قائمة تحقق P01 (تفصيل)
-
-- [x] `docs/AGENT_RULES.md` (HRD + 22 قاعدة + حلقة العمل + بيئة التنفيذ + قائمة تحقق لكل مرحلة).
-- [x] `PROJECT_CONTEXT.md` (9 أقسام مطلوبة، غير فارغة).
-- [x] `DEVELOPMENT_PROGRESS.md` (24 مرحلة مدرجة).
-- [x] `docs/DECISIONS.md` (قالب ADR + 6 قرارات مسجَّلة).
-- [x] `docs/PRODUCT_POLICIES.md` (8 قرارات بشرية معلَّمة صراحةً).
-- [x] `docs/GLOSSARY.md` و`docs/ASSET_LICENSES.md` (هيكل + تعليمات).
-- [x] `docs/THREAT_MODEL.md` (STRIDE: أصول، مهاجمون، أسطح، ضوابط).
-- [x] `README.md` (تعريف + حالة، يُستكمل في P23).
-- [x] لا كود تطبيق في P01.
-- [x] تأكيد المستخدم بتشغيل أوامر التحقق (2026-11-08).
+- [x] `docs/AGENT_RULES.md` (HRD + 22 قاعدة + حلقة العمل + بيئة التنفيذ).
+- [x] `PROJECT_CONTEXT.md` (9 أقسام) · `DEVELOPMENT_PROGRESS.md` (24 مرحلة).
+- [x] `docs/DECISIONS.md` (قالب + 6 قرارات) · `PRODUCT_POLICIES` (8 قرارات بشرية).
+- [x] `GLOSSARY` · `ASSET_LICENSES` · `THREAT_MODEL` · `README` مبدئي.
+- [x] لا كود تطبيق. تأكيد المستخدم بأوامر التحقق (2026-11-08).
 
 ## قائمة تحقق P02 (تفصيل)
-
-- [x] مشروع Expo SDK 58 (React 19.3 / RN 0.88.1).
-- [x] TypeScript strict + `noUncheckedIndexedAccess` + Path Alias `@/*`.
-- [x] ESLint flat config + Prettier + سكربتات `lint`/`format`/`typecheck`/`test`/`web:export`/`doctor`.
-- [x] Jest (jest-expo) + RNTL مع اختبارات وحدة حقيقية.
-- [x] هيكل مجلدات `src/*` مع READMEs.
-- [x] `.env.example` موثق، و`.gitignore` يمنع `.env` و keystores.
-- [x] `scripts/check-hardcoded-arabic.mjs` مربوط بسكربت `lint`.
-- [x] `app.config.ts` مع `allowBackup=false`، `supportsRTL=true`، scheme `azib`.
-- [x] CI: `npm ci` → `lint` → `typecheck` → `test`.
-- [x] شاشة Index مؤقتة (استُبدلت بالـGate في P05).
-- [x] تأكيد المستخدم بنتائج `expo-doctor` و`web:export` (2026-11-09).
-
-### فجوات أدوات أُغلقت لاحقاً
-- [x] `prettier` أُضيف في P04 (`^3.10.0`).
-- [x] `@testing-library/react-native` + `react-test-renderer` أُضيفا في P04.
-- [x] `Expo Doctor` مُفعَّل في CI.
+- [x] Expo SDK 58 · TS strict + `noUncheckedIndexedAccess` + alias `@/*`.
+- [x] ESLint flat + Prettier + سكربتات lint/format/typecheck/test/web:export/doctor.
+- [x] Jest (jest-expo) + اختبارات وحدة حقيقية.
+- [x] `.env.example` + `.gitignore` يمنع `.env` وkeystores.
+- [x] `check-hardcoded-arabic.mjs` مربوط بـ`lint`.
+- [x] `app.config.ts`: `allowBackup=false`, `supportsRTL=true`, scheme `azib`.
+- [x] CI: `npm ci` → lint → typecheck → test.
+- [x] تأكيد المستخدم بـdoctor وweb:export (2026-11-09).
 
 ## قائمة تحقق P03 (تفصيل)
-
-### Core
-- [x] `Result<T, E>` + `AppError` (8 kinds) + `toAppError` + `logger` مع redaction.
-- [x] `env` محقق بـZod مع فشل مبكر.
-- [x] `useAppModeStore` (demo | backend) مع persist.
-
-### i18n
-- [x] i18next + react-i18next + expo-localization.
-- [x] 14 namespaces ar/en (28 JSON) — صارت 15 في P05.
-- [x] Formatters (number/currency YER/date/percent) مع `Intl` + fallback.
-- [x] RTL helpers + `I18nManager.allowRTL`.
-- [x] Plurals عربية (6 صيغ).
-- [x] استبدال `src/lib/i18n.ts` القديم.
-
-### Providers
-- [x] 12 contracts + NotConnected stubs.
-- [x] 12 Mock adapters (`dataOrigin='demo'`).
-- [x] `IntegrationRegistry` (5 statuses).
-- [x] `ProviderContainer` + `ProviderContainerProvider`.
-- [x] `PaymentProvider` مطابق ADR-0005.
-- [x] `AiProvider` مطابق ADR-0006 (`advisory: true`).
-
-### Repositories
-- [x] 16 contracts + 16 mocks + Contract tests.
-- [x] `createMockCrudRepository` generic factory (6 repos).
-- [x] `RepositoryContainer` مع `searchProvider` injection.
-- [x] حذف `stubs.ts` و`stubs.test.ts`.
-
-### Seed & Components
-- [x] 15 مجموعة seed بـ`dataOrigin='demo'`, لا PII حقيقي.
-- [x] `populateDemoSeed(container)` (13/16).
-- [x] `DemoBadge` + `NotConnectedScreen`.
-- [x] seed tests: PII, uniqueness, ISO, i18n keys.
-
-### Documentation & CI
-- [x] `docs/ARCHITECTURE.md` + تحديث الملفين + README.
-- [x] CI أخضر بعد كل جزء (بتقرير المستخدم).
+- [x] `Result<T,E>` · `AppError` (8 kinds) · `logger` مع redaction · `env` بـZod.
+- [x] i18next + 14 namespace + formatters + RTL helpers + plurals عربية.
+- [x] 12 contracts + 12 mocks + 12 NotConnected stubs + Registry + Container.
+- [x] 16 repository contracts + mocks + Contract tests + crud factory.
+- [x] 15 مجموعة seed (`dataOrigin='demo'`, بلا PII) + populator (13/16).
+- [x] `ARCHITECTURE.md` + تحديث الملفين + README. CI أخضر بعد كل جزء.
 
 ## قائمة تحقق P04 (تفصيل)
+- [x] Tokens كاملة + ThemeProvider + 4 hooks + 17 زوج WCAG AA.
+- [x] 42 مكوّناً (4 primitives · 12 forms · 3 feedback · 8 display · 2 overlays · 3 nav · 7 brand · 3 states).
+- [x] Gallery + `DESIGN_SYSTEM.md` + ADR-0009/0010/0011.
+- [x] P04.1 … P04.6b — كلها خضراء (565 اختباراً).
 
-### Foundations
-- [x] Tokens: colors, typography (8 variants × 2 families), spacing (13), radius (6), shadows (4), glows (3), motion.
-- [x] `ThemeProvider` + `useTheme`.
-- [x] Hooks: `useDeviceTier`, `useMotion`, `useHaptics`, `useDirection`.
-- [x] Contrast utility + 17 WCAG AA pairs.
-
-### Components (42)
-- [x] Primitives (4) · Forms (12) · Feedback (3) · Display (8) · Overlays (2) · Navigation (3) · Brand (7) · States (3) + StateView base.
-
-### Gallery & Docs
-- [x] Gallery at `/gallery`.
-- [x] `docs/DESIGN_SYSTEM.md` كامل.
-- [x] ADR-0009 (fonts), ADR-0010 (lucide), ADR-0011 (Reanimated mock).
-
-### Sub-part CI
-- [x] P04.1 … P04.6b — كلها خضراء.
-
-### Known deferred (تتبَّع في PROJECT_CONTEXT §8)
-- [ ] `RingProgress` animation → مؤجل (لم يُنفَّذ في P05).
-- [ ] `BottomSheet` multi-snap → P20 إن لزم.
-- [ ] `Tabs` scrollable → P07+ إن لزم.
-- [ ] `Avatar` image → P06.
-- [x] Gallery gating للإنتاج → **أُنجز مبكراً في P05.1**.
+## قائمة تحقق P05 (تفصيل)
+- [x] P05.1: routes · Gate · FloatingDock · Hosts · Banners · ErrorBoundary · NotFound · Maintenance · Deep Links · حارس Staff · Placeholders · بوابة `(dev)`.
+- [x] P05.2: AnimatedSplash (تخطي + Reduce Motion) · Onboarding 5 خطوات · حفظ اللغة + forceRTL + Bootstrap · namespace `onboarding`.
+- [x] P05.3: DevSettings · Integrations (healthCheckAll حقيقي) · `check-dead-buttons.mjs` + خطوة CI.
+- [x] 623 اختباراً ناجحاً، CI أخضر (بتقرير المالك).
 
 ---
 
-## قائمة تحقق P05 (تفصيل)
+## قائمة تحقق P06 (تفصيل)
 
-### P05.1 — الهيكل الأساسي
-- [x] `src/constants/routes.ts`: مصدر وحيد للمسارات + `TABS` + `href()` متوافق مع typed-routes.
-- [x] متاجر: `onboarding.store` (persist) + `shell.store` (dialog/sheet/banner/badge).
-- [x] `resolveGate` نقية + `useShellGate` + `useSession` عبر TanStack Query (`AuthProvider.getSession()`).
-- [x] `app/index.tsx` = Gate رفيع (Redirect فقط، بلا منطق أعمال).
-- [x] `app/_layout.tsx`: ErrorBoundary → Query → i18n → Theme → SafeArea → Container → Toast + Hosts + Banners.
-- [x] **FloatingDock**: 5 خانات، الوسطى ذهبية مميزة، حركة اختيار (Reanimated)، Haptics خفيف، شارة، إخفاء عند الكيبورد، SafeArea، ترتيب RTL (الرئيسية يميناً).
-- [x] `TabsShell` بحارس (onboarding/auth/not-connected/error) + شريط Tabs أصلي مخفي.
-- [x] DialogHost + BottomSheetHost فوق مكوّني P04، مع منع التكدس المتزامن.
-- [x] OfflineBanner عبر NetInfo حقيقي + DemoBanner في وضع demo فقط.
-- [x] AppErrorBoundary عام (fallback بتوكنز ثابتة) + NotFound + Maintenance.
-- [x] Deep Links: `parseAzibUrl` + `resolveDeepLink` (allow/guarded/not-found) + `DeepLinkGuard`.
-- [x] حارس Staff deny-by-default + ForbiddenView.
-- [x] 9 شاشات ميزات + 5 تبويبات + auth + staff كـPlaceholders صادقة تذكر مرحلة البناء.
-- [x] بوابة `(dev)` للإنتاج (تحمي Gallery).
-- [x] مفاتيح `common:shell.*` في ar/en + mock لـNetInfo وexpo-splash-screen في `jest.setup.ts`.
+### P06.1 — نواة المصادقة
+- [x] `src/schemas/auth.ts`: بريد/كلمة مرور/اسم/رمز/نية دور + موافقتان، الرسائل مفاتيح i18n.
+- [x] توسيع `AuthProvider` بـ5 دوال (signUp · requestVerification · verify · requestPasswordReset · resetPassword) + `channels` — **إضافة فقط**.
+- [x] تنفيذ الدوال في Mock وNotConnected معاً؛ لا كسر لأي Contract Test.
+- [x] Mock Auth كامل: مستخدمون، تحديات، عدّاد محاولات، قفل بعد 5 محاولات فاشلة، كولداون إعادة إرسال 30s، أدوار، موافقات بنسخ.
+- [x] `auth-machine.ts` نقية: 5 حالات + كل الانتقالات الصالحة وغير الصالحة + `deriveAuthPhase`.
+- [x] `token-vault.ts`: SecureStore (`WHEN_UNLOCKED`) على الجهاز · **ذاكرة فقط على الويب** · fallback عند فشل Keychain · لا تسجيل للتوكن.
+- [x] `use-auth.ts`: signIn/signUp/verify/resend/requestReset/resetPassword/guest/signOut + تجديد تلقائي مجدول عند وجود توكنات.
+- [x] 6 شاشات: Welcome (3 مداخل + شرح حدود الضيف) · SignIn · SignUp (مؤشر قوة + موافقات + نية دور) · Verify · Forgot (منع تعداد) · Reset.
+- [x] `use-otp.ts`: محاولات + كولداون + helpers نقية.
+- [x] `auth.store`: علم الضيف (persist) + challenge وredirect في الذاكرة — **بلا توكنات**.
+- [x] `RequireAuth` + تحديث Gate → Welcome + حارسا Tabs/Staff + حالة `verify`.
+- [x] `hasStaffRole` يقرأ أدوار الجلسة (deny-by-default عند غيابها).
+- [x] `(dev)/auth`: مبدّل أدوار + عارض جلسة + رمز تجريبي.
+- [x] Deep Links: welcome/sign-up/verify/forgot/reset مسموحة.
+- [x] اختبارات: schemas · machine · vault · otp · mock flows · 4 شاشات · RequireAuth · routing-auth · DevAuth · GateScreen (محدَّث).
 
-### P05.2 — Splash + Onboarding
-- [x] `AnimatedSplash`: قمرية + اتحاد حلقتين، ظهور تدريجي، تخطي دائم، إنهاء ذاتي قصير، مرة واحدة فقط.
-- [x] بديل Reduce Motion: ثابت + مدة أقصر؛ كل المدد عبر `useMotion().duration()`.
-- [x] `OnboardingFlow`: 5 خطوات (علامة/رسالة/مميزات/خصوصية/لغة) + ProgressBar + تخطي دائم + رجوع + متابعة.
-- [x] حفظ `onboardingCompleted` والانتقال إلى sign-in (تخطي وإنهاء).
-- [x] Parallax عبر `Hero3D` (يُعطّل نفسه على Tier low وReduce Motion).
-- [x] `language.store` (persist) + `useLanguageSwitch` + `LanguageBootstrap` → forceRTL عند التبديل والإقلاع.
-- [x] ملاحظة صادقة: الاتجاه الأصلي يكتمل بعد إعادة فتح التطبيق.
-- [x] `onboarding` namespace (ar/en) + تحديث `NAMESPACES` إلى 15 + تحديث `config.test.ts`.
-- [x] حذف `OnboardingPlaceholder` المؤقت (استبدال مخطط وموثق).
+### P06.2 — الملف الشخصي والإعدادات
+- [x] `mocks/seed/locations.ts`: 6 محافظات + 10 مديريات + 7 مناطق، `nameKey` i18n، `dataOrigin='demo'`، `verificationStatus='pending-human-review'`.
+- [x] `locations.ts` نقية: childrenOf / locationChain / selectionFromId / deepestId / isValidChain.
+- [x] `use-profile.ts` عبر `ProfileRepository` — **بلا تعديل عقد**؛ الموقع في `city`.
+- [x] `image-pipeline.ts`: اختيار + قص مربع مركزي + إعادة ترميز JPEG (واجهة `manipulateAsync` المثبتة) — **فشل المعالجة ⇒ لا رفع**.
+- [x] `use-avatar-upload.ts`: رفع عبر `FileStorageProvider` + الرابط في Query cache + إزالة.
+- [x] `Avatar` يقبل `uri` (خاصية إضافية، رجوع للأحرف الأولى).
+- [x] `LocationCascade` (3 قوائم متتالية + إعادة ضبط الأبناء).
+- [x] شاشتا Profile (عرض بحالاته الثمانية) وEditProfile (RHF + Zod + أخطاء Inline).
+- [x] `settings.store`: أرقام · مظهر · رؤية الاسم · موافقة القصص · إشعارات (persist).
+- [x] Module 20: فهرس + account + language + appearance + numbers + notifications + privacy + help + about.
+- [x] `SignOutButton` بتأكيد عبر DialogHost + مسح الجلسة.
+- [x] مسارات `profile/*` (RequireAuth) و`settings/*` (حارس جزئي) + تحديث Allowlist.
+- [x] اختبارات: profile-form · locations · image-pipeline · ProfileScreen · EditProfileScreen · SettingsIndex · SettingsPreferences · settings.store.
 
-### P05.3 — Dev + الفاحص
-- [x] `DevSettingsScreen`: AppMode (مع مسح Query cache) · Tier override · اللغة/الاتجاه · الاهتزاز · عدّاد شارة Dock · روابط · إعادة ضبط Onboarding عبر DialogHost.
-- [x] `IntegrationsScreen`: 12 مزوّداً من `IntegrationRegistry` + `healthCheckAll()` حقيقي (demo→connected، backend→error).
-- [x] رابط إعدادات المطور من «حسابي» خارج الإنتاج فقط.
-- [x] `scripts/check-dead-buttons.mjs`: معالجات `on*` فارغة + `TODO`/`FIXME`، نطاق `app/` و`src/features/`، استثناء Gallery و`__tests__`.
-- [x] خطوة CI مستقلة `Dead Buttons Check` قبل Typecheck.
-- [x] اختبارات الفاحص (حالات اصطناعية: فشل/نجاح/استثناءات/خارج النطاق).
+### P06.3 — الأمان والحذف والتصدير والقانوني
+- [x] توسيع العقد بـ6 دوال → **15 capability**: changePassword · listSessions · revokeSession · requestAccountDeletion · cancelAccountDeletion · exportAccountData.
+- [x] Mock: سجل جلسات + تمييز الحالية + إنهاء + طلب حذف بإعادة مصادقة + إلغاء + تصدير بلا أسرار.
+- [x] `schemas/security.ts`: تغيير كلمة المرور (رفض المطابقة للقديمة) + تأكيد الحذف (كلمة مرور + `DELETE` + إقرار).
+- [x] `use-security.ts` · `use-account-deletion.ts` · `use-data-export.ts`.
+- [x] `biometric.ts` + `use-biometric-lock.ts` + `BiometricGate` (قفل فعلي لشاشة الأمان، تعطيل بسبب معلن).
+- [x] شاشة الأمان: نموذج تغيير كلمة المرور + مفتاح البيومتري + رابط الأجهزة.
+- [x] شاشة الأجهزة: قائمة + تمييز الحالية + إنهاء (الحالية تُخرج إلى Welcome).
+- [x] شاشة الحذف: 3 خطوات + شرح المحذوف/المجهَّل/المحتفظ + جدولة بتاريخ + إلغاء فعلي + وسم المدة غير المعتمدة.
+- [x] `export-service.ts` نقية (بناء + تسلسل + اسم ملف) و`export-file.ts` حدودية.
+- [x] **ترحيل التصدير إلى الواجهة الصنفية**: `new File(Paths.document, fileName)` + `create({overwrite:true})` + `write(json)` + `file.uri`؛ حذف حارس `NO_DOCUMENT_DIRECTORY` والاستيراد غير المستخدم.
+- [x] مسار الويب: Blob + تنزيل (بلا حزم أصلية).
+- [x] `legal-documents.ts`: 5 وثائق بنسخ `draft-1` + `requiresLegalReview: true` + مفاتيح i18n فقط.
+- [x] `LegalDocScreen` + `app/legal/[doc].tsx` + حالة مجهول صادقة.
+- [x] نصوص قانونية كاملة في `locales/{ar,en}/legal.json` + وسم مراجعة ظاهر.
+- [x] تحديث Allowlist بمسارات settings الأربعة وlegal الخمسة.
+- [x] اختبارات: security schemas · mock-auth-security · legal registry · LegalDocScreen · export-service · Security · Devices · DeleteAccount · ExportData.
 
-### الاختبارات والنتائج
-- [x] اختبارات Gate (3 مسارات + NotConnected + Loading).
-- [x] اختبارات Dock (5 خانات، تنقل، نشاط، شارة، كيبورد، **ترتيب RTL**).
-- [x] اختبارات Allowlist + DeepLinkGuard + حارس Staff.
-- [x] اختبارات Hosts/Banners/ErrorBoundary/RoutePlaceholder.
-- [x] اختبارات Splash (تخطي/إنهاء ذاتي/Reduce Motion).
-- [x] اختبارات Onboarding (ترتيب الخطوات، رجوع، تخطي، إنهاء، تبديل اللغة + forceRTL).
-- [x] اختبارات Dev + Integrations + الفاحص.
-- [x] **النتيجة النهائية: 623 اختباراً ناجحاً، لا فشل، CI أخضر بالكامل** (بتقرير المستخدم 2026-11-16).
-- [x] لا انحدار في اختبارات P04 (565) ولا P03.
+### النتيجة النهائية
+- [x] **110/110 test suites · 780/780 tests · CI أخضر بالكامل بلا أخطاء أو تحذيرات** (بتقرير المالك 2026-11-16).
+- [x] لا انحدار في P03/P04/P05 (كل Contract Tests والاختبارات السابقة خضراء).
+- [x] `lint` · `typecheck` · `expo-doctor (20/20)` · `test` · `web:export` — كلها خضراء.
 
-### دروس تنفيذية ملزمة (تُطبَّق في كل مرحلة لاحقة)
-- [x] **اسم مجلد الاختبار `__tests__` دائماً** (بشرطتين سفليتين). `jest.config.js` يتجاهل `tests` كمجلد اختبار؛ المجلد الخارجي `tests/` مسموح فقط لأنه يحتوي `__tests__` بداخله. خطأ التسمية كاد يُخفي 10 اختبارات.
-- [x] Class Components: `override` قبل `state` و`render` (قاعدة `noImplicitOverride`).
-- [x] Expo Router: `tabBar` يُمرر **prop مباشراً** لـ`<Tabs>` وليس داخل `screenOptions`.
-- [x] لا استيراد مزدوج من نفس الحزمة في ملف واحد (يُدمج في سطر واحد).
-- [x] React 19 + RNTL: `await renderHook(...)` عند الحاجة، وتغليف `fireEvent` بـ`act` عند تحديث الحالة، و`await act(async () => {})` لتحديثات Zustand.
+### إصلاحات P06.1 (سجّلها المالك)
+- [x] التقاط الحاوية داخل `useEffect` لا أثناء render (تفادي overlapping act).
+- [x] فهرسة المصفوفات بمتغير `number` محمية بـ`?? default` (`noUncheckedIndexedAccess`).
+- [x] عدم استدعاء `requestVerification` بعد `signUp` (كولداون) — بدلاً منه `challengeId`/`demoCode` داخل `pendingVerification`.
+- [x] الكولداون المحلي يبدأ عند **محاولة** الإرسال لا عند نجاحه.
+- [x] ترحيل كل الاختبارات إلى أسلوب RNTL v14.
 
-### مؤجلات P05 (موثقة في PROJECT_CONTEXT §8)
-- [ ] `seedBundle` → مؤجل بقرار المالك (لا تعديل على `repositories/container.ts`).
-- [ ] مصدر شارة الإشعارات الحقيقي → P16.
-- [ ] أدوار `AuthUser` → P06/P17 (حارس Staff يرفض الجميع حتى ذلك).
-- [ ] علم Maintenance عن بُعد → P18+.
-- [ ] أصول أيقونات التطبيق → P22/P23.
-- [ ] ضم الفاحص لسكربت `lint` → عند توفر `package.json` محدث.
-- [ ] الحركة الفعلية/Blur/رجوع Android/التدفق على الأجهزة → تحقق يدوي + P21.
+### إصلاحات P06.2 (7 دورات CI)
+- [x] `manipulateAsync` بدل الواجهة الكائنية غير الموجودة.
+- [x] `useWatch` بدل `watch` (React Compiler يفشل على التحذيرات).
+- [x] `import { StyleSheet }` صريح في كل ملف فيه `styles`.
+- [x] `expo install --fix` لإصلاح 4 patch mismatches في `package.json` + `package-lock.json` معاً (رُفض `install.exclude`).
+- [x] اختبارات الشاشات: mock لـ`Select`/`Modal` بدل محاكاة النافذة.
+- [x] `user.id` يُقرأ من الجلسة لا قيمة ثابتة.
+- [x] `setQueryData` مباشر بدل `invalidateQueries` وحده.
+- [x] `waitFor` على الحالة النهائية (busy=false) لا العنصر اللحظي.
+
+### إصلاحات P06.3 (4 مجموعات)
+- [x] **lint:** `expo-file-system` تُصدّر الواجهة الصنفية؛ الكلاسيكية في `/legacy`. ترحيل `export-file.ts` + mock ببنية `Paths`/`File` مع بادئة `mock` (شرط jest-hoist)، ونقل فحص اسم الملف إلى أول وسيط لـ`Sharing.shareAsync`.
+- [x] **test:** فهرس الإعدادات — `security` أُخرج من الصفوف النشطة، و`deleteAccount` صار بنداً معطّلاً عبر `renderUpcomingRow` (`ListItem disabled` + `subtitle = profile:settings.comingSoon`). `devices` و`exportData` نشطان. **النتيجة: انحراف موثَّق في `PROJECT_CONTEXT §8 #32`.**
+- [x] **test:** تلوّث بين اختبارات LegalDocScreen بسبب `unmount()` غير مؤجَّل داخل حلقة → `await view.unmount()` + `await waitFor(...)`. الشاشة والسجل لم يُمسّا ولم يُضعف أي تأكيد.
+- [x] **typecheck:** `const view = await render(...)` (لا تفكيك مباشر) + استيراد `waitFor`.
+
+### دروس ملزمة لكل المراحل القادمة
+- [x] **RNTL v14:** `await render(...)` · `await fireEvent.xxx(...)` · `await view.unmount()` · **لا** تغليف `fireEvent` داخل `act` · `await act(() => {...})` (callback متزامن) لتحديث المتاجر · كل `it` فيه `await` هو `async`.
+- [x] **لا side effects أثناء render** — الالتقاط من hooks داخل `useEffect`.
+- [x] **`useWatch` لا `watch`** (React Compiler مفعّل والتحذيرات تفشل CI).
+- [x] **`StyleSheet` استيراد صريح** في كل ملف يستخدم `StyleSheet.create`.
+- [x] **فهرسة مصفوفة بمتغير number ⇒ `?? default`.**
+- [x] **مجلد الاختبار `__tests__`** (بشرطتين سفليتين) دائماً.
+- [x] **لا افتراض لواجهة حزمة من الذاكرة** — تحقّق من المثبت (`npm ls` / `expo install --check`) أو اعزل الاستدعاء في وحدة حدودية واحدة (ADR-0022).
+- [x] **اختبارات الشاشات:** mock للمكونات المعتمدة على `Modal`/`Select`؛ `setQueryData` مباشر؛ `waitFor` على الحالة النهائية؛ `user.id` من الجلسة.
+- [x] **عند تغيير سلوك شاشة، حدّث اختبارها في نفس الجزء** (درس مباشر من انحراف #32).
+- [x] **أي helper جديد يُضاف لسطر الاستيراد** (درس TS2304).
+- [x] **`expo install --fix` يصلح `package.json` + `package-lock.json` معاً**؛ لا `install.exclude` لإخفاء الانحراف.
+
+### مؤجلات P06 (في PROJECT_CONTEXT §8)
+- [ ] حفظ رابط الصورة دائماً → P18 (#26).
+- [ ] تحقق إزالة EXIF على جهاز → P20 (#27).
+- [ ] تنفيذ مسح الحذف من الخادم + اعتماد المدة → P18 + قرار بشري (#29).
+- [ ] أجهزة/جلسات حقيقية وإنهاء عن بُعد → P18 (#30).
+- [ ] مراجعة قانونية للنصوص الخمسة → قبل الإطلاق (#31).
+- [ ] **قرار تفعيل صفّي الأمان والحذف في الفهرس → المالك (#32).**
+- [ ] حذف `SignInPlaceholder` مع اختباره → P07 (#33).
+- [ ] استعادة الجلسة عند الإقلاع → P18 (#35).
+- [ ] إعلان `zod` في `package.json` + ضم الفاحص لـ`lint` (#36, #23).
+- [ ] `seedBundle` → مؤجل بقرار المالك (#8).
 
 ---
 
@@ -213,6 +193,7 @@
 | 4 | سياسة الانسحاب من العرس الجماعي | P10 |
 | 5 | الاستثناء من قاعدة مساعدة واحدة | P08 |
 | 6 | الفئة المستفيدة من خصومات الشركاء | P11 |
-| 7 | مدة الاحتفاظ بالبيانات | P19 / P23 |
+| 7 | مدة الاحتفاظ بالبيانات + فترة تأكيد الحذف | P06 (#29) / P19 / P23 |
 | 8 | الحد الأدنى لإخفاء الإحصاءات | P15 / P17 |
-| 9 | تمديد عقد `AuthUser` بحقل أدوار (ADR جديد) | P06 / P17 |
+| 9 | مراجعة قانونية لنصوص Legal | الإطلاق |
+| 10 | تفعيل صفّي الأمان والحذف في فهرس الإعدادات | P06 (#32) |
