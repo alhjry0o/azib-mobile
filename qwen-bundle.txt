@@ -1,0 +1,2860 @@
+===============================================
+### FILE: src/repositories/contracts/application.ts
+===============================================
+
+```
+import type { Result } from '@/core/result';
+
+import type { BaseEntity, ListQuery, PagedResult } from '../types';
+
+export type ApplicationStatus =
+  | 'draft'
+  | 'submitted'
+  | 'reviewing'
+  | 'approved'
+  | 'rejected'
+  | 'disbursed';
+
+export interface Application extends BaseEntity {
+  readonly applicantId: string;
+  readonly programId: string;
+  readonly status: ApplicationStatus;
+  readonly requestedAmount: number;
+  readonly currency: 'YER';
+  readonly notes: string | null;
+  readonly reviewerNote: string | null;
+}
+
+export interface CreateApplicationInput {
+  readonly applicantId: string;
+  readonly programId: string;
+  readonly requestedAmount: number;
+  readonly notes?: string | null;
+}
+
+export interface ApplicationListQuery extends ListQuery {
+  readonly status?: ApplicationStatus;
+  readonly programId?: string;
+  readonly applicantId?: string;
+}
+
+export interface ApplicationRepository {
+  getById(id: string): Promise<Result<Application | null>>;
+  list(query?: ApplicationListQuery): Promise<Result<PagedResult<Application>>>;
+  listByApplicant(applicantId: string): Promise<Result<readonly Application[]>>;
+  create(input: CreateApplicationInput): Promise<Result<Application>>;
+  updateStatus(
+    id: string,
+    status: ApplicationStatus,
+    reviewerNote?: string,
+  ): Promise<Result<Application>>;
+  delete(id: string): Promise<Result<void>>;
+}
+```
+
+===============================================
+### FILE: src/repositories/contracts/wedding.ts
+===============================================
+
+```
+import type { CrudRepository, BaseEntity } from '../types';
+
+export interface Wedding extends BaseEntity {
+  readonly titleKey: string;
+  readonly scheduledDate: string;
+  readonly capacity: number;
+  readonly status: 'draft' | 'open' | 'closed' | 'completed';
+}
+
+export interface CreateWeddingInput {
+  readonly titleKey: string;
+  readonly scheduledDate: string;
+  readonly capacity: number;
+}
+
+export interface UpdateWeddingInput {
+  readonly titleKey?: string;
+  readonly scheduledDate?: string;
+  readonly capacity?: number;
+  readonly status?: Wedding['status'];
+}
+
+export type WeddingRepository = CrudRepository<Wedding, CreateWeddingInput, UpdateWeddingInput>;
+```
+
+===============================================
+### FILE: src/repositories/contracts/offer.ts
+===============================================
+
+```
+import type { CrudRepository, BaseEntity } from '../types';
+
+export interface Offer extends BaseEntity {
+  readonly partnerId: string;
+  readonly titleKey: string;
+  readonly discountPercent: number;
+  readonly status: 'draft' | 'active' | 'expired';
+}
+
+export interface CreateOfferInput {
+  readonly partnerId: string;
+  readonly titleKey: string;
+  readonly discountPercent: number;
+}
+
+export interface UpdateOfferInput {
+  readonly titleKey?: string;
+  readonly discountPercent?: number;
+  readonly status?: Offer['status'];
+}
+
+export type OfferRepository = CrudRepository<Offer, CreateOfferInput, UpdateOfferInput>;
+```
+
+===============================================
+### FILE: src/repositories/contracts/partner.ts
+===============================================
+
+```
+import type { CrudRepository, BaseEntity } from '../types';
+
+export interface Partner extends BaseEntity {
+  readonly displayName: string;
+  readonly category: string;
+  readonly status: 'draft' | 'verified' | 'suspended';
+}
+
+export interface CreatePartnerInput {
+  readonly displayName: string;
+  readonly category: string;
+}
+
+export interface UpdatePartnerInput {
+  readonly displayName?: string;
+  readonly category?: string;
+  readonly status?: Partner['status'];
+}
+
+export type PartnerRepository = CrudRepository<Partner, CreatePartnerInput, UpdatePartnerInput>;
+```
+
+===============================================
+### FILE: src/repositories/contracts/souk.ts
+===============================================
+
+```
+import type { CrudRepository, BaseEntity } from '../types';
+
+export interface SoukItem extends BaseEntity {
+  readonly titleKey: string;
+  readonly category: string;
+  readonly status: 'available' | 'reserved' | 'claimed';
+}
+
+export interface CreateSoukItemInput {
+  readonly titleKey: string;
+  readonly category: string;
+}
+
+export interface UpdateSoukItemInput {
+  readonly titleKey?: string;
+  readonly category?: string;
+  readonly status?: SoukItem['status'];
+}
+
+export type SoukRepository = CrudRepository<SoukItem, CreateSoukItemInput, UpdateSoukItemInput>;
+```
+
+===============================================
+### FILE: src/repositories/contracts/job.ts
+===============================================
+
+```
+import type { CrudRepository, BaseEntity } from '../types';
+
+export interface Job extends BaseEntity {
+  readonly titleKey: string;
+  readonly partnerId: string;
+  readonly status: 'draft' | 'open' | 'closed';
+}
+
+export interface CreateJobInput {
+  readonly titleKey: string;
+  readonly partnerId: string;
+}
+
+export interface UpdateJobInput {
+  readonly titleKey?: string;
+  readonly status?: Job['status'];
+}
+
+export type JobRepository = CrudRepository<Job, CreateJobInput, UpdateJobInput>;
+```
+
+===============================================
+### FILE: src/repositories/contracts/volunteer.ts
+===============================================
+
+```
+import type { CrudRepository, BaseEntity } from '../types';
+
+export interface Volunteer extends BaseEntity {
+  readonly userId: string;
+  readonly skillKey: string;
+  readonly status: 'active' | 'inactive';
+}
+
+export interface CreateVolunteerInput {
+  readonly userId: string;
+  readonly skillKey: string;
+}
+
+export interface UpdateVolunteerInput {
+  readonly skillKey?: string;
+  readonly status?: Volunteer['status'];
+}
+
+export type VolunteerRepository = CrudRepository<
+  Volunteer,
+  CreateVolunteerInput,
+  UpdateVolunteerInput
+>;
+```
+
+===============================================
+### FILE: src/repositories/contracts/program.ts
+===============================================
+
+```
+import type { Result } from '@/core/result';
+
+import type { BaseEntity, ListQuery, PagedResult } from '../types';
+
+export type ProgramStatus = 'draft' | 'open' | 'closed' | 'archived';
+
+export interface Program extends BaseEntity {
+  readonly nameKey: string;
+  readonly descriptionKey: string;
+  readonly status: ProgramStatus;
+  readonly minAmount: number;
+  readonly maxAmount: number;
+  readonly currency: 'YER';
+}
+
+export interface CreateProgramInput {
+  readonly nameKey: string;
+  readonly descriptionKey: string;
+  readonly status?: ProgramStatus;
+  readonly minAmount: number;
+  readonly maxAmount: number;
+}
+
+export interface UpdateProgramInput {
+  readonly nameKey?: string;
+  readonly descriptionKey?: string;
+  readonly status?: ProgramStatus;
+  readonly minAmount?: number;
+  readonly maxAmount?: number;
+}
+
+export interface ProgramRepository {
+  getById(id: string): Promise<Result<Program | null>>;
+  list(query?: ListQuery): Promise<Result<PagedResult<Program>>>;
+  create(input: CreateProgramInput): Promise<Result<Program>>;
+  update(id: string, input: UpdateProgramInput): Promise<Result<Program>>;
+  delete(id: string): Promise<Result<void>>;
+}
+```
+
+===============================================
+### FILE: src/repositories/contracts/donation.ts
+===============================================
+
+```
+import type { Result } from '@/core/result';
+
+import type { AppendOnlyRepository, BaseEntity, ListQuery, PagedResult } from '../types';
+
+export interface Donation extends BaseEntity {
+  readonly donorId: string;
+  readonly amount: number;
+  readonly currency: 'YER';
+  readonly status: 'pending' | 'confirmed' | 'declined';
+  readonly note: string | null;
+}
+
+export interface CreateDonationInput {
+  readonly donorId: string;
+  readonly amount: number;
+  readonly note?: string | null;
+}
+
+export interface DonationRepository extends AppendOnlyRepository<Donation, CreateDonationInput> {
+  listByDonor(donorId: string): Promise<Result<PagedResult<Donation>>>;
+  list(query?: ListQuery): Promise<Result<PagedResult<Donation>>>;
+}
+```
+
+===============================================
+### FILE: src/repositories/contracts/disbursement.ts
+===============================================
+
+```
+import type { Result } from '@/core/result';
+
+import type { AppendOnlyRepository, BaseEntity, ListQuery, PagedResult } from '../types';
+
+export interface Disbursement extends BaseEntity {
+  readonly applicationId: string;
+  readonly amount: number;
+  readonly currency: 'YER';
+  readonly status: 'pending' | 'confirmed';
+  readonly providerReference: string | null;
+}
+
+export interface CreateDisbursementInput {
+  readonly applicationId: string;
+  readonly amount: number;
+}
+
+export interface DisbursementRepository
+  extends AppendOnlyRepository<Disbursement, CreateDisbursementInput> {
+  listByApplication(applicationId: string): Promise<Result<PagedResult<Disbursement>>>;
+  list(query?: ListQuery): Promise<Result<PagedResult<Disbursement>>>;
+  }
+```
+
+===============================================
+### FILE: src/repositories/contracts/content.ts
+===============================================
+
+```
+import type { Result } from '@/core/result';
+
+import type { BaseEntity, ListQuery, PagedResult, ReadOnlyRepository } from '../types';
+
+export interface ContentRecord extends BaseEntity {
+  readonly slug: string;
+  readonly titleKey: string;
+  readonly bodyKey: string;
+}
+
+export interface ContentRepository extends ReadOnlyRepository<ContentRecord> {
+  getBySlug(slug: string): Promise<Result<ContentRecord | null>>;
+  list(query?: ListQuery): Promise<Result<PagedResult<ContentRecord>>>;
+}
+```
+
+===============================================
+### FILE: src/repositories/contracts/settings.ts
+===============================================
+
+```
+import type { Result } from '@/core/result';
+
+export interface Settings {
+  readonly key: string;
+  readonly value: Readonly<Record<string, unknown>>;
+  readonly updatedAt: string;
+}
+
+export interface SettingsRepository {
+  get(key: string): Promise<Result<Settings | null>>;
+  update(key: string, value: Readonly<Record<string, unknown>>): Promise<Result<Settings>>;
+}
+```
+
+===============================================
+### FILE: src/repositories/contracts/index.ts
+===============================================
+
+```
+export type {
+  Application,
+  ApplicationListQuery,
+  ApplicationRepository,
+  ApplicationStatus,
+  CreateApplicationInput,
+} from './application';
+export type {
+  AuditEntry,
+  AuditRepository,
+  CreateAuditEntryInput,
+} from './audit';
+export type {
+  ContentRecord,
+  ContentRepository,
+} from './content';
+export type {
+  CreateDisbursementInput,
+  Disbursement,
+  DisbursementRepository,
+} from './disbursement';
+export type {
+  CreateDonationInput,
+  Donation,
+  DonationRepository,
+} from './donation';
+export type {
+  CreateJobInput,
+  Job,
+  JobRepository,
+  UpdateJobInput,
+} from './job';
+export type {
+  InAppNotification,
+  NotificationRepository,
+} from './notification';
+export type {
+  CreateOfferInput,
+  Offer,
+  OfferRepository,
+  UpdateOfferInput,
+} from './offer';
+export type {
+  CreatePartnerInput,
+  Partner,
+  PartnerRepository,
+  UpdatePartnerInput,
+} from './partner';
+export type {
+  CreateProfileInput,
+  MaritalStatus,
+  Profile,
+  ProfileGender,
+  ProfileListQuery,
+  ProfileRepository,
+  UpdateProfileInput,
+} from './profile';
+export type {
+  CreateProgramInput,
+  Program,
+  ProgramRepository,
+  ProgramStatus,
+  UpdateProgramInput,
+} from './program';
+export type { SearchRepository } from './search';
+export type { Settings, SettingsRepository } from './settings';
+export type {
+  CreateSoukItemInput,
+  SoukItem,
+  SoukRepository,
+  UpdateSoukItemInput,
+} from './souk';
+export type {
+  CreateVolunteerInput,
+  UpdateVolunteerInput,
+  Volunteer,
+  VolunteerRepository,
+} from './volunteer';
+export type {
+  CreateWeddingInput,
+  UpdateWeddingInput,
+  Wedding,
+  WeddingRepository,
+} from './wedding';
+```
+
+===============================================
+### FILE: src/repositories/mock/index.ts
+===============================================
+
+```
+export type { MockRepositoryOptions } from './profile';
+export { createMockProfileRepository } from './profile';
+export { createMockApplicationRepository } from './application';
+export { createMockProgramRepository } from './program';
+export { createMockWeddingRepository } from './wedding';
+export { createMockPartnerRepository } from './partner';
+export { createMockOfferRepository } from './offer';
+export { createMockSoukRepository } from './souk';
+export { createMockJobRepository } from './job';
+export { createMockVolunteerRepository } from './volunteer';
+export { createMockDonationRepository } from './donation';
+export { createMockDisbursementRepository } from './disbursement';
+export { createMockContentRepository } from './content';
+export { createMockNotificationRepository } from './notification';
+export { createMockSearchRepository } from './search';
+export { createMockAuditRepository } from './audit';
+export { createMockSettingsRepository } from './settings';
+export { createMockCrudRepository, type CrudFactoryOptions } from './crud-factory';
+```
+
+===============================================
+### FILE: mocks/seed/types.ts
+===============================================
+
+```
+// Seed types. All demo data must carry dataOrigin='demo'.
+// Files under mocks/ are excluded from the hardcoded-Arabic check.
+// Arabic strings here are intentional: fabricated Arabic content for demo mode.
+
+import type {
+  AuditEntry,
+  ContentRecord,
+  CreateApplicationInput,
+  CreateAuditEntryInput,
+  CreateDisbursementInput,
+  CreateDonationInput,
+  CreateOfferInput,
+  CreatePartnerInput,
+  CreateProfileInput,
+  CreateProgramInput,
+  CreateSoukItemInput,
+  CreateVolunteerInput,
+  CreateWeddingInput,
+  InAppNotification,
+  Job,
+  Settings,
+} from '@/repositories/contracts';
+
+export const SEED_REFERENCE_DATE = '2026-01-01T00:00:00.000Z';
+
+/** Job uses CrudRepository without a dedicated CreateJobInput — reuse Job fields. */
+export type SeedJob = Omit<Job, 'id' | 'createdAt' | 'updatedAt' | 'dataOrigin'>;
+
+export interface SeedContentRecord {
+  slug: string;
+  titleKey: string;
+  bodyKey: string;
+}
+
+export interface SeedNotification {
+  userId: string;
+  titleKey: string;
+  bodyKey: string;
+  read: boolean;
+}
+
+export interface SeedAuditEntry extends CreateAuditEntryInput {
+  /** ISO date; if absent, SEED_REFERENCE_DATE is used. */
+  occurredAt?: string;
+}
+
+export interface SeedSettingsEntry {
+  key: string;
+  value: Readonly<Record<string, unknown>>;
+}
+
+export interface SeedBundle {
+  profiles: readonly CreateProfileInput[];
+  programs: readonly CreateProgramInput[];
+  applications: readonly CreateApplicationInput[];
+  weddings: readonly CreateWeddingInput[];
+  partners: readonly CreatePartnerInput[];
+  offers: readonly CreateOfferInput[];
+  souk: readonly CreateSoukItemInput[];
+  jobs: readonly SeedJob[];
+  volunteers: readonly CreateVolunteerInput[];
+  donations: readonly CreateDonationInput[];
+  disbursements: readonly CreateDisbursementInput[];
+  content: readonly SeedContentRecord[];
+  notifications: readonly SeedNotification[];
+  audit: readonly SeedAuditEntry[];
+  settings: readonly SeedSettingsEntry[];
+}
+
+// Re-export the shapes used by the existing contracts, so consumers have one import.
+export type {
+  AuditEntry,
+  ContentRecord,
+  CreateApplicationInput,
+  CreateDisbursementInput,
+  CreateDonationInput,
+  CreateOfferInput,
+  CreatePartnerInput,
+  CreateProfileInput,
+  CreateProgramInput,
+  CreateSoukItemInput,
+  CreateVolunteerInput,
+  CreateWeddingInput,
+  InAppNotification,
+  Settings,
+};
+```
+
+===============================================
+### FILE: mocks/seed/applications.ts
+===============================================
+
+```
+import type { CreateApplicationInput } from './types';
+
+// applicantId references seedProfiles[*].userId (cross-link within demo bundle).
+export const seedApplications: readonly CreateApplicationInput[] = [
+  {
+    applicantId: 'seed-user-1',
+    programId: 'seed-program-1',
+    requestedAmount: 150000,
+    notes: 'طلب مساعدة لتغطية تكاليف الزواج.',
+  },
+  {
+    applicantId: 'seed-user-4',
+    programId: 'seed-program-1',
+    requestedAmount: 100000,
+    notes: null,
+  },
+  {
+    applicantId: 'seed-user-3',
+    programId: 'seed-program-2',
+    requestedAmount: 250000,
+    notes: 'حالة طارئة — تم تسجيلها للتجربة.',
+  },
+];
+```
+
+===============================================
+### FILE: mocks/seed/weddings.ts
+===============================================
+
+```
+import type { CreateWeddingInput } from './types';
+
+export const seedWeddings: readonly CreateWeddingInput[] = [
+  {
+    titleKey: 'weddings.first_group_2026',
+    scheduledDate: '2026-06-15T16:00:00.000Z',
+    capacity: 40,
+  },
+  {
+    titleKey: 'weddings.spring_batch_2026',
+    scheduledDate: '2026-04-20T16:00:00.000Z',
+    capacity: 25,
+  },
+];
+```
+
+===============================================
+### FILE: mocks/seed/offers.ts
+===============================================
+
+```
+import type { CreateOfferInput } from './types';
+
+// partnerId references seedPartners by index (mock ids differ — associations in docs only).
+// Numeric fields reflect demo values, not real prices.
+export const seedOffers: readonly CreateOfferInput[] = [
+  {
+    partnerId: 'seed-partner-1',
+    titleKey: 'offers.catering_20',
+    discountPercent: 20,
+  },
+  {
+    partnerId: 'seed-partner-2',
+    titleKey: 'offers.venue_15',
+    discountPercent: 15,
+  },
+  {
+    partnerId: 'seed-partner-3',
+    titleKey: 'offers.clothing_10',
+    discountPercent: 10,
+  },
+];
+```
+
+===============================================
+### FILE: mocks/seed/souk.ts
+===============================================
+
+```
+import type { CreateSoukItemInput } from './types';
+
+// Generic Arabic item titles. Not real listings.
+export const seedSouk: readonly CreateSoukItemInput[] = [
+  { titleKey: 'souk.furniture_set', category: 'furniture' },
+  { titleKey: 'souk.kitchen_basic', category: 'kitchenware' },
+  { titleKey: 'souk.bedding_set', category: 'textiles' },
+];
+```
+
+===============================================
+### FILE: mocks/seed/jobs.ts
+===============================================
+
+```
+import type { SeedJob } from './types';
+
+export const seedJobs: readonly SeedJob[] = [
+  {
+    titleKey: 'jobs.accountant',
+    partnerId: 'seed-partner-1',
+    status: 'open',
+  },
+  {
+    titleKey: 'jobs.cashier',
+    partnerId: 'seed-partner-3',
+    status: 'open',
+  },
+  {
+    titleKey: 'jobs.photographer_assistant',
+    partnerId: 'seed-partner-4',
+    status: 'draft',
+  },
+];
+```
+
+===============================================
+### FILE: mocks/seed/programs.ts
+===============================================
+
+```
+import type { CreateProgramInput } from './types';
+
+export const seedPrograms: readonly CreateProgramInput[] = [
+  {
+    nameKey: 'programs.marriage.support',
+    descriptionKey: 'programs.marriage.support.desc',
+    status: 'open',
+    minAmount: 50000,
+    maxAmount: 300000,
+  },
+  {
+    nameKey: 'programs.emergency.wedding',
+    descriptionKey: 'programs.emergency.wedding.desc',
+    status: 'open',
+    minAmount: 100000,
+    maxAmount: 500000,
+  },
+  {
+    nameKey: 'programs.seasonal.support',
+    descriptionKey: 'programs.seasonal.support.desc',
+    status: 'draft',
+    minAmount: 20000,
+    maxAmount: 150000,
+  },
+];
+```
+
+===============================================
+### FILE: mocks/seed/content.ts
+===============================================
+
+```
+import type { SeedContentRecord } from './types';
+
+// Content references i18n keys. Actual Arabic content lands in P15.
+// We reuse existing keys to avoid inventing new namespaces here.
+export const seedContent: readonly SeedContentRecord[] = [
+  {
+    slug: 'welcome',
+    titleKey: 'learn:title',
+    bodyKey: 'learn:notConnectedYet',
+  },
+  {
+    slug: 'azib-charter',
+    titleKey: 'legal:title',
+    bodyKey: 'legal:notConnectedYet',
+  },
+];
+```
+
+===============================================
+### FILE: mocks/seed/donations.ts
+===============================================
+
+```
+import type { CreateDonationInput } from './types';
+
+// Fictional donors. Amounts are YER demo values, not real transactions.
+export const seedDonations: readonly CreateDonationInput[] = [
+  { donorId: 'seed-donor-1', amount: 100000, note: 'تبرع تجريبي.' },
+  { donorId: 'seed-donor-2', amount: 50000, note: null },
+  { donorId: 'seed-donor-3', amount: 250000, note: 'دعم برنامج الأعراس.' },
+];
+```
+
+===============================================
+### FILE: mocks/seed/disbursements.ts
+===============================================
+
+```
+import type { CreateDisbursementInput } from './types';
+
+// applicationId references applications by index in the seed bundle.
+export const seedDisbursements: readonly CreateDisbursementInput[] = [
+  { applicationId: 'seed-application-1', amount: 100000 },
+  { applicationId: 'seed-application-2', amount: 75000 },
+];
+```
+
+===============================================
+### FILE: mocks/seed/volunteers.ts
+===============================================
+
+```
+import type { CreateVolunteerInput } from './types';
+
+export const seedVolunteers: readonly CreateVolunteerInput[] = [
+  { userId: 'seed-user-2', skillKey: 'volunteer.skills.translation' },
+  { userId: 'seed-user-4', skillKey: 'volunteer.skills.teaching' },
+];
+```
+
+===============================================
+### FILE: mocks/seed/partners.ts
+===============================================
+
+```
+import type { CreatePartnerInput } from './types';
+
+// Fabricated businesses. Not real companies.
+export const seedPartners: readonly CreatePartnerInput[] = [
+  { displayName: 'مخبز النور التجريبي', category: 'catering' },
+  { displayName: 'قاعة الأمل للأفراح', category: 'venue' },
+  { displayName: 'أزياء البركة', category: 'clothing' },
+  { displayName: 'تصوير اللحظات', category: 'photography' },
+];
+```
+
+===============================================
+### FILE: src/repositories/mock/application.ts
+===============================================
+
+```
+import { AppError } from '@/core/errors';
+import { ok, type Result } from '@/core/result';
+import { CreateApplicationInputSchema } from '@/schemas/application';
+
+import type {
+  Application,
+  ApplicationListQuery,
+  ApplicationRepository,
+  ApplicationStatus,
+  CreateApplicationInput,
+} from '../contracts/application';
+import type { PagedResult } from '../types';
+import type { MockRepositoryOptions } from './profile';
+
+export function createMockApplicationRepository(
+  options: MockRepositoryOptions = {},
+): ApplicationRepository {
+  const { delayMs = 0, forceErrorKind = null } = options;
+  const byId = new Map<string, Application>();
+
+  async function simulate(): Promise<AppError | null> {
+    if (delayMs > 0) {
+      await new Promise<void>((resolve) => setTimeout(resolve, delayMs));
+    }
+    if (forceErrorKind) return AppError.fromKind(forceErrorKind, { code: 'MOCK_FORCED_ERROR' });
+    return null;
+  }
+
+  return Object.freeze({
+    async getById(id: string): Promise<Result<Application | null>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      return ok(byId.get(id) ?? null);
+    },
+
+    async list(query?: ApplicationListQuery): Promise<Result<PagedResult<Application>>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const limit = query?.limit ?? 20;
+      const offset = query?.offset ?? 0;
+      let items: Application[] = Array.from(byId.values());
+      if (query?.status) items = items.filter((a) => a.status === query.status);
+      if (query?.programId) items = items.filter((a) => a.programId === query.programId);
+      if (query?.applicantId) items = items.filter((a) => a.applicantId === query.applicantId);
+      const total = items.length;
+      items = items.slice(offset, offset + limit);
+      return ok({ items, total, limit, offset });
+    },
+
+    async listByApplicant(applicantId: string): Promise<Result<readonly Application[]>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const items = Array.from(byId.values()).filter((a) => a.applicantId === applicantId);
+      return ok(items);
+    },
+
+    async create(input: CreateApplicationInput): Promise<Result<Application>> {
+      const parsed = CreateApplicationInputSchema.safeParse(input);
+      if (!parsed.success) {
+        return { ok: false, error: AppError.validation({ cause: parsed.error }) };
+      }
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const id = `mock-application-${Date.now()}-${byId.size}`;
+      const now = new Date().toISOString();
+      const app: Application = Object.freeze({
+        id,
+        applicantId: parsed.data.applicantId,
+        programId: parsed.data.programId,
+        status: 'draft' as const,
+        requestedAmount: parsed.data.requestedAmount,
+        currency: 'YER' as const,
+        notes: parsed.data.notes ?? null,
+        reviewerNote: null,
+        createdAt: now,
+        updatedAt: now,
+        dataOrigin: 'demo' as const,
+      });
+      byId.set(id, app);
+      return ok(app);
+    },
+
+    async updateStatus(
+      id: string,
+      status: ApplicationStatus,
+      reviewerNote?: string,
+    ): Promise<Result<Application>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const existing = byId.get(id);
+      if (!existing) {
+        return { ok: false, error: AppError.notFound({ code: 'APPLICATION_NOT_FOUND' }) };
+      }
+      const updated: Application = Object.freeze({
+        ...existing,
+        status,
+        ...(reviewerNote !== undefined && { reviewerNote }),
+        updatedAt: new Date().toISOString(),
+      });
+      byId.set(id, updated);
+      return ok(updated);
+    },
+
+    async delete(id: string): Promise<Result<void>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      byId.delete(id);
+      return ok(undefined);
+    },
+  });
+}
+```
+
+===============================================
+### FILE: src/repositories/mock/wedding.ts
+===============================================
+
+```
+import { CreateWeddingInputSchema, UpdateWeddingInputSchema } from '@/schemas/wedding';
+
+import type {
+  CreateWeddingInput,
+  UpdateWeddingInput,
+  Wedding,
+  WeddingRepository,
+} from '../contracts/wedding';
+import { createMockCrudRepository } from './crud-factory';
+import type { MockRepositoryOptions } from './profile';
+
+export function createMockWeddingRepository(
+  options: MockRepositoryOptions = {},
+): WeddingRepository {
+  return createMockCrudRepository<Wedding, CreateWeddingInput, UpdateWeddingInput>({
+    idPrefix: 'mock-wedding',
+    schemaCreate: CreateWeddingInputSchema,
+    schemaUpdate: UpdateWeddingInputSchema,
+    buildEntity: ({ id, input, nowIso }) => ({
+      id,
+      titleKey: input.titleKey,
+      scheduledDate: input.scheduledDate,
+      capacity: input.capacity,
+      status: 'draft',
+      createdAt: nowIso,
+      updatedAt: nowIso,
+      dataOrigin: 'demo',
+    }),
+    applyUpdate: ({ existing, patch, nowIso }) => ({
+      ...existing,
+      ...(patch.titleKey !== undefined && { titleKey: patch.titleKey }),
+      ...(patch.scheduledDate !== undefined && { scheduledDate: patch.scheduledDate }),
+      ...(patch.capacity !== undefined && { capacity: patch.capacity }),
+      ...(patch.status !== undefined && { status: patch.status }),
+      updatedAt: nowIso,
+    }),
+    delayMs: options.delayMs,
+    forceErrorKind: options.forceErrorKind ?? null,
+  });
+}
+```
+
+===============================================
+### FILE: src/repositories/mock/offer.ts
+===============================================
+
+```
+import { CreateOfferInputSchema, UpdateOfferInputSchema } from '@/schemas/offer';
+
+import type {
+  CreateOfferInput,
+  Offer,
+  OfferRepository,
+  UpdateOfferInput,
+} from '../contracts/offer';
+import { createMockCrudRepository } from './crud-factory';
+import type { MockRepositoryOptions } from './profile';
+
+export function createMockOfferRepository(
+  options: MockRepositoryOptions = {},
+): OfferRepository {
+  return createMockCrudRepository<Offer, CreateOfferInput, UpdateOfferInput>({
+    idPrefix: 'mock-offer',
+    schemaCreate: CreateOfferInputSchema,
+    schemaUpdate: UpdateOfferInputSchema,
+    buildEntity: ({ id, input, nowIso }) => ({
+      id,
+      partnerId: input.partnerId,
+      titleKey: input.titleKey,
+      discountPercent: input.discountPercent,
+      status: 'draft',
+      createdAt: nowIso,
+      updatedAt: nowIso,
+      dataOrigin: 'demo',
+    }),
+    applyUpdate: ({ existing, patch, nowIso }) => ({
+      ...existing,
+      ...(patch.titleKey !== undefined && { titleKey: patch.titleKey }),
+      ...(patch.discountPercent !== undefined && { discountPercent: patch.discountPercent }),
+      ...(patch.status !== undefined && { status: patch.status }),
+      updatedAt: nowIso,
+    }),
+    delayMs: options.delayMs,
+    forceErrorKind: options.forceErrorKind ?? null,
+  });
+}
+```
+
+===============================================
+### FILE: app/(tabs)/index.tsx
+===============================================
+
+```
+import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { RoutePlaceholder } from '@/components/shell';
+import { ROUTES, href } from '@/constants/routes';
+
+export default function HomeScreen() {
+  const router = useRouter();
+  const { t } = useTranslation();
+  return (
+    <RoutePlaceholder
+      icon="home"
+      title={t('common:shell.features.home.title')}
+      description={t('common:shell.features.home.description')}
+      phase="P07"
+      action={{
+        label: t('common:shell.placeholder.openServices'),
+        onPress: () => router.navigate(href(ROUTES.tabs.services)),
+      }}
+      testID="home-screen"
+    />
+  );
+}
+```
+
+===============================================
+### FILE: src/constants/routes.ts
+===============================================
+
+```
+// Single source of truth for all app routes (P05 + P06).
+// No Arabic strings here. href() casts to expo-router's Href so typed-routes
+// generation (when present) stays satisfied without duplicating path literals.
+import type { Href } from 'expo-router';
+import type { IconName } from '@/components/ui';
+
+export const ROUTES = {
+  root: '/',
+  onboarding: '/(onboarding)',
+  signIn: '/(auth)/sign-in',
+  auth: {
+    welcome: '/(auth)/welcome',
+    signIn: '/(auth)/sign-in',
+    signUp: '/(auth)/sign-up',
+    verify: '/(auth)/verify',
+    forgotPassword: '/(auth)/forgot-password',
+    resetPassword: '/(auth)/reset-password',
+  },
+  tabs: {
+    home: '/(tabs)',
+    services: '/(tabs)/services',
+    weddings: '/(tabs)/weddings',
+    partners: '/(tabs)/partners',
+    account: '/(tabs)/account',
+  },
+  profile: {
+    root: '/profile',
+    edit: '/profile/edit',
+  },
+  settings: {
+    root: '/settings',
+    account: '/settings/account',
+    language: '/settings/language',
+    appearance: '/settings/appearance',
+    numbers: '/settings/numbers',
+    notifications: '/settings/notifications',
+    privacy: '/settings/privacy',
+    help: '/settings/help',
+    about: '/settings/about',
+    security: '/settings/security',
+    devices: '/settings/devices',
+    deleteAccount: '/settings/delete-account',
+    exportData: '/settings/export-data',
+  },
+  legal: {
+    terms: '/legal/terms',
+    privacy: '/legal/privacy',
+    eligibility: '/legal/eligibility',
+    weddingsWithdrawal: '/legal/weddings-withdrawal',
+    souk: '/legal/souk',
+  },
+  features: {
+    assistance: '/(features)/assistance',
+    souk: '/(features)/souk',
+    jobs: '/(features)/jobs',
+    volunteers: '/(features)/volunteers',
+    learn: '/(features)/learn',
+    calculator: '/(features)/calculator',
+    guide: '/(features)/guide',
+    notifications: '/(features)/notifications',
+    search: '/(features)/search',
+  },
+  staff: '/(staff)',
+  dev: '/(dev)',
+  devIntegrations: '/(dev)/integrations',
+  devAuth: '/(dev)/auth',
+  gallery: '/(dev)/gallery',
+  maintenance: '/maintenance',
+  notFound: '/+not-found',
+} as const;
+
+export function href(path: string): Href {
+  return path as Href;
+}
+
+export function legalDocPath(slug: string): string {
+  return `/legal/${slug}`;
+}
+
+export const TAB_ORDER = ['home', 'services', 'weddings', 'partners', 'account'] as const;
+export type TabKey = (typeof TAB_ORDER)[number];
+
+export interface TabConfig {
+  readonly key: TabKey;
+  /** Router target (group-qualified, for navigation). */
+  readonly route: string;
+  /** URL path (groups stripped, for active matching). */
+  readonly path: string;
+  readonly icon: IconName;
+  readonly labelKey: string;
+  readonly center?: boolean;
+}
+
+export const TABS: readonly TabConfig[] = [
+  { key: 'home', route: ROUTES.tabs.home, path: '/', icon: 'home', labelKey: 'common:shell.tabs.home' },
+  { key: 'services', route: ROUTES.tabs.services, path: '/services', icon: 'menu', labelKey: 'common:shell.tabs.services' },
+  { key: 'weddings', route: ROUTES.tabs.weddings, path: '/weddings', icon: 'heart', labelKey: 'common:shell.tabs.weddings', center: true },
+  { key: 'partners', route: ROUTES.tabs.partners, path: '/partners', icon: 'users', labelKey: 'common:shell.tabs.partners' },
+  { key: 'account', route: ROUTES.tabs.account, path: '/account', icon: 'user', labelKey: 'common:shell.tabs.account' },
+] as const;
+```
+
+===============================================
+### FILE: src/features/shell/use-notifications-badge.ts
+===============================================
+
+```
+// Dock badge count. Honest default: 0 (hidden) — no notification source
+// exists before P16. P16 feeds the real unread count via
+// useShellStore.setUnreadNotifications(). Keeping this hook as the single
+// read point means the Dock never changes when the source lands.
+import { useShellStore } from '@/stores';
+
+export function useNotificationsBadge(): number {
+  return useShellStore((s) => s.unreadNotifications);
+}
+```
+
+===============================================
+### FILE: src/features/shell/index.ts
+===============================================
+
+```
+export type { GateInput, GateStatus } from './routing';
+export { hasStaffRole, isTabActive, resolveGate, stripGroups } from './routing';
+export type { DeepLinkResolution } from './deep-links';
+export { parseAzibUrl, resolveDeepLink } from './deep-links';
+export { appQueryClient, makeQueryClient } from './query-client';
+export type { SessionApi } from './use-session';
+export { sessionQueryKey, useSession } from './use-session';
+export type { ShellGate } from './use-shell-gate';
+export { useShellGate } from './use-shell-gate';
+export { useOfflineStatus } from './use-offline-status';
+export { useKeyboardVisible } from './use-keyboard-visibility';
+export { useNotificationsBadge } from './use-notifications-badge';
+export type { LanguageSwitchApi } from './use-language-switch';
+export { useLanguageSwitch } from './use-language-switch';
+export { LanguageBootstrap } from './LanguageBootstrap';
+export { GateScreen } from './GateScreen';
+export { TabsShell } from './TabsShell';
+export { StaffLayoutGate } from './StaffLayoutGate';
+export { SignInPlaceholder } from './SignInPlaceholder';
+export { AccountPlaceholder } from './AccountPlaceholder';
+export { ServicesScreen } from './ServicesScreen';
+export { DeepLinkGuard } from './DeepLinkGuard';
+```
+
+===============================================
+### FILE: src/components/shell/index.ts
+===============================================
+
+```
+export { FloatingDock } from './FloatingDock';
+export { DialogHost } from './DialogHost';
+export { BottomSheetHost } from './BottomSheetHost';
+export { OfflineBanner } from './OfflineBanner';
+export { DemoBanner } from './DemoBanner';
+export { ShellBanners } from './ShellBanners';
+export { AppErrorBoundary } from './AppErrorBoundary';
+export type { RoutePlaceholderAction, RoutePlaceholderProps } from './RoutePlaceholder';
+export { RoutePlaceholder } from './RoutePlaceholder';
+export { GateLoading } from './GateLoading';
+export { ForbiddenView } from './ForbiddenView';
+export type { AnimatedSplashProps } from './AnimatedSplash';
+export { AnimatedSplash } from './AnimatedSplash';
+```
+
+===============================================
+### FILE: src/components/shell/RoutePlaceholder.tsx
+===============================================
+
+```
+// Unified honest placeholder for unbuilt sections.
+// Always states which phase builds the feature. No dead buttons:
+// the only optional button is a real, caller-provided action.
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import { Badge, Button, Icon, Screen, Text, type IconName } from '@/components/ui';
+import { useTheme } from '@/theme';
+
+export interface RoutePlaceholderAction {
+  readonly label: string;
+  readonly onPress: () => void;
+}
+
+export interface RoutePlaceholderProps {
+  readonly title: string;
+  readonly description: string;
+  /** Phase tag, e.g. 'P08'. Displayed via i18n interpolation. */
+  readonly phase: string;
+  readonly icon?: IconName;
+  readonly action?: RoutePlaceholderAction;
+  readonly testID?: string;
+}
+
+export function RoutePlaceholder({
+  title,
+  description,
+  phase,
+  icon = 'sparkles',
+  action,
+  testID,
+}: RoutePlaceholderProps) {
+  const theme = useTheme();
+  const { t } = useTranslation();
+
+  return (
+    <Screen
+      scroll
+      testID={testID}
+      contentStyle={[
+        styles.content,
+        { paddingBottom: theme.spacing[12], gap: theme.spacing[4] },
+      ]}
+    >
+      <View
+        style={[
+          styles.iconCircle,
+          {
+            borderColor: theme.colors.accent.fill,
+            backgroundColor: 'rgba(155,92,255,0.16)',
+          },
+        ]}
+      >
+        <Icon name={icon} size={28} color={theme.colors.text.accent} />
+      </View>
+      <Text variant="h2" align="center">
+        {title}
+      </Text>
+      <Text variant="body" color="secondary" align="center">
+        {description}
+      </Text>
+      <Badge
+        variant="pending"
+        label={t('common:shell.placeholder.builtIn', { phase })}
+        testID={testID ? `${testID}-phase` : undefined}
+      />
+      {action ? (
+        <Button
+          variant="secondary"
+          label={action.label}
+          onPress={action.onPress}
+          style={styles.action}
+          testID={testID ? `${testID}-action` : undefined}
+        />
+      ) : null}
+    </Screen>
+  );
+}
+
+const styles = StyleSheet.create({
+  content: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  action: { alignSelf: 'stretch', maxWidth: 280 },
+});
+```
+
+===============================================
+### FILE: src/features/auth/use-auth.ts
+===============================================
+
+```
+// Single entry point for auth actions. Screens never call providers directly.
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import type { AppError } from '@/core/errors';
+import type { Result } from '@/core/result';
+import type {
+  AuthChallenge,
+  AuthSession,
+  AuthUser,
+  ResetPasswordInput,
+  RoleIntent,
+  SignInCredentials,
+} from '@/providers';
+import { useProviderContainer } from '@/providers';
+import { useSession } from '@/features/shell/use-session';
+import { useAppModeStore, useAuthStore } from '@/stores';
+import { deriveAuthPhase, type AuthPhase } from './auth-machine';
+import { buildConsents } from './consents';
+import { createTokenVault } from './token-vault';
+
+export interface SignUpPayload extends SignInCredentials {
+  readonly displayName: string;
+  readonly roleIntent: RoleIntent;
+}
+
+export interface AuthApi {
+  readonly phase: AuthPhase;
+  readonly user: AuthUser | null;
+  readonly session: AuthSession | null;
+  readonly isGuest: boolean;
+  readonly busy: boolean;
+  readonly error: AppError | null;
+  readonly channels: readonly ('email' | 'phone')[];
+  signIn(credentials: SignInCredentials): Promise<Result<AuthSession>>;
+  signUp(payload: SignUpPayload): Promise<Result<AuthSession>>;
+  verify(code: string): Promise<Result<AuthSession>>;
+  resend(): Promise<Result<AuthChallenge>>;
+  requestReset(email: string): Promise<Result<AuthChallenge>>;
+  resetPassword(code: string, password: string): Promise<Result<void>>;
+  continueAsGuest(): void;
+  signOut(): Promise<Result<void>>;
+  clearError(): void;
+  refetch(): void;
+}
+
+const REFRESH_MARGIN_MS = 60_000;
+
+export function useAuth(): AuthApi {
+  const container = useProviderContainer();
+  const session = useSession();
+  const client = useQueryClient();
+  const modeHydrated = useAppModeStore((s) => s.hydrated);
+  const authHydrated = useAuthStore((s) => s.hydrated);
+  const guestActive = useAuthStore((s) => s.guestActive);
+  const challenge = useAuthStore((s) => s.challenge);
+  const startGuest = useAuthStore((s) => s.startGuest);
+  const endGuest = useAuthStore((s) => s.endGuest);
+  const setChallenge = useAuthStore((s) => s.setChallenge);
+
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<AppError | null>(null);
+  const vault = useMemo(() => createTokenVault(), []);
+
+  const resolved = session.result?.ok ? session.result.value : null;
+  const setSessionData = session.setSession;
+
+  const phase = deriveAuthPhase({
+    hydrated: modeHydrated && authHydrated,
+    guestActive,
+    sessionLoading: session.isLoading,
+    session: session.result,
+  });
+
+  const run = useCallback(async <T,>(fn: () => Promise<Result<T>>): Promise<Result<T>> => {
+    setBusy(true);
+    setError(null);
+    const result = await fn();
+    if (!result.ok) setError(result.error);
+    setBusy(false);
+    return result;
+  }, []);
+
+  const persist = useCallback(
+    async (value: AuthSession): Promise<void> => {
+      if (value.tokens) await vault.save(value.tokens.refreshToken);
+    },
+    [vault],
+  );
+
+  const storeChallenge = useCallback(
+    (value: AuthChallenge): void => {
+      setChallenge({
+        id: value.id,
+        channel: value.channel,
+        target: value.target,
+        expiresAt: value.expiresAt,
+        demoCode: value.demoCode ?? null,
+      });
+    },
+    [setChallenge],
+  );
+
+  const signIn = useCallback(
+    async (credentials: SignInCredentials) => {
+      const result = await run(() => container.auth.signIn(credentials));
+      if (result.ok) {
+        endGuest();
+        await persist(result.value);
+        setSessionData(result.value);
+      }
+      return result;
+    },
+    [container, run, endGuest, persist, setSessionData],
+  );
+
+  const signUp = useCallback(
+    async (payload: SignUpPayload) => {
+      const result = await run(() =>
+        container.auth.signUp({
+          displayName: payload.displayName,
+          email: payload.email,
+          password: payload.password,
+          roleIntent: payload.roleIntent,
+          consents: buildConsents(),
+        }),
+      );
+      if (result.ok) {
+        endGuest();
+        await persist(result.value);
+        setSessionData(result.value);
+        const pending = result.value.pendingVerification;
+        if (pending?.challengeId) {
+          setChallenge({
+            id: pending.challengeId,
+            channel: pending.channel,
+            target: pending.target,
+            expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+            demoCode: pending.demoCode ?? null,
+          });
+        }
+      }
+      return result;
+    },
+    [container, run, endGuest, persist, setSessionData, setChallenge],
+  );
+
+  const verify = useCallback(
+    async (code: string) => {
+      const result = await run(() =>
+        container.auth.verify({ code, challengeId: challenge?.id }),
+      );
+      if (result.ok) {
+        await persist(result.value);
+        setSessionData(result.value);
+        setChallenge(null);
+      }
+      return result;
+    },
+    [container, run, challenge, persist, setSessionData, setChallenge],
+  );
+
+  const resend = useCallback(async () => {
+    const target = resolved?.pendingVerification?.target ?? challenge?.target;
+    if (!target) {
+      const issued = await run(() =>
+        container.auth.requestVerification({ channel: 'email', target: '' }),
+      );
+      return issued;
+    }
+    const result = await run(() =>
+      container.auth.requestVerification({ channel: 'email', target }),
+    );
+    if (result.ok) storeChallenge(result.value);
+    return result;
+  }, [container, run, resolved, challenge, storeChallenge]);
+
+  const requestReset = useCallback(
+    async (email: string) => {
+      const result = await run(() => container.auth.requestPasswordReset({ email }));
+      if (result.ok) storeChallenge(result.value);
+      return result;
+    },
+    [container, run, storeChallenge],
+  );
+
+  const resetPassword = useCallback(
+    async (code: string, password: string) => {
+      const input: ResetPasswordInput = {
+        challengeId: challenge?.id ?? '',
+        code,
+        password,
+      };
+      const result = await run(() => container.auth.resetPassword(input));
+      if (result.ok) setChallenge(null);
+      return result;
+    },
+    [container, run, challenge, setChallenge],
+  );
+
+  const continueAsGuest = useCallback((): void => {
+    setError(null);
+    startGuest();
+    setSessionData(null);
+  }, [startGuest, setSessionData]);
+
+  const signOut = useCallback(async () => {
+    const result = await run(() => container.auth.signOut());
+    if (result.ok) {
+      await vault.clear();
+      endGuest();
+      setChallenge(null);
+      setSessionData(null);
+      client.clear();
+    }
+    return result;
+  }, [run, container, vault, endGuest, setChallenge, setSessionData, client]);
+
+  const clearError = useCallback(() => setError(null), []);
+
+  // Automatic refresh, scheduled only when the session actually carries tokens.
+  useEffect(() => {
+    if (!resolved?.tokens) return;
+    const delay = Math.max(
+      5_000,
+      new Date(resolved.expiresAt).getTime() - Date.now() - REFRESH_MARGIN_MS,
+    );
+    const timer = setTimeout(() => {
+      void container.auth.refreshSession().then((result) => {
+        if (result.ok && result.value) setSessionData(result.value);
+      });
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [resolved, container, setSessionData]);
+
+  return {
+    phase,
+    user: resolved?.user ?? null,
+    session: resolved,
+    isGuest: phase === 'guest',
+    busy,
+    error,
+    channels: container.auth.channels,
+    signIn,
+    signUp,
+    verify,
+    resend,
+    requestReset,
+    resetPassword,
+    continueAsGuest,
+    signOut,
+    clearError,
+    refetch: session.refetch,
+  };
+}
+```
+
+===============================================
+### FILE: src/stores/settings.store.ts
+===============================================
+
+```
+// Client preferences only (ADR-0002). No server data, no PII, no tokens.
+// Server-side enforcement of visibility/consents lands with P18.
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
+export type NumberSystem = 'latn' | 'arab';
+/** Only dark exists today (P04). Light/system are offered later. */
+export type AppearanceMode = 'dark';
+export type ProfileVisibility = 'private' | 'reviewers';
+export type NotificationCategory = 'assistance' | 'weddings' | 'marketplace';
+
+export interface NotificationPrefs {
+  readonly enabled: boolean;
+  readonly assistance: boolean;
+  readonly weddings: boolean;
+  readonly marketplace: boolean;
+}
+
+export interface SettingsState {
+  numberSystem: NumberSystem;
+  appearance: AppearanceMode;
+  visibility: ProfileVisibility;
+  /** Optional consent: publishing success stories. Default off. */
+  storiesConsent: boolean;
+  notifications: NotificationPrefs;
+  /** Optional biometric lock for sensitive screens (P06.3). */
+  biometricLock: boolean;
+  hydrated: boolean;
+  setNumberSystem: (value: NumberSystem) => void;
+  setAppearance: (value: AppearanceMode) => void;
+  setVisibility: (value: ProfileVisibility) => void;
+  setStoriesConsent: (value: boolean) => void;
+  setNotificationsEnabled: (value: boolean) => void;
+  setNotificationCategory: (category: NotificationCategory, value: boolean) => void;
+  setBiometricLock: (value: boolean) => void;
+  /** Internal: used by persist middleware only. */
+  _setHydrated: (hydrated: boolean) => void;
+}
+
+export const SETTINGS_STORAGE_KEY = 'azib.settings.v1';
+
+const DEFAULT_NOTIFICATIONS: NotificationPrefs = Object.freeze({
+  enabled: true,
+  assistance: true,
+  weddings: true,
+  marketplace: false,
+});
+
+export const useSettingsStore = create<SettingsState>()(
+  persist(
+    (set) => ({
+      numberSystem: 'latn',
+      appearance: 'dark',
+      visibility: 'private',
+      storiesConsent: false,
+      notifications: DEFAULT_NOTIFICATIONS,
+      biometricLock: false,
+      hydrated: false,
+      setNumberSystem: (numberSystem) => set({ numberSystem }),
+      setAppearance: (appearance) => set({ appearance }),
+      setVisibility: (visibility) => set({ visibility }),
+      setStoriesConsent: (storiesConsent) => set({ storiesConsent }),
+      setNotificationsEnabled: (value) =>
+        set((state) => ({ notifications: { ...state.notifications, enabled: value } })),
+      setNotificationCategory: (category, value) =>
+        set((state) => ({ notifications: { ...state.notifications, [category]: value } })),
+      setBiometricLock: (biometricLock) => set({ biometricLock }),
+      _setHydrated: (hydrated) => set({ hydrated }),
+    }),
+    {
+      name: SETTINGS_STORAGE_KEY,
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state) => ({
+        numberSystem: state.numberSystem,
+        appearance: state.appearance,
+        visibility: state.visibility,
+        storiesConsent: state.storiesConsent,
+        notifications: state.notifications,
+        biometricLock: state.biometricLock,
+      }),
+      onRehydrateStorage: () => (state) => {
+        state?._setHydrated(true);
+      },
+    },
+  ),
+);
+```
+
+===============================================
+### FILE: src/stores/index.ts
+===============================================
+
+```
+export type { AppMode, AppModeState } from './app-mode.store';
+export { useAppModeStore, APP_MODE_STORAGE_KEY } from './app-mode.store';
+export type { OnboardingState } from './onboarding.store';
+export { useOnboardingStore, ONBOARDING_STORAGE_KEY } from './onboarding.store';
+export type { ShellDialogOptions, ShellSheetOptions, ShellState } from './shell.store';
+export { useShellStore } from './shell.store';
+export type { LanguageState } from './language.store';
+export { useLanguageStore, LANGUAGE_STORAGE_KEY } from './language.store';
+export type { AuthChallengeState, AuthState } from './auth.store';
+export { useAuthStore, AUTH_STORAGE_KEY } from './auth.store';
+export type {
+  AppearanceMode,
+  NotificationCategory,
+  NotificationPrefs,
+  NumberSystem,
+  ProfileVisibility,
+  SettingsState,
+} from './settings.store';
+export { useSettingsStore, SETTINGS_STORAGE_KEY } from './settings.store';
+```
+
+===============================================
+### FILE: src/i18n/formatters.ts
+===============================================
+
+```
+// Locale-aware formatters. Uses Intl directly (available on Node 26, browsers, Hermes RN 0.88).
+// Fallbacks only trigger if Intl or a locale is unavailable; warnings are logged, not thrown.
+
+import { logger } from '@/core/logger';
+
+import type { SupportedLanguage } from './config';
+
+export type NumeralSystem = 'latn' | 'arab';
+export type DateStyle = 'short' | 'medium' | 'long';
+
+export interface FormatOptions {
+  readonly language?: SupportedLanguage;
+  readonly numerals?: NumeralSystem;
+}
+
+const DEFAULT_LANGUAGE: SupportedLanguage = 'ar';
+const DEFAULT_NUMERALS_AR: NumeralSystem = 'arab';
+const DEFAULT_NUMERALS_EN: NumeralSystem = 'latn';
+const CURRENCY_CODE = 'YER';
+
+function resolve(language: SupportedLanguage | undefined, numerals: NumeralSystem | undefined): {
+  language: SupportedLanguage;
+  numerals: NumeralSystem;
+} {
+  const lang = language ?? DEFAULT_LANGUAGE;
+  const nums = numerals ?? (lang === 'ar' ? DEFAULT_NUMERALS_AR : DEFAULT_NUMERALS_EN);
+  return { language: lang, numerals: nums };
+}
+
+export function isIntlAvailable(): boolean {
+  return (
+    typeof Intl !== 'undefined' &&
+    typeof Intl.NumberFormat === 'function' &&
+    typeof Intl.DateTimeFormat === 'function'
+  );
+}
+
+export function formatNumber(value: number, opts: FormatOptions = {}): string {
+  const { language, numerals } = resolve(opts.language, opts.numerals);
+  if (!isIntlAvailable()) return String(value);
+  try {
+    return new Intl.NumberFormat(language, { numberingSystem: numerals }).format(value);
+  } catch (e) {
+    logger.warn('formatNumber failed', { error: e });
+    return String(value);
+  }
+}
+
+export function formatCurrency(amount: number, opts: FormatOptions = {}): string {
+  const { language, numerals } = resolve(opts.language, opts.numerals);
+  if (!isIntlAvailable()) {
+    const suffix = language === 'ar' ? 'ر.ي' : 'YER';// i18n-allow-arabic
+    return `${String(amount)} ${suffix}`;
+  }
+  try {
+    return new Intl.NumberFormat(language, {
+      style: 'currency',
+      currency: CURRENCY_CODE,
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+      numberingSystem: numerals,
+    }).format(amount);
+  } catch (e) {
+    logger.warn('formatCurrency failed', { error: e });
+    const suffix = language === 'ar' ? 'ر.ي' : 'YER';// i18n-allow-arabic
+    return `${String(amount)} ${suffix}`;
+  }
+}
+
+export function formatDate(
+  input: Date | string | number,
+  style: DateStyle = 'medium',
+  opts: FormatOptions = {},
+): string {
+  const date = input instanceof Date ? input : new Date(input);
+  if (Number.isNaN(date.getTime())) {
+    logger.warn('formatDate received invalid date', { input: String(input) });
+    return '';
+  }
+  const { language, numerals } = resolve(opts.language, opts.numerals);
+  if (!isIntlAvailable()) {
+    return date.toISOString().slice(0, 10);
+  }
+  try {
+    return new Intl.DateTimeFormat(language, {
+      dateStyle: style,
+      numberingSystem: numerals,
+    }).format(date);
+  } catch (e) {
+    logger.warn('formatDate failed', { error: e });
+    return date.toISOString().slice(0, 10);
+  }
+}
+
+export function formatPercent(ratio: number, opts: FormatOptions = {}): string {
+  const { language, numerals } = resolve(opts.language, opts.numerals);
+  if (!isIntlAvailable()) return `${String(Math.round(ratio * 100))}%`;
+  try {
+    return new Intl.NumberFormat(language, {
+      style: 'percent',
+      maximumFractionDigits: 1,
+      numberingSystem: numerals,
+    }).format(ratio);
+  } catch (e) {
+    logger.warn('formatPercent failed', { error: e });
+    return `${String(Math.round(ratio * 100))}%`;
+  }
+}
+```
+
+===============================================
+### FILE: src/locales/ar/home.json
+===============================================
+
+```
+{
+  "title": "الرئيسية",
+  "notConnectedYet": "الرئيسية ستُبنى في P07."
+}
+```
+
+===============================================
+### FILE: src/locales/en/home.json
+===============================================
+
+```
+{
+  "title": "Home",
+  "notConnectedYet": "Home will be built in P07."
+}
+```
+
+===============================================
+### FILE: src/features/shell/__tests__/test-utils.tsx
+===============================================
+
+```
+import { useState, type ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { act } from '@testing-library/react-native';
+import { ToastProvider } from '@/components/ui';
+import { Providers } from '@/components/ui/__tests__/test-utils';
+import { setLanguage } from '@/i18n';
+import { ProviderContainerProvider } from '@/providers';
+import type { AuthSession } from '@/providers';
+import { useAppModeStore, useOnboardingStore, useShellStore } from '@/stores';
+
+export function createTestQueryClient(): QueryClient {
+  return new QueryClient({
+    defaultOptions: { queries: { retry: false, gcTime: Infinity } },
+  });
+}
+
+export function ShellProviders({
+  children,
+  client,
+}: {
+  children: ReactNode;
+  client?: QueryClient;
+}) {
+  const [queryClient] = useState(() => client ?? createTestQueryClient());
+  return (
+    <Providers>
+      <QueryClientProvider client={queryClient}>
+        <ProviderContainerProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </ProviderContainerProvider>
+      </QueryClientProvider>
+    </Providers>
+  );
+}
+
+export async function resetShellStores(): Promise<void> {
+  await act(async () => {
+    useAppModeStore.setState({ mode: 'demo', hydrated: true });
+    useOnboardingStore.setState({ completed: false, hydrated: true });
+    useShellStore.setState({
+      dialog: null,
+      sheet: null,
+      demoBannerDismissed: false,
+      unreadNotifications: 0,
+    });
+  });
+}
+
+export async function resetLanguageToArabic(): Promise<void> {
+  await act(async () => {
+    await setLanguage('ar');
+  });
+}
+
+export function makeDemoSession(): AuthSession {
+  return {
+    user: {
+      id: 'demo-user-test',
+      email: 'demo@azib.invalid',
+      phone: null,
+      displayName: 'Demo User',
+      dataOrigin: 'demo',
+      createdAt: new Date().toISOString(),
+    },
+    expiresAt: new Date(Date.now() + 3_600_000).toISOString(),
+  };
+}
+```
+
+===============================================
+### FILE: docs/PRODUCT_POLICIES.md
+===============================================
+
+```
+# PRODUCT_POLICIES — سياسات منتج بانتظار قرار بشري
+
+> **كل قيمة في هذا الملف افتراضية مؤقتة.** لا يملك الوكيل صلاحية اعتمادها.
+> صيغة كل بند: **القيمة الحالية = (قيمة افتراضية مؤقتة) | الحالة = بانتظار قرار بشري**.
+> عند اعتماد القرار: يُحدَّث الملف، ويُسجَّل قرار الاعتماد في `docs/DECISIONS.md`، وتُرفع الحالة إلى `معتمد من المالك`.
+> **عام المستودع:** لا بيانات شخصية ولا أسرار.
+
+---
+
+## 1) حدود الاستحقاق ونطاقات الدخل
+
+- **القيمة الحالية = (حد أدنى مؤقت 0 YER، حد أعلى مؤقت 150,000 YER شهرياً للفرد، 250,000 YER للأسرة)**
+- الحالة = **بانتظار قرار بشري**
+- يحجب: P08
+- يحدد فيه المالك: العملة (YER)، هل الدخل شهري/سنوي، هل يشمل دخل الأسرة الممتدة، ما يُحتسب من الدخل، معالجة الدخل غير المنتظم.
+- ملفات التحقق المطلوب توثيقها قبل التنفيذ: المصدر، التاريخ، من اعتمد، ما يُفعل بالمستفيدين على الحد.
+
+---
+
+## 2) أوزان التقييم الآلي (Advisory)
+
+- **القيمة الحالية = (وزن مؤقت متساوٍ لكل عامل: الدخل، حجم الأسرة، الحالة السكنية، الالتزامات)**
+- الحالة = **بانتظار قرار بشري**
+- يحجب: P08 / P14
+- المالك يحدد: قائمة العوامل، وزن كل عامل، سلّم التقييم، ما يُستبعد صراحةً (مثلاً: لا يُستخدم الجنس/الأصل الجغرافي كعامل).
+- **قيد حاكم:** التقييم Advisory فقط (ADR-0006).
+
+---
+
+## 3) مدة الاعتراض على قرار الأهلية
+
+- **القيمة الحالية = (14 يوماً من تاريخ إشعار القرار)**
+- الحالة = **بانتظار قرار بشري**
+- يحجب: P08
+- المالك يحدد: المدة، من يراجع الاعتراض، هل يُوقف الاعتراض صرف المساعدة، كيف يُبلَّغ المستخدم بالنتيجة.
+
+---
+
+## 4) سياسة الانسحاب من العرس الجماعي
+
+- **القيمة الحالية = (انسحاب مسموح حتى 30 يوماً قبل الموعد مع إعادة تقييم الأهلية)**
+- الحالة = **بانتظار قرار بشري**
+- يحجب: P10
+- المالك يحدد: نافذة الانسحاب، التبعات المالية (إن وجدت والتزاماً بقاعدة Non-Custodial)، ما يحدث للدعم المرتبط، كيف يُعالج الانسحاب بعد الموعد.
+
+---
+
+## 5) الاستثناء من قاعدة «مساعدة واحدة»
+
+- **القيمة الحالية = (لا استثناء افتراضياً)**
+- الحالة = **بانتظار قرار بشري**
+- يحجب: P08
+- المالك يحدد: هل يوجد استثناء، من يوافق عليه (دور)، ما حدوده، هل يُسجَّل بمرجع، هل يُدرج ضمن التقارير.
+
+---
+
+## 6) الفئة المستفيدة من خصومات الشركاء
+
+- **القيمة الحالية = (المستفيدون المعتمدون فقط)**
+- الحالة = **بانتظار قرار بشري**
+- يحجب: P11
+- المالك يحدد: هل تشمل الفئة: أعضاء، متقدمون، متبرعون، متطوعون، سفراء؛ هل الخصم عام أو بكود؛ هل يُسمح بتراكمه مع عروض أخرى.
+- **قيد حاكم:** لا تُكشف هوية المستفيد للشريك؛ يكفي إثبات الاستحقاق.
+
+---
+
+## 7) مدة الاحتفاظ بالبيانات
+
+- **القيمة الحالية = (24 شهراً للسجلات المالية، 12 شهراً لسجلات الدعم، 6 أشهر للسجلات التقنية)**
+- الحالة = **بانتظار قرار بشري**
+- يحجب: P19 / P23
+- المالك يحدد: لكل نوع بيانات (PII، مالية، دعم، سجلات تقنية، سجلات مراجعة): مدة الاحتفاظ، ما يُحذف/يُجهَّل، من ينفّذ الحذف، كيف يُثبت الحذف.
+- **قيد حاكم:** الحذف لا يمس السجلات المطلوبة قانونياً (تُحدَّد).
+
+---
+
+## 8) الحد الأدنى لإخفاء الإحصاءات
+
+- **القيمة الحالية = (لا تُعرض إحصائية لمجموعة < 10 أفراد)**
+- الحالة = **بانتظار قرار بشري**
+- يحجب: P15 / P17
+- المالك يحدد: الحد الأدنى، هل يُخفى الرقم أو يُجمَّع في نطاق، كيف يُعالج النشر عبر التصدير.
+- **قيد حاكم:** لا كشف لبيانات المستفيدين (AGENT_RULES §1 #20).
+
+---
+
+## جدول ملخّص
+
+| # | القرار | الافتراضي المؤقت | الحالة | يحجب |
+|---|---------|-------------------|--------|------|
+| 1 | حدود الاستحقاق ونطاقات الدخل | 0–150k فرد / 250k أسرة | بانتظار قرار بشري | P08 |
+| 2 | أوزان التقييم الآلي | متساوية | بانتظار قرار بشري | P08 / P14 |
+| 3 | مدة الاعتراض | 14 يوماً | بانتظار قرار بشري | P08 |
+| 4 | الانسحاب من العرس الجماعي | حتى 30 يوماً قبل | بانتظار قرار بشري | P10 |
+| 5 | الاستثناء من مساعدة واحدة | لا استثناء | بانتظار قرار بشري | P08 |
+| 6 | فئة خصومات الشركاء | المستفيدون المعتمدون | بانتظار قرار بشري | P11 |
+| 7 | الاحتفاظ بالبيانات | 24/12/6 شهراً | بانتظار قرار بشري | P19 / P23 |
+| 8 | إخفاء الإحصاءات | < 10 أفراد | بانتظار قرار بشري | P15 / P17 |
+```
+```
+
+===============================================
+### FILE: src/features/dev/DevSettingsScreen.tsx
+===============================================
+
+```
+// Internal developer settings (hidden in production by app/(dev)/_layout.tsx).
+// Every control writes to a real store/provider and gives immediate feedback.
+import type { ReactNode } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import {
+  Badge,
+  Button,
+  Card,
+  Icon,
+  ListItem,
+  Screen,
+  SegmentedControl,
+  Switch,
+  Text,
+} from '@/components/ui';
+import { ROUTES, href } from '@/constants/routes';
+import { useLanguageSwitch } from '@/features/shell/use-language-switch';
+import { useDeviceTier, useDeviceTierStore, useDirection, useHapticsStore } from '@/hooks';
+import type { DeviceTier } from '@/hooks';
+import { useAppModeStore, useOnboardingStore, useShellStore } from '@/stores';
+import type { AppMode } from '@/stores';
+import { useTheme } from '@/theme';
+
+type TierChoice = DeviceTier | 'auto';
+
+function DevSection({
+  title,
+  description,
+  testID,
+  children,
+}: {
+  readonly title: string;
+  readonly description?: string;
+  readonly testID?: string;
+  readonly children: ReactNode;
+}) {
+  const theme = useTheme();
+  return (
+    <Card testID={testID} style={{ gap: theme.spacing[3] }}>
+      <Text variant="h3">{title}</Text>
+      {description ? (
+        <Text variant="caption" color="secondary">
+          {description}
+        </Text>
+      ) : null}
+      {children}
+    </Card>
+  );
+}
+
+export function DevSettingsScreen() {
+  const theme = useTheme();
+  const router = useRouter();
+  const { t } = useTranslation();
+  const { direction, isRTL } = useDirection();
+  const queryClient = useQueryClient();
+
+  const mode = useAppModeStore((s) => s.mode);
+  const setMode = useAppModeStore((s) => s.setMode);
+  const override = useDeviceTierStore((s) => s.override);
+  const setOverride = useDeviceTierStore((s) => s.setOverride);
+  const { tier } = useDeviceTier();
+  const { language, switchLanguage } = useLanguageSwitch();
+  const hapticsEnabled = useHapticsStore((s) => s.enabled);
+  const setHapticsEnabled = useHapticsStore((s) => s.setEnabled);
+  const unread = useShellStore((s) => s.unreadNotifications);
+  const setUnread = useShellStore((s) => s.setUnreadNotifications);
+  const openDialog = useShellStore((s) => s.openDialog);
+  const resetOnboarding = useOnboardingStore((s) => s.reset);
+
+  const changeMode = (next: AppMode): void => {
+    if (next === mode) return;
+    setMode(next);
+    queryClient.clear();
+  };
+
+  const confirmResetOnboarding = (): void => {
+    openDialog({
+      title: t('common:shell.dev.resetOnboarding.title'),
+      description: t('common:shell.dev.resetOnboarding.description'),
+      confirmLabel: t('common:shell.dev.resetOnboarding.confirm'),
+      cancelLabel: t('common:buttons.cancel'),
+      destructive: true,
+      onConfirm: () => {
+        resetOnboarding();
+        router.replace(href(ROUTES.onboarding));
+      },
+    });
+  };
+
+  return (
+    <Screen
+      scroll
+      testID="dev-settings-screen"
+      contentStyle={{ paddingBottom: theme.spacing[12], gap: theme.spacing[4] }}
+    >
+      <Button
+        variant="ghost"
+        size="sm"
+        leftIcon="arrowLeft"
+        label={t('common:shell.dev.backToAccount')}
+        onPress={() => router.replace(href(ROUTES.tabs.account))}
+        testID="dev-back"
+        style={styles.backButton}
+      />
+      <View
+        style={[
+          styles.titleRow,
+          { flexDirection: isRTL ? 'row-reverse' : 'row', gap: theme.spacing[3] },
+        ]}
+      >
+        <Text variant="h1" style={styles.title}>
+          {t('common:shell.dev.title')}
+        </Text>
+        <Badge variant="accent" label={t('common:shell.dev.badgeLabel')} testID="dev-badge" />
+      </View>
+      <Text variant="body" color="secondary">
+        {t('common:shell.dev.description')}
+      </Text>
+
+      <DevSection
+        title={t('common:shell.dev.mode.title')}
+        description={t('common:shell.dev.mode.description')}
+        testID="dev-mode-card"
+      >
+        <SegmentedControl
+          segments={[
+            { value: 'demo' as const, label: t('common:shell.dev.mode.demo') },
+            { value: 'backend' as const, label: t('common:shell.dev.mode.backend') },
+          ]}
+          value={mode}
+          onChange={changeMode}
+          testID="dev-mode-control"
+        />
+      </DevSection>
+
+      <DevSection
+        title={t('common:shell.dev.tier.title')}
+        description={t('common:shell.dev.tier.description', { tier })}
+        testID="dev-tier-card"
+      >
+        <SegmentedControl<TierChoice>
+          segments={[
+            { value: 'auto', label: t('common:shell.dev.tier.auto') },
+            { value: 'high', label: t('common:shell.dev.tier.high') },
+            { value: 'mid', label: t('common:shell.dev.tier.mid') },
+            { value: 'low', label: t('common:shell.dev.tier.low') },
+          ]}
+          value={override ?? 'auto'}
+          onChange={(value) => setOverride(value === 'auto' ? null : value)}
+          testID="dev-tier-control"
+        />
+      </DevSection>
+
+      <DevSection
+        title={t('common:shell.dev.language.title')}
+        description={t('common:shell.dev.language.description', { direction })}
+        testID="dev-language-card"
+      >
+        <SegmentedControl
+          segments={[
+            { value: 'ar' as const, label: t('common:language.arabic') },
+            { value: 'en' as const, label: t('common:language.english') },
+          ]}
+          value={language}
+          onChange={(value) => {
+            void switchLanguage(value);
+          }}
+          testID="dev-language-control"
+        />
+        <Text variant="caption" color="secondary">
+          {t('common:shell.dev.language.note')}
+        </Text>
+      </DevSection>
+
+      <DevSection
+        title={t('common:shell.dev.haptics.title')}
+        description={t('common:shell.dev.haptics.description')}
+        testID="dev-haptics-card"
+      >
+        <Switch
+          value={hapticsEnabled}
+          onValueChange={setHapticsEnabled}
+          label={t('common:shell.dev.haptics.toggle')}
+          testID="dev-haptics-switch"
+        />
+      </DevSection>
+
+      <DevSection
+        title={t('common:shell.dev.dockBadge.title')}
+        description={t('common:shell.dev.dockBadge.description')}
+        testID="dev-badge-card"
+      >
+        <View
+          style={[
+            styles.badgeRow,
+            { flexDirection: isRTL ? 'row-reverse' : 'row', gap: theme.spacing[3] },
+          ]}
+        >
+          <Button
+            variant="icon"
+            size="sm"
+            leftIcon="minus"
+            accessibilityLabel={t('common:shell.dev.dockBadge.decrease')}
+            disabled={unread === 0}
+            onPress={() => setUnread(unread - 1)}
+            testID="dev-badge-minus"
+          />
+          <Text variant="h3" testID="dev-badge-count">
+            {String(unread)}
+          </Text>
+          <Button
+            variant="icon"
+            size="sm"
+            leftIcon="plus"
+            accessibilityLabel={t('common:shell.dev.dockBadge.increase')}
+            onPress={() => setUnread(unread + 1)}
+            testID="dev-badge-plus"
+          />
+        </View>
+      </DevSection>
+
+      <DevSection title={t('common:shell.dev.links.title')} testID="dev-links-card">
+        <ListItem
+          variant="card"
+          title={t('common:shell.dev.links.integrations')}
+          leading={<Icon name="info" size={20} />}
+          onPress={() => router.push(href(ROUTES.devIntegrations))}
+          testID="dev-integrations-link"
+        />
+        <ListItem
+          variant="card"
+          title={t('common:shell.dev.links.gallery')}
+          leading={<Icon name="sparkles" size={20} />}
+          onPress={() => router.push(href(ROUTES.gallery))}
+          testID="dev-gallery-link"
+        />
+      </DevSection>
+
+      <Button
+        variant="danger"
+        fullWidth
+        label={t('common:shell.dev.resetOnboarding.action')}
+        onPress={confirmResetOnboarding}
+        testID="dev-reset-onboarding"
+      />
+    </Screen>
+  );
+}
+
+const styles = StyleSheet.create({
+  backButton: { alignSelf: 'flex-start', marginTop: 8 },
+  titleRow: { alignItems: 'center', marginTop: 4 },
+  title: { flex: 1 },
+  badgeRow: { alignItems: 'center', justifyContent: 'center' },
+});
+```
+
+===============================================
+### FILE: src/features/shell/ServicesScreen.tsx
+===============================================
+
+```
+// Services hub: every row navigates to a real (honest placeholder) screen.
+import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { Icon, ListItem, Screen, Text, type IconName } from '@/components/ui';
+import { ROUTES, href } from '@/constants/routes';
+import { useTheme } from '@/theme';
+
+interface ServiceLink {
+  readonly key: string;
+  readonly route: string;
+  readonly icon: IconName;
+}
+
+const SERVICE_LINKS: readonly ServiceLink[] = [
+  { key: 'assistance', route: ROUTES.features.assistance, icon: 'wallet' },
+  { key: 'souk', route: ROUTES.features.souk, icon: 'shoppingBag' },
+  { key: 'jobs', route: ROUTES.features.jobs, icon: 'users' },
+  { key: 'volunteers', route: ROUTES.features.volunteers, icon: 'userCheck' },
+  { key: 'learn', route: ROUTES.features.learn, icon: 'info' },
+  { key: 'calculator', route: ROUTES.features.calculator, icon: 'creditCard' },
+  { key: 'guide', route: ROUTES.features.guide, icon: 'sparkles' },
+  { key: 'notifications', route: ROUTES.features.notifications, icon: 'bell' },
+  { key: 'search', route: ROUTES.features.search, icon: 'search' },
+];
+
+export function ServicesScreen() {
+  const router = useRouter();
+  const { t } = useTranslation();
+  const theme = useTheme();
+
+  return (
+    <Screen
+      scroll
+      testID="services-screen"
+      contentStyle={{ paddingBottom: theme.spacing[12], gap: theme.spacing[2] }}
+    >
+      <Text variant="h1" style={{ marginTop: theme.spacing[4] }}>
+        {t('common:shell.features.services.title')}
+      </Text>
+      <Text variant="body" color="secondary" style={{ marginBottom: theme.spacing[2] }}>
+        {t('common:shell.features.services.description')}
+      </Text>
+      {SERVICE_LINKS.map((link) => (
+        <ListItem
+          key={link.key}
+          variant="card"
+          title={t(`common:shell.features.${link.key}.title`)}
+          leading={<Icon name={link.icon} size={20} />}
+          onPress={() => router.push(href(link.route))}
+          testID={`service-${link.key}`}
+        />
+      ))}
+    </Screen>
+  );
+}
+```
+
+===============================================
+### FILE: src/features/auth/index.ts
+===============================================
+
+```
+export type { AuthEvent, AuthPhase, DerivePhaseInput } from './auth-machine';
+export {
+  INITIAL_AUTH_PHASE,
+  deriveAuthPhase,
+  isValidTransition,
+  transition,
+} from './auth-machine';
+export { authErrorKey } from './errors';
+export type { TokenVault, VaultPlatform } from './token-vault';
+export { REFRESH_TOKEN_KEY, createTokenVault } from './token-vault';
+export type { ConsentDoc } from './consents';
+export { CONSENT_DOCS, buildConsents } from './consents';
+export type { OtpApi } from './use-otp';
+export {
+  OTP_MAX_ATTEMPTS,
+  OTP_RESEND_SECONDS,
+  canSubmitCode,
+  nextAttempts,
+  secondsLeftUntil,
+  useOtp,
+} from './use-otp';
+export type { AuthApi, SignUpPayload } from './use-auth';
+export { useAuth } from './use-auth';
+export type { RequireAuthProps } from './RequireAuth';
+export { RequireAuth } from './RequireAuth';
+export { AuthScaffold } from './components/AuthScaffold';
+export { PasswordStrengthMeter } from './components/PasswordStrengthMeter';
+export { WelcomeScreen } from './screens/WelcomeScreen';
+export { SignInScreen } from './screens/SignInScreen';
+export { SignUpScreen } from './screens/SignUpScreen';
+export { VerifyScreen } from './screens/VerifyScreen';
+export { ForgotPasswordScreen } from './screens/ForgotPasswordScreen';
+export { ResetPasswordScreen } from './screens/ResetPasswordScreen';
+```
+
+===============================================
+### FILE: src/providers/contracts/auth.ts
+===============================================
+
+```
+// AuthProvider contract. Mock in demo; Supabase Auth in backend (P18).
+// P06.1 extended it additively; P06.3 adds security/session/deletion/export.
+// All new fields stay optional so P03/P05 callers remain valid.
+import type { Result } from '@/core/result';
+import type { ProviderBase } from '../types';
+
+export const AUTH_ROLES = [
+  'guest',
+  'member',
+  'applicant',
+  'donor',
+  'partner_owner',
+  'ambassador',
+  'volunteer',
+  'reviewer',
+  'moderator',
+  'partner_verifier',
+  'finance_officer',
+  'content_editor',
+  'admin',
+  'auditor',
+] as const;
+export type AuthRole = (typeof AUTH_ROLES)[number];
+
+/** Roles that unlock the staff area. Self-declared intents are NOT staff. */
+export const STAFF_ROLES: readonly AuthRole[] = [
+  'reviewer',
+  'moderator',
+  'partner_verifier',
+  'finance_officer',
+  'content_editor',
+  'admin',
+  'auditor',
+] as const;
+
+export type AuthChannel = 'email' | 'phone';
+export type RoleIntent = 'applicant' | 'donor' | 'partner_owner' | 'volunteer';
+
+export interface AuthConsent {
+  readonly docId: string;
+  readonly version: string;
+  readonly acceptedAt: string;
+}
+
+export interface AuthTokens {
+  readonly accessToken: string;
+  readonly refreshToken: string;
+  /** ISO 8601. */
+  readonly expiresAt: string;
+}
+
+export interface PendingVerification {
+  readonly channel: AuthChannel;
+  readonly target: string;
+  /** Demo adapters only: challenge id so clients can verify without re-requesting. */
+  readonly challengeId?: string;
+  /** Demo adapters only: never present in a real backend response. */
+  readonly demoCode?: string;
+}
+
+export interface AuthUser {
+  readonly id: string;
+  readonly email: string | null;
+  readonly phone: string | null;
+  readonly displayName: string;
+  /** All users created in demo mode MUST carry 'demo'. */
+  readonly dataOrigin: 'real' | 'demo';
+  /** ISO 8601. */
+  readonly createdAt: string;
+  /** Absent until P06 clients populate it; deny-by-default in guards. */
+  readonly roles?: readonly AuthRole[];
+  readonly consents?: readonly AuthConsent[];
+}
+
+export interface AuthSession {
+  readonly user: AuthUser;
+  /** ISO 8601. */
+  readonly expiresAt: string;
+  readonly tokens?: AuthTokens;
+  readonly pendingVerification?: PendingVerification | null;
+}
+
+export interface SignInCredentials {
+  readonly email: string;
+  readonly password: string;
+}
+
+export interface SignUpInput {
+  readonly displayName: string;
+  readonly email: string;
+  readonly password: string;
+  readonly roleIntent: RoleIntent;
+  readonly consents: readonly AuthConsent[];
+}
+
+export interface AuthChallenge {
+  readonly id: string;
+  readonly channel: AuthChannel;
+  readonly target: string;
+  /** ISO 8601. */
+  readonly expiresAt: string;
+  /** Demo adapters only. Never present in a real backend response. */
+  readonly demoCode?: string;
+}
+
+export interface RequestVerificationInput {
+  readonly channel: AuthChannel;
+  readonly target: string;
+}
+
+export interface VerifyInput {
+  readonly code: string;
+  readonly challengeId?: string;
+}
+
+export interface RequestPasswordResetInput {
+  readonly email: string;
+}
+
+export interface ResetPasswordInput {
+  readonly challengeId: string;
+  readonly code: string;
+  readonly password: string;
+}
+
+/** P06.3 — re-authentication happens inside changePassword. */
+export interface ChangePasswordInput {
+  readonly currentPassword: string;
+  readonly newPassword: string;
+}
+
+export interface AuthSessionInfo {
+  readonly id: string;
+  readonly deviceLabel: string;
+  /** ISO 8601. */
+  readonly createdAt: string;
+  /** ISO 8601. */
+  readonly lastSeenAt: string;
+  readonly current: boolean;
+}
+
+export interface DeleteAccountInput {
+  /** Re-authentication before scheduling deletion. */
+  readonly password: string;
+}
+
+export interface AccountDeletionRequest {
+  /** ISO 8601. */
+  readonly requestedAt: string;
+  /** ISO 8601. */
+  readonly scheduledFor: string;
+  readonly gracePeriodDays: number;
+  readonly status: 'pending' | 'cancelled';
+  /** The retention window is a human policy decision, not yet approved. */
+  readonly policyStatus: 'pending-human-approval';
+}
+
+/** Everything the account owner may export. Never contains tokens or passwords. */
+export interface AccountExport {
+  /** ISO 8601. */
+  readonly generatedAt: string;
+  readonly dataOrigin: 'real' | 'demo';
+  readonly user: AuthUser;
+  readonly consents: readonly AuthConsent[];
+  readonly sessions: readonly AuthSessionInfo[];
+  readonly deletionRequest: AccountDeletionRequest | null;
+}
+
+export interface AuthProvider extends ProviderBase {
+  readonly name: 'auth';
+  /** Channels this provider can actually deliver to. Never assume SMS. */
+  readonly channels: readonly AuthChannel[];
+  signIn(credentials: SignInCredentials): Promise<Result<AuthSession>>;
+  signOut(): Promise<Result<void>>;
+  getSession(): Promise<Result<AuthSession | null>>;
+  refreshSession(): Promise<Result<AuthSession | null>>;
+  signUp(input: SignUpInput): Promise<Result<AuthSession>>;
+  requestVerification(input: RequestVerificationInput): Promise<Result<AuthChallenge>>;
+  verify(input: VerifyInput): Promise<Result<AuthSession>>;
+  requestPasswordReset(input: RequestPasswordResetInput): Promise<Result<AuthChallenge>>;
+  resetPassword(input: ResetPasswordInput): Promise<Result<void>>;
+  changePassword(input: ChangePasswordInput): Promise<Result<void>>;
+  listSessions(): Promise<Result<readonly AuthSessionInfo[]>>;
+  revokeSession(sessionId: string): Promise<Result<void>>;
+  requestAccountDeletion(input: DeleteAccountInput): Promise<Result<AccountDeletionRequest>>;
+  cancelAccountDeletion(): Promise<Result<void>>;
+  exportAccountData(): Promise<Result<AccountExport>>;
+}
+```
+
+===============================================
+### FILE: jest.setup.ts
+===============================================
+
+```
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
+// Mock expo-blur globally to prevent act warnings in tests
+jest.mock('expo-blur', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const React = require('react');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+  return {
+    BlurView: ({ children, style, testID }: any) =>
+      React.createElement(View, { style, testID }, children),
+  };
+});
+
+// Global test setup. Extend as testing grows (P21).
+// Test-mode environment variables (parsed by src/config/env.ts).
+process.env.EXPO_PUBLIC_ENV = 'local';
+process.env.EXPO_PUBLIC_APP_MODE = 'development';
+process.env.EXPO_PUBLIC_SUPABASE_URL = '';
+process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY = '';
+
+// AsyncStorage mock (used by Zustand persist in tests).
+jest.mock('@react-native-async-storage/async-storage', () =>
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
+);
+
+// NetInfo mock (P05): online by default; tests override addEventListener/fetch.
+jest.mock('@react-native-community/netinfo', () => ({
+  __esModule: true,
+  default: {
+    addEventListener: jest.fn(() => jest.fn()),
+    fetch: jest.fn(() => Promise.resolve({ isConnected: true, isInternetReachable: true })),
+  },
+}));
+
+// expo-splash-screen mock (P05): no native splash in Jest.
+jest.mock('expo-splash-screen', () => ({
+  preventAutoHideAsync: jest.fn(() => Promise.resolve(true)),
+  hideAsync: jest.fn(() => Promise.resolve(true)),
+}));
+
+// expo-secure-store mock (P06): in-memory keychain, no native module in Jest.
+jest.mock('expo-secure-store', () => {
+  const store = new Map<string, string>();
+  return {
+    WHEN_UNLOCKED: 'WHEN_UNLOCKED',
+    AFTER_FIRST_UNLOCK: 'AFTER_FIRST_UNLOCK',
+    setItemAsync: jest.fn(async (key: string, value: string) => {
+      store.set(key, value);
+    }),
+    getItemAsync: jest.fn(async (key: string) => store.get(key) ?? null),
+    deleteItemAsync: jest.fn(async (key: string) => {
+      store.delete(key);
+    }),
+  };
+});
+
+// expo-image-picker mock (P06.2): tests override the returned asset.
+jest.mock('expo-image-picker', () => ({
+  requestMediaLibraryPermissionsAsync: jest.fn(async () => ({
+    granted: true,
+    status: 'granted',
+    canAskAgain: true,
+    expires: 'never',
+  })),
+  launchImageLibraryAsync: jest.fn(async () => ({
+    canceled: false,
+    assets: [
+      {
+        uri: 'file://picked-photo.jpg',
+        width: 1200,
+        height: 800,
+        fileSize: 240000,
+        mimeType: 'image/jpeg',
+      },
+    ],
+  })),
+  MediaTypeOptions: { Images: 'Images', Videos: 'Videos', All: 'All' },
+}));
+
+// expo-image-manipulator mock (P06.2): legacy API, no native rendering in Jest.
+jest.mock('expo-image-manipulator', () => ({
+  manipulateAsync: jest.fn(async (uri: string) => ({
+    uri: uri === 'file://in.jpg' ? 'file://azib-avatar.jpg' : uri,
+    width: 512,
+    height: 512,
+  })),
+  SaveFormat: { JPEG: 'jpeg', PNG: 'png', WEBP: 'webp' },
+}));
+
+// Mock lucide-react-native to avoid ESM parsing errors in Jest.
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+jest.mock('lucide-react-native', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  const MockIcon = (props: any) => React.createElement(View, props);
+  return new Proxy({}, { get: () => MockIcon });
+});
+/* eslint-enable @typescript-eslint/no-require-imports */
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+// ============================================================
+// react-native-reanimated — static Jest mock (no worklets).
+// Used only in test env. On device, the real library takes over.
+// This mock replaces:
+//   - Animated.View/Text/ScrollView/Image  → RN components
+//   - useSharedValue(v)                     → { value: v } (plain object)
+//   - useAnimatedStyle(fn)                  → fn() (evaluated once)
+//   - withTiming/withSpring/withRepeat/etc. → returns final value
+// Result: no animations in Jest, but components render with final styles.
+// ============================================================
+jest.mock('react-native-reanimated', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const RN = require('react-native');
+  const identity = (v: unknown) => v;
+  const shared = (init: unknown) => ({ value: init });
+  const AnimatedView = RN.View;
+  const AnimatedText = RN.Text;
+  const AnimatedScrollView = RN.ScrollView;
+  const AnimatedImage = RN.Image;
+  const chainableGesture = (): Record<string, unknown> => {
+    const g: Record<string, unknown> = {};
+    const self = () => g;
+    g.onStart = self;
+    g.onUpdate = self;
+    g.onEnd = self;
+    g.onBegin = self;
+    g.onFinalize = self;
+    g.onChange = self;
+    g.enabled = self;
+    g.minDistance = self;
+    return g;
+  };
+  return {
+    __esModule: true,
+    default: {
+      View: AnimatedView,
+      Text: AnimatedText,
+      ScrollView: AnimatedScrollView,
+      Image: AnimatedImage,
+      createAnimatedComponent: identity,
+    },
+    View: AnimatedView,
+    Text: AnimatedText,
+    ScrollView: AnimatedScrollView,
+    Image: AnimatedImage,
+    createAnimatedComponent: identity,
+    useSharedValue: (v: unknown) => shared(v),
+    useAnimatedStyle: (fn: () => object) => fn(),
+    useAnimatedProps: (fn: () => object) => fn(),
+    useDerivedValue: (fn: () => unknown) => shared(fn()),
+    useAnimatedRef: () => ({ current: null }),
+    useAnimatedScrollHandler: (fn: unknown) => fn,
+    useAnimatedReaction: () => {},
+    useAnimatedGestureHandler: () => ({}),
+    withTiming: (v: unknown) => v,
+    withSpring: (v: unknown) => v,
+    withRepeat: (v: unknown) => v,
+    withDelay: (_d: number, v: unknown) => v,
+    withSequence: (...v: unknown[]) => v[v.length - 1],
+    withDecay: (v: unknown) => v,
+    cancelAnimation: () => {},
+    runOnJS: (fn: (...args: unknown[]) => unknown) => fn,
+    runOnUI: (fn: (...args: unknown[]) => unknown) => fn,
+    interpolate: identity,
+    Extrapolation: { CLAMP: 'clamp', EXTEND: 'extend', IDENTITY: 'identity' },
+    Easing: {
+      linear: identity,
+      ease: identity,
+      inOut: (v: unknown) => v,
+      bezier: () => identity,
+      out: (v: unknown) => v,
+      in: (v: unknown) => v,
+      elastic: () => identity,
+      quad: identity,
+      cubic: identity,
+    },
+    Gesture: {
+      Pan: chainableGesture,
+      Tap: chainableGesture,
+      LongPress: chainableGesture,
+      Pinch: chainableGesture,
+      Rotation: chainableGesture,
+    },
+    GestureDetector: ({ children }: { children: unknown }) => children,
+  };
+});
+```
+
+===============================================
+### FILE: package.json
+===============================================
+
+```
+{
+  "name": "azib-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "npm run lint:js && npm run lint:arabic",
+    "lint:js": "expo lint",
+    "lint:arabic": "node scripts/check-hardcoded-arabic.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "web:export": "expo export --platform web",
+    "doctor": "npx expo-doctor"
+  },
+  "dependencies": {
+    "@expo-google-fonts/cairo": "^0.4.2",
+    "@expo-google-fonts/ibm-plex-sans-arabic": "^0.4.2",
+    "@hookform/resolvers": "^7.0.6",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-community/netinfo": "12.0.1",
+    "@tanstack/react-query": "^5.107.1",
+    "expo": "~58.0.26",
+    "expo-blur": "~58.0.6",
+    "expo-constants": "~58.0.15",
+    "expo-file-system": "~58.0.13",
+    "expo-font": "~58.0.12",
+    "expo-haptics": "~58.0.8",
+    "expo-image-manipulator": "~58.0.16",
+    "expo-image-picker": "~58.0.10",
+    "expo-linking": "~58.0.17",
+    "expo-local-authentication": "~58.0.3",
+    "expo-localization": "~58.0.5",
+    "expo-router": "~58.0.32",
+    "expo-secure-store": "~58.0.3",
+    "expo-sharing": "~58.0.23",
+    "expo-splash-screen": "~58.0.14",
+    "expo-status-bar": "~58.0.5",
+    "i18next": "^27.1.0",
+    "lucide-react-native": "^1.72.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.92.0",
+    "react-i18next": "^18.0.1",
+    "react-native": "0.88.1",
+    "react-native-gesture-handler": "~3.3.0",
+    "react-native-reanimated": "4.7.1",
+    "react-native-safe-area-context": "~5.11.1",
+    "react-native-screens": "~4.30.1",
+    "react-native-svg": "15.16.0",
+    "react-native-web": "~0.21.4",
+    "react-native-worklets": "0.13.0",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@testing-library/react-native": "^14.1.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.6",
+    "@types/react": "~19.3.0",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "^58.0.4",
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-import": "^2.32.0",
+    "jest": "^30.5.2",
+    "jest-expo": "~58.0.15",
+    "prettier": "^3.10.0",
+    "react-test-renderer": "^19.3.0",
+    "typescript": "~6.0.3"
+  }
+}
+```
+
