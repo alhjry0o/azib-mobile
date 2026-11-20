@@ -22,6 +22,6 @@ export function useHomeFormatters(): HomeFormatters {
       date: (iso: string) => formatDate(iso, 'medium', { language, numerals }),
     }),
     // i18n.language participates so a language switch rebuilds the formatters.
-    [language, numerals, i18n.language],
+    [language, numerals],
   );
 }
