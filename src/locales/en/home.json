@@ -31,6 +31,14 @@
     "guide": "Setup guide"
   },
   "sections": {
+    "support-cases": {
+      "title": "Community support cases",
+      "subtitle": "Published with consent, with no identifying data",
+      "empty": "No cases cleared for publication",
+      "emptyDescription": "We never publish a support case without a documented publication consent. Consent fields do not exist in the current contracts and arrive in P08/P18. We will never show a name, an amount, or identifying details.",
+      "action": "Request assistance",
+      "unknownCategory": "General need"
+    },
     "weddings": {
       "title": "Active group weddings",
       "subtitle": "Open for registration",
@@ -61,6 +69,35 @@
       "emptyDescription": "Only open jobs are shown, with no contact details. Ships in P13.",
       "viewAll": "See all",
       "open": "Open now"
+    },
+    "community-stats": {
+      "title": "Community statistics",
+      "subtitle": "Confirmed figures only, protecting small groups",
+      "empty": "Not enough data yet",
+      "emptyDescription": "Statistics appear once donations, disbursements or profiles exist. We never show unconfirmed figures.",
+      "donations": "Confirmed donations",
+      "disbursements": "Disbursed assistance",
+      "beneficiaries": "Beneficiary families",
+      "suppressed": "Withheld",
+      "demoOnly": "Demo figures only",
+      "thresholdNote": "Any count below {{threshold}} is withheld together with its amount, to protect small groups. This threshold is provisional and awaits owner approval.",
+      "realHidden": "No real figures are shown here; separating real from demo data is mandatory, and demo figures are never presented as real achievements."
+    },
+    "initiatives": {
+      "title": "Current initiatives",
+      "subtitle": "Programs open for applications",
+      "empty": "No open initiatives",
+      "emptyDescription": "Open programs appear here. Eligibility details and amounts ship in P08 after thresholds are approved.",
+      "viewAll": "See all",
+      "open": "Open"
+    },
+    "success-stories": {
+      "title": "Success stories",
+      "subtitle": "Only with an active consent from their owners",
+      "empty": "No stories cleared for publication",
+      "emptyDescription": "We never publish a story without a documented, active consent. Consent fields do not exist in the current contracts; publishing ships in P15.",
+      "action": "Explore awareness",
+      "consentRecorded": "Your consent to publish your story is recorded. You can withdraw it anytime in Settings › Privacy."
     }
   },
   "categories": {
@@ -106,7 +143,7 @@
   },
   "dev": {
     "title": "Demo showcase data",
-    "description": "Fills the demo repositories through the same contracts, then publishes weddings, jobs and souk items, verifies partners and links offers. No auto-population.",
+    "description": "Fills the demo repositories through the same contracts, then publishes weddings, jobs, souk items and programs, verifies partners and links offers. No auto-population.",
     "action": "Populate demo data",
     "summary": "Created {{created}} records · published {{published}} · linked offers {{offers}}",
     "demoOnly": "This tool works in demo mode only."
@@ -131,6 +168,14 @@
       "accountant": "Accountant — part time",
       "cashier": "Cashier",
       "photographer": "Photography assistant"
+    },
+    "programs": {
+      "marriage": "Marriage facilitation program",
+      "marriageDesc": "Disciplined support for essential marriage costs after human eligibility verification.",
+      "emergency": "Emergency cases program",
+      "emergencyDesc": "Rapid response for emergency cases with human review and full documentation.",
+      "seasonal": "Seasonal support program",
+      "seasonalDesc": "Seasonal batches tied to group weddings and partners."
     }
   }
 }
