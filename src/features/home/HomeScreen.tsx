@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
-  RefreshControl,
   StyleSheet,
   View,
   type ListRenderItemInfo,
