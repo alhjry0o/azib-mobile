@@ -1,22 +1,29 @@
 import { AppError } from '@/core/errors';
 import { ok, type Result } from '@/core/result';
-import { CreateApplicationInputSchema } from '@/schemas/application';
-
+import {
+  CreateApplicationInputSchema,
+  UpdateApplicationInputSchema,
+} from '@/schemas/application';
 import type {
   Application,
   ApplicationListQuery,
   ApplicationRepository,
   ApplicationStatus,
   CreateApplicationInput,
+  UpdateApplicationInput,
 } from '../contracts/application';
+import { PUBLICATION_CONSENT_VERSION } from '../contracts/application';
 import type { PagedResult } from '../types';
 import type { MockRepositoryOptions } from './profile';
+
+const SUBMITTABLE: readonly ApplicationStatus[] = ['draft', 'info_requested'];
 
 export function createMockApplicationRepository(
   options: MockRepositoryOptions = {},
 ): ApplicationRepository {
   const { delayMs = 0, forceErrorKind = null } = options;
   const byId = new Map<string, Application>();
+  let referenceCounter = 0;
 
   async function simulate(): Promise<AppError | null> {
     if (delayMs > 0) {
@@ -24,6 +31,13 @@ export function createMockApplicationRepository(
     }
     if (forceErrorKind) return AppError.fromKind(forceErrorKind, { code: 'MOCK_FORCED_ERROR' });
     return null;
+  }
+
+  /** Demo-labeled reference number. The real one is minted server-side in P18. */
+  function mintReference(): string {
+    referenceCounter += 1;
+    const year = new Date().getUTCFullYear();
+    return `AZIB-DEMO-${year}-${String(referenceCounter).padStart(5, '0')}`;
   }
 
   return Object.freeze({
@@ -75,6 +89,14 @@ export function createMockApplicationRepository(
         createdAt: now,
         updatedAt: now,
         dataOrigin: 'demo' as const,
+        referenceNumber: null,
+        submittedAt: null,
+        payload: parsed.data.payload ?? null,
+        evaluation: null,
+        infoRequest: null,
+        decision: null,
+        appeal: null,
+        publicationConsent: null,
       });
       byId.set(id, app);
       return ok(app);
@@ -96,6 +118,73 @@ export function createMockApplicationRepository(
         status,
         ...(reviewerNote !== undefined && { reviewerNote }),
         updatedAt: new Date().toISOString(),
+      });
+      byId.set(id, updated);
+      return ok(updated);
+    },
+
+    async update(id: string, input: UpdateApplicationInput): Promise<Result<Application>> {
+      const parsed = UpdateApplicationInputSchema.safeParse(input);
+      if (!parsed.success) {
+        return { ok: false, error: AppError.validation({ cause: parsed.error }) };
+      }
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const existing = byId.get(id);
+      if (!existing) {
+        return { ok: false, error: AppError.notFound({ code: 'APPLICATION_NOT_FOUND' }) };
+      }
+      const patch = parsed.data;
+      const updated: Application = Object.freeze({
+        ...existing,
+        ...(patch.requestedAmount !== undefined && { requestedAmount: patch.requestedAmount }),
+        ...(patch.notes !== undefined && { notes: patch.notes }),
+        ...(patch.payload !== undefined && { payload: patch.payload }),
+        ...(patch.evaluation !== undefined && { evaluation: patch.evaluation }),
+        ...(patch.infoRequest !== undefined && { infoRequest: patch.infoRequest }),
+        ...(patch.decision !== undefined && { decision: patch.decision }),
+        ...(patch.appeal !== undefined && { appeal: patch.appeal }),
+        ...(patch.publicationConsent !== undefined && {
+          publicationConsent: patch.publicationConsent,
+        }),
+        updatedAt: new Date().toISOString(),
+      });
+      byId.set(id, updated);
+      return ok(updated);
+    },
+
+    async submit(id: string): Promise<Result<Application>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const existing = byId.get(id);
+      if (!existing) {
+        return { ok: false, error: AppError.notFound({ code: 'APPLICATION_NOT_FOUND' }) };
+      }
+      if (!SUBMITTABLE.includes(existing.status)) {
+        return {
+          ok: false,
+          error: AppError.conflict({
+            code: 'INVALID_TRANSITION',
+            context: { from: existing.status, to: 'submitted' },
+          }),
+        };
+      }
+      const now = new Date().toISOString();
+      const wantsPublication = existing.payload?.declarations.publicationConsent === true;
+      const updated: Application = Object.freeze({
+        ...existing,
+        status: 'submitted' as const,
+        referenceNumber: existing.referenceNumber ?? mintReference(),
+        submittedAt: now,
+        infoRequest: null,
+        publicationConsent: wantsPublication
+          ? Object.freeze({
+              grantedAt: now,
+              revokedAt: null,
+              version: PUBLICATION_CONSENT_VERSION,
+            })
+          : null,
+        updatedAt: now,
       });
       byId.set(id, updated);
       return ok(updated);
