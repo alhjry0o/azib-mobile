@@ -17,3 +17,13 @@ export type {
   SettingsState,
 } from './settings.store';
 export { useSettingsStore, SETTINGS_STORAGE_KEY } from './settings.store';
+export type {
+  ApplicantDraft,
+  AssistanceDraftState,
+  AssetsDraft,
+  DeclarationsDraft,
+  EngagementDraft,
+  IncomeDraft,
+  ObligationsDraft,
+} from './assistance-draft.store';
+export { useAssistanceDraftStore, ASSISTANCE_DRAFT_KEY } from './assistance-draft.store';
