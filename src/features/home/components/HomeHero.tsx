@@ -23,7 +23,7 @@ export function HomeHero({ progress }: HomeHeroProps) {
 
   const isApplicant = auth.user?.roles?.includes('applicant') === true;
   const primaryLabel = isApplicant ? t('home:hero.startRequest') : t('home:hero.exploreWeddings');
-  const primaryRoute = isApplicant ? ROUTES.features.assistance : ROUTES.tabs.weddings;
+  const primaryRoute = isApplicant ? ROUTES.assistance.root : ROUTES.tabs.weddings;
 
   return (
     <View style={styles.wrapper} testID="home-hero">
@@ -33,9 +33,7 @@ export function HomeHero({ progress }: HomeHeroProps) {
         testID="home-hero-3d"
         background={
           <View style={StyleSheet.absoluteFill}>
-            <View
-              style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.bg.surface }]}
-            />
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.bg.surface }]} />
             <QamariyaPattern width={width} height={300} opacity={0.14} />
           </View>
         }
@@ -47,12 +45,8 @@ export function HomeHero({ progress }: HomeHeroProps) {
             ]}
             pointerEvents="none"
           >
-            <View
-              style={[styles.orb, { backgroundColor: theme.colors.accent.fill, opacity: 0.3 }]}
-            />
-            <View
-              style={[styles.orbSmall, { backgroundColor: theme.colors.gold.fill, opacity: 0.3 }]}
-            />
+            <View style={[styles.orb, { backgroundColor: theme.colors.accent.fill, opacity: 0.3 }]} />
+            <View style={[styles.orbSmall, { backgroundColor: theme.colors.gold.fill, opacity: 0.3 }]} />
           </View>
         }
         foreground={
