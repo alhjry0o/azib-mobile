@@ -45,14 +45,14 @@ export function SupportCasesSection() {
   return (
     <SectionShell
       id="support-cases"
-      title={t('home:sections.supportCases.title')}
-      subtitle={t('home:sections.supportCases.subtitle')}
+      title={t('home:sections.support-cases.title')}
+      subtitle={t('home:sections.support-cases.subtitle')}
       status={section.status}
       emptyIcon="shield"
-      emptyTitle={t('home:sections.supportCases.empty')}
-      emptyDescription={t('home:sections.supportCases.emptyDescription')}
+      emptyTitle={t('home:sections.support-cases.empty')}
+      emptyDescription={t('home:sections.support-cases.emptyDescription')}
       emptyAction={{
-        label: t('home:sections.supportCases.action'),
+        label: t('home:sections.support-cases.action'),
         onPress: () => router.navigate(href(ROUTES.features.assistance)),
       }}
       onRetry={section.refetch}
