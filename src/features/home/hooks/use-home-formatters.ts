@@ -11,17 +11,15 @@ export interface HomeFormatters {
 }
 
 export function useHomeFormatters(): HomeFormatters {
-  const { i18n } = useTranslation();
+  useTranslation();
   const numerals = useSettingsStore((s) => s.numberSystem);
   const language = getLanguage();
-
   return useMemo<HomeFormatters>(
     () => ({
       number: (value: number) => formatNumber(value, { language, numerals }),
       percent: (ratio: number) => formatPercent(ratio, { language, numerals }),
       date: (iso: string) => formatDate(iso, 'medium', { language, numerals }),
     }),
-    // i18n.language participates so a language switch rebuilds the formatters.
     [language, numerals],
   );
 }
