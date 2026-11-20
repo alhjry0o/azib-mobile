@@ -1,7 +1,4 @@
-// Deep-link allowlist for the azib:// scheme (P05 + P06).
-// - allow:    public destinations; the router handles them (screen guards still run).
-// - guarded:  protected areas; their layout guards decide (staff/dev/onboarding).
-// - not-found: everything else -> +not-found.
+// Deep-link allowlist for the azib:// scheme (P05 → P08).
 // Query strings and fragments are dropped entirely: no sensitive data in links.
 import { stripGroups } from './routing';
 
@@ -27,6 +24,10 @@ const ALLOWED: ReadonlySet<string> = new Set([
   '/account',
   '/profile',
   '/profile/edit',
+  '/assistance',
+  '/assistance/conditions',
+  '/assistance/pre-check',
+  '/assistance/new',
   '/settings',
   '/settings/account',
   '/settings/language',
@@ -45,7 +46,6 @@ const ALLOWED: ReadonlySet<string> = new Set([
   '/legal/eligibility',
   '/legal/weddings-withdrawal',
   '/legal/souk',
-  '/assistance',
   '/souk',
   '/jobs',
   '/volunteers',
@@ -58,7 +58,6 @@ const ALLOWED: ReadonlySet<string> = new Set([
 
 const GUARDED_PREFIXES: readonly string[] = ['/onboarding', '/staff', '/dev', '/gallery'];
 
-/** Parses azib:// URLs into a normalized, group-free path. Non-azib URLs -> null. */
 export function parseAzibUrl(url: string): string | null {
   const match = /^azib:\/\/(.*)$/i.exec(url.trim());
   if (!match) return null;
