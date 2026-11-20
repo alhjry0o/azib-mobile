@@ -1,5 +1,3 @@
-jest.mock('expo-router', () => ({}));
-
 import {
   DEFAULT_HOME_CONFIG,
   hiddenFromMap,
@@ -15,6 +13,8 @@ import {
 } from '../config/home-config.source';
 import { HOME_QUICK_ACTION_IDS, HOME_SECTION_IDS } from '../config/home-config.types';
 import { REGISTERED_SECTION_IDS } from '../sections/registry';
+
+jest.mock('expo-router', () => ({}));
 
 describe('home config defaults', () => {
   it('lists all eight planned sections in a stable order', () => {
