@@ -16,7 +16,7 @@ interface QuickAction {
 }
 
 const ACTIONS: readonly QuickAction[] = [
-  { id: 'assistance', icon: 'wallet', route: ROUTES.features.assistance },
+  { id: 'assistance', icon: 'wallet', route: ROUTES.assistance.root },
   { id: 'weddings', icon: 'heart', route: ROUTES.tabs.weddings },
   { id: 'offers', icon: 'gift', route: ROUTES.tabs.partners },
   { id: 'souk', icon: 'shoppingBag', route: ROUTES.features.souk },
@@ -44,19 +44,11 @@ export function QuickActions() {
 
   return (
     <View
-      style={[
-        styles.container,
-        { paddingHorizontal: theme.spacing[4], gap: theme.spacing[3] },
-      ]}
+      style={[styles.container, { paddingHorizontal: theme.spacing[4], gap: theme.spacing[3] }]}
       testID="home-quick-actions"
     >
       <Text variant="h3">{t('home:quickActions.title')}</Text>
-      <View
-        style={[
-          styles.grid,
-          { flexDirection: isRTL ? 'row-reverse' : 'row', gap },
-        ]}
-      >
+      <View style={[styles.grid, { flexDirection: isRTL ? 'row-reverse' : 'row', gap }]}>
         {visible.map((action, index) => (
           <Stagger key={action.id} index={index}>
             <Pressable
