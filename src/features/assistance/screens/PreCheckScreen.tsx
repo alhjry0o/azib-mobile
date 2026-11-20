@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Badge, Banner, Button, Card, Screen, Text } from '@/components/ui';
 import { ROUTES, href } from '@/constants/routes';
-import type { ApplicationPayload } from '@/repositories/contracts/application';
+import type { ApplicationPayload, AdvisoryEvaluation } from '@/repositories/contracts/application';
 import { useTheme } from '@/theme';
 import { scoreApplication } from '../engine';
-import type { AdvisoryEvaluation } from '@/repositories/contracts/application';
 import { NumericField } from '../components/NumericField';
 import { useEligibilityRules } from '../hooks/use-assistance-query';
 
