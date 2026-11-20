@@ -1,4 +1,4 @@
-// Single source of truth for all app routes (P05 + P06).
+// Single source of truth for all app routes (P05 → P08).
 // No Arabic strings here. href() casts to expo-router's Href so typed-routes
 // generation (when present) stays satisfied without duplicating path literals.
 import type { Href } from 'expo-router';
@@ -23,9 +23,12 @@ export const ROUTES = {
     partners: '/(tabs)/partners',
     account: '/(tabs)/account',
   },
-  profile: {
-    root: '/profile',
-    edit: '/profile/edit',
+  profile: { root: '/profile', edit: '/profile/edit' },
+  assistance: {
+    root: '/assistance',
+    conditions: '/assistance/conditions',
+    preCheck: '/assistance/pre-check',
+    new: '/assistance/new',
   },
   settings: {
     root: '/settings',
@@ -50,7 +53,6 @@ export const ROUTES = {
     souk: '/legal/souk',
   },
   features: {
-    assistance: '/(features)/assistance',
     souk: '/(features)/souk',
     jobs: '/(features)/jobs',
     volunteers: '/(features)/volunteers',
@@ -82,9 +84,7 @@ export type TabKey = (typeof TAB_ORDER)[number];
 
 export interface TabConfig {
   readonly key: TabKey;
-  /** Router target (group-qualified, for navigation). */
   readonly route: string;
-  /** URL path (groups stripped, for active matching). */
   readonly path: string;
   readonly icon: IconName;
   readonly labelKey: string;
