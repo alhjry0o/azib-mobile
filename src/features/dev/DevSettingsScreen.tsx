@@ -23,6 +23,7 @@ import type { DeviceTier } from '@/hooks';
 import { useAppModeStore, useOnboardingStore, useShellStore } from '@/stores';
 import type { AppMode } from '@/stores';
 import { useTheme } from '@/theme';
+import { useDemoSeed } from './use-demo-seed';
 
 type TierChoice = DeviceTier | 'auto';
 
@@ -57,7 +58,6 @@ export function DevSettingsScreen() {
   const { t } = useTranslation();
   const { direction, isRTL } = useDirection();
   const queryClient = useQueryClient();
-
   const mode = useAppModeStore((s) => s.mode);
   const setMode = useAppModeStore((s) => s.setMode);
   const override = useDeviceTierStore((s) => s.override);
@@ -70,6 +70,7 @@ export function DevSettingsScreen() {
   const setUnread = useShellStore((s) => s.setUnreadNotifications);
   const openDialog = useShellStore((s) => s.openDialog);
   const resetOnboarding = useOnboardingStore((s) => s.reset);
+  const demoSeed = useDemoSeed();
 
   const changeMode = (next: AppMode): void => {
     if (next === mode) return;
@@ -90,6 +91,10 @@ export function DevSettingsScreen() {
       },
     });
   };
+
+  const createdTotal = demoSeed.summary
+    ? Object.values(demoSeed.summary.created).reduce((sum, value) => sum + value, 0)
+    : 0;
 
   return (
     <Screen
@@ -135,6 +140,38 @@ export function DevSettingsScreen() {
           onChange={changeMode}
           testID="dev-mode-control"
         />
+      </DevSection>
+
+      <DevSection
+        title={t('home:dev.title')}
+        description={t('home:dev.description')}
+        testID="dev-demo-seed-card"
+      >
+        <Button
+          fullWidth
+          loading={demoSeed.busy}
+          disabled={!demoSeed.isDemo}
+          leftIcon="sparkles"
+          label={t('home:dev.action')}
+          onPress={() => {
+            void demoSeed.run();
+          }}
+          testID="dev-demo-seed"
+        />
+        {demoSeed.summary ? (
+          <Text variant="caption" color="secondary" testID="dev-demo-seed-summary">
+            {t('home:dev.summary', {
+              created: createdTotal,
+              published: demoSeed.summary.published,
+              offers: demoSeed.summary.linkedOffers,
+            })}
+          </Text>
+        ) : null}
+        {!demoSeed.isDemo ? (
+          <Text variant="caption" color="secondary" testID="dev-demo-seed-unavailable">
+            {t('home:dev.demoOnly')}
+          </Text>
+        ) : null}
       </DevSection>
 
       <DevSection
