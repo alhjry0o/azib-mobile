@@ -1,3 +1,5 @@
+jest.mock('expo-router', () => ({}));
+
 import {
   DEFAULT_HOME_CONFIG,
   hiddenFromMap,
