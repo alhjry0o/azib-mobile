@@ -30,7 +30,7 @@ export function toPublicSupportCase(
   if (!isConsentActive(consent, context.now ?? new Date())) return null;
   return {
     id: application.id,
-    categoryKey: context.categoryKey ?? 'home:sections.supportCases.unknownCategory',
+    categoryKey: context.categoryKey ?? 'home:sections.support-cases.unknownCategory',
     governorateKey: context.governorateKey ?? null,
     dataOrigin: application.dataOrigin,
   };
