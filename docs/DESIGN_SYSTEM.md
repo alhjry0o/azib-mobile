@@ -3,6 +3,7 @@
 > **النسخة النهائية — P04 مغلقة.**
 > يوافق كل قرار في هذا المستند ما هو مُنفَّذ في الكود. أي تعديل يستدعي تحديث هذا الملف.
 > **تحديث P05 (2026-11-16):** بوابة Gallery للإنتاج نُفّذت في **P05.1** (كانت مؤجلة لـP22). لا تغيير في أي مكوّن من P04.
+> **تحديث P07 (2026-11-16):** صورة Avatar مُسلَّمة في **P06.2**، وبند Tabs scrollable لم يعد مطلوباً، وأعداد الاختبارات حُدِّثت إلى إغلاق P07. لا تغيير في أي مكوّن من P04.
 > **عام المستودع:** لا أسرار، لا بيانات شخصية.
 
 ---
@@ -135,7 +136,7 @@ import { useDeviceTier, useMotion, useHaptics, useDirection } from '@/hooks';
 - **`<ListItem>`** — default or card; interactive or static; destructive; leading/trailing.
 - **`<SectionHeader>`** — title + subtitle + action chevron (mirrored in RTL).
 - **`<Divider>`** — horizontal / vertical, hidden from a11y.
-- **`<Avatar>`** — initials-based, 5 sizes, optional gold ring. **No image support until P06.**
+- **`<Avatar>`** — initials-based, 5 sizes, optional gold ring. **Optional `uri` prop shipped in P06.2 (ADR-0020):** renders the image when a URI is provided and falls back to initials otherwise. The image is center-cropped and re-encoded before upload; its URL lives in the Query cache until P18.
 - **`<ProgressBar>`** — linear, determinate / indeterminate, 3 sizes, 4 colors, a11y value.
 - **`<RingProgress>`** — circular determinate, a11y value, center label. **No animation until P05+.**
 - **`<Skeleton>`** — text / circle / rect; shimmer respects reduceMotion; hidden from a11y.
@@ -147,7 +148,7 @@ import { useDeviceTier, useMotion, useHaptics, useDirection } from '@/hooks';
 
 ### 2.6 Navigation
 
-- **`<Tabs>`** — header only (default / pills), badges, disabled, a11y role `tablist` + `tab`. **Equal-width; non-scrollable until P07+ if needed.**
+- **`<Tabs>`** — header only (default / pills), badges, disabled, a11y role `tablist` + `tab`. **Equal-width; non-scrollable.** P07 used a horizontal `FlatList` carousel for the weddings section instead of extending this component, so no change was required.
 - **`<SegmentedControl>`** — Material-style, animated indicator, RTL-aware.
 - **`<Stepper>`** — horizontal multi-step (completed / current / pending), a11y `progressbar`.
 
@@ -285,9 +286,14 @@ Every component must satisfy all of these before merge:
 - **Blur rendering** — `expo-blur` mocked. Web/Mobile blur verified visually.
 - **SVG rendering correctness** — `react-native-svg` renders in Jest, but visual layout is checked manually via Gallery.
 - **Font loading** — Real font files not loaded in Jest; layout of Arabic glyphs verified visually.
+- **Horizontal carousel direction in RTL** — the P07 weddings carousel uses `FlatList` with `inverted`; the visual order is verified on devices, not in Jest.
+- **Lazy section mounting / viewability** — `onViewableItemsChanged` plus the 700ms fallback (P07) is not exercised by Jest; real scroll behavior is verified on devices.
 
 **Total test count at P04 close: 565 tests, 71 suites.**
-**Project-wide count at P05 close: 623 tests passing** (CI green, per owner report 2026-11-16). Device verification for P05 has **not** been performed yet.
+**Project-wide count at P05 close: 623 tests passing.**
+**Project-wide count at P06 close: 780 tests, 110 suites.**
+**Project-wide count at P07 close: 869 tests, 129 suites** (CI green, per owner report 2026-11-16).
+Device verification for P05–P07 has **not** been performed yet.
 
 ---
 
@@ -316,6 +322,6 @@ Every component must satisfy all of these before merge:
 **Known deferred items** (tracked in `PROJECT_CONTEXT §8`):
 - RingProgress animation → P05+ (not implemented in P05; still deferred)
 - BottomSheet multi-snap → P20 if needed
-- Tabs scrollable → P07+ if needed
-- Avatar image → P06
-- ~~Gallery gating for production → P22~~ → **Closed in P05.1** via `app/(dev)/_layout.tsx`
+- ~~Tabs scrollable → P07+ if needed~~ → **Not needed in P07**: the weddings carousel uses a horizontal `FlatList`; `Tabs` stays equal-width and unchanged.
+- ~~Avatar image → P06~~ → **Closed in P06.2** via the optional `uri` prop (ADR-0020).
+- ~~Gallery gating for production → P22~~ → **Closed in P05.1** via `app/(dev)/_layout.tsx`.
