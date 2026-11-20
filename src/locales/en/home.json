@@ -1,4 +1,136 @@
 {
   "title": "Home",
-  "notConnectedYet": "Home will be built in P07."
+  "notConnectedYet": "Home will be built in P07.",
+  "footer": "A non-profit platform — no commissions, no subscriptions, no dating services.",
+  "guest": { "name": "Welcome, guest" },
+  "greeting": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
+  },
+  "header": {
+    "search": "Search",
+    "notifications": "Notifications",
+    "customize": "Customize home"
+  },
+  "hero": {
+    "title": "Together we make marriage easier",
+    "subtitle": "Disciplined aid · group weddings · trusted partners",
+    "startRequest": "Start your request",
+    "exploreWeddings": "Explore weddings",
+    "browseServices": "Browse services"
+  },
+  "quickActions": {
+    "title": "Quick actions",
+    "assistance": "Request aid",
+    "weddings": "Our Wedding",
+    "offers": "Offers",
+    "souk": "Souk Khair",
+    "jobs": "Jobs",
+    "calculator": "Calculator",
+    "guide": "Setup guide"
+  },
+  "sections": {
+    "weddings": {
+      "title": "Active group weddings",
+      "subtitle": "Open for registration",
+      "empty": "No open weddings",
+      "emptyDescription": "Group weddings open for registration appear here. Details ship in P10.",
+      "viewAll": "See all",
+      "capacity": "{{count}} seats"
+    },
+    "offers": {
+      "title": "Latest verified offers",
+      "subtitle": "From verified partners",
+      "empty": "No verified offers",
+      "emptyDescription": "We never show an offer before its partner is verified. The directory ships in P11.",
+      "viewAll": "See all",
+      "verified": "Verified partner"
+    },
+    "souk": {
+      "title": "Souk Khair",
+      "subtitle": "Available in-kind donations",
+      "empty": "No available items",
+      "emptyDescription": "Souk Khair is in-kind only, with no money inside the app. Ships in P12.",
+      "viewAll": "See all"
+    },
+    "jobs": {
+      "title": "Job opportunities",
+      "subtitle": "Open community jobs",
+      "empty": "No open jobs",
+      "emptyDescription": "Only open jobs are shown, with no contact details. Ships in P13.",
+      "viewAll": "See all",
+      "open": "Open now"
+    }
+  },
+  "categories": {
+    "furniture": "Furniture",
+    "kitchenware": "Kitchenware",
+    "textiles": "Textiles",
+    "other": "Other"
+  },
+  "states": {
+    "error": "Could not load this section",
+    "errorDescription": "Something went wrong while fetching data. Please retry.",
+    "notConnected": "Not connected to the server",
+    "notConnectedDescription": "This section runs in demo mode now and is wired to the backend in P18."
+  },
+  "customize": {
+    "title": "Customize home",
+    "subtitle": "Reorder sections and keep what matters. Saved on your device.",
+    "sections": "Sections",
+    "quickActions": "Quick actions",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "reset": "Restore defaults",
+    "done": "Done"
+  },
+  "roles": {
+    "partner": {
+      "title": "Your offers summary",
+      "description": "Your account is not linked to a business yet, so we show no figures. Linking and offer management ship in P11.",
+      "action": "Go to partners"
+    },
+    "volunteer": {
+      "title": "My volunteer tasks",
+      "empty": "No tasks linked to you",
+      "emptyDescription": "Register your skill in the volunteers section to see your tasks here. Tasks ship in P13.",
+      "action": "Volunteers section",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "staff": {
+      "title": "Staff console",
+      "description": "Authorized roles only — ships in P17."
+    }
+  },
+  "dev": {
+    "title": "Demo showcase data",
+    "description": "Fills the demo repositories through the same contracts, then publishes weddings, jobs and souk items, verifies partners and links offers. No auto-population.",
+    "action": "Populate demo data",
+    "summary": "Created {{created}} records · published {{published}} · linked offers {{offers}}",
+    "demoOnly": "This tool works in demo mode only."
+  },
+  "demo": {
+    "notice": "Every figure and card on this screen is demo data and does not represent real beneficiaries or achievements.",
+    "weddings": {
+      "first": "First group wedding — Sanaa",
+      "second": "Spring batch — Sanaa"
+    },
+    "offers": {
+      "catering": "Discount on catering service",
+      "venue": "Discount on wedding venue",
+      "clothing": "Discount on wedding attire"
+    },
+    "souk": {
+      "furniture": "Home furniture set",
+      "kitchen": "Basic kitchen tools",
+      "bedding": "Bedding set"
+    },
+    "jobs": {
+      "accountant": "Accountant — part time",
+      "cashier": "Cashier",
+      "photographer": "Photography assistant"
+    }
+  }
 }
