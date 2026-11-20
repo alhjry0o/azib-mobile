@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import {
   FlatList,
   RefreshControl,
@@ -54,13 +54,14 @@ export function HomeScreen() {
     return () => clearTimeout(timer);
   }, []);
 
-  const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 35 }).current;
-  const onViewableItemsChanged = useRef(
+  const viewabilityConfig = useMemo(() => ({ itemVisiblePercentThreshold: 35 }), []);
+  const onViewableItemsChanged = useCallback(
     (info: { viewableItems: readonly { item: HomeSectionId }[] }) => {
       setVisibleIds(info.viewableItems.map((entry) => entry.item));
     },
-  ).current;
-
+    [],
+  );
+  
   const onRefresh = useCallback(async (): Promise<void> => {
     setRefreshing(true);
     await client.invalidateQueries({ queryKey: ['home'] });
@@ -70,6 +71,7 @@ export function HomeScreen() {
   const onScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       const y = event.nativeEvent.contentOffset.y;
+      // eslint-disable-next-line react-hooks/immutability
       heroProgress.value = Math.max(0, Math.min(1, y / 240));
     },
     [heroProgress],
