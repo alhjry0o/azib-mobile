@@ -26,6 +26,10 @@ export interface SettingsState {
   notifications: NotificationPrefs;
   /** Optional biometric lock for sensitive screens (P06.3). */
   biometricLock: boolean;
+  /** Home customization (P07.1). Ids are validated by the home config layer. */
+  homeSectionOrder: readonly string[];
+  homeSectionVisibility: Readonly<Record<string, boolean>>;
+  homeQuickActionVisibility: Readonly<Record<string, boolean>>;
   hydrated: boolean;
   setNumberSystem: (value: NumberSystem) => void;
   setAppearance: (value: AppearanceMode) => void;
@@ -34,6 +38,10 @@ export interface SettingsState {
   setNotificationsEnabled: (value: boolean) => void;
   setNotificationCategory: (category: NotificationCategory, value: boolean) => void;
   setBiometricLock: (value: boolean) => void;
+  setHomeSectionOrder: (order: readonly string[]) => void;
+  setHomeSectionVisible: (id: string, visible: boolean) => void;
+  setHomeQuickActionVisible: (id: string, visible: boolean) => void;
+  resetHomeSections: () => void;
   /** Internal: used by persist middleware only. */
   _setHydrated: (hydrated: boolean) => void;
 }
@@ -56,6 +64,9 @@ export const useSettingsStore = create<SettingsState>()(
       storiesConsent: false,
       notifications: DEFAULT_NOTIFICATIONS,
       biometricLock: false,
+      homeSectionOrder: [],
+      homeSectionVisibility: {},
+      homeQuickActionVisibility: {},
       hydrated: false,
       setNumberSystem: (numberSystem) => set({ numberSystem }),
       setAppearance: (appearance) => set({ appearance }),
@@ -66,6 +77,21 @@ export const useSettingsStore = create<SettingsState>()(
       setNotificationCategory: (category, value) =>
         set((state) => ({ notifications: { ...state.notifications, [category]: value } })),
       setBiometricLock: (biometricLock) => set({ biometricLock }),
+      setHomeSectionOrder: (order) => set({ homeSectionOrder: [...order] }),
+      setHomeSectionVisible: (id, visible) =>
+        set((state) => ({
+          homeSectionVisibility: { ...state.homeSectionVisibility, [id]: visible },
+        })),
+      setHomeQuickActionVisible: (id, visible) =>
+        set((state) => ({
+          homeQuickActionVisibility: { ...state.homeQuickActionVisibility, [id]: visible },
+        })),
+      resetHomeSections: () =>
+        set({
+          homeSectionOrder: [],
+          homeSectionVisibility: {},
+          homeQuickActionVisibility: {},
+        }),
       _setHydrated: (hydrated) => set({ hydrated }),
     }),
     {
@@ -78,6 +104,9 @@ export const useSettingsStore = create<SettingsState>()(
         storiesConsent: state.storiesConsent,
         notifications: state.notifications,
         biometricLock: state.biometricLock,
+        homeSectionOrder: state.homeSectionOrder,
+        homeSectionVisibility: state.homeSectionVisibility,
+        homeQuickActionVisibility: state.homeQuickActionVisibility,
       }),
       onRehydrateStorage: () => (state) => {
         state?._setHydrated(true);
