@@ -1,4 +1,5 @@
 // Shared section chrome: header + the four honest states + content.
+// P07.2 adds an optional empty-state action (additive, no caller breakage).
 import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
@@ -13,6 +14,11 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/theme';
 import type { HomeSectionStatus } from '../hooks/use-home-section';
 
+export interface SectionShellEmptyAction {
+  readonly label: string;
+  readonly onPress: () => void;
+}
+
 export interface SectionShellProps {
   readonly id: string;
   readonly title: string;
@@ -21,6 +27,7 @@ export interface SectionShellProps {
   readonly emptyTitle: string;
   readonly emptyDescription?: string;
   readonly emptyIcon?: IconName;
+  readonly emptyAction?: SectionShellEmptyAction;
   readonly actionLabel?: string;
   readonly onAction?: () => void;
   readonly onRetry?: () => void;
@@ -35,6 +42,7 @@ export function SectionShell({
   emptyTitle,
   emptyDescription,
   emptyIcon = 'info',
+  emptyAction,
   actionLabel,
   onAction,
   onRetry,
@@ -82,6 +90,7 @@ export function SectionShell({
           icon={emptyIcon}
           title={emptyTitle}
           description={emptyDescription}
+          action={emptyAction}
           testID={`section-${id}-empty`}
         />
       ) : null}
