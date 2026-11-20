@@ -18,22 +18,10 @@
     "excluded": "Relatives' wealth, unreceived inheritance and restricted assets are never counted."
   },
   "gates": {
-    "realIncome": {
-      "pass": "A real income source exists.",
-      "fail": "A real income source is required to complete scoring."
-    },
-    "notWealthy": {
-      "pass": "Available assets are below the rule threshold.",
-      "fail": "Available assets reached or exceeded the rule threshold."
-    },
-    "noPrior": {
-      "pass": "No prior assistance recorded.",
-      "fail": "Prior assistance exists and no exception is approved."
-    },
-    "truth": {
-      "pass": "Truthfulness was declared.",
-      "fail": "Declaring truthfulness is required."
-    }
+    "realIncome": { "pass": "A real income source exists.", "fail": "A real income source is required to complete scoring." },
+    "notWealthy": { "pass": "Available assets are below the rule threshold.", "fail": "Available assets reached or exceeded the rule threshold." },
+    "noPrior": { "pass": "No prior assistance recorded.", "fail": "Prior assistance exists and no exception is approved." },
+    "truth": { "pass": "Truthfulness was declared.", "fail": "Declaring truthfulness is required." }
   },
   "bands": {
     "notEligible": "Not eligible",
@@ -60,6 +48,7 @@
     "status": {
       "draft": "Draft",
       "submitted": "Submitted",
+      "reviewing": "In review",
       "in_review": "In review",
       "info_requested": "Awaiting information",
       "approved": "Approved",
@@ -67,6 +56,7 @@
       "appealed": "Appeal submitted",
       "appeal_resolved": "Appeal resolved",
       "disbursing": "Disbursing",
+      "disbursed": "Disbursed",
       "completed": "Completed",
       "cancelled": "Cancelled"
     },
@@ -113,5 +103,154 @@
   "reference": {
     "label": "Reference number",
     "demoNote": "Demo number; the official one is minted server-side in P18."
+  },
+  "program": {
+    "title": "Assistance programs",
+    "subtitle": "Choose a suitable program. Every request is reviewed by a human; scoring is advisory only.",
+    "start": "Start application",
+    "conditions": "Eligibility conditions",
+    "preCheck": "Non-binding pre-check",
+    "empty": "No open programs",
+    "emptyDescription": "Programs open for applications appear here. You can populate demo data from developer settings.",
+    "errorTitle": "Could not load programs",
+    "errorDescription": "Something went wrong while fetching programs. Please retry.",
+    "notConnected": "Programs not connected",
+    "notConnectedDescription": "Backend wiring activates in P18. Demo mode is available now."
+  },
+  "conditions": {
+    "title": "Eligibility conditions",
+    "version": "Rules version: {{version}}",
+    "gates": "Gate conditions",
+    "weights": "Advisory scoring weights",
+    "bands": "Score bands",
+    "limits": "Limits and windows",
+    "assetsRule": "Available assets must be below {{value}} YER.",
+    "priorClosed": "A second assistance is not granted; no exception is approved.",
+    "priorOpen": "An exception may be considered under an independent policy.",
+    "appealWindow": "Appeal window: {{days}} days from the decision date."
+  },
+  "preCheck": {
+    "title": "Pre-check",
+    "notStored": "This pre-check is non-binding, never saved and never sent. It is an advisory estimate only.",
+    "action": "Compute an estimate"
+  },
+  "wizard": {
+    "stepOf": "Step {{current}} of {{total}}",
+    "next": "Next",
+    "back": "Back",
+    "fixErrors": "Review the highlighted fields, then continue.",
+    "steps": {
+      "applicant": "Applicant details",
+      "income": "Work and income",
+      "assets": "Assets and savings",
+      "obligations": "Living obligations",
+      "engagement": "Engagement status",
+      "documents": "Documents",
+      "review": "Review and declaration",
+      "submit": "Submit"
+    },
+    "why": {
+      "applicant": "We ask for the minimum only. Your id and phone are converted to a fingerprint and never stored.",
+      "income": "Actual income against needs is the basis — not relatives' wealth.",
+      "assets": "Only assets available for disposal are counted. Restricted assets and unreceived inheritance are context only.",
+      "obligations": "Living obligations show the real financial pressure on the household.",
+      "engagement": "Engagement status and proof type are enough. We collect no details about the other party.",
+      "documents": "Documents are uploaded privately; images are processed to drop location metadata before upload.",
+      "review": "Review your data and declare it truthful. Publication consent is optional and revocable.",
+      "submit": "After submission a reference number is issued and human review begins."
+    },
+    "fields": {
+      "governorate": "Governorate",
+      "district": "District",
+      "birthYear": "Birth year",
+      "household": "Household size",
+      "identity": "National id number",
+      "phone": "Phone number",
+      "employment": "Employment status",
+      "incomeSource": "Income source",
+      "monthlyIncome": "Monthly income (YER)",
+      "stabilityMonths": "Stability in months",
+      "availableAssets": "Assets available for disposal (YER)",
+      "availableAssetsHelp": "Only this field enters the scoring.",
+      "restrictedAssets": "Restricted assets (YER)",
+      "unreceivedInheritance": "Unreceived inheritance (YER)",
+      "excludedHelp": "Context only — never scored.",
+      "savings": "Savings (YER)",
+      "monthlyRent": "Monthly rent (YER)",
+      "monthlyDebt": "Monthly debt payments (YER)",
+      "monthlyEssentials": "Monthly essentials (YER)",
+      "dependents": "Number of dependents",
+      "proofType": "Proof document type",
+      "requestedAmount": "Requested amount (YER)",
+      "notes": "Additional notes"
+    },
+    "employment": {
+      "employed": "Employed",
+      "self_employed": "Self-employed",
+      "irregular": "Irregular income",
+      "unemployed": "Unemployed"
+    },
+    "incomeSource": {
+      "salary": "Salary",
+      "business": "Business",
+      "daily_wage": "Daily wage",
+      "none": "None"
+    },
+    "engagement": {
+      "official_engagement": "Official engagement",
+      "serious_family_approval": "Serious family approval"
+    },
+    "proof": {
+      "engagement_certificate": "Engagement certificate",
+      "family_letter": "Family letter",
+      "guardian_statement": "Guardian statement"
+    },
+    "fingerprints": {
+      "saved": "Fingerprints saved",
+      "note": "We keep neither your id number nor your phone — only an encrypted fingerprint used to prevent duplicates.",
+      "edit": "Edit id / phone"
+    },
+    "documents": {
+      "pickImage": "Upload image",
+      "pickPdf": "Upload PDF",
+      "uploading": "Uploading…",
+      "empty": "No documents uploaded yet.",
+      "remove": "Remove document",
+      "permission": "Photo library permission was not granted.",
+      "type": "Unsupported file type. Allowed: JPG/PNG image or PDF.",
+      "size": "The file exceeds the allowed size.",
+      "processing": "Image processing failed, so nothing was uploaded — for your privacy.",
+      "failed": "Could not upload the document. Please try again.",
+      "fingerprintNote": "The current fingerprint is a demo metadata hash; content fingerprinting activates in P18."
+    },
+    "review": {
+      "documentsCount": "Documents: {{count}}",
+      "truthful": "I declare all information is truthful.",
+      "verification": "I consent to verification of this information.",
+      "processing": "I consent to processing my data for eligibility.",
+      "publication": "I optionally consent to publishing my case anonymously.",
+      "publicationNote": "Publication consent is entirely optional, never affects eligibility, and can be withdrawn anytime."
+    },
+    "submit": {
+      "intro": "Submitting creates an official copy of your request and issues a reference number. No automated decision is made.",
+      "action": "Submit application"
+    },
+    "result": {
+      "title": "Application submitted",
+      "note": "Keep the reference number. The tracking screen and timeline ship in the next part of P08.",
+      "home": "Back to home"
+    },
+    "validation": {
+      "governorate": "Choose a governorate.",
+      "birthYear": "Enter a valid birth year.",
+      "household": "Enter the household size (at least 1).",
+      "identity": "Enter your id number so its fingerprint can be saved.",
+      "phone": "Enter your phone number so its fingerprint can be saved.",
+      "documents": "Upload at least one document.",
+      "amount": "Enter a valid amount greater than zero.",
+      "truthful": "Declaring truthfulness is required.",
+      "verification": "Consent to verification is required.",
+      "processing": "Consent to processing is required."
+    }
   }
 }
