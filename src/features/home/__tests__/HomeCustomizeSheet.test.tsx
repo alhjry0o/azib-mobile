@@ -4,6 +4,7 @@ import {
   createTestQueryClient,
   resetShellStores,
 } from '@/features/shell/__tests__/test-utils';
+import { HOME_SECTION_IDS } from '../config/home-config.types';
 import { useAuthStore, useSettingsStore, useShellStore } from '@/stores';
 import { HomeCustomizeSheet } from '../components/HomeCustomizeSheet';
 
@@ -15,7 +16,7 @@ describe('HomeCustomizeSheet', () => {
   beforeEach(async () => {
     await resetShellStores();
     await act(() => {
-      useAuthStore.setState({ guestActive: false, hydrated: true, challenge: null });
+      useAuthStore.setState({ guestActive: true, hydrated: true, challenge: null });
       useSettingsStore.setState({
         homeSectionOrder: [],
         homeSectionVisibility: {},
@@ -25,7 +26,7 @@ describe('HomeCustomizeSheet', () => {
     });
   });
 
-  it('lists only registered sections', async () => {
+  it('lists every registered section', async () => {
     await render(
       <ShellProviders client={createTestQueryClient()}>
         <HomeCustomizeSheet />
@@ -34,8 +35,9 @@ describe('HomeCustomizeSheet', () => {
     await waitFor(() => {
       expect(screen.getByTestId('customize-section-weddings')).toBeTruthy();
     });
-    expect(screen.getByTestId('customize-section-jobs')).toBeTruthy();
-    expect(screen.queryByTestId('customize-section-support-cases')).toBeNull();
+    for (const id of HOME_SECTION_IDS) {
+      expect(screen.getByTestId(`customize-section-${id}`)).toBeTruthy();
+    }
   });
 
   it('hides a section and persists the choice', async () => {
@@ -64,7 +66,9 @@ describe('HomeCustomizeSheet', () => {
     });
     await fireEvent.press(screen.getByTestId('customize-down-weddings'));
     await waitFor(() => {
-      expect(useSettingsStore.getState().homeSectionOrder[0]).toBe('offers');
+      const order = useSettingsStore.getState().homeSectionOrder;
+      expect(order[1]).toBe('offers');
+      expect(order[2]).toBe('weddings');
     });
     await fireEvent.press(screen.getByTestId('customize-reset'));
     await waitFor(() => {
