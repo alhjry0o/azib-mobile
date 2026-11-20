@@ -12,9 +12,11 @@ import {
   setHomeConfigSource,
 } from '../config/home-config.source';
 import { HOME_QUICK_ACTION_IDS, HOME_SECTION_IDS } from '../config/home-config.types';
-import { REGISTERED_SECTION_IDS } from '../sections/registry';
+import { REGISTERED_SECTION_IDS, SECTION_REGISTRY } from '../sections/registry';
 
-jest.mock('expo-router', () => ({}));
+jest.mock('expo-router', () => ({
+  useRouter: () => ({ navigate: jest.fn(), push: jest.fn(), replace: jest.fn() }),
+}));
 
 describe('home config defaults', () => {
   it('lists all eight planned sections in a stable order', () => {
@@ -23,8 +25,11 @@ describe('home config defaults', () => {
     expect(DEFAULT_HOME_CONFIG.hiddenQuickActions).toEqual([]);
   });
 
-  it('registers only the sections implemented in P07.1', () => {
-    expect(REGISTERED_SECTION_IDS).toEqual(['weddings', 'offers', 'souk', 'jobs']);
+  it('registers every section implemented through P07.2', () => {
+    expect(REGISTERED_SECTION_IDS).toEqual(HOME_SECTION_IDS);
+    for (const id of HOME_SECTION_IDS) {
+      expect(SECTION_REGISTRY[id]).toBeDefined();
+    }
   });
 });
 
