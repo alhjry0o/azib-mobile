@@ -2,6 +2,7 @@
 // populateDemoSeed() creates records, then we publish them (update) and
 // link offers to real verified partners so the home dashboard is truthful
 // and readable. Nothing here changes a contract or a mock factory.
+// P07.2 adds program normalization so initiatives never show raw i18n keys.
 import type { RepositoryContainer } from '@/repositories/container';
 import { seedOffers } from '../../../mocks/seed/offers';
 import { populateDemoSeed } from '../../../mocks/seed/populator';
@@ -30,6 +31,16 @@ const OFFER_TITLES = [
   'home:demo.offers.catering',
   'home:demo.offers.venue',
   'home:demo.offers.clothing',
+] as const;
+const PROGRAM_NAMES = [
+  'home:demo.programs.marriage',
+  'home:demo.programs.emergency',
+  'home:demo.programs.seasonal',
+] as const;
+const PROGRAM_DESCRIPTIONS = [
+  'home:demo.programs.marriageDesc',
+  'home:demo.programs.emergencyDesc',
+  'home:demo.programs.seasonalDesc',
 ] as const;
 
 function titleAt(list: readonly string[], index: number): string {
@@ -109,6 +120,21 @@ export async function populateHomeDemoData(
       });
       if (updated.ok) published += 1;
       else errors.push('jobs: update failed');
+    }
+  }
+
+  const programs = await repositories.programs.list({ limit: 100 });
+  if (programs.ok) {
+    for (let i = 0; i < programs.value.items.length; i += 1) {
+      const program = programs.value.items[i];
+      if (!program) continue;
+      const updated = await repositories.programs.update(program.id, {
+        status: 'open',
+        nameKey: titleAt(PROGRAM_NAMES, i),
+        descriptionKey: titleAt(PROGRAM_DESCRIPTIONS, i),
+      });
+      if (updated.ok) published += 1;
+      else errors.push('programs: update failed');
     }
   }
 
