@@ -158,16 +158,10 @@ export function HomeScreen() {
         viewabilityConfig={viewabilityConfig}
         onViewableItemsChanged={onViewableItemsChanged}
         contentContainerStyle={{ paddingBottom: theme.spacing[12], gap: theme.spacing[2] }}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => {
-              void onRefresh();
-            }}
-            tintColor={theme.colors.text.accent}
-            colors={[theme.colors.accent.fill]}
-          />
-        }
+        refreshing={refreshing}
+        onRefresh={() => {
+          void onRefresh();
+        }}
       />
     </Screen>
   );
