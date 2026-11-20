@@ -20,4 +20,4 @@ export const REGISTERED_SECTION_IDS: readonly HomeSectionId[] = Object.freeze([
   'offers',
   'souk',
   'jobs',
-] as const HomeSectionId[]);
+]);
