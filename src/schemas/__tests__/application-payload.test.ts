@@ -4,7 +4,7 @@ import {
 } from '../index';
 import { seedAssistancePayloads } from '../../../mocks/seed/assistance';
 
-const payload = seedAssistancePayloads[0];
+const payload = seedAssistancePayloads[0]!;
 
 describe('ApplicationPayloadSchema', () => {
   it('accepts a complete demo payload', () => {
