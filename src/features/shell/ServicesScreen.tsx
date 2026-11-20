@@ -1,4 +1,4 @@
-// Services hub: every row navigates to a real (honest placeholder) screen.
+// Services hub: every row navigates to a real screen.
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Icon, ListItem, Screen, Text, type IconName } from '@/components/ui';
@@ -12,7 +12,7 @@ interface ServiceLink {
 }
 
 const SERVICE_LINKS: readonly ServiceLink[] = [
-  { key: 'assistance', route: ROUTES.features.assistance, icon: 'wallet' },
+  { key: 'assistance', route: ROUTES.assistance.root, icon: 'wallet' },
   { key: 'souk', route: ROUTES.features.souk, icon: 'shoppingBag' },
   { key: 'jobs', route: ROUTES.features.jobs, icon: 'users' },
   { key: 'volunteers', route: ROUTES.features.volunteers, icon: 'userCheck' },
