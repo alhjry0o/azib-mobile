@@ -42,14 +42,14 @@ export function SuccessStoriesSection() {
     <View style={{ gap: theme.spacing[2] }}>
       <SectionShell
         id="success-stories"
-        title={t('home:sections.successStories.title')}
-        subtitle={t('home:sections.successStories.subtitle')}
+        title={t('home:sections.success-stories.title')}
+        subtitle={t('home:sections.success-stories.subtitle')}
         status={section.status}
         emptyIcon="heart"
-        emptyTitle={t('home:sections.successStories.empty')}
-        emptyDescription={t('home:sections.successStories.emptyDescription')}
+        emptyTitle={t('home:sections.success-stories.empty')}
+        emptyDescription={t('home:sections.success-stories.emptyDescription')}
         emptyAction={{
-          label: t('home:sections.successStories.action'),
+          label: t('home:sections.success-stories.action'),
           onPress: () => router.navigate(href(ROUTES.features.learn)),
         }}
         onRetry={section.refetch}
@@ -73,7 +73,7 @@ export function SuccessStoriesSection() {
           style={[styles.note, { paddingHorizontal: theme.spacing[4] }]}
           testID="stories-consent-note"
         >
-          {t('home:sections.successStories.consentRecorded')}
+          {t('home:sections.success-stories.consentRecorded')}
         </Text>
       ) : null}
     </View>
