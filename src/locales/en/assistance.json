@@ -1,4 +1,117 @@
 {
   "title": "Assistance",
-  "notConnectedYet": "Assistance will be built in P08."
+  "notConnectedYet": "Assistance will be built in P08.",
+  "policy": {
+    "pending": "The values in use are provisional and await owner approval.",
+    "advisory": "Scoring is advisory only; the final decision belongs to a human reviewer.",
+    "scoreHidden": "The detailed score is not shown to the applicant in this version."
+  },
+  "engine": {
+    "explain": {
+      "needSeverity": "Need severity: household size and dependents against income per person.",
+      "incomeToNeeds": "Income compared with essential monthly needs.",
+      "obligations": "Living obligations compared with income.",
+      "availableAssets": "Only assets actually available for disposal.",
+      "seriousness": "Seriousness of steps: engagement status and its proof document.",
+      "jobStability": "Job stability: continuity months with the income source."
+    },
+    "excluded": "Relatives' wealth, unreceived inheritance and restricted assets are never counted."
+  },
+  "gates": {
+    "realIncome": {
+      "pass": "A real income source exists.",
+      "fail": "A real income source is required to complete scoring."
+    },
+    "notWealthy": {
+      "pass": "Available assets are below the rule threshold.",
+      "fail": "Available assets reached or exceeded the rule threshold."
+    },
+    "noPrior": {
+      "pass": "No prior assistance recorded.",
+      "fail": "Prior assistance exists and no exception is approved."
+    },
+    "truth": {
+      "pass": "Truthfulness was declared.",
+      "fail": "Declaring truthfulness is required."
+    }
+  },
+  "bands": {
+    "notEligible": "Not eligible",
+    "additionalReview": "Additional review",
+    "partial": "Partially eligible",
+    "full": "Fully eligible",
+    "gatesFailed": "Gate conditions not met"
+  },
+  "recommendations": {
+    "notEligible": "Advisory: insufficient eligibility indicated; human review decides.",
+    "additionalReview": "Advisory: further verification is needed before any decision.",
+    "partial": "Advisory: partial assistance may fit after review.",
+    "full": "Advisory: full assistance may fit after review.",
+    "humanReview": "Advisory: routed to a human reviewer with no automated decision."
+  },
+  "flags": {
+    "identityDuplicate": "Identity fingerprint used in another application",
+    "phoneDuplicate": "Phone fingerprint used in another application",
+    "documentReused": "Reused document",
+    "rapidResubmission": "Repeated submissions in a short window",
+    "incomeObligationMismatch": "Declared income and obligations are inconsistent"
+  },
+  "workflow": {
+    "status": {
+      "draft": "Draft",
+      "submitted": "Submitted",
+      "in_review": "In review",
+      "info_requested": "Awaiting information",
+      "approved": "Approved",
+      "rejected": "Not approved",
+      "appealed": "Appeal submitted",
+      "appeal_resolved": "Appeal resolved",
+      "disbursing": "Disbursing",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "errors": {
+      "invalidTransition": "This status cannot be reached from the current one.",
+      "appealUsed": "An appeal may be submitted only once.",
+      "appealWindowClosed": "The appeal window has closed."
+    }
+  },
+  "documents": {
+    "kind": {
+      "identity": "Identity proof",
+      "income_proof": "Income proof",
+      "engagement_proof": "Engagement proof",
+      "other": "Supporting document"
+    },
+    "why": {
+      "identity": "To verify the applicant and prevent duplicates, without publishing any data.",
+      "income_proof": "To estimate actual income against needs.",
+      "engagement_proof": "To prove seriousness without collecting the other party's details."
+    },
+    "limits": "Maximum 5 MB for images and 10 MB for PDF files.",
+    "pdfNote": "PDF files are checked for type and size only; no image processing is applied.",
+    "private": "Documents are private to the applicant and never appear in search, notifications or public logs."
+  },
+  "infoRequest": {
+    "title": "Information request",
+    "intro": "We need a few clarifications to complete your review. This is not a rejection.",
+    "resubmit": "Resubmit after completing"
+  },
+  "decision": {
+    "title": "Review outcome",
+    "approved": "Approved after human review.",
+    "rejected": "Not approved after human review.",
+    "reasons": "Decision reasons"
+  },
+  "appeal": {
+    "title": "Submit an appeal",
+    "window": "You may appeal once within {{days}} days of the decision.",
+    "statement": "Appeal statement",
+    "submit": "Submit appeal",
+    "pending": "Your appeal is being reviewed by a different reviewer."
+  },
+  "reference": {
+    "label": "Reference number",
+    "demoNote": "Demo number; the official one is minted server-side in P18."
+  }
 }
