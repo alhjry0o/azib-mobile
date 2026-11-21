@@ -89,7 +89,7 @@ describe('MyApplicationsScreen', () => {
       if (created.ok) id = created.value.id;
     });
     await act(async () => {
-      await client.invalidateQueries();
+      await client.invalidateQueries({ queryKey: ['assistance'] });
     });
     await waitFor(() => {
       expect(screen.getByTestId(`application-${id}`)).toBeTruthy();
