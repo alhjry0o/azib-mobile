@@ -100,15 +100,35 @@ export function ApplicationDetailScreen() {
     );
   }
 
-  const status = toWorkflowStatus(application.status);
-  const decision = application.decision ?? null;
-  const appeal = application.appeal ?? null;
+  const application = detail.application;
+  const status = application ? toWorkflowStatus(application.status) : 'draft';
+  const decision = application?.decision ?? null;
+  const appeal = application?.appeal ?? null;
   const decidedAt = decision?.decidedAt ? Date.parse(decision.decidedAt) : Number.NaN;
   const windowMs = rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
   const withinWindow = useMemo(() => {
     if (Number.isNaN(decidedAt)) return false;
+    
     return Date.now() - decidedAt <= windowMs;
   }, [decidedAt, windowMs]);
+  
+  if (!application) {
+    return (
+      <Screen testID="application-detail-screen" style={styles.center}>
+        <EmptyState
+          icon="info"
+          title={t('assistance:detail.notFound')}
+          description={t('assistance:detail.notFoundDescription')}
+          action={{
+            label: t('assistance:mine.title'),
+            onPress: () => router.replace(href(ROUTES.assistance.mine)),
+          }}
+          testID="detail-not-found"
+        />
+      </Screen>
+    );
+  }
+
   const canAppeal = status === 'rejected' && appeal === null && withinWindow;
 
   const confirmCancel = (): void => {
