@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -45,6 +46,16 @@ export function ApplicationDetailScreen() {
   const format = useHomeFormatters();
   const openDialog = useShellStore((s) => s.openDialog);
 
+  const decision = detail.application?.decision ?? null;
+  const decidedAt = decision?.decidedAt ? Date.parse(decision.decidedAt) : Number.NaN;
+  const windowMs = rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
+
+  const withinWindow = useMemo(() => {
+    if (Number.isNaN(decidedAt)) return false;
+    // eslint-disable-next-line react-hooks/purity
+    return Date.now() - decidedAt <= windowMs;
+  }, [decidedAt, windowMs]);
+
   if (container.mode !== 'demo') {
     return (
       <Screen testID="application-detail-screen" style={styles.center}>
@@ -82,17 +93,6 @@ export function ApplicationDetailScreen() {
   }
 
   const application = detail.application;
-  const decision = application?.decision ?? null;
-  
-  const decidedAt = decision?.decidedAt ? Date.parse(decision.decidedAt) : Number.NaN;
-  const windowMs = rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
-  
-  const withinWindow = useMemo(() => {
-    if (Number.isNaN(decidedAt)) return false;
-    // eslint-disable-next-line react-hooks/purity
-    return Date.now() - decidedAt <= windowMs;
-  }, [decidedAt, windowMs]);
-
   if (!application) {
     return (
       <Screen testID="application-detail-screen" style={styles.center}>
@@ -113,6 +113,7 @@ export function ApplicationDetailScreen() {
   const status = toWorkflowStatus(application.status);
   const appeal = application.appeal ?? null;
   const canAppeal = status === 'rejected' && appeal === null && withinWindow;
+
   const confirmCancel = (): void => {
     openDialog({
       title: t('assistance:detail.cancelConfirmTitle'),
@@ -142,7 +143,6 @@ export function ApplicationDetailScreen() {
         style={styles.back}
       />
       <Text variant="h1">{t('assistance:detail.title')}</Text>
-
       <Card variant="crest" style={{ gap: theme.spacing[2] }} testID="detail-summary">
         <Text variant="caption" color="secondary">
           {t('assistance:reference.label')}
