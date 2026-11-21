@@ -104,6 +104,7 @@ export function ApplicationDetailScreen() {
   const appeal = application.appeal ?? null;
   const decidedAt = decision?.decidedAt ? Date.parse(decision.decidedAt) : Number.NaN;
   const windowMs = rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
+  // eslint-disable-next-line react-hooks/purity
   const withinWindow =
     !Number.isNaN(decidedAt) && Date.now() - decidedAt <= windowMs;
   const canAppeal = status === 'rejected' && appeal === null && withinWindow;
