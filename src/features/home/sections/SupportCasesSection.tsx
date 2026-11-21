@@ -1,6 +1,5 @@
-// D-3: the Application contract carries no publication consent, so NO case is
-// published. The query and the anonymizing projection are real and ready for
-// P08/P18; until then the section is honestly empty with the reason shown.
+// Publication consent now exists on the Application contract (P08.1), but no
+// approved case carries it yet in demo. The gate stays fail-closed (ADR-0024).
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Badge, Card, Text } from '@/components/ui';
@@ -14,9 +13,6 @@ import { SectionShell } from '../components/SectionShell';
 import { useHomeSection } from '../hooks/use-home-section';
 
 const MAX_ITEMS = 4;
-
-/** No publication-consent source exists in the P03 contracts (D-3). */
-const PUBLICATION_CONSENTS: readonly PublicationConsent[] = [];
 
 export function SupportCasesSection() {
   const theme = useTheme();
@@ -32,12 +28,19 @@ export function SupportCasesSection() {
         status: 'approved',
       });
       if (!listed.ok) return listed;
+      const consents: PublicationConsent[] = [];
+      for (const application of listed.value.items) {
+        const record = application.publicationConsent;
+        if (!record) continue;
+        consents.push({
+          subjectId: application.id,
+          grantedAt: record.grantedAt,
+          revokedAt: record.revokedAt,
+        });
+      }
       return {
         ok: true,
-        value: selectPublicSupportCases(listed.value.items, PUBLICATION_CONSENTS).slice(
-          0,
-          MAX_ITEMS,
-        ),
+        value: selectPublicSupportCases(listed.value.items, consents).slice(0, MAX_ITEMS),
       };
     },
   });
@@ -53,7 +56,7 @@ export function SupportCasesSection() {
       emptyDescription={t('home:sections.support-cases.emptyDescription')}
       emptyAction={{
         label: t('home:sections.support-cases.action'),
-        onPress: () => router.navigate(href(ROUTES.features.assistance)),
+        onPress: () => router.navigate(href(ROUTES.assistance.root)),
       }}
       onRetry={section.refetch}
     >
