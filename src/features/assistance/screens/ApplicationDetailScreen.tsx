@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -90,10 +89,8 @@ export function ApplicationDetailScreen() {
   const windowMs = rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
   const withinWindow = useMemo(() => {
     if (Number.isNaN(decidedAt)) return false;
-    
     return Date.now() - decidedAt <= windowMs;
   }, [decidedAt, windowMs]);
-  
   if (!application) {
     return (
       <Screen testID="application-detail-screen" style={styles.center}>
@@ -112,7 +109,6 @@ export function ApplicationDetailScreen() {
   }
 
   const canAppeal = status === 'rejected' && appeal === null && withinWindow;
-
   const confirmCancel = (): void => {
     openDialog({
       title: t('assistance:detail.cancelConfirmTitle'),
