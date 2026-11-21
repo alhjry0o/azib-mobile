@@ -1,8 +1,8 @@
 // Demo-only review simulator (D-11). Executes reviewer/finance transitions
 // through the same workflow service the real console will use in P17.
 // Never runs in backend mode and never produces an automated user decision.
-import { useCallback, useEffect, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -47,23 +47,20 @@ export function DevAssistanceScreen() {
   const container = useProviderContainer();
   const client = useQueryClient();
 
-  const [applications, setApplications] = useState<readonly Application[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [pending, setPending] = useState<{ to: WorkflowStatus; actor: WorkflowActor } | null>(null);
   const [reasons, setReasons] = useState<readonly string[]>([]);
   const [fields, setFields] = useState<readonly string[]>([]);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-
-  const refresh = useCallback(async (): Promise<void> => {
-    const listed = await container.repositories.applications.list({ limit: 50 });
-    if (listed.ok) setApplications(listed.value.items);
-  }, [container]);
-
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => {
-    void refresh();
-  }, [refresh]);
+  const { data: applications = [], refetch: refresh } = useQuery({
+    queryKey: ['dev', 'applications', container.mode],
+    enabled: container.mode === 'demo',
+    queryFn: async () => {
+      const listed = await container.repositories.applications.list({ limit: 50 });
+      return listed.ok ? listed.value.items : [];
+    },
+  });
 
   if (container.mode !== 'demo') {
     return (
