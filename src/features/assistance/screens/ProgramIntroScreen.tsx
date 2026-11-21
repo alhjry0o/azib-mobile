@@ -53,6 +53,13 @@ export function ProgramIntroScreen() {
       <Badge variant="pending" label={t('assistance:policy.pending')} testID="program-policy-badge" />
 
       <Button
+        fullWidth
+        leftIcon="wallet"
+        label={t('assistance:mine.title')}
+        onPress={() => router.push(href(ROUTES.assistance.mine))}
+        testID="program-open-mine"
+      />
+      <Button
         variant="secondary"
         fullWidth
         leftIcon="info"
