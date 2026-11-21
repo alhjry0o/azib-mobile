@@ -60,6 +60,7 @@ export function DevAssistanceScreen() {
     if (listed.ok) setApplications(listed.value.items);
   }, [container]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     void refresh();
   }, [refresh]);
