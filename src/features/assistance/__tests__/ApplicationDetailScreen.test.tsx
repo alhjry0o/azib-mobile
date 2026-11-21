@@ -78,7 +78,7 @@ describe('ApplicationDetailScreen', () => {
       mockId = await seedApplication(applicantId);
     });
     await act(async () => {
-      await client.invalidateQueries();
+      await client.invalidateQueries({ queryKey: ['assistance'] });
     });
     return client;
   }
