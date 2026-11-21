@@ -82,15 +82,17 @@ export function ApplicationDetailScreen() {
   }
 
   const application = detail.application;
-  const status = application ? toWorkflowStatus(application.status) : 'draft';
   const decision = application?.decision ?? null;
-  const appeal = application?.appeal ?? null;
+  
   const decidedAt = decision?.decidedAt ? Date.parse(decision.decidedAt) : Number.NaN;
   const windowMs = rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
+  
   const withinWindow = useMemo(() => {
     if (Number.isNaN(decidedAt)) return false;
+    // eslint-disable-next-line react-hooks/purity
     return Date.now() - decidedAt <= windowMs;
   }, [decidedAt, windowMs]);
+
   if (!application) {
     return (
       <Screen testID="application-detail-screen" style={styles.center}>
@@ -108,6 +110,8 @@ export function ApplicationDetailScreen() {
     );
   }
 
+  const status = toWorkflowStatus(application.status);
+  const appeal = application.appeal ?? null;
   const canAppeal = status === 'rejected' && appeal === null && withinWindow;
   const confirmCancel = (): void => {
     openDialog({
