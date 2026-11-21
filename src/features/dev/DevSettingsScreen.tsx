@@ -263,6 +263,13 @@ export function DevSettingsScreen() {
       <DevSection title={t('common:shell.dev.links.title')} testID="dev-links-card">
         <ListItem
           variant="card"
+          title={t('assistance:dev.title')}
+          leading={<Icon name="wallet" size={20} />}
+          onPress={() => router.push(href(ROUTES.devAssistance))}
+          testID="dev-assistance-link"
+        />
+        <ListItem
+          variant="card"
           title={t('common:shell.dev.links.integrations')}
           leading={<Icon name="info" size={20} />}
           onPress={() => router.push(href(ROUTES.devIntegrations))}
