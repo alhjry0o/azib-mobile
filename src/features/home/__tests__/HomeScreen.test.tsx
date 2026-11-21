@@ -94,7 +94,7 @@ describe('HomeScreen', () => {
       </ShellProviders>,
     );
     await fireEvent.press(screen.getByTestId('hero-primary'));
-    expect(mockNavigate).toHaveBeenCalledWith('/(features)/assistance');
+    expect(mockNavigate).toHaveBeenCalledWith('/assistance');
   });
 
   it('shows role blocks only for the matching roles', async () => {
