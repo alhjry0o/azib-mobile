@@ -77,6 +77,6 @@ describe('SupportCasesSection', () => {
     });
     const buttons = screen.getAllByRole('button');
     await fireEvent.press(buttons[0]!);
-    expect(mockNavigate).toHaveBeenCalledWith('/(features)/assistance');
+    expect(mockNavigate).toHaveBeenCalledWith('/assistance');
   });
 });
