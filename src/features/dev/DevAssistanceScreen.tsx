@@ -19,7 +19,6 @@ import {
 } from '@/components/ui';
 import { ROUTES, href } from '@/constants/routes';
 import { useProviderContainer } from '@/providers';
-import type { Application } from '@/repositories/contracts/application';
 import { useDirection } from '@/hooks';
 import { useTheme } from '@/theme';
 import {
