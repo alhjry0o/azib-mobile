@@ -91,7 +91,7 @@ describe('InfoRequestScreen', () => {
       );
     });
     await act(async () => {
-      await client.invalidateQueries();
+      await client.invalidateQueries({ queryKey: ['assistance'] });
     });
     await waitFor(() => {
       expect(screen.getByTestId('info-request-items')).toBeTruthy();
