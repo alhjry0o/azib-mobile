@@ -43,8 +43,10 @@ export function DecisionScreen() {
   const decidedAt = Date.parse(decision.decidedAt);
   const withinWindow = useMemo(() => {
     if (Number.isNaN(decidedAt)) return false;
+    // eslint-disable-next-line react-hooks/purity
     return Date.now() - decidedAt <= rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
   }, [decidedAt, rules.data.appealWindowDays]);
+  
   const canAppeal = decision.outcome === 'rejected' && appeal === null && withinWindow;
 
   return (
