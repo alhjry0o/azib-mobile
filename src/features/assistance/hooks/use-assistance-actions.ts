@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { AppError } from '@/core/errors';
 import type { Result } from '@/core/result';
@@ -46,10 +46,13 @@ export function useAssistanceActions(id: string): AssistanceActionsApi {
     [client],
   );
 
-  const deps = {
-    applications: container.repositories.applications,
-    audit: container.repositories.audit,
-  };
+  const deps = useMemo(
+    () => ({
+      applications: container.repositories.applications,
+      audit: container.repositories.audit,
+    }),
+    [container],
+  );
 
   const resubmit = useCallback(
     (input: ResubmitInput) =>
