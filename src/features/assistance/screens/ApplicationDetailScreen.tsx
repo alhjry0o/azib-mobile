@@ -83,24 +83,6 @@ export function ApplicationDetailScreen() {
   }
 
   const application = detail.application;
-  if (!application) {
-    return (
-      <Screen testID="application-detail-screen" style={styles.center}>
-        <EmptyState
-          icon="info"
-          title={t('assistance:detail.notFound')}
-          description={t('assistance:detail.notFoundDescription')}
-          action={{
-            label: t('assistance:mine.title'),
-            onPress: () => router.replace(href(ROUTES.assistance.mine)),
-          }}
-          testID="detail-not-found"
-        />
-      </Screen>
-    );
-  }
-
-  const application = detail.application;
   const status = application ? toWorkflowStatus(application.status) : 'draft';
   const decision = application?.decision ?? null;
   const appeal = application?.appeal ?? null;
