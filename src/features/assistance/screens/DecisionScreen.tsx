@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -40,10 +41,10 @@ export function DecisionScreen() {
 
   const appeal = application.appeal ?? null;
   const decidedAt = Date.parse(decision.decidedAt);
-  // eslint-disable-next-line react-hooks/purity
-  const withinWindow =
-    !Number.isNaN(decidedAt) &&
-    Date.now() - decidedAt <= rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
+  const withinWindow = useMemo(() => {
+    if (Number.isNaN(decidedAt)) return false;
+    return Date.now() - decidedAt <= rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
+  }, [decidedAt, rules.data.appealWindowDays]);
   const canAppeal = decision.outcome === 'rejected' && appeal === null && withinWindow;
 
   return (
