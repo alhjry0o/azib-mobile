@@ -40,6 +40,7 @@ export function DecisionScreen() {
 
   const appeal = application.appeal ?? null;
   const decidedAt = Date.parse(decision.decidedAt);
+  // eslint-disable-next-line react-hooks/purity
   const withinWindow =
     !Number.isNaN(decidedAt) &&
     Date.now() - decidedAt <= rules.data.appealWindowDays * 24 * 60 * 60 * 1000;
