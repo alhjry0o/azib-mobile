@@ -43,7 +43,7 @@ export function InitiativesSection() {
       emptyTitle={t('home:sections.initiatives.empty')}
       emptyDescription={t('home:sections.initiatives.emptyDescription')}
       actionLabel={t('home:sections.initiatives.viewAll')}
-      onPress: () => router.navigate(href(ROUTES.assistance.root)),
+      onAction={() => router.navigate(href(ROUTES.assistance.root))}
       onRetry={section.refetch}
     >
       {section.data.map((program) => (
