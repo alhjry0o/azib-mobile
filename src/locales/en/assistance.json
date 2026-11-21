@@ -82,23 +82,66 @@
     "pdfNote": "PDF files are checked for type and size only; no image processing is applied.",
     "private": "Documents are private to the applicant and never appear in search, notifications or public logs."
   },
+  "reasons": {
+    "approval": {
+      "documentsVerified": "Submitted documents were verified.",
+      "needConfirmed": "Need was confirmed after review.",
+      "eligibleAfterReview": "Conditions met after human review."
+    },
+    "rejection": {
+      "documentsIncomplete": "The submitted documents are incomplete.",
+      "incomeAboveThreshold": "Declared income exceeds the currently approved threshold.",
+      "priorAssistance": "Prior assistance is recorded for this applicant.",
+      "inconsistentInformation": "Some information needs clarification before proceeding."
+    }
+  },
   "infoRequest": {
     "title": "Information request",
     "intro": "We need a few clarifications to complete your review. This is not a rejection.",
-    "resubmit": "Resubmit after completing"
+    "resubmit": "Resubmit after completing",
+    "editTitle": "Update your details",
+    "noteLabel": "Clarification note",
+    "fields": {
+      "identityDocument": "Identity proof document",
+      "incomeProof": "Income proof document",
+      "engagementProof": "Engagement proof document",
+      "incomeFigure": "Monthly income figure",
+      "assetsFigure": "Available assets figure",
+      "obligationsFigure": "Monthly obligations figure"
+    },
+    "reasons": {
+      "identityDocument": "The document is unclear or incomplete; we need a clearer copy.",
+      "incomeProof": "We need evidence for the stated monthly income.",
+      "engagementProof": "We need proof of engagement status, with no details about the other party.",
+      "incomeFigure": "We need confirmation of the stated income figure.",
+      "assetsFigure": "We need confirmation of assets available for disposal.",
+      "obligationsFigure": "We need confirmation of monthly obligations."
+    }
   },
   "decision": {
     "title": "Review outcome",
     "approved": "Approved after human review.",
     "rejected": "Not approved after human review.",
-    "reasons": "Decision reasons"
+    "reasons": "Decision reasons",
+    "reviewer": "Authorized human reviewer",
+    "noScores": "Detailed scores are not shown. The decision is human; automated scoring is advisory only.",
+    "appealCta": "Submit an appeal",
+    "pendingTitle": "No decision yet",
+    "pendingDescription": "Your application is still under review. The decision will appear here once issued."
   },
   "appeal": {
     "title": "Submit an appeal",
     "window": "You may appeal once within {{days}} days of the decision.",
     "statement": "Appeal statement",
+    "documents": "Additional documents",
     "submit": "Submit appeal",
-    "pending": "Your appeal is being reviewed by a different reviewer."
+    "pending": "Your appeal is being reviewed by a different reviewer.",
+    "used": "You already appealed this application; a second appeal is not allowed.",
+    "closed": "This application cannot be appealed now; the window closed or its status does not allow it.",
+    "validation": {
+      "statementMin": "Describe your appeal in at least 20 characters.",
+      "statementMax": "The appeal statement is too long (2000 characters max)."
+    }
   },
   "reference": {
     "label": "Reference number",
@@ -133,6 +176,32 @@
     "title": "Pre-check",
     "notStored": "This pre-check is non-binding, never saved and never sent. It is an advisory estimate only.",
     "action": "Compute an estimate"
+  },
+  "mine": {
+    "title": "My applications",
+    "subtitle": "All your applications and their stages. Tap one for its timeline and actions.",
+    "empty": "No applications yet",
+    "emptyDescription": "Start a new application from the programs list; it will appear here with its reference number.",
+    "action": "Browse programs",
+    "draft": "Draft without a reference number",
+    "errorTitle": "Could not load applications",
+    "errorDescription": "Something went wrong while fetching your applications. Please retry.",
+    "notConnected": "Applications not connected",
+    "notConnectedDescription": "Backend wiring activates in P18. Demo mode is available now."
+  },
+  "detail": {
+    "title": "Application details",
+    "timeline": "Timeline",
+    "amount": "Requested amount",
+    "notFound": "Application not found",
+    "notFoundDescription": "We could not find this application. It may have been deleted or the link is invalid.",
+    "infoRequest": "Complete information",
+    "decision": "View review outcome",
+    "appeal": "Submit an appeal",
+    "cancel": "Cancel application",
+    "cancelConfirmTitle": "Cancel application",
+    "cancelConfirmDescription": "The application will be cancelled and this cannot be undone.",
+    "cancelConfirm": "Confirm cancellation"
   },
   "wizard": {
     "stepOf": "Step {{current}} of {{total}}",
@@ -237,7 +306,7 @@
     },
     "result": {
       "title": "Application submitted",
-      "note": "Keep the reference number. The tracking screen and timeline ship in the next part of P08.",
+      "note": "Keep the reference number. You can track the application from My applications.",
       "home": "Back to home"
     },
     "validation": {
@@ -252,5 +321,19 @@
       "verification": "Consent to verification is required.",
       "processing": "Consent to processing is required."
     }
+  },
+  "dev": {
+    "title": "Review simulator",
+    "subtitle": "Internal tool to run reviewer/finance transitions through the same workflow service. No automated decision in the user path.",
+    "empty": "No applications. Create a demo one to start.",
+    "create": "Create a complete demo application",
+    "created": "A demo application was created and submitted.",
+    "current": "Current status",
+    "noTransitions": "No transitions available from this status.",
+    "reasonsRequired": "Choose decision reasons",
+    "fieldsRequired": "Choose what to request",
+    "apply": "Apply transition",
+    "applied": "Transition applied and recorded in the audit trail.",
+    "notDemo": "This simulator works in demo mode only."
   }
 }
