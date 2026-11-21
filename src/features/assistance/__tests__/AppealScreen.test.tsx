@@ -100,7 +100,7 @@ describe('AppealScreen', () => {
       mockId = await rejectedApplication(decidedAt);
     });
     await act(async () => {
-      await client.invalidateQueries();
+      await client.invalidateQueries({ queryKey: ['assistance'] });
     });
     return client;
   }
