@@ -8,6 +8,14 @@ import { PROGRAM_KIND_CATALOG, programKindOf } from '../catalog/program-kinds';
 import { FinanceScaffold } from '../components/FinanceScaffold';
 import { useProgramCatalog } from '../hooks/use-program-catalog';
 
+const KIND_LABEL_KEYS: Readonly<Record<string, string>> = {
+  grant: 'grant.label',
+  partial: 'partial.label',
+  qard_hasan: 'qardHasan.label',
+  in_kind: 'inKind.label',
+  donor_contribution: 'donorContribution.label',
+};
+
 export function ProgramCatalogScreen() {
   const theme = useTheme();
   const router = useRouter();
@@ -39,6 +47,22 @@ export function ProgramCatalogScreen() {
         label={t('assistance:finance.receipts.title')}
         onPress={() => router.push(href(ROUTES.programs.receipts))}
         testID="catalog-open-receipts"
+      />
+      <Button
+        variant="ghost"
+        fullWidth
+        leftIcon="creditCard"
+        label={t('assistance:finance.disbursements.title')}
+        onPress={() => router.push(href(ROUTES.programs.disbursements))}
+        testID="catalog-open-disbursements"
+      />
+      <Button
+        variant="ghost"
+        fullWidth
+        leftIcon="info"
+        label={t('assistance:finance.impact.title')}
+        onPress={() => router.push(href(ROUTES.programs.impact))}
+        testID="catalog-open-impact"
       />
 
       <Text variant="h3">{t('assistance:finance.catalog.kindsTitle')}</Text>
@@ -103,7 +127,9 @@ export function ProgramCatalogScreen() {
           <Badge
             variant="pending"
             size="sm"
-            label={t(`assistance:finance.kinds.${kindLabelKey(programKindOf(program))}`)}
+            label={t(
+              `assistance:finance.kinds.${KIND_LABEL_KEYS[programKindOf(program)] ?? 'grant.label'}`,
+            )}
           />
           <Button
             fullWidth
@@ -115,19 +141,4 @@ export function ProgramCatalogScreen() {
       ))}
     </FinanceScaffold>
   );
-}
-
-function kindLabelKey(kind: string): string {
-  switch (kind) {
-    case 'qard_hasan':
-      return 'qardHasan.label';
-    case 'in_kind':
-      return 'inKind.label';
-    case 'donor_contribution':
-      return 'donorContribution.label';
-    case 'partial':
-      return 'partial.label';
-    default:
-      return 'grant.label';
-  }
 }
