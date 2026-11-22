@@ -1,5 +1,5 @@
 // Account tab hub. Profile and settings are real screens from P06.2.
-// Finance entry points added in P09.2. Developer links stay non-production.
+// Finance entry points added in P09.2–P09.3. Developer links stay non-production.
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -80,6 +80,13 @@ export function AccountPlaceholder() {
         leading={<Icon name="checkCircle" size={20} />}
         onPress={() => router.push(href(ROUTES.programs.receipts))}
         testID="account-receipts"
+      />
+      <ListItem
+        variant="card"
+        title={t('assistance:finance.disbursements.title')}
+        leading={<Icon name="creditCard" size={20} />}
+        onPress={() => router.push(href(ROUTES.programs.disbursements))}
+        testID="account-disbursements"
       />
       <ListItem
         variant="card"
