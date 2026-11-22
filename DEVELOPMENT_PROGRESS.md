@@ -15,10 +15,10 @@
 | P03 | Core Platform | Done | 2026-11-12 | 12 providers · 16 repos · seed · ARCHITECTURE. |
 | P04 | Design System | Done | 2026-11-14 | 42 مكوّناً · 565 اختباراً · 71 suite. |
 | P05 | Shell + Onboarding | Done | 2026-11-16 | 3 أجزاء · 623 اختباراً · ADR-0012…0015. |
-| P06 | Auth / Profile / Settings / Legal | Done | 2026-11-16 | 3 أجزاء · 780 اختباراً · 110 suites · ADR-0016…0022. |
-| P07 | **Home Dashboard & Discovery** | **Done** | **2026-11-16** | جزءان · **129/129 suites · 869/869 tests** · lint/typecheck نظيفان · CI أخضر (بتقرير المالك) · ADR-0023…0026. |
-| P08 | Assistance + Eligibility | **Blocked** | — | **محجوب** حتى `PRODUCT_POLICIES #1,#2,#3,#5`. |
-| P09 | Financial Architecture | Not Started | — | Non-Custodial، لا دفع تجريبي. |
+| P06 | Auth / Profile / Settings / Legal | Done | 2026-11-16 | 3 أجزاء · 780 اختباراً / 110 suites · ADR-0016…0022. |
+| P07 | Home Dashboard & Discovery | Done | 2026-11-16 | جزءان · 869 اختباراً / 129 suites · ADR-0023…0026. |
+| P08 | **Assistance & Eligibility Engine** | **Done** | **2026-11-16** | 3 أجزاء · **155/155 suites · 1020/1020 tests** · lint/typecheck نظيفان · CI أخضر (بتقرير المالك) · ADR-0027…0032 + `docs/ELIGIBILITY_ENGINE.md`. |
+| P09 | Financial Architecture | Not Started | — | Non-Custodial (ADR-0005)؛ لا دفع تجريبي بإيصال حقيقي. |
 | P10 | Group Weddings | Not Started | — | **محجوب** حتى سياسة الانسحاب. |
 | P11 | Partners + Ambassadors | Not Started | — | **محجوب** حتى فئة الخصومات؛ يضيف ربط حساب↔شريك. |
 | P12 | Souk | Not Started | — | عيني فقط. |
@@ -26,10 +26,10 @@
 | P14 | Calculator + Guide | Not Started | — | إرشادي فقط. |
 | P15 | Education + Charter + Impact | Not Started | — | **محجوب** حتى حد الإحصاءات؛ يضيف نشر القصص بموافقة. |
 | P16 | Notifications + Search | Not Started | — | يربط مصدر شارة Dock وجرس الرئيسية. |
-| P17 | Staff Console | Not Started | — | يستفيد من أدوار P06 وحارسه. |
-| P18 | Supabase | Not Started | — | ينفّذ الحذف، يحفظ الصورة، يستعيد الجلسة، يفصل Real. |
-| P19 | Security | Not Started | — | يستهلك `THREAT_MODEL.md`. |
-| P20 | Offline / Perf / A11y | Not Started | — | يشمل تحقق الأجهزة المؤجل (P05–P07). |
+| P17 | Staff Console | Not Started | — | يستهلك `evaluation` وكتالوج الأسباب ويفصل مراجع الاعتراض. |
+| P18 | Supabase | Not Started | — | قواعد على الخادم · انتقال ذرّي · بصمة محتوى · تنفيذ الحذف والصرف. |
+| P19 | Security | Not Started | — | يستهلك `THREAT_MODEL.md` (محدَّث بـP08). |
+| P20 | Offline / Perf / A11y | Not Started | — | يشمل تحقق الأجهزة المؤجل (P05–P08). |
 | P21 | Testing | Not Started | — | Playwright + pgTAP. |
 | P22 | GitHub Actions | Not Started | — | الفاحص أُضيف مبكراً في P05. |
 | P23 | Docs | Not Started | — | يُستكمل README. |
@@ -40,14 +40,14 @@
 ## قوائم التحقق السابقة (مختصرة)
 
 ### P01
-- [x] `AGENT_RULES` (HRD + 22 قاعدة + حلقة عمل) · `PROJECT_CONTEXT` (9 أقسام) · `DEVELOPMENT_PROGRESS` (24 مرحلة).
+- [x] `AGENT_RULES` (HRD + 22 قاعدة) · `PROJECT_CONTEXT` (9 أقسام) · `DEVELOPMENT_PROGRESS` (24 مرحلة).
 - [x] `DECISIONS` (قالب + 6 قرارات) · `PRODUCT_POLICIES` (8 قرارات بشرية) · `GLOSSARY` · `ASSET_LICENSES` · `THREAT_MODEL` · `README`.
 - [x] لا كود تطبيق. تأكيد المالك بأوامر التحقق.
 
 ### P02
 - [x] Expo SDK 58 · TS strict + `noUncheckedIndexedAccess` + alias `@/*`.
 - [x] ESLint flat + Prettier + سكربتات lint/format/typecheck/test/web:export/doctor.
-- [x] Jest + اختبارات وحدة حقيقية · `.env.example` + `.gitignore` · فاحص العربية مربوط بـ`lint`.
+- [x] Jest + اختبارات حقيقية · `.env.example` + `.gitignore` · فاحص العربية مربوط بـ`lint`.
 - [x] `app.config.ts` (allowBackup=false, supportsRTL, scheme) · CI أخضر.
 
 ### P03
@@ -65,130 +65,143 @@
 - [x] 623 اختباراً، CI أخضر.
 
 ### P06
-- [x] P06.1 نواة المصادقة (عقد +5، آلة، Vault، 6 شاشات، OTP، ضيف، أدوار).
-- [x] P06.2 الملف الشخصي + locations + الصورة + Module 20 + الموافقات.
-- [x] P06.3 عقد +6 (→15) · الأمان · الجلسات · الحذف · التصدير · Legal · `INTEGRATIONS.md`.
-- [x] 780 اختباراً / 110 suites، CI أخضر.
+- [x] P06.1 نواة المصادقة · P06.2 الملف/الإعدادات/الصورة · P06.3 الأمان/الجلسات/الحذف/التصدير/Legal.
+- [x] 780 اختباراً / 110 suites، CI أخضر · `docs/INTEGRATIONS.md`.
+
+### P07
+- [x] P07.1 HomeConfig + Header/Hero/QuickActions + 4 أقسام + كتل الأدوار + التخصيص + أداة Demo.
+- [x] P07.2 بوابة الموافقة + التعقيم + إخفاء الأعداد والمبالغ + فصل Demo/Real + 4 أقسام حساسة.
+- [x] 869 اختباراً / 129 suites، CI أخضر · `DESIGN_SYSTEM.md` صُحّح في رد منفصل.
 
 ---
 
-## قائمة تحقق P07 (تفصيل)
+## قائمة تحقق P08 (تفصيل)
 
-### P07.1 — الأساس والأقسام الأربعة
-- [x] `config/home-config.types.ts`: 8 معرّفات أقسام + 7 إجراءات سريعة + `HomeConfig` + `HomeConfigSource`.
-- [x] `config/default-home-config.ts`: افتراضي مستقر + `normalizeOrder` (إسقاط المجهول/المكرر + إلحاق الناقص) + `hiddenFromMap` (false الصريحة فقط) + `moveInList`.
-- [x] `config/home-config.source.ts`: تنفيذ Mock + `get/set/resetHomeConfigSource` — **قابل للتبديل بلا مساس بالمستهلكين**.
-- [x] `hooks/use-home-config.ts`: دمج المصدر مع تخصيص `settings.store` + ترشيح الأقسام المسجّلة.
-- [x] `hooks/use-home-section.ts`: استعلام لكل قسم بمفتاح `['home', mode, id]` + `resolveSectionStatus` نقية (loading/empty/error/not-connected/ready).
-- [x] `hooks/use-home-greeting.ts`: `greetingKeyForHour` نقية + تحديث دوري.
-- [x] `hooks/use-home-formatters.ts`: ربط الأرقام/النسب/التواريخ باللغة وتفضيل الأرقام.
-- [x] `HomeHeader`: تحية + اسم العرض + جرس بعدّاد + بحث + تخصيص + شارة Demo.
-- [x] `HomeHero`: قمرية + `Hero3D` حسب Tier + بارالاكس مربوط بالتمرير + زر أساسي بحسب الدور + زر ثانوي.
-- [x] `QuickActions`: 7 إجراءات، شبكة RTL، قابلة للإخفاء، Haptics خفيف.
-- [x] `SectionShell`: ترويسة + الحالات الأربع + محتوى + `emptyAction` (أُضيف في P07.2).
-- [x] `SectionErrorBoundary`: class بـ`override` + إعادة محاولة القسم وحده.
-- [x] `LazySection` + `Stagger` (حد 8، خطوة 60ms، يحترم Reduce Motion).
-- [x] `WeddingsSection`: `status==='open'` + ترتيب بالتاريخ + Carousel أفقي (حد 6).
-- [x] `OffersSection`: `status==='active'` **و** الشريك `verified` (join) — إسقاط أي عرض بلا شريك موثّق (حد 5).
-- [x] `SoukSection`: `status==='available'` + فئة عبر i18n (حد 5).
-- [x] `JobsSection`: `status==='open'` فقط، **بلا أي بيانات تواصل** (حد 5).
-- [x] كتل الأدوار: `PartnerSummarySection` (بلا أرقام — لا ربط بعد) · `VolunteerSection` (تصفية بـ`userId`) · `StaffShortcutSection` (`hasStaffRole`).
-- [x] `HomeCustomizeSheet`: ترتيب/إظهار الأقسام + إخفاء الإجراءات + استعادة الافتراضي + إغلاق.
-- [x] `HomeScreen`: FlatList مضبوط (`initialNumToRender=2`, `windowSize=5`, `maxToRenderPerBatch=2`, `removeClippedSubviews`) + Pull-to-Refresh + كشف الظهور + fallback 700ms.
-- [x] `settings.store`: `homeSectionOrder` · `homeSectionVisibility` · `homeQuickActionVisibility` + setters + reset (محفوظة).
-- [x] `dev/demo-seed.ts` + `use-demo-seed.ts`: `populateDemoSeed` ثم نشر (partners→verified, weddings→open, souk→available, jobs→open) + ربط عروض بشركاء حقيقيين + مفاتيح `home:demo.*`.
-- [x] زر التعبئة في `DevSettingsScreen` (وضع demo فقط، بلا تعبئة تلقائية).
-- [x] استبدال `app/(tabs)/index.tsx` بـ`HomeScreen`.
-- [x] اختبارات: home-config · home-utils · SectionShell · SectionErrorBoundary · 4 أقسام · HomeScreen · HomeCustomizeSheet · demo-seed.
-- [x] **النتيجة: 121 suites / 829 tests، CI أخضر** (بتقرير المالك).
+### P08.1 — النواة النقية
+- [x] توسيع `ApplicationStatus` إلى 13 قيمة-additive؛ `reviewing`/`disbursed` باقيتان (شرط د-3 تحقّق بقراءة `application.contract.ts` — لا يَعُدّ القيم).
+- [x] `Application` + حقول اختيارية: `referenceNumber` · `submittedAt` · `payload` · `evaluation` · `infoRequest` · `decision` · `appeal` · `publicationConsent`.
+- [x] `update(id, input)` (بلا status) + `submit(id)` ذرّي (حالة + رقم مرجعي مرة واحدة + تاريخ + مسح الاستكمال + التقاط موافقة النشر).
+- [x] `schemas/application-payload.ts`: 7 مجموعات + سجلات سير العمل؛ المال أعداد صحيحة غير سالبة؛ بصمات ≥16 حرفاً.
+- [x] `engine/rules.types.ts` + `rules.v1.ts` (`eligibility-v1`, `pending-human-approval`) + `rules-source.ts` قابل للتبديل.
+- [x] `gates.ts`: 4 بوابات، تُبلّغ كل الفاشلة؛ الأصول عند الحد ⇒ فشل؛ الأقارب/الميراث لا يدخلان.
+- [x] `flags.ts`: 5 أعلام؛ لا تأثير على النقاط؛ لا علم عند دخل صفر.
+- [x] `bands.ts`: 4 نطاقات من القواعد + `gates_failed` + تقريب قبل التحديد.
+- [x] `score-application.ts`: 6 مكوّنات مطبّعة، مجموع 100، `advisory:true`، `ruleVersion`، بلا حقل قرار.
+- [x] `state-machine/workflow.ts`: 11 حالة · 18 انتقالاً · فحص الفاعل · `isTerminal` · `toWorkflowStatus` للقيم legacy.
+- [x] `services/hash.ts`: SHA-256 عبر `expo-crypto` (وحدة حدودية) + بصمة متجاهلة للمسافات/الشرطة/الحالة.
+- [x] `services/dedup-service.ts`: واجهة + Mock؛ كشف بصمة هوية/هاتف/مستند + عدّاد نافذة الإرسال.
+- [x] `services/audit-trail.ts`: Append-only بميتاداتا محدودة (بلا payload/مستندات/معرّفات خام).
+- [x] `services/workflow-service.ts`: يفرض الآلة + يحرس الاعتراض (مرة/نافذة) + يكتب التدقيق.
+- [x] `mocks/seed/assistance.ts` مستقل — لا يمسّ `SeedBundle` ولا `seed.test.ts`.
+- [x] اختبارات: rules · gates · bands · flags · score (جداول حدّية + عدالة) · workflow (استقصائي) · dedup · workflow-service · payload schema · application-workflow repo · i18n.
 
-### P07.2 — الأقسام الحساسة والإحصاءات
-- [x] `consent-gate.ts`: `PublicationConsent` + `isConsentActive` **fail-closed** (مفقود/تاريخ فاسد/منح مستقبلي/سحب ماضٍ/سحب فاسد ⇒ رفض) + `indexConsents` (الأحدث يفوز).
-- [x] `anonymize.ts`: `PUBLISHABLE_STATUSES=['approved','disbursed']` + إسقاط يوافق فقط `{id, categoryKey, governorateKey, dataOrigin}` — **لا applicantId/programId/notes/reviewerNote/requestedAmount**.
-- [x] `stats-privacy.ts`: `SMALL_NUMBER_THRESHOLD=10` موسوم `PENDING_POLICY` + `suppressSmallNumber` + `buildStatCell` (**يحجب المبلغ مع العدد**) + `computeCommunityStats` (دلو demo ودلو real منفصلان) + `totalRecordCount`.
-- [x] `success-stories.ts`: `selectPublicStories` بموافقة لكل قصة — موافقة الحساب ليست بديلاً.
-- [x] `SupportCasesSection`: استعلام `approved` + بوابة موافقة (مصدرها فارغ) ⇒ **حالة فارغة صادقة + السبب + إجراء حقيقي**.
-- [x] `CommunityStatsSection`: 3 مستودعات في استعلام القسم + عرض **دلو demo فقط** + شارة demo + ملاحظة الحد + نص عدم عرض Real.
-- [x] `InitiativesSection`: برامج `open` (حد 4) — **بلا مبالغ** (حدود الاستحقاق غير معتمدة).
-- [x] `SuccessStoriesSection`: محتوى + بوابة موافقة ⇒ فارغ صادق + ملاحظة موافقة الحساب عند تفعيلها + إجراء إلى التوعية.
-- [x] `SectionShell`: خاصية `emptyAction` إضافية (بلا كسر للمستهلكين).
-- [x] `registry.ts`: تسجيل الأقسام الثمانية؛ `REGISTERED_SECTION_IDS = HOME_SECTION_IDS`.
-- [x] `demo-seed.ts`: تطبيع البرامج (`status='open'` + `nameKey`/`descriptionKey` من `home:demo.programs.*`).
-- [x] `locales/{ar,en}/home.json`: كل مفاتيح الأقسام الثمانية + الإحصاءات + المبادرات + القصص + برامج demo.
-- [x] تحديث اختبارَي P07.1 المتأثرين بمجموعة الأقسام المسجّلة (`home-config.test.ts`, `HomeCustomizeSheet.test.tsx`).
-- [x] اختبارات جديدة: consent-gate · anonymize · stats-privacy · success-stories · 4 أقسام.
-- [x] **النتيجة النهائية: 129/129 suites · 869/869 tests · lint وtypecheck نظيفان · CI أخضر بالكامل** (بتقرير المالك).
+### P08.2 — الرحلة والرفع
+- [x] `services/document-pipeline.ts`: picker صور/PDF + فحص نوع/حجم **من القواعد** + `manipulateAsync` (تصغير 1600 + JPEG) + **PDF بلا معالجة** + **فشل ⇒ لا رفع** + بصمة وصفية حتمية.
+- [x] `stores/assistance-draft.store.ts`: 7 مجموعات + خطوة + مستندات + إقرارات + مبلغ/ملاحظات؛ **بصمات فقط**؛ `clearFingerprints` · `reset` · قص الخطوة 0..7.
+- [x] `schemas/wizard.ts`: 7 مخططات خطوات + `collectFieldErrors` + `buildPayload`.
+- [x] `components/NumericField` (أعداد صحيحة فقط) · `WizardProgress` (Double Ring + شريط) · `WizardStepShell` (لماذا نطلب) · `DocumentUploader` (نوع/رفع/حذف/معاينة/تقدم غير محدد).
+- [x] `wizard/step-config.ts` + 6 مكوّنات خطوة (Applicant · Numeric×3 · Engagement · Documents · Review · Submit).
+- [x] `AssistanceWizard`: تحقق لكل خطوة + أخطاء Inline + رجوع + نتيجة بالرقم المرجعي.
+- [x] `services/submission-service.ts`: dedup → score → create → attach evaluation → submit + audit.
+- [x] نقل المسار (د-1): حذف `app/(features)/assistance.tsx` + `app/assistance/` + `ROUTES.assistance` + Allowlist + ServicesScreen/QuickActions/HomeHero/SupportCasesSection.
+- [x] شاشات: `ProgramIntroScreen` · `EligibilityConditionsScreen` (قواعد/أوزان/نطاقات/حدود + وسم مؤقت) · `PreCheckScreen` (غير ملزم، لا يُخزَّن).
+- [x] اختبارات: wizard schemas · document-pipeline · draft store · submission-service · 3 شاشات · Wizard.
 
-### إصلاحات P07.1 (5 مجموعات، سجّلها المالك)
-- [x] **Syntax:** إزالة `as const HomeSectionId[]` بعد `Object.freeze([...])` — الـtype annotation في التعريف يكفي.
-- [x] **React 19 Hooks:** لا `useRef().current` أثناء render ⇒ `useMemo`/`useCallback`; تعديل `SharedValue` يحتاج `// eslint-disable-next-line react-hooks/immutability`.
-- [x] **Unused var:** إزالة `i18n` غير المستخدم من `use-home-formatters`.
-- [x] **import/first:** نقل `jest.mock` بعد كل الـimports (Jest يتكفّل بالـhoisting).
-- [x] **Pull-to-Refresh:** `refreshing`/`onRefresh` كـprops مباشرة على `FlatList` بدل `<RefreshControl>` منفصل.
+### P08.3 — المتابعة والمراجعة
+- [x] `hooks/use-assistance-applications.ts`: طلباتي · التفاصيل (مع فحص الملكية) · الخط الزمني من التدقيق.
+- [x] `hooks/use-assistance-actions.ts`: إعادة الإرسال · الاعتراض · الإلغاء (مع `useMemo` للـdeps).
+- [x] `components/StatusTimeline.tsx`: عقدة الإنشاء + عقد التدقيق، RTL.
+- [x] `MyApplicationsScreen` · `ApplicationDetailScreen` (ملكية + إلغاء بتأكيد عبر DialogHost).
+- [x] `InfoRequestScreen`: المطلوب بصياغة محترمة + 4 أرقام + مستندات + ملاحظة + إعادة إرسال تمسح الطلب.
+- [x] `DecisionScreen`: نتيجة + أسباب من الكتالوج + **لا نقاط** + CTA اعتراض مشروط.
+- [x] `AppealScreen`: Zod (20–2000) + مستندات + نافذة + مرة واحدة + حالة رفض صادقة.
+- [x] `config/reason-catalog.ts` + `schemas/appeal.ts`.
+- [x] `DevAssistanceScreen`: إنشاء طلب تجريبي كامل + انتقالات مراجع/مالي عبر الخدمة + منتقي أسباب/حقول + demo فقط.
+- [x] ربط `SupportCasesSection` بموافقة النشر الحقيقية + المحافظة من payload (بوابة fail-closed).
+- [x] مسارات `assistance/mine` و`assistance/[id]/{index,info-request,decision,appeal}` + `(dev)/assistance` + رابط من إعدادات المطور.
+- [x] اختبارات: reason-catalog/appeal schema · MyApplications · Detail (ملكية/إلغاء) · InfoRequest · Decision · Appeal · DevAssistance.
 
-### إصلاحات P07.2 (مجموعة واحدة)
-- [x] **i18n Keys Mismatch:** `home.json` يستخدم `kebab-case` (`sections.support-cases.*`) بينما أشارت الأكواد إلى `camelCase`. صُحّحت المسارات في `SupportCasesSection.tsx` و`SuccessStoriesSection.tsx` و`anonymize.ts` (`unknownCategory`). **لا تعديل على المنطق ولا على الاختبارات.**
+### النتيجة النهائية
+- [x] **155/155 test suites · 1020/1020 tests · lint وtypecheck نظيفان · CI أخضر بالكامل** (بتقرير المالك 2026-11-16).
+- [x] لا انحدار في P03–P07 (عقد Application وProgram وAudit واختباراتها خضراء كما هي).
+
+### إصلاحات P08.1 (مجموعة واحدة)
+- [x] `noUncheckedIndexedAccess`: فهرسة `seedAssistancePayloads[0]` في الاختبار تحتاج `!` أو `?? default`.
+
+### إصلاحات P08.2
+- [x] لا أخطاء مُبلَّغة — الجزء أخضر من أول تشغيل (بتقرير المالك).
+
+### إصلاحات P08.3 (6 مجموعات)
+- [x] **exhaustive-deps:** كائن `deps` يُنشأ كل render ⇒ `useMemo(() => ({...}), [container])`.
+- [x] **purity:** `Date.now()` أثناء render في 3 شاشات ⇒ حساب داخل `useMemo` + `// eslint-disable-next-line react-hooks/purity` مباشرة فوق السطر.
+- [x] **rules-of-hooks:** `useMemo` بعد `return` مبكر ⇒ نقل كل الحسابات إلى **أعلى الدالة** قبل أي `return`، مع `?.` للتعامل مع `null`.
+- [x] **set-state-in-effect:** `void refresh()` داخل `useEffect` ⇒ تحويل إلى `useQuery` بمفتاح `['dev','applications',mode]` و`enabled: mode === 'demo'`.
+- [x] **unused import:** حذف `Application` غير المستخدم بعد التحويل.
+- [x] **Query scope:** `invalidateQueries()` بلا `queryKey` مسح بيانات الجلسة المحقونة ⇒ تقييد بـ`{ queryKey: ['assistance'] }` في 4 ملفات اختبار.
 
 ---
 
 ## الدروس المُلزِمة (تراكمية — تُطبَّق في كل مرحلة قادمة)
 
-### الاختبارات (RNTL v14 + React 19)
-- [x] `await render(...)` · `await fireEvent.xxx(...)` · `await view.unmount()` — كلها async.
-- [x] **لا** تغليف `fireEvent` داخل `act` (التداخل يفسد `screen`).
-- [x] `await act(() => {...})` (callback متزامن) لتحديث المتاجر مباشرة.
-- [x] كل `it` يحتوي `await`必须是 `async`.
-- [x] مجلد الاختبار **`__tests__`** دائماً (بشرطتين سفليتين).
-- [x] mock للمكونات المعتمدة على `Modal`/`Select` في اختبارات الشاشات.
-- [x] `setQueryData` مباشر على مفتاح معروف؛ `invalidateQueries` وحده غير كافٍ.
-- [x] `waitFor` على الحالة النهائية (`busy=false` أو العنصر المتوقع) لا اللحظية.
-- [x] `user.id` يُقرأ من الجلسة، لا قيمة ثابتة.
-- [x] `jest.mock` **بعد** كل الـimports.
-
 ### React 19 / React Compiler
-- [x] لا side effects أثناء render؛ الالتقاط من hooks داخل `useEffect`.
-- [x] لا `useRef().current` أثناء render ⇒ `useMemo`/`useCallback`.
-- [x] تعديل `SharedValue` مباشرة يسبقه `// eslint-disable-next-line react-hooks/immutability`.
-- [x] `useWatch` بدل `watch` في React Hook Form.
-- [x] `override` قبل `state`/`render` في أي Class Component.
+- [ ] **لا `useRef().current` أثناء render** ⇒ `useMemo`/`useCallback`.
+- [ ] **لا `Date.now()` أثناء render** ⇒ حساب داخل `useMemo` + `eslint-disable-next-line react-hooks/purity` فوق السطر مباشرة.
+- [ ] **كل Hook (وخصوصاً `useMemo`) قبل أي `return` مبكر** — بلا استثناء.
+- [ ] **لا `setState` مباشر داخل `useEffect`** ⇒ `useQuery` (أو اشتقاق من الحالة).
+- [ ] **الكائنات المُمرَّرة كـ dependency تُغلَّف بـ`useMemo`** (مثل `deps`).
+- [ ] `useWatch` بدل `watch` في React Hook Form.
+- [ ] `override` قبل `state`/`render` في أي Class Component.
+- [ ] تعديل `SharedValue` يسبقه `eslint-disable-next-line react-hooks/immutability`.
+- [ ] لا side effects أثناء render؛ الالتقاط من hooks داخل `useEffect`.
+
+### الاختبارات (RNTL v14 + Query)
+- [ ] `await render(...)` · `await fireEvent.xxx(...)` · `await view.unmount()`.
+- [ ] **لا** تغليف `fireEvent` داخل `act`.
+- [ ] `await act(() => {...})` (callback متزامن) لتحديث المتاجر.
+- [ ] كل `it` فيه `await` هو `async`.
+- [ ] مجلد الاختبار **`__tests__`** دائماً.
+- [ ] **`invalidateQueries({ queryKey: ['<feature>'] })` دائماً** — بلا `queryKey` يمسح الجلسة وكل الكاش.
+- [ ] `setQueryData(sessionQueryKey('demo'), ...)` **قبل** `render`.
+- [ ] `setQueryData` مباشر على مفتاح معروف بدل الاعتماد على `invalidateQueries` وحده.
+- [ ] mock للمكونات المعتمدة على `Modal`/`Select` في اختبارات الشاشات.
+- [ ] `waitFor` على الحالة النهائية (`busy=false` أو العنصر المتوقع).
+- [ ] `user.id` يُقرأ من الجلسة، لا قيمة ثابتة.
+- [ ] `jest.mock` **بعد** كل الـimports.
 
 ### TypeScript / ESLint
-- [x] `import { StyleSheet } from 'react-native'` صراحةً في كل ملف فيه `StyleSheet.create`.
-- [x] فهرسة مصفوفة بمتغير `number` ⇒ `?? default` (`noUncheckedIndexedAccess`).
-- [x] لا `as const Type[]` بعد `Object.freeze([...])`.
-- [x] أي helper جديد يُضاف لسطر الاستيراد.
-- [x] `tabBar` prop مباشر لـ`<Tabs>` لا داخل `screenOptions`.
-- [x] `refreshing`/`onRefresh` props مباشرة على `FlatList`.
+- [ ] `import { StyleSheet } from 'react-native'` صراحةً في كل ملف فيه `StyleSheet.create`.
+- [ ] فهرسة مصفوفة بمتغير `number` ⇒ `!` أو `?? default`.
+- [ ] لا `as const Type[]` بعد `Object.freeze([...])`.
+- [ ] أي helper/نوع جديد يُضاف لسطر الاستيراد؛ ويُحذف غير المستخدم.
+- [ ] `tabBar` prop مباشر لـ`<Tabs>` · `refreshing`/`onRefresh` props مباشرة على `FlatList`.
 
 ### الحزم والواجهات
-- [x] لا افتراض لواجهة حزمة من الذاكرة — تحقّق من المثبت أو اعزل الاستدعاء في **وحدة حدودية** (ADR-0022).
-- [x] `expo install --fix` يصلح `package.json` + `package-lock.json` معاً؛ لا `install.exclude`.
-- [x] `manipulateAsync` (الكلاسيكية) لـimage-manipulator · `File`/`Paths` (الصنفية) لـfile-system.
+- [ ] لا افتراض لواجهة حزمة من الذاكرة — تحقّق من المثبت أو اعزل الاستدعاء في **وحدة حدودية** (ADR-0022).
+- [ ] `manipulateAsync` (الكلاسيكية) لـimage-manipulator · `File`/`Paths` (الصنفية) لـfile-system.
+- [ ] `expo install --fix` يصلح `package.json` + `package-lock.json` معاً.
 
-### i18n والمحتوى (جديد في P07.2)
-- [x] **تطابق صيغة مفاتيح i18n بين `locales/*.json` وملفات `ts/tsx` قبل الاختبار** — `kebab-case` مقابل `camelCase` كسر اختبارين. الفحص جزء من قائمة ما قبل الإرسال.
-- [x] كل نص واجهة عبر `t()`؛ لا نصوص حرفية في المكونات.
+### i18n والمحتوى
+- [ ] **تطابق صيغة مفاتيح i18n بين JSON و`ts/tsx` قبل الاختبار.**
+- [ ] كل نص واجهة عبر `t()`؛ لا نصوص حرفية في المكونات.
 
 ### العملية
-- [x] **عند تغيير سلوك شاشة، حدّث اختبارها في نفس الجزء** (درس انحراف فهرس الإعدادات).
-- [x] لا تعديل على عقود الـRepositories؛ الاستهلاك فقط.
-- [x] كل قرار معماري ⇒ ADR؛ كل قيمة سياسة غير معتمدة ⇒ وسم `PENDING_POLICY` ظاهر للمستخدم.
+- [ ] **عند تغيير سلوك شاشة، حدّث اختبارها في نفس الجزء.**
+- [ ] لا تعديل على عقود الـRepositories إلا إضافةً وبموافقة (ADR).
+- [ ] كل قرار معماري ⇒ ADR؛ كل قيمة سياسة غير معتمدة ⇒ وسم `PENDING_POLICY` ظاهر للمستخدم.
 
 ---
 
-## مؤجلات P07 (في PROJECT_CONTEXT §8)
-- [ ] مصدر HomeConfig من SettingsRepository ⇒ لاحقاً (#38).
-- [ ] حقول موافقة النشر ⇒ P08/P15/P18 (#39) — تفتح قسمَي الدعم والقصص.
-- [ ] تأكيد التبرعات/الصرف عبر العقد ⇒ P18 (#40) — يفتح الإحصاءات المؤكدة.
-- [ ] إنشاء محتوى في المستودع ⇒ P15/P18 (#41).
-- [ ] ربط حساب↔شريك ⇒ P11 (#42).
-- [ ] مهام تطوع حقيقية ⇒ P13 (#43).
-- [ ] عرض مبالغ البرامج ⇒ بعد اعتماد `PRODUCT_POLICIES #1` (#44).
-- [ ] تحقق الأجهزة: Carousel RTL، الكسل، البارالاكس ⇒ P20/P21 (#45).
-- [ ] اعتماد حد الإحصاءات ⇒ المالك (#8).
-- [ ] تنفيذ القرار #33 (صفّا الأمان والحذف) ⇒ رقعة صغيرة مستقلة.
-- [ ] حذف `SignInPlaceholder` مع اختباره (#34) · ضم الفاحص لـ`lint` (#24) · إعلان `zod` (#37).
-- [ ] تصحيح `docs/DESIGN_SYSTEM.md` (#47).
+## مؤجلات P08 (في PROJECT_CONTEXT §8)
+- [ ] فئة الحاجة في payload ⇒ P15/P18 (#48).
+- [ ] فلتر تدقيق بـ`target` ⇒ P18 (#49).
+- [ ] انتقال ذرّي على الخادم ⇒ P18 (#50).
+- [ ] بصمة محتوى + HMAC ⇒ P18 (#51).
+- [ ] رقم مرجعي رسمي ⇒ P18 (#53).
+- [ ] تحرير كامل لحقول الاستكمال ⇒ P17/P18 (#54).
+- [ ] لوحة مراجع حقيقية بصلاحيات وفصل مراجعين ⇒ P17 (#55).
+- [ ] تحقق الأجهزة لرفع المستندات ومعالجتها ⇒ P20/P21 (#26, #28).
+- [ ] اعتماد العتبات والنطاقات والنافذة والاحتفاظ ⇒ المالك (#1, #3, #5, #7).
+- [ ] تنفيذ #33 (صفّا الأمان والحذف) + حذف `SignInPlaceholder` (#34) + ضم الفاحص لـ`lint` (#24) + إعلان `zod` (#37).
 
 ---
 
@@ -196,13 +209,13 @@
 
 | # | القرار | يحجب |
 |---|--------|------|
-| 1 | حدود الاستحقاق ونطاقات الدخل | **P08** + عرض مبالغ البرامج |
-| 2 | أوزان التقييم الآلي | **P08** / P14 |
-| 3 | مدة الاعتراض | **P08** |
+| 1 | حدود الاستحقاق ونطاقات الدخل (عتبات P08 مؤقتة) | P15 / اعتماد نهائي للمحرك |
+| 2 | سلّم التقييم والنطاقات (الأوزان محسومة من HRD) | اعتماد نهائي للمحرك |
+| 3 | مدة الاعتراض (14 يوماً مؤقتة) | اعتماد نهائي |
 | 4 | سياسة الانسحاب من العرس الجماعي | P10 |
-| 5 | الاستثناء من مساعدة واحدة | **P08** |
+| 5 | الاستثناء من مساعدة واحدة (مغلق مؤقتاً) | P17 |
 | 6 | الفئة المستفيدة من خصومات الشركاء | P11 |
-| 7 | مدة الاحتفاظ + فترة تأكيد الحذف | P19 / P23 + تنفيذ الحذف |
-| 8 | الحد الأدنى لإخفاء الإحصاءات (10 مؤقت) | P15 / P17 + إظهار أرقام الرئيسية |
+| 7 | مدة الاحتفاظ + فترة تأكيد الحذف | P09 (سجلات) / P19 / P23 |
+| 8 | الحد الأدنى لإخفاء الإحصاءات (10 مؤقت) | P15 / P17 |
 | 9 | مراجعة قانونية لنصوص Legal | الإطلاق |
-| 10 | سياسة موافقة النشر (الحقول والنطاق) | P08 / P15 + قسمَا الدعم والقصص |
+| 10 | سياسة عرض النقاط وموافقة النشر (مخفية/لكل سجل مؤقتاً) | P15 / P17 |
