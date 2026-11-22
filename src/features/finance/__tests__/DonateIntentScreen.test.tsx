@@ -45,7 +45,7 @@ describe('DonateIntentScreen', () => {
 
   async function setup() {
     const client = clientWithSession();
-    await render(
+    const { rerender } = render(
       <ShellProviders client={client}>
         <Probe />
         <DonateIntentScreen />
@@ -64,6 +64,12 @@ describe('DonateIntentScreen', () => {
         await container!.repositories.programs.update(mockId, { status: 'open' });
       }
     });
+    rerender(
+      <ShellProviders client={client}>
+        <Probe />
+        <DonateIntentScreen />
+      </ShellProviders>,
+    );
     await act(async () => {
       await client.invalidateQueries({ queryKey: ['finance'] });
     });
