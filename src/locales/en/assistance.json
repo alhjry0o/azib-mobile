@@ -438,6 +438,62 @@
       "issuedAt": "Issued on {{date}}",
       "demoNote": "Demo receipt — not an official financial document"
     },
+    "disbursements": {
+      "title": "Disbursement history",
+      "subtitle": "What was actually disbursed to you, with its honest status. Only you can see this history.",
+      "empty": "No disbursements",
+      "emptyDescription": "Disbursements appear here after a human reviewer approves your application and a payment proof is recorded.",
+      "action": "View my applications",
+      "errorTitle": "Could not load disbursement history",
+      "errorDescription": "Something went wrong while fetching your disbursements. Please retry.",
+      "notConnected": "Disbursement history not connected",
+      "notConnectedDescription": "Backend wiring activates in P18. Demo mode is available now.",
+      "status": {
+        "proposed": "Proposed — awaiting a second review",
+        "approved": "Approved — awaiting disbursement",
+        "paidRecorded": "Disbursed with proof — awaiting your confirmation",
+        "beneficiaryConfirmed": "Confirmed by you",
+        "disputed": "Disputed",
+        "rejected": "Rejected"
+      },
+      "amount": "Disbursed amount",
+      "proof": "Proof reference",
+      "application": "Application",
+      "confirm": "I confirm receipt",
+      "dispute": "I dispute",
+      "disputeNote": "Dispute reason",
+      "disputeSubmit": "Submit dispute",
+      "disputeCancel": "Cancel",
+      "awaitingNote": "A disbursement is not complete until you confirm it. A dispute returns it to financial review.",
+      "capNote": "Total disbursements never exceed your approved amount, and nothing is disbursed without a human reviewer different from the proposer.",
+      "validation": {
+        "note": "Write the dispute reason before submitting."
+      }
+    },
+    "impact": {
+      "title": "Impact report",
+      "subtitle": "Real confirmed figures only, with a clear definition for every number.",
+      "empty": "No real confirmed data",
+      "emptyDescription": "No demo figure is shown here. Impact appears after real financial verification on the server (P18).",
+      "suppressed": "Withheld",
+      "thresholdNote": "Display threshold: {{threshold}} — provisional, awaiting approval",
+      "realOnly": "This report excludes demo data entirely, and withhold the amount whenever the count is below the threshold.",
+      "noRealData": "Every figure in demo mode is labeled and never presented as a real achievement.",
+      "errorTitle": "Could not load the impact report",
+      "errorDescription": "Something went wrong while computing impact. Please retry.",
+      "notConnected": "Impact report not connected",
+      "notConnectedDescription": "Backend wiring activates in P18. Demo mode is available now.",
+      "metrics": {
+        "verifiedDonations": "Verified donations",
+        "confirmedDisbursements": "Beneficiary-confirmed disbursements",
+        "assistedCases": "Cases that received a disbursement"
+      },
+      "definitions": {
+        "verifiedDonations": "Count and total of real, financially verified donations only.",
+        "confirmedDisbursements": "Count and total of real disbursements confirmed by the beneficiary only.",
+        "assistedCases": "Number of real applications that received a beneficiary-confirmed disbursement."
+      }
+    },
     "requirements": {
       "title": "Licensed provider requirements",
       "subtitle": "No real donation can be recorded before these requirements are met.",
@@ -451,15 +507,29 @@
       },
       "note": "Until then, demo mode runs with honest labels, and no demo figure enters public statistics."
     },
-    "impact": {
-      "definitions": {
-        "verifiedDonations": "Count and total of real, financially verified donations only.",
-        "confirmedDisbursements": "Count and total of real disbursements confirmed by the beneficiary only.",
-        "assistedCases": "Number of real applications that received a beneficiary-confirmed disbursement."
-      }
-    },
     "reasons": {
       "rejected": "The request did not meet disbursement conditions after human review."
+    },
+    "dev": {
+      "title": "Disbursement simulator (Maker/Checker)",
+      "subtitle": "Internal tool to exercise the full disbursement cycle through the same domain service. Maker ≠ Checker is enforced in code.",
+      "notDemo": "This simulator works in demo mode only.",
+      "createApplication": "Create an approved demo application",
+      "applicationsTitle": "Applications",
+      "noApplications": "No applications. Create an approved one to start.",
+      "proposeTitle": "Propose a disbursement",
+      "amount": "Amount (YER)",
+      "makerId": "Proposer id (Maker)",
+      "checkerId": "Reviewer id (Checker)",
+      "proofReference": "Payment proof reference",
+      "propose": "Propose disbursement",
+      "approve": "Approve (Checker)",
+      "reject": "Reject",
+      "recordPayment": "Record payment with proof",
+      "disbursementsTitle": "Disbursements",
+      "noDisbursements": "No disbursements for this application.",
+      "applied": "Transition applied and recorded in the audit trail.",
+      "beneficiaryNote": "Confirmation or dispute happens on the beneficiary screen, not here."
     }
   }
 }
