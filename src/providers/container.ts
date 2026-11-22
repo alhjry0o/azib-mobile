@@ -1,6 +1,5 @@
 import type { AppEnv } from '@/config/env';
 import { createRepositoryContainer, type RepositoryContainer } from '@/repositories';
-
 import type {
   AiProvider,
   AnalyticsProvider,
@@ -16,6 +15,7 @@ import type {
   SmsProvider,
 } from './contracts';
 import {
+  createDemoPaymentProvider,
   createMockAiProvider,
   createMockAnalyticsProvider,
   createMockAuthProvider,
@@ -24,7 +24,6 @@ import {
   createMockEmailProvider,
   createMockMapsProvider,
   createMockNotificationProvider,
-  createMockPaymentProvider,
   createMockSearchProvider,
   createMockSmsProvider,
   createMockStorageProvider,
@@ -75,7 +74,6 @@ export interface CreateContainerOptions {
 export function createProviderContainer(options: CreateContainerOptions): ProviderContainer {
   const registry = new IntegrationRegistry();
   const mockConfig = withConfig(options.mockConfig);
-
   if (options.mode === 'demo') {
     return Object.freeze(buildDemoContainer(registry, mockConfig, options.env));
   }
@@ -91,7 +89,8 @@ function buildDemoContainer(
   const database = createMockDatabaseProvider(mockConfig);
   const storage = createMockStorageProvider(mockConfig);
   const notification = createMockNotificationProvider(mockConfig);
-  const payment = createMockPaymentProvider(mockConfig);
+  // P09: demo payment lifecycle provider (same contract, demo-only helpers).
+  const payment = createDemoPaymentProvider(mockConfig);
   const email = createMockEmailProvider(mockConfig);
   const sms = createMockSmsProvider(mockConfig);
   const analytics = createMockAnalyticsProvider(mockConfig);
@@ -99,6 +98,7 @@ function buildDemoContainer(
   const search = createMockSearchProvider(mockConfig);
   const ai = createMockAiProvider(mockConfig);
   const content = createMockContentProvider(mockConfig);
+
   const repositories = createRepositoryContainer({
     mode: 'demo',
     env,
@@ -176,6 +176,7 @@ function buildBackendContainer(
   const search = createNotConnectedSearchProvider();
   const ai = createNotConnectedAiProvider();
   const content = createNotConnectedContentProvider();
+
   const repositories = createRepositoryContainer({
     mode: 'backend',
     env,
