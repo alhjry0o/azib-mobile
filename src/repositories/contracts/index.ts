@@ -1,17 +1,20 @@
 export type {
+  Application,
+  ApplicationListQuery,
+  ApplicationRepository,
+  ApplicationStatus,
+  CreateApplicationInput,
+} from './application';
+export { PUBLICATION_CONSENT_VERSION } from './application';
+export type {
   AdvisoryEvaluation,
   AppealRecord,
   AppealResolution,
   ApplicantInfo,
-  Application,
   ApplicationDocument,
   ApplicationDocumentKind,
-  ApplicationListQuery,
   ApplicationPayload,
-  ApplicationRepository,
-  ApplicationStatus,
   AssetsInfo,
-  CreateApplicationInput,
   Declarations,
   EmploymentStatus,
   EngagementInfo,
@@ -29,7 +32,6 @@ export type {
   ReviewDecision,
   UpdateApplicationInput,
 } from './application';
-export { PUBLICATION_CONSENT_VERSION } from './application';
 export type {
   AuditEntry,
   AuditRepository,
@@ -42,12 +44,18 @@ export type {
 export type {
   CreateDisbursementInput,
   Disbursement,
+  DisbursementActor,
+  DisbursementEvent,
   DisbursementRepository,
+  DisbursementStatus,
 } from './disbursement';
 export type {
   CreateDonationInput,
   Donation,
+  DonationActor,
+  DonationEvent,
   DonationRepository,
+  DonationStatus,
 } from './donation';
 export type {
   CreateJobInput,
@@ -83,6 +91,7 @@ export type {
 export type {
   CreateProgramInput,
   Program,
+  ProgramKind,
   ProgramRepository,
   ProgramStatus,
   UpdateProgramInput,
