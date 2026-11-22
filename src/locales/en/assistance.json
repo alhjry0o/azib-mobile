@@ -335,5 +335,131 @@
     "apply": "Apply transition",
     "applied": "Transition applied and recorded in the audit trail.",
     "notDemo": "This simulator works in demo mode only."
+  },
+  "finance": {
+    "catalog": {
+      "title": "Support & donation programs",
+      "subtitle": "Donation intent is recorded here; money moves outside the app through a licensed provider only.",
+      "kindsTitle": "Program kinds",
+      "programsTitle": "Open programs",
+      "openProgram": "View program",
+      "empty": "No open programs",
+      "emptyDescription": "Open programs appear here. You can populate demo data from developer settings.",
+      "errorTitle": "Could not load programs",
+      "errorDescription": "Something went wrong while fetching programs. Please retry."
+    },
+    "kinds": {
+      "grant": {
+        "label": "Non-refundable grants",
+        "description": "Financial support that is not repaid, disbursed after human eligibility verification."
+      },
+      "partial": {
+        "label": "Partial assistance",
+        "description": "Covers part of the costs based on need and available resources."
+      },
+      "qardHasan": {
+        "label": "Qard Hasan",
+        "description": "Information and referral to a licensed entity only. No lending or collection inside the app."
+      },
+      "inKind": {
+        "label": "In-kind support",
+        "description": "Furniture, appliances and textiles through Souk Khair, with no money inside the app."
+      },
+      "donorContribution": {
+        "label": "Donor contributions",
+        "description": "Individual donation intents directed to open programs via a licensed provider."
+      }
+    },
+    "kind": {
+      "title": "Program kind",
+      "donatable": "Accepts donation intents",
+      "referralOnly": "Information and referral only",
+      "inKind": "In-kind via Souk Khair",
+      "note": "The platform holds no funds, no wallet and no escrow. Any money transfer happens outside the app through a licensed provider.",
+      "referralAction": "Licensed provider requirements",
+      "soukAction": "Go to Souk Khair",
+      "catalogAction": "Back to programs"
+    },
+    "detail": {
+      "title": "Program details",
+      "range": "Advisory range: {{min}} — {{max}} YER",
+      "donate": "Record a donation intent",
+      "kindInfo": "About this kind",
+      "notDonatable": "This kind does not accept monetary donation intents inside the app.",
+      "notOpen": "This program is not open right now.",
+      "notFound": "Program not found",
+      "notFoundDescription": "We could not find this program. It may be closed or the link is invalid."
+    },
+    "donate": {
+      "title": "Donation intent",
+      "subtitle": "Only the intent is recorded. No amount is charged inside the app and no card data is requested.",
+      "amount": "Amount (YER)",
+      "minMax": "Allowed range: {{min}} — {{max}} YER",
+      "anonymous": "Hide my name from reports and public surfaces",
+      "anonymousHelp": "Anonymity does not prevent verification by the authorized finance entity, and never reveals any beneficiary identity.",
+      "notice": "This is an unconfirmed donation intent. It is never counted as received money and never enters public statistics.",
+      "action": "Record intent",
+      "handoff": "Register the intent with the provider",
+      "simulate": "Simulate provider confirmation (demo)",
+      "simulateNote": "Demo simulation of the provider confirmation only. It represents no real transfer and issues no receipt.",
+      "verifiedNote": "Final financial verification happens through an authorized entity on the server (P18). No receipt is issued before that.",
+      "requirementsAction": "What is needed for real wiring?",
+      "donationsAction": "Go to my donations",
+      "validation": {
+        "amount": "Enter a valid amount greater than zero.",
+        "min": "The amount is below the program minimum.",
+        "max": "The amount exceeds the program maximum."
+      }
+    },
+    "certainty": {
+      "intent": "Unconfirmed donation intent",
+      "providerPending": "Registered with provider — awaiting confirmation",
+      "providerConfirmed": "Provider confirmed — awaiting financial verification",
+      "verified": "Confirmed and financially verified",
+      "declined": "Declined",
+      "cancelled": "Cancelled"
+    },
+    "donations": {
+      "title": "My donations",
+      "subtitle": "Your intents and the confirmed ones. No amount is shown as received before financial verification.",
+      "empty": "No donation intents",
+      "emptyDescription": "Start from the programs list to record an intent; it will appear here with its honest status.",
+      "action": "Browse programs",
+      "anonymousLabel": "Anonymous",
+      "errorTitle": "Could not load donations",
+      "errorDescription": "Something went wrong while fetching your donations. Please retry."
+    },
+    "receipts": {
+      "title": "Receipts",
+      "subtitle": "A receipt is issued only after financial verification by an authorized entity.",
+      "empty": "No receipts",
+      "emptyDescription": "Receipts appear only for financially verified donations. Intents and provider confirmation issue no receipt.",
+      "number": "Receipt number",
+      "issuedAt": "Issued on {{date}}",
+      "demoNote": "Demo receipt — not an official financial document"
+    },
+    "requirements": {
+      "title": "Licensed provider requirements",
+      "subtitle": "No real donation can be recorded before these requirements are met.",
+      "intro": "The provider is not connected. No real donations are recorded and no receipts are issued until server-side wiring is complete.",
+      "items": {
+        "licensed": "A payment entity legally licensed in the target market, with a signed agreement.",
+        "agreement": "A usage agreement defining responsibilities, any fees, and the refund policy.",
+        "keys": "Provider keys stored server-side only — never in the app or the repository.",
+        "webhook": "A server webhook with a verified signature to receive payment confirmation.",
+        "serverVerification": "Financial verification and writing the verified status happen server-side only, with an audit trail."
+      },
+      "note": "Until then, demo mode runs with honest labels, and no demo figure enters public statistics."
+    },
+    "impact": {
+      "definitions": {
+        "verifiedDonations": "Count and total of real, financially verified donations only.",
+        "confirmedDisbursements": "Count and total of real disbursements confirmed by the beneficiary only.",
+        "assistedCases": "Number of real applications that received a beneficiary-confirmed disbursement."
+      }
+    },
+    "reasons": {
+      "rejected": "The request did not meet disbursement conditions after human review."
+    }
   }
 }
