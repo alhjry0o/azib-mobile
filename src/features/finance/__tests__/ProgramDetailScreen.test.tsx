@@ -48,30 +48,30 @@ describe('ProgramDetailScreen', () => {
   });
 
   async function setup(kind: ProgramKind, open: boolean) {
-  const client = createTestQueryClient();
-  const { rerender } = render(
-    <ShellProviders client={client}>
-      <Probe />
-      <ProgramDetailScreen />
-    </ShellProviders>,
-  );
-  await act(async () => {
-    mockId = await seedProgram(kind, open);
-  });
-  rerender(
-    <ShellProviders client={client}>
-      <Probe />
-      <ProgramDetailScreen />
-    </ShellProviders>,
-  );
-  await act(async () => {
-    await client.invalidateQueries({ queryKey: ['finance'] });
-  });
-  await waitFor(() => {
-    expect(screen.getByTestId('program-detail-card')).toBeTruthy();
-  });
-  return client;
-}
+    const client = createTestQueryClient();
+    const { rerender } = render(
+      <ShellProviders client={client}>
+        <Probe />
+        <ProgramDetailScreen />
+      </ShellProviders>,
+    );
+    await act(async () => {
+      mockId = await seedProgram(kind, open);
+    });
+    rerender(
+      <ShellProviders client={client}>
+        <Probe />
+        <ProgramDetailScreen />
+      </ShellProviders>,
+    );
+    await act(async () => {
+      await client.invalidateQueries({ queryKey: ['finance'] });
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('program-detail-card')).toBeTruthy();
+    });
+    return client;
+  }
 
   it('offers donation for an open donatable program', async () => {
     await setup('grant', true);
@@ -92,27 +92,27 @@ describe('ProgramDetailScreen', () => {
   });
 
   it('shows a missing state for an unknown id', async () => {
-  const client = createTestQueryClient();
-  const { rerender } = render(
-    <ShellProviders client={client}>
-      <Probe />
-      <ProgramDetailScreen />
-    </ShellProviders>,
-  );
-  await act(async () => {
-    mockId = 'does-not-exist';
+    const client = createTestQueryClient();
+    const { rerender } = render(
+      <ShellProviders client={client}>
+        <Probe />
+        <ProgramDetailScreen />
+      </ShellProviders>,
+    );
+    await act(async () => {
+      mockId = 'does-not-exist';
+    });
+    rerender(
+      <ShellProviders client={client}>
+        <Probe />
+        <ProgramDetailScreen />
+      </ShellProviders>,
+    );
+    await act(async () => {
+      await client.invalidateQueries({ queryKey: ['finance'] });
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('program-detail-missing')).toBeTruthy();
+    });
   });
-  rerender(
-    <ShellProviders client={client}>
-      <Probe />
-      <ProgramDetailScreen />
-    </ShellProviders>,
-  );
-  await act(async () => {
-    await client.invalidateQueries({ queryKey: ['finance'] });
-  });
-  await waitFor(() => {
-    expect(screen.getByTestId('program-detail-missing')).toBeTruthy();
-  });
-});
 });
