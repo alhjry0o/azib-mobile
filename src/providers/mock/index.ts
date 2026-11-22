@@ -7,6 +7,8 @@ export type { MockAuthProvider } from './auth';
 export { createMockAuthProvider, isMockAuthProvider } from './auth';
 export { createMockContentProvider } from './content';
 export { createMockDatabaseProvider } from './database';
+export type { DemoPaymentProvider } from './demo-payment';
+export { createDemoPaymentProvider, isDemoPaymentProvider } from './demo-payment';
 export type { MockEmailProvider } from './email';
 export { createMockEmailProvider } from './email';
 export { createMockMapsProvider } from './maps';
