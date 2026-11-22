@@ -34,6 +34,8 @@ const ALLOWED: ReadonlySet<string> = new Set([
   '/programs',
   '/programs/donations',
   '/programs/receipts',
+  '/programs/disbursements',
+  '/programs/impact',
   '/programs/provider-requirements',
   '/settings',
   '/settings/account',
