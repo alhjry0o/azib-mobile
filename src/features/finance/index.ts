@@ -44,8 +44,25 @@ export type { DonorApi } from './hooks/use-donor';
 export { myDonationsQueryKey, useDonor } from './hooks/use-donor';
 export type { DonationIntentApi } from './hooks/use-donation-intent';
 export { useDonationIntent } from './hooks/use-donation-intent';
+export type { BeneficiaryDisbursementsApi } from './hooks/use-beneficiary-disbursements';
+export {
+  beneficiaryDisbursementsQueryKey,
+  useBeneficiaryDisbursements,
+} from './hooks/use-beneficiary-disbursements';
+export type { BeneficiaryOutcome, DisbursementActionsApi } from './hooks/use-disbursement-actions';
+export { useDisbursementActions } from './hooks/use-disbursement-actions';
+export type { ImpactReportApi } from './hooks/use-impact-report';
+export { impactQueryKey, useImpactReport } from './hooks/use-impact-report';
 export type { CertaintyLevel } from './components/CertaintyBadge';
 export { CertaintyBadge, certaintyLevelOf } from './components/CertaintyBadge';
+export type { DisbursementCertainty } from './components/DisbursementStatusBadge';
+export {
+  DISBURSEMENT_CERTAINTIES,
+  DisbursementStatusBadge,
+  disbursementCertaintyOf,
+} from './components/DisbursementStatusBadge';
+export type { DisbursementCardProps, DisbursementRow } from './components/DisbursementCard';
+export { DisbursementCard } from './components/DisbursementCard';
 export { AmountField } from './components/AmountField';
 export { FinanceScaffold } from './components/FinanceScaffold';
 export { ProgramCatalogScreen } from './screens/ProgramCatalogScreen';
@@ -55,3 +72,5 @@ export { DonateIntentScreen } from './screens/DonateIntentScreen';
 export { MyDonationsScreen } from './screens/MyDonationsScreen';
 export { ReceiptsScreen } from './screens/ReceiptsScreen';
 export { LicensedProviderRequirementsScreen } from './screens/LicensedProviderRequirementsScreen';
+export { BeneficiaryDisbursementsScreen } from './screens/BeneficiaryDisbursementsScreen';
+export { ImpactReportScreen } from './screens/ImpactReportScreen';
