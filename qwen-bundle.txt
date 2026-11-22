@@ -1,0 +1,942 @@
+===============================================
+### FILE: src/repositories/__tests__/contracts/append-only.contract.ts
+===============================================
+
+```
+// Shared contract for AppendOnlyRepository implementations (donation, disbursement).
+
+import type { AppendOnlyRepository, BaseEntity } from '@/repositories/types';
+
+export interface AppendOnlyContractConfig<T extends BaseEntity, TCreate> {
+  readonly getRepo: () => AppendOnlyRepository<T, TCreate>;
+  readonly validCreate: TCreate;
+  readonly invalidCreate: TCreate;
+  readonly expectedDataOrigin: 'demo' | 'real';
+}
+
+export function appendOnlyRepositoryContract<T extends BaseEntity, TCreate>(
+  config: AppendOnlyContractConfig<T, TCreate>,
+): void {
+  describe('AppendOnlyRepository contract', () => {
+    it('getById returns null for unknown id', async () => {
+      const repo = config.getRepo();
+      const r = await repo.getById('nonexistent');
+      expect(r.ok).toBe(true);
+      if (r.ok) expect(r.value).toBe(null);
+    });
+
+    it('create returns an entity with correct dataOrigin', async () => {
+      const repo = config.getRepo();
+      const r = await repo.create(config.validCreate);
+      expect(r.ok).toBe(true);
+      if (r.ok) {
+        expect(r.value.id).toBeTruthy();
+        expect(r.value.dataOrigin).toBe(config.expectedDataOrigin);
+        expect(r.value.createdAt).toBeTruthy();
+        expect(r.value.updatedAt).toBeTruthy();
+      }
+    });
+
+    it('create rejects invalid input via Validation error', async () => {
+      const repo = config.getRepo();
+      const r = await repo.create(config.invalidCreate);
+      expect(r.ok).toBe(false);
+      if (!r.ok) expect(r.error.kind).toBe('Validation');
+    });
+
+    it('list returns PagedResult with correct totals', async () => {
+      const repo = config.getRepo();
+      await repo.create(config.validCreate);
+      await repo.create(config.validCreate);
+      await repo.create(config.validCreate);
+      const r = await repo.list();
+      expect(r.ok).toBe(true);
+      if (r.ok) {
+        expect(r.value.total).toBe(3);
+        expect(r.value.items.length).toBe(3);
+        expect(r.value.limit).toBe(20);
+        expect(r.value.offset).toBe(0);
+      }
+    });
+
+    it('list respects limit and offset', async () => {
+      const repo = config.getRepo();
+      for (let i = 0; i < 5; i += 1) {
+        await repo.create(config.validCreate);
+      }
+      const r = await repo.list({ limit: 2, offset: 1 });
+      expect(r.ok).toBe(true);
+      if (r.ok) {
+        expect(r.value.items.length).toBe(2);
+        expect(r.value.total).toBe(5);
+      }
+    });
+  });
+}
+```
+
+===============================================
+### FILE: src/providers/contracts/payment.ts
+===============================================
+
+```
+// PaymentProvider contract. Compliant with ADR-0005 (Non-Custodial).
+//
+// FORBIDDEN in this interface (enforced by absence):
+//   - charge(), capture(), refund(), createIntent(), createPaymentMethod()
+//   - any method that touches card data, IBAN, or wallet balances.
+//
+// ALLOWED:
+//   - recordPledge(): register an intent to donate (no money moves in-app).
+//   - verifyExternalPayment(): verify a reference issued by a licensed external provider (P09).
+
+import type { Result } from '@/core/result';
+import type { ProviderBase } from '../types';
+
+export interface DonationPledge {
+  readonly amount: number;
+  readonly currency: 'YER';
+  readonly note?: string;
+}
+
+export type PledgeStatus = 'pending' | 'confirmed' | 'declined';
+
+export interface PledgeRecord {
+  readonly id: string;
+  readonly amount: number;
+  readonly currency: 'YER';
+  readonly status: PledgeStatus;
+  /** ISO 8601. */
+  readonly createdAt: string;
+  readonly dataOrigin: 'real' | 'demo';
+}
+
+export interface PaymentProvider extends ProviderBase {
+  readonly name: 'payment';
+  recordPledge(pledge: DonationPledge): Promise<Result<PledgeRecord>>;
+  verifyExternalPayment(providerReference: string): Promise<Result<PledgeRecord | null>>;
+}
+```
+
+===============================================
+### FILE: src/providers/mock/payment.ts
+===============================================
+
+```
+// In-memory PaymentProvider. Compliant with ADR-0005 (Non-Custodial).
+// No method moves money. recordPledge stores an intent only.
+// verifyExternalPayment returns null ALWAYS — no fake confirmation.
+
+import { AppError } from '@/core/errors';
+import type { Result } from '@/core/result';
+
+import type { DonationPledge, PaymentProvider, PledgeRecord } from '../contracts/payment';
+import type { HealthCheckResult } from '../types';
+import { DEFAULT_MOCK_CONFIG, simulateMockIO, stableHash, type MockProviderConfig } from './config';
+
+export interface MockPaymentProvider extends PaymentProvider {
+  __pledges(): readonly PledgeRecord[];
+}
+
+export function createMockPaymentProvider(
+  config: MockProviderConfig = DEFAULT_MOCK_CONFIG,
+): MockPaymentProvider {
+  const pledges = new Map<string, PledgeRecord>();
+
+  return Object.freeze({
+    name: 'payment' as const,
+    mode: 'mock' as const,
+    capabilities: ['recordPledge', 'verifyExternalPayment'] as const,
+    async healthCheck(): Promise<HealthCheckResult> {
+      return { status: 'ok', checkedAt: Date.now() };
+    },
+    async recordPledge(pledge: DonationPledge): Promise<Result<PledgeRecord>> {
+      const failure = await simulateMockIO(config);
+      if (failure) return { ok: false, error: failure };
+      if (pledge.amount <= 0) {
+        return { ok: false, error: AppError.validation({ code: 'INVALID_AMOUNT' }) };
+      }
+      const id = `mock-pledge-${stableHash(JSON.stringify(pledge) + Date.now())}`;
+      const record: PledgeRecord = Object.freeze({
+        id,
+        amount: pledge.amount,
+        currency: 'YER' as const,
+        status: 'pending' as const,
+        createdAt: new Date().toISOString(),
+        dataOrigin: 'demo' as const,
+      });
+      pledges.set(id, record);
+      return { ok: true, value: record };
+    },
+    async verifyExternalPayment(): Promise<Result<PledgeRecord | null>> {
+      const failure = await simulateMockIO(config);
+      if (failure) return { ok: false, error: failure };
+      return { ok: true, value: null };
+    },
+    __pledges(): readonly PledgeRecord[] {
+      return Array.from(pledges.values());
+    },
+  });
+}
+```
+
+===============================================
+### FILE: src/schemas/donation.ts
+===============================================
+
+```
+import { z } from 'zod';
+
+import { CurrencySchema, DataOriginSchema, IdSchema, IsoDateSchema } from './common';
+
+export const DonationStatusSchema = z.enum(['pending', 'confirmed', 'declined']);
+
+export const DonationSchema = z.object({
+  id: IdSchema,
+  donorId: IdSchema,
+  amount: z.number().positive(),
+  currency: CurrencySchema,
+  status: DonationStatusSchema,
+  note: z.string().max(1000).nullable(),
+  createdAt: IsoDateSchema,
+  updatedAt: IsoDateSchema,
+  dataOrigin: DataOriginSchema,
+});
+
+export const CreateDonationInputSchema = z.object({
+  donorId: IdSchema,
+  amount: z.number().positive(),
+  note: z.string().max(1000).nullable().optional(),
+});
+```
+
+===============================================
+### FILE: src/schemas/disbursement.ts
+===============================================
+
+```
+import { z } from 'zod';
+
+import { CurrencySchema, DataOriginSchema, IdSchema, IsoDateSchema } from './common';
+
+export const DisbursementStatusSchema = z.enum(['pending', 'confirmed']);
+
+export const DisbursementSchema = z.object({
+  id: IdSchema,
+  applicationId: IdSchema,
+  amount: z.number().positive(),
+  currency: CurrencySchema,
+  status: DisbursementStatusSchema,
+  providerReference: z.string().max(200).nullable(),
+  createdAt: IsoDateSchema,
+  updatedAt: IsoDateSchema,
+  dataOrigin: DataOriginSchema,
+});
+
+export const CreateDisbursementInputSchema = z.object({
+  applicationId: IdSchema,
+  amount: z.number().positive(),
+});
+```
+
+===============================================
+### FILE: src/repositories/mock/donation.ts
+===============================================
+
+```
+import { AppError } from '@/core/errors';
+import { ok, type Result } from '@/core/result';
+import { CreateDonationInputSchema } from '@/schemas/donation';
+
+import type {
+  CreateDonationInput,
+  Donation,
+  DonationRepository,
+} from '../contracts/donation';
+import type { ListQuery, PagedResult } from '../types';
+import type { MockRepositoryOptions } from './profile';
+
+export function createMockDonationRepository(
+  options: MockRepositoryOptions = {},
+): DonationRepository {
+  const { delayMs = 0, forceErrorKind = null } = options;
+  const byId = new Map<string, Donation>();
+  let counter = 0;
+
+  async function simulate(): Promise<AppError | null> {
+    if (delayMs > 0) {
+      await new Promise<void>((resolve) => setTimeout(resolve, delayMs));
+    }
+    if (forceErrorKind) return AppError.fromKind(forceErrorKind, { code: 'MOCK_FORCED_ERROR' });
+    return null;
+  }
+
+  return Object.freeze({
+    async getById(id: string): Promise<Result<Donation | null>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      return ok(byId.get(id) ?? null);
+    },
+
+    async create(input: CreateDonationInput): Promise<Result<Donation>> {
+      const parsed = CreateDonationInputSchema.safeParse(input);
+      if (!parsed.success) {
+        return { ok: false, error: AppError.validation({ cause: parsed.error }) };
+      }
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      counter += 1;
+      const id = `mock-donation-${Date.now()}-${counter}`;
+      const now = new Date().toISOString();
+      const donation: Donation = Object.freeze({
+        id,
+        donorId: parsed.data.donorId,
+        amount: parsed.data.amount,
+        currency: 'YER' as const,
+        status: 'pending' as const,
+        note: parsed.data.note ?? null,
+        createdAt: now,
+        updatedAt: now,
+        dataOrigin: 'demo' as const,
+      });
+      byId.set(id, donation);
+      return ok(donation);
+    },
+
+    async list(query?: ListQuery): Promise<Result<PagedResult<Donation>>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const limit = query?.limit ?? 20;
+      const offset = query?.offset ?? 0;
+      const all = Array.from(byId.values());
+      const items = all.slice(offset, offset + limit);
+      return ok({ items, total: all.length, limit, offset });
+    },
+
+    async listByDonor(donorId: string): Promise<Result<PagedResult<Donation>>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const items = Array.from(byId.values()).filter((d) => d.donorId === donorId);
+      return ok({ items, total: items.length, limit: items.length, offset: 0 });
+    },
+  });
+}
+```
+
+===============================================
+### FILE: src/repositories/mock/disbursement.ts
+===============================================
+
+```
+import { AppError } from '@/core/errors';
+import { ok, type Result } from '@/core/result';
+import { CreateDisbursementInputSchema } from '@/schemas/disbursement';
+
+import type {
+  CreateDisbursementInput,
+  Disbursement,
+  DisbursementRepository,
+} from '../contracts/disbursement';
+import type { ListQuery, PagedResult } from '../types';
+import type { MockRepositoryOptions } from './profile';
+
+export function createMockDisbursementRepository(
+  options: MockRepositoryOptions = {},
+): DisbursementRepository {
+  const { delayMs = 0, forceErrorKind = null } = options;
+  const byId = new Map<string, Disbursement>();
+  let counter = 0;
+
+  async function simulate(): Promise<AppError | null> {
+    if (delayMs > 0) {
+      await new Promise<void>((resolve) => setTimeout(resolve, delayMs));
+    }
+    if (forceErrorKind) return AppError.fromKind(forceErrorKind, { code: 'MOCK_FORCED_ERROR' });
+    return null;
+  }
+
+  return Object.freeze({
+    async getById(id: string): Promise<Result<Disbursement | null>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      return ok(byId.get(id) ?? null);
+    },
+
+    async create(input: CreateDisbursementInput): Promise<Result<Disbursement>> {
+      const parsed = CreateDisbursementInputSchema.safeParse(input);
+      if (!parsed.success) {
+        return { ok: false, error: AppError.validation({ cause: parsed.error }) };
+      }
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      counter += 1;
+      const id = `mock-disbursement-${Date.now()}-${counter}`;
+      const now = new Date().toISOString();
+      const record: Disbursement = Object.freeze({
+        id,
+        applicationId: parsed.data.applicationId,
+        amount: parsed.data.amount,
+        currency: 'YER' as const,
+        status: 'pending' as const,
+        providerReference: null,
+        createdAt: now,
+        updatedAt: now,
+        dataOrigin: 'demo' as const,
+      });
+      byId.set(id, record);
+      return ok(record);
+    },
+
+    async list(query?: ListQuery): Promise<Result<PagedResult<Disbursement>>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const limit = query?.limit ?? 20;
+      const offset = query?.offset ?? 0;
+      const all = Array.from(byId.values());
+      const items = all.slice(offset, offset + limit);
+      return ok({ items, total: all.length, limit, offset });
+    },
+
+    async listByApplication(applicationId: string): Promise<Result<PagedResult<Disbursement>>> {
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      const items = Array.from(byId.values()).filter((d) => d.applicationId === applicationId);
+      return ok({ items, total: items.length, limit: items.length, offset: 0 });
+    },
+  });
+}
+```
+
+===============================================
+### FILE: src/repositories/mock/__tests__/donation.test.ts
+===============================================
+
+```
+import { appendOnlyRepositoryContract } from '../../__tests__/contracts/append-only.contract';
+import { createMockDonationRepository } from '../donation';
+
+describe('MockDonationRepository', () => {
+  appendOnlyRepositoryContract({
+    getRepo: () => createMockDonationRepository(),
+    validCreate: { donorId: 'donor-1', amount: 5000 },
+    invalidCreate: { donorId: '', amount: -1 },
+    expectedDataOrigin: 'demo',
+  });
+
+  it('listByDonor returns matching donations only', async () => {
+    const repo = createMockDonationRepository();
+    await repo.create({ donorId: 'donor-a', amount: 100 });
+    await repo.create({ donorId: 'donor-a', amount: 200 });
+    await repo.create({ donorId: 'donor-b', amount: 300 });
+    const r = await repo.listByDonor('donor-a');
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value.total).toBe(2);
+      expect(r.value.items.every((d) => d.donorId === 'donor-a')).toBe(true);
+    }
+  });
+
+  it('records dataOrigin=demo (ADR-0005 Non-Custodial: no money moves in-app)', async () => {
+    const repo = createMockDonationRepository();
+    const r = await repo.create({ donorId: 'd1', amount: 100 });
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value.dataOrigin).toBe('demo');
+  });
+
+  it('forceErrorKind: Network causes all methods to fail', async () => {
+    const repo = createMockDonationRepository({ forceErrorKind: 'Network' });
+    const r = await repo.list();
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.kind).toBe('Network');
+  });
+});
+```
+
+===============================================
+### FILE: src/repositories/mock/__tests__/disbursement.test.ts
+===============================================
+
+```
+import { appendOnlyRepositoryContract } from '../../__tests__/contracts/append-only.contract';
+import { createMockDisbursementRepository } from '../disbursement';
+
+describe('MockDisbursementRepository', () => {
+  appendOnlyRepositoryContract({
+    getRepo: () => createMockDisbursementRepository(),
+    validCreate: { applicationId: 'app-1', amount: 10000 },
+    invalidCreate: { applicationId: '', amount: -1 },
+    expectedDataOrigin: 'demo',
+  });
+
+  it('listByApplication returns matching disbursements only', async () => {
+    const repo = createMockDisbursementRepository();
+    await repo.create({ applicationId: 'app-x', amount: 100 });
+    await repo.create({ applicationId: 'app-x', amount: 200 });
+    await repo.create({ applicationId: 'app-y', amount: 300 });
+    const r = await repo.listByApplication('app-x');
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value.total).toBe(2);
+      expect(r.value.items.every((d) => d.applicationId === 'app-x')).toBe(true);
+    }
+  });
+
+  it('forceErrorKind: Unknown causes all methods to fail', async () => {
+    const repo = createMockDisbursementRepository({ forceErrorKind: 'Unknown' });
+    const r = await repo.list();
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.kind).toBe('Unknown');
+  });
+});
+```
+
+===============================================
+### FILE: src/repositories/mock/crud-factory.ts
+===============================================
+
+```
+// Generic in-memory CRUD mock factory.
+// One implementation, six repositories. Avoids duplicating ~90 lines per repo.
+
+import type { ZodType } from 'zod';
+
+import { AppError } from '@/core/errors';
+import { ok, type Result } from '@/core/result';
+
+import type { BaseEntity, CrudRepository, ListQuery, PagedResult } from '../types';
+
+export interface CrudFactoryOptions<T extends BaseEntity, TCreate, TUpdate> {
+  /** Prefix for generated ids. */
+  readonly idPrefix: string;
+  readonly schemaCreate: ZodType<TCreate>;
+  readonly schemaUpdate: ZodType<TUpdate>;
+  readonly buildEntity: (args: { id: string; input: TCreate; nowIso: string }) => T;
+  readonly applyUpdate: (args: { existing: T; patch: TUpdate; nowIso: string }) => T;
+  readonly delayMs?: number;
+  readonly forceErrorKind?: 'Network' | 'Unknown' | 'Validation' | null;
+}
+
+export function createMockCrudRepository<T extends BaseEntity, TCreate, TUpdate>(
+  options: CrudFactoryOptions<T, TCreate, TUpdate>,
+): CrudRepository<T, TCreate, TUpdate> {
+  const { idPrefix, schemaCreate, schemaUpdate, buildEntity, applyUpdate } = options;
+  const delayMs = options.delayMs ?? 0;
+  const forceErrorKind = options.forceErrorKind ?? null;
+  const byId = new Map<string, T>();
+  let counter = 0;
+
+  async function simulate(): Promise<AppError | null> {
+    if (delayMs > 0) {
+      await new Promise<void>((resolve) => setTimeout(resolve, delayMs));
+    }
+    if (forceErrorKind) {
+      return AppError.fromKind(forceErrorKind, { code: 'MOCK_FORCED_ERROR' });
+    }
+    return null;
+  }
+
+  const repo: CrudRepository<T, TCreate, TUpdate> = {
+    async getById(id: string): Promise<Result<T | null>> {
+      const failure = await simulate();
+      if (failure) return { ok: false, error: failure };
+      return ok(byId.get(id) ?? null);
+    },
+
+    async list(query?: ListQuery): Promise<Result<PagedResult<T>>> {
+      const failure = await simulate();
+      if (failure) return { ok: false, error: failure };
+      const limit = query?.limit ?? 20;
+      const offset = query?.offset ?? 0;
+      const all = Array.from(byId.values());
+      const items = all.slice(offset, offset + limit);
+      return ok({ items, total: all.length, limit, offset });
+    },
+
+    async create(input: TCreate): Promise<Result<T>> {
+      const parsed = schemaCreate.safeParse(input);
+      if (!parsed.success) {
+        return { ok: false, error: AppError.validation({ cause: parsed.error }) };
+      }
+      const failure = await simulate();
+      if (failure) return { ok: false, error: failure };
+      counter += 1;
+      const id = `${idPrefix}-${Date.now()}-${counter}`;
+      const entity = buildEntity({ id, input: parsed.data, nowIso: new Date().toISOString() });
+      byId.set(id, entity);
+      return ok(entity);
+    },
+
+    async update(id: string, patch: TUpdate): Promise<Result<T>> {
+      const parsed = schemaUpdate.safeParse(patch);
+      if (!parsed.success) {
+        return { ok: false, error: AppError.validation({ cause: parsed.error }) };
+      }
+      const failure = await simulate();
+      if (failure) return { ok: false, error: failure };
+      const existing = byId.get(id);
+      if (!existing) {
+        return { ok: false, error: AppError.notFound({ code: 'NOT_FOUND' }) };
+      }
+      const updated = applyUpdate({ existing, patch: parsed.data, nowIso: new Date().toISOString() });
+      byId.set(id, updated);
+      return ok(updated);
+    },
+
+    async delete(id: string): Promise<Result<void>> {
+      const failure = await simulate();
+      if (failure) return { ok: false, error: failure };
+      byId.delete(id);
+      return ok(undefined);
+    },
+  };
+
+  return repo;
+}
+```
+
+===============================================
+### FILE: src/locales/ar/assistance.json
+===============================================
+
+```
+{
+  "title": "المساعدات",
+  "notConnectedYet": "المساعدات ستُبنى في P08.",
+  "policy": {
+    "pending": "القيم المستخدمة مؤقتة وبانتظار اعتماد الجهة المالكة.",
+    "advisory": "التقييم استشاري فقط، والقرار النهائي لمراجع بشري.",
+    "scoreHidden": "لا تُعرض النقاط التفصيلية للمتقدم في هذه النسخة."
+  },
+  "engine": {
+    "explain": {
+      "needSeverity": "شدة الحاجة: حجم الأسرة وعدد المعالين مقابل الدخل للفرد.",
+      "incomeToNeeds": "الدخل مقارنة بالاحتياجات الشهرية الأساسية.",
+      "obligations": "الالتزامات المعيشية مقارنة بالدخل.",
+      "availableAssets": "الأصول المتاحة فعلياً للتصرف فقط.",
+      "seriousness": "جدية الإجراءات: حالة الارتباط ومستند إثباتها.",
+      "jobStability": "استقرار العمل: مدة الاستمرارية بمصدر الدخل."
+    },
+    "excluded": "لا تُحتسب ثروة الأقارب ولا الميراث غير المستلم ولا الأصول غير المتاحة للتصرف."
+  },
+  "gates": {
+    "realIncome": { "pass": "يوجد مصدر دخل حقيقي.", "fail": "يلزم وجود مصدر دخل حقيقي لإكمال التقييم." },
+    "notWealthy": { "pass": "الأصول المتاحة دون حد القاعدة.", "fail": "الأصول المتاحة بلغت حد القاعدة أو تجاوزته." },
+    "noPrior": { "pass": "لا توجد مساعدة سابقة مسجّلة.", "fail": "توجد مساعدة سابقة، والاستثناء غير معتمد حالياً." },
+    "truth": { "pass": "تم الإقرار بصحة المعلومات.", "fail": "يلزم الإقرار بصحة المعلومات." }
+  },
+  "bands": {
+    "notEligible": "غير مستحق",
+    "additionalReview": "مراجعة إضافية",
+    "partial": "مستحق جزئي",
+    "full": "مستحق كامل",
+    "gatesFailed": "لم تُستوفَ شروط البوابة"
+  },
+  "recommendations": {
+    "notEligible": "توصية استشارية: لا تظهر أهلية كافية؛ المراجعة البشرية هي الفيصل.",
+    "additionalReview": "توصية استشارية: يلزم تحقق إضافي قبل أي قرار.",
+    "partial": "توصية استشارية: قد تناسب مساعدة جزئية بعد المراجعة.",
+    "full": "توصية استشارية: قد تناسب مساعدة كاملة بعد المراجعة.",
+    "humanReview": "توصية استشارية: تُحال الحالة لمراجع بشري دون قرار آلي."
+  },
+  "flags": {
+    "identityDuplicate": "بصمة هوية مستخدمة في طلب آخر",
+    "phoneDuplicate": "بصمة هاتف مستخدمة في طلب آخر",
+    "documentReused": "مستند مُعاد الاستخدام",
+    "rapidResubmission": "تقديم متكرر خلال مدة قصيرة",
+    "incomeObligationMismatch": "تناقض بين الدخل والالتزامات المعلنة"
+  },
+  "workflow": {
+    "status": {
+      "draft": "مسودة",
+      "submitted": "مُرسَل",
+      "reviewing": "قيد المراجعة",
+      "in_review": "قيد المراجعة",
+      "info_requested": "بانتظار استكمال",
+      "approved": "مقبول",
+      "rejected": "غير مقبول",
+      "appealed": "اعتراض مقدَّم",
+      "appeal_resolved": "تم الفصل في الاعتراض",
+      "disbursing": "قيد الصرف",
+      "disbursed": "تم الصرف",
+      "completed": "مكتمل",
+      "cancelled": "ملغى"
+    },
+    "errors": {
+      "invalidTransition": "لا يمكن الانتقال إلى هذه الحالة من الوضع الحالي.",
+      "appealUsed": "الاعتراض متاح مرة واحدة فقط.",
+      "appealWindowClosed": "انتهت مدة الاعتراض المسموحة."
+    }
+  },
+  "documents": {
+    "kind": {
+      "identity": "إثبات الهوية",
+      "income_proof": "إثبات الدخل",
+      "engagement_proof": "إثبات الارتباط",
+      "other": "مستند داعم"
+    },
+    "why": {
+      "identity": "للتحقق من هوية مقدم الطلب ومنع التكرار، دون نشر أي بيانات.",
+      "income_proof": "لتقدير الدخل الفعلي مقارنة بالاحتياجات.",
+      "engagement_proof": "لإثبات جدية الإجراءات دون جمع تفاصيل الطرف الآخر."
+    },
+    "limits": "الحد الأقصى 5 ميغابايت للصور و10 ميغابايت لملفات PDF.",
+    "pdfNote": "ملفات PDF تُفحص نوعاً وحجماً فقط، ولا تُعالَج صورياً.",
+    "private": "المستندات خاصة بمقدم الطلب ولا تظهر في بحث أو إشعار أو سجل عام."
+  },
+  "reasons": {
+    "approval": {
+      "documentsVerified": "تم التحقق من المستندات المقدمة.",
+      "needConfirmed": "تم التأكد من الحاجة بعد المراجعة.",
+      "eligibleAfterReview": "استوفى الشروط بعد المراجعة البشرية."
+    },
+    "rejection": {
+      "documentsIncomplete": "المستندات المقدمة غير مكتملة.",
+      "incomeAboveThreshold": "الدخل المعلن يتجاوز الحد المعتمد حالياً.",
+      "priorAssistance": "توجد مساعدة سابقة مسجّلة لنفس المتقدم.",
+      "inconsistentInformation": "توجد معلومات تحتاج توضيحاً قبل المتابعة."
+    }
+  },
+  "infoRequest": {
+    "title": "طلب استكمال معلومات",
+    "intro": "نحتاج بعض التوضيحات لإكمال مراجعتك. لا يعني هذا رفض طلبك.",
+    "resubmit": "إعادة الإرسال بعد الاستكمال",
+    "editTitle": "تحديث البيانات",
+    "noteLabel": "ملاحظة توضيحية",
+    "fields": {
+      "identityDocument": "مستند إثبات الهوية",
+      "incomeProof": "مستند إثبات الدخل",
+      "engagementProof": "مستند إثبات الارتباط",
+      "incomeFigure": "قيمة الدخل الشهري",
+      "assetsFigure": "قيمة الأصول المتاحة",
+      "obligationsFigure": "قيمة الالتزامات الشهرية"
+    },
+    "reasons": {
+      "identityDocument": "المستند غير واضح أو غير مكتمل، ونحتاج نسخة أوضح.",
+      "incomeProof": "نحتاج ما يثبت الدخل الشهري المذكور.",
+      "engagementProof": "نحتاج ما يثبت حالة الارتباط دون أي تفاصيل عن الطرف الآخر.",
+      "incomeFigure": "نحتاج تأكيد الرقم المذكور للدخل.",
+      "assetsFigure": "نحتاج تأكيد الأصول المتاحة للتصرف.",
+      "obligationsFigure": "نحتاج تأكيد الالتزامات الشهرية."
+    }
+  },
+  "decision": {
+    "title": "نتيجة المراجعة",
+    "approved": "تمت الموافقة بعد مراجعة بشرية.",
+    "rejected": "لم تتم الموافقة بعد مراجعة بشرية.",
+    "reasons": "أسباب القرار",
+    "reviewer": "مراجع بشري مخوّل",
+    "noScores": "لا تُعرض النقاط التفصيلية. القرار بشري، والتقييم الآلي استشاري فقط.",
+    "appealCta": "تقديم اعتراض",
+    "pendingTitle": "لا يوجد قرار بعد",
+    "pendingDescription": "طلبك ما زال قيد المراجعة. سيظهر القرار هنا فور صدوره."
+  },
+  "appeal": {
+    "title": "تقديم اعتراض",
+    "window": "يمكنك الاعتراض مرة واحدة خلال {{days}} يوماً من تاريخ القرار.",
+    "statement": "شرح الاعتراض",
+    "documents": "مستندات إضافية",
+    "submit": "إرسال الاعتراض",
+    "pending": "اعتراضك قيد المراجعة من مراجع مختلف.",
+    "used": "سبق أن قدّمت اعتراضاً على هذا الطلب، ولا يمكن تقديم آخر.",
+    "closed": "لا يمكن الاعتراض على هذا الطلب حالياً؛ إما أن المدة انتهت أو أن حالته لا تسمح.",
+    "validation": {
+      "statementMin": "اشرح اعتراضك في 20 حرفاً على الأقل.",
+      "statementMax": "شرح الاعتراض طويل جداً (2000 حرف كحد أقصى)."
+    }
+  },
+  "reference": {
+    "label": "الرقم المرجعي",
+    "demoNote": "رقم تجريبي؛ الرقم الرسمي يُولَّد على الخادم في P18."
+  },
+  "program": {
+    "title": "برامج المساعدة",
+    "subtitle": "اختر برنامجاً مناسباً. كل طلب يُراجع بشرياً، والتقييم الآلي استشاري فقط.",
+    "start": "ابدأ الطلب",
+    "conditions": "شروط الاستحقاق",
+    "preCheck": "اختبار أولي غير ملزم",
+    "empty": "لا توجد برامج مفتوحة",
+    "emptyDescription": "تظهر هنا البرامج المفتوحة للتقديم. يمكنك تعبئة بيانات العرض من إعدادات المطور.",
+    "errorTitle": "تعذّر تحميل البرامج",
+    "errorDescription": "حدث خطأ أثناء جلب البرامج. أعد المحاولة.",
+    "notConnected": "البرامج غير متصلة",
+    "notConnectedDescription": "ربط الخادم يُفعّل في P18. الوضع التجريبي متاح الآن."
+  },
+  "conditions": {
+    "title": "شروط الاستحقاق",
+    "version": "نسخة القواعد: {{version}}",
+    "gates": "شروط البوابة",
+    "weights": "أوزان التقييم الاستشاري",
+    "bands": "نطاقات النقاط",
+    "limits": "حدود ومهل",
+    "assetsRule": "ألا تبلغ الأصول المتاحة {{value}} ريال أو أكثر.",
+    "priorClosed": "لا تُمنح مساعدة ثانية، والاستثناء غير معتمد حالياً.",
+    "priorOpen": "قد يُنظر في استثناء بموافقة سياسة مستقلة.",
+    "appealWindow": "نافذة الاعتراض: {{days}} يوماً من تاريخ القرار."
+  },
+  "preCheck": {
+    "title": "اختبار أولي",
+    "notStored": "هذا الاختبار غير ملزم ولا يُحفظ ولا يُرسل. هو تقدير إرشادي فقط.",
+    "action": "احسب تقديراً أولياً"
+  },
+  "mine": {
+    "title": "طلباتي",
+    "subtitle": "كل طلباتك ومراحلها. اضغط أي طلب لعرض الخط الزمني والإجراءات.",
+    "empty": "لا توجد طلبات بعد",
+    "emptyDescription": "ابدأ طلباً جديداً من قائمة البرامج، وسيظهر هنا مع رقمه المرجعي.",
+    "action": "تصفح البرامج",
+    "draft": "مسودة بلا رقم مرجعي",
+    "errorTitle": "تعذّر تحميل الطلبات",
+    "errorDescription": "حدث خطأ أثناء جلب طلباتك. أعد المحاولة.",
+    "notConnected": "الطلبات غير متصلة",
+    "notConnectedDescription": "ربط الخادم يُفعّل في P18. الوضع التجريبي متاح الآن."
+  },
+  "detail": {
+    "title": "تفاصيل الطلب",
+    "timeline": "الخط الزمني",
+    "amount": "المبلغ المطلوب",
+    "notFound": "الطلب غير موجود",
+    "notFoundDescription": "لم نجد هذا الطلب. قد يكون حُذف أو أن الرابط غير صحيح.",
+    "infoRequest": "استكمال المعلومات",
+    "decision": "عرض نتيجة المراجعة",
+    "appeal": "تقديم اعتراض",
+    "cancel": "إلغاء الطلب",
+    "cancelConfirmTitle": "إلغاء الطلب",
+    "cancelConfirmDescription": "سيصبح الطلب ملغى ولا يمكن التراجع عن الإلغاء.",
+    "cancelConfirm": "تأكيد الإلغاء"
+  },
+  "wizard": {
+    "stepOf": "الخطوة {{current}} من {{total}}",
+    "next": "التالي",
+    "back": "السابق",
+    "fixErrors": "راجع الحقول المميزة ثم تابع.",
+    "steps": {
+      "applicant": "بيانات مقدم الطلب",
+      "income": "العمل والدخل",
+      "assets": "الأصول والمدخرات",
+      "obligations": "الالتزامات المعيشية",
+      "engagement": "حالة الارتباط",
+      "documents": "المستندات",
+      "review": "المراجعة والإقرار",
+      "submit": "الإرسال"
+    },
+    "why": {
+      "applicant": "نطلب الحد الأدنى فقط. رقم الهوية والهاتف يُحوَّلان إلى بصمة ولا يُخزَّنان.",
+      "income": "الدخل الفعلي مقارنة بالاحتياجات هو أساس التقدير، لا ثروة الأقارب.",
+      "assets": "الأصول المتاحة للتصرف وحدها تُحتسب. غير المتاحة والميراث غير المستلم للعلم فقط.",
+      "obligations": "الالتزامات المعيشية توضح الضغط المالي الحقيقي على الأسرة.",
+      "engagement": "يكفي حالة الارتباط ونوع مستند الإثبات. لا نجمع أي تفاصيل عن الطرف الآخر.",
+      "documents": "المستندات تُرفع بشكل خاص، وتُعالَج الصور لإزالة بيانات الموقع قبل الرفع.",
+      "review": "راجع بياناتك وأقرّ بصحتها. الموافقة على النشر اختيارية ويمكن سحبها.",
+      "submit": "بعد الإرسال يصدر رقم مرجعي، وتبدأ المراجعة البشرية."
+    },
+    "fields": {
+      "governorate": "المحافظة",
+      "district": "المديرية",
+      "birthYear": "سنة الميلاد",
+      "household": "عدد أفراد الأسرة",
+      "identity": "رقم الهوية",
+      "phone": "رقم الهاتف",
+      "employment": "حالة العمل",
+      "incomeSource": "مصدر الدخل",
+      "monthlyIncome": "الدخل الشهري (ريال)",
+      "stabilityMonths": "مدة الاستقرار بالأشهر",
+      "availableAssets": "أصول متاحة للتصرف (ريال)",
+      "availableAssetsHelp": "هذا الحقل وحده يدخل في التقييم.",
+      "restrictedAssets": "أصول غير متاحة للتصرف (ريال)",
+      "unreceivedInheritance": "ميراث غير مستلم (ريال)",
+      "excludedHelp": "للعلم فقط — لا يدخل في التقييم.",
+      "savings": "مدخرات (ريال)",
+      "monthlyRent": "إيجار شهري (ريال)",
+      "monthlyDebt": "أقساط شهرية (ريال)",
+      "monthlyEssentials": "مصروفات أساسية شهرية (ريال)",
+      "dependents": "عدد المعالين",
+      "proofType": "نوع مستند الإثبات",
+      "requestedAmount": "المبلغ المطلوب (ريال)",
+      "notes": "ملاحظات إضافية"
+    },
+    "employment": {
+      "employed": "موظف",
+      "self_employed": "عمل حر",
+      "irregular": "دخل غير منتظم",
+      "unemployed": "بدون عمل"
+    },
+    "incomeSource": {
+      "salary": "راتب",
+      "business": "نشاط تجاري",
+      "daily_wage": "أجر يومي",
+      "none": "لا يوجد"
+    },
+    "engagement": {
+      "official_engagement": "خطبة رسمية",
+      "serious_family_approval": "موافقة أسرية جادة"
+    },
+    "proof": {
+      "engagement_certificate": "عقد/شهادة خطوبة",
+      "family_letter": "خطاب أسري",
+      "guardian_statement": "إقرار ولي الأمر"
+    },
+    "fingerprints": {
+      "saved": "تم حفظ البصمات",
+      "note": "لا نحتفظ برقم الهوية ولا الهاتف — فقط بصمة مشفّرة تُستخدم لمنع التكرار.",
+      "edit": "تعديل الهوية/الهاتف"
+    },
+    "documents": {
+      "pickImage": "رفع صورة",
+      "pickPdf": "رفع PDF",
+      "uploading": "جارٍ الرفع…",
+      "empty": "لم تُرفع أي مستندات بعد.",
+      "remove": "إزالة المستند",
+      "permission": "لم يُمنح إذن الوصول إلى الصور.",
+      "type": "نوع الملف غير مدعوم. المسموح: صورة JPG/PNG أو PDF.",
+      "size": "حجم الملف يتجاوز الحد المسموح.",
+      "processing": "تعذّرت معالجة الصورة، ولم تُرفع حفاظاً على خصوصيتك.",
+      "failed": "تعذّر رفع المستند. حاول مرة أخرى.",
+      "fingerprintNote": "البصمة الحالية تجريبية من بيانات الملف؛ البصمة على المحتوى تُفعّل في P18."
+    },
+    "review": {
+      "documentsCount": "عدد المستندات: {{count}}",
+      "truthful": "أقرّ بأن جميع المعلومات صحيحة.",
+      "verification": "أوافق على التحقق من صحة المعلومات.",
+      "processing": "أوافق على معالجة بياناتي لأغراض الأهلية.",
+      "publication": "أوافق اختيارياً على نشر حالتي بشكل مجهول.",
+      "publicationNote": "موافقة النشر اختيارية تماماً، ولا تؤثر على أهلية الطلب، ويمكن سحبها في أي وقت."
+    },
+    "submit": {
+      "intro": "بالإرسال تُنشأ نسخة رسمية من طلبك ويصدر رقم مرجعي. لا يُتخذ أي قرار آلي.",
+      "action": "إرسال الطلب"
+    },
+    "result": {
+      "title": "تم إرسال طلبك",
+      "note": "احتفظ بالرقم المرجعي. يمكنك متابعة الطلب من شاشة طلباتي.",
+      "home": "العودة إلى الرئيسية"
+    },
+    "validation": {
+      "governorate": "اختر المحافظة.",
+      "birthYear": "أدخل سنة ميلاد صحيحة.",
+      "household": "أدخل عدد أفراد الأسرة (1 على الأقل).",
+      "identity": "أدخل رقم الهوية ليتم حفظ بصمته.",
+      "phone": "أدخل رقم الهاتف ليتم حفظ بصمته.",
+      "documents": "ارفع مستنداً واحداً على الأقل.",
+      "amount": "أدخل مبلغاً صحيحاً أكبر من صفر.",
+      "truthful": "يلزم الإقرار بصحة المعلومات.",
+      "verification": "يلزم الموافقة على التحقق.",
+      "processing": "يلزم الموافقة على المعالجة."
+    }
+  },
+  "dev": {
+    "title": "محاكي مراجعة الطلبات",
+    "subtitle": "أداة داخلية لتنفيذ انتقالات المراجع والمالي عبر نفس خدمة سير العمل. لا قرار آلي في مسار المستخدم.",
+    "empty": "لا توجد طلبات. أنشئ طلباً تجريبياً للبدء.",
+    "create": "إنشاء طلب تجريبي كامل",
+    "created": "أُنشئ طلب تجريبي وأُرسل.",
+    "current": "الحالة الحالية",
+    "noTransitions": "لا توجد انتقالات متاحة من هذه الحالة.",
+    "reasonsRequired": "اختر أسباب القرار",
+    "fieldsRequired": "اختر المطلوب استكماله",
+    "apply": "تنفيذ الانتقال",
+    "applied": "نُفّذ الانتقال وسُجّل في سجل التدقيق.",
+    "notDemo": "هذا المحاكي يعمل في الوضع التجريبي فقط."
+  }
+}
+```
+
