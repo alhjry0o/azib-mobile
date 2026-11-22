@@ -1,5 +1,5 @@
 // Account tab hub. Profile and settings are real screens from P06.2.
-// Developer links are visible only outside production builds.
+// Finance entry points added in P09.2. Developer links stay non-production.
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -59,6 +59,27 @@ export function AccountPlaceholder() {
         leading={<Icon name="userCheck" size={20} />}
         onPress={() => router.push(href(ROUTES.profile.root))}
         testID="account-profile"
+      />
+      <ListItem
+        variant="card"
+        title={t('assistance:finance.catalog.title')}
+        leading={<Icon name="wallet" size={20} />}
+        onPress={() => router.push(href(ROUTES.programs.root))}
+        testID="account-programs"
+      />
+      <ListItem
+        variant="card"
+        title={t('assistance:finance.donations.title')}
+        leading={<Icon name="heart" size={20} />}
+        onPress={() => router.push(href(ROUTES.programs.donations))}
+        testID="account-donations"
+      />
+      <ListItem
+        variant="card"
+        title={t('assistance:finance.receipts.title')}
+        leading={<Icon name="checkCircle" size={20} />}
+        onPress={() => router.push(href(ROUTES.programs.receipts))}
+        testID="account-receipts"
       />
       <ListItem
         variant="card"
