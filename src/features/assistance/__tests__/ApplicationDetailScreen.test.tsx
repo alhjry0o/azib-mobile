@@ -95,7 +95,7 @@ describe('ApplicationDetailScreen', () => {
   it('never shows another applicant application', async () => {
     const client = createTestQueryClient();
     client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    await render(
+    const { rerender } = await render(
       <ShellProviders client={client}>
         <Probe />
         <ApplicationDetailScreen />
@@ -107,11 +107,18 @@ describe('ApplicationDetailScreen', () => {
     await act(async () => {
       await client.invalidateQueries();
     });
+    rerender(
+      <ShellProviders client={client}>
+        <Probe />
+        <ApplicationDetailScreen />
+      </ShellProviders>,
+    );
+  
     await waitFor(() => {
       expect(screen.getByTestId('forbidden-view')).toBeTruthy();
     });
   });
-
+  
   it('cancels only after confirming in the global dialog', async () => {
     await setup();
     await waitFor(() => {
