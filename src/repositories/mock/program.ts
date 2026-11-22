@@ -4,7 +4,6 @@ import {
   CreateProgramInputSchema,
   UpdateProgramInputSchema,
 } from '@/schemas/program';
-
 import type {
   CreateProgramInput,
   Program,
@@ -65,6 +64,7 @@ export function createMockProgramRepository(
         createdAt: now,
         updatedAt: now,
         dataOrigin: 'demo' as const,
+        ...(parsed.data.kind !== undefined && { kind: parsed.data.kind }),
       });
       byId.set(id, program);
       return ok(program);
@@ -90,6 +90,7 @@ export function createMockProgramRepository(
         ...(parsed.data.status !== undefined && { status: parsed.data.status }),
         ...(parsed.data.minAmount !== undefined && { minAmount: parsed.data.minAmount }),
         ...(parsed.data.maxAmount !== undefined && { maxAmount: parsed.data.maxAmount }),
+        ...(parsed.data.kind !== undefined && { kind: parsed.data.kind }),
         updatedAt: new Date().toISOString(),
       });
       byId.set(id, updated);
