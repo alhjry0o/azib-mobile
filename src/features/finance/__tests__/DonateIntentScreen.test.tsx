@@ -43,41 +43,42 @@ describe('DonateIntentScreen', () => {
     });
   });
 
-  async function setup() {
-    const client = clientWithSession();
-    const { rerender } = render(
-      <ShellProviders client={client}>
-        <Probe />
-        <DonateIntentScreen />
-      </ShellProviders>,
-    );
-    await act(async () => {
-      const created = await container!.repositories.programs.create({
-        nameKey: 'assistance:finance.catalog.title',
-        descriptionKey: 'assistance:finance.catalog.subtitle',
-        minAmount: 1000,
-        maxAmount: 100000,
-        kind: 'grant',
-      });
-      if (created.ok) {
-        mockId = created.value.id;
-        await container!.repositories.programs.update(mockId, { status: 'open' });
-      }
+async function setup() {
+  const client = clientWithSession();
+  const { rerender } = await render(
+    <ShellProviders client={client}>
+      <Probe />
+      <DonateIntentScreen />
+    </ShellProviders>,
+  );
+  
+  await act(async () => {
+    const created = await container!.repositories.programs.create({
+      nameKey: 'assistance:finance.catalog.title',
+      descriptionKey: 'assistance:finance.catalog.subtitle',
+      minAmount: 1000,
+      maxAmount: 100000,
+      kind: 'grant',
     });
-    rerender(
-      <ShellProviders client={client}>
-        <Probe />
-        <DonateIntentScreen />
-      </ShellProviders>,
-    );
-    await act(async () => {
-      await client.invalidateQueries({ queryKey: ['finance'] });
-    });
-    await waitFor(() => {
-      expect(screen.getByTestId('donate-amount')).toBeTruthy();
-    });
-    return client;
-  }
+    if (created.ok) {
+      mockId = created.value.id;
+      await container!.repositories.programs.update(mockId, { status: 'open' });
+    }
+  });
+  await act(async () => {
+    await client.invalidateQueries({ queryKey: ['finance'] });
+  });
+  await rerender(
+    <ShellProviders client={client}>
+      <Probe />
+      <DonateIntentScreen />
+    </ShellProviders>,
+  );
+  await waitFor(() => {
+    expect(screen.getByTestId('donate-amount')).toBeTruthy();
+  });
+  return client;
+}
 
   it('states clearly that the intent is unconfirmed and never charged', async () => {
     await setup();
