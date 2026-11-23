@@ -24,6 +24,6 @@ export const seedWeddingPollOptions = [
 ] as const;
 
 export const seedWeddingMessages: readonly { authorId: string; text: string }[] = [
-  { authorId: 'seed-user-1', text: 'تم حجز القاعة مبدئياً، ننتظر تأكيد التصويت.' },
-  { authorId: 'seed-user-2', text: 'أقترح إضافة بند للصوت والإضاءة في النسخة القادمة.' },
+  { authorId: 'seed-user-1', text: 'تم حجز القاعة مبدئياً، ننتظر تأكيد التصويت.' }, // i18n-allow-arabic
+  { authorId: 'seed-user-2', text: 'أقترح إضافة بند للصوت والإضاءة في النسخة القادمة.' }, // i18n-allow-arabic
 ];
