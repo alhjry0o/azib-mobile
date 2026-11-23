@@ -17,14 +17,16 @@ export function canSendMessage(input: SendEligibilityInput): SendEligibility {
   if (!input.isActiveMember || input.role === null) {
     return { allowed: false, reasonKey: 'weddings:chat.blocked.notMember' };
   }
-  const mutedUntil = input.mutedUntil ?? null;
+  // undefined ⇒ no mute record · null ⇒ open-ended mute.
+  const mutedUntil = input.mutedUntil;
   if (mutedUntil === null) {
-    // A null expiry means an open-ended mute.
     return { allowed: false, reasonKey: 'weddings:chat.blocked.muted' };
   }
-  const stamp = Date.parse(mutedUntil);
-  if (!Number.isNaN(stamp) && stamp > input.now.getTime()) {
-    return { allowed: false, reasonKey: 'weddings:chat.blocked.muted' };
+  if (typeof mutedUntil === 'string') {
+    const stamp = Date.parse(mutedUntil);
+    if (!Number.isNaN(stamp) && stamp > input.now.getTime()) {
+      return { allowed: false, reasonKey: 'weddings:chat.blocked.muted' };
+    }
   }
   if (!can(input.role, 'send_message')) {
     return { allowed: false, reasonKey: 'weddings:chat.blocked.notMember' };
