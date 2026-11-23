@@ -9,8 +9,8 @@ export {
   nextGroupStatuses,
   toGroupStatus,
 } from './group-machine';
-export type { GroupPermission, PublicGroupView } from './roles';
-export { can, isOrganizerOnly, toPublicGroupView } from './roles';
+export type { GroupPermission, MemberView, PublicGroupView } from './roles';
+export { can, isOrganizerOnly, toMemberView, toPublicGroupView } from './roles';
 export type { PollTally, PollTallyInput, PollVoteInput } from './poll-rules';
 export { canChangeVote, tallyPoll } from './poll-rules';
 export type { ApprovalRecord } from './approvals';
