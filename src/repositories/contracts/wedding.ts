@@ -1,7 +1,7 @@
 import type { CrudRepository, BaseEntity } from '../types';
 
-// P10.1 extends additively. Legacy statuses stay valid; the group machine
-// adds planning/agreed/cancelled. 'closed' is a read-only alias of planning.
+// P10.1 extended additively; P10.2 adds user-authored title/description.
+// Legacy statuses stay valid; 'closed' is a read-only alias of 'planning'.
 export type WeddingStatus =
   | 'draft'
   | 'open'
@@ -16,6 +16,9 @@ export interface Wedding extends BaseEntity {
   readonly scheduledDate: string;
   readonly capacity: number;
   readonly status: WeddingStatus;
+  /** User-authored plain text. When present it wins over titleKey. */
+  readonly title?: string | null;
+  readonly description?: string | null;
   readonly organizerId?: string | null;
   readonly coOrganizerIds?: readonly string[];
   readonly governorateId?: string | null;
@@ -35,6 +38,8 @@ export interface CreateWeddingInput {
   readonly titleKey: string;
   readonly scheduledDate: string;
   readonly capacity: number;
+  readonly title?: string | null;
+  readonly description?: string | null;
   readonly organizerId?: string | null;
   readonly coOrganizerIds?: readonly string[];
   readonly governorateId?: string | null;
@@ -52,6 +57,8 @@ export interface UpdateWeddingInput {
   readonly scheduledDate?: string;
   readonly capacity?: number;
   readonly status?: WeddingStatus;
+  readonly title?: string | null;
+  readonly description?: string | null;
   readonly organizerId?: string | null;
   readonly coOrganizerIds?: readonly string[];
   readonly governorateId?: string | null;
