@@ -18,3 +18,10 @@ export {
   computeWithdrawalImpact,
   isWithdrawalWindowOpen,
 } from './withdrawal-impact';
+export type {
+  DiscoveryFilters,
+  DiscoveryRow,
+  DiscoverySizeFilter,
+  DiscoveryStatusFilter,
+} from './discovery';
+export { DEFAULT_DISCOVERY_FILTERS, filterGroups, hasActiveFilters } from './discovery';
