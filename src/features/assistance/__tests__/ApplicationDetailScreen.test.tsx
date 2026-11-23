@@ -64,17 +64,17 @@ describe('ApplicationDetailScreen', () => {
     });
   });
 
-async function setup(applicantId = 'demo-user-test') {
+  async function setup(applicantId = 'demo-user-test') {
     const client = createTestQueryClient();
     client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    const view = render(
+    const view = await render(
       <ShellProviders client={client}>
         <Probe />
         <ApplicationDetailScreen />
         <DialogHost />
       </ShellProviders>,
     );
-    let createdId = '';
+
     await act(async () => {
       const created = await submitAssistance(
         {
@@ -91,37 +91,37 @@ async function setup(applicantId = 'demo-user-test') {
         },
       );
       if (created.ok) {
-        createdId = created.value.id;
-        mockId = createdId;
+        mockId = created.value.id;
       }
-    });
+    }); 
+    
     await act(async () => {
       await client.invalidateQueries({ queryKey: ['assistance'] });
     });
-    view.rerender(
+    
+    await view.rerender(
       <ShellProviders client={client}>
         <Probe />
         <ApplicationDetailScreen />
         <DialogHost />
       </ShellProviders>,
     );
-
     return { client, view };
   }
 
   it('renders the reference, status and timeline', async () => {
-    await setup();
+    const { view } = await setup();
     await waitFor(() => {
-      expect(screen.getByTestId('detail-reference')).toBeTruthy();
+      expect(view.getByTestId('detail-reference')).toBeTruthy();
     });
-    expect(screen.getByTestId('detail-status')).toBeTruthy();
-    expect(screen.getByTestId('status-timeline')).toBeTruthy();
+    expect(view.getByTestId('detail-status')).toBeTruthy();
+    expect(view.getByTestId('status-timeline')).toBeTruthy();
   });
 
   it('never shows another applicant application', async () => {
     const client = createTestQueryClient();
     client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    const { rerender } = await render(
+    const view = await render(
       <ShellProviders client={client}>
         <Probe />
         <ApplicationDetailScreen />
@@ -131,17 +131,16 @@ async function setup(applicantId = 'demo-user-test') {
       mockId = await seedApplication('someone-else');
     });
     await act(async () => {
-      await client.invalidateQueries();
+      await client.invalidateQueries({ queryKey: ['assistance'] });
     });
-    rerender(
+    await view.rerender(
       <ShellProviders client={client}>
         <Probe />
         <ApplicationDetailScreen />
       </ShellProviders>,
     );
-  
     await waitFor(() => {
-      expect(screen.getByTestId('forbidden-view')).toBeTruthy();
+      expect(view.getByTestId('forbidden-view')).toBeTruthy();
     });
   });
   
