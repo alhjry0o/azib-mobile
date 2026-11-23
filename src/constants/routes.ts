@@ -1,4 +1,4 @@
-// Single source of truth for all app routes (P05 → P09).
+// Single source of truth for all app routes (P05 → P10).
 // No Arabic strings here. href() casts to expo-router's Href so typed-routes
 // generation (when present) stays satisfied without duplicating path literals.
 import type { Href } from 'expo-router';
@@ -45,6 +45,14 @@ export const ROUTES = {
     detail: (id: string): string => `/programs/${id}`,
     kind: (kind: string): string => `/programs/kind/${kind}`,
     donate: (id: string): string => `/programs/donate/${id}`,
+  },
+  // D-4: the tab stays the discovery route; app/weddings has NO index.tsx.
+  weddings: {
+    root: '/weddings',
+    new: '/weddings/new',
+    detail: (id: string): string => `/weddings/${id}`,
+    members: (id: string): string => `/weddings/${id}/members`,
+    polls: (id: string): string => `/weddings/${id}/polls`,
   },
   settings: {
     root: '/settings',
