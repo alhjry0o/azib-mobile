@@ -1,6 +1,6 @@
 // Group permissions live in the domain, not in screens. The UI guard is a
 // convenience; real enforcement is RLS in P18 (AGENT_RULES §1 #19).
-import type { GroupRole } from '@/repositories/contracts/wedding-group';
+import type { GroupMember, GroupRole, MemberStatus } from '@/repositories/contracts/wedding-group';
 
 export type GroupPermission =
   | 'invite'
@@ -82,7 +82,33 @@ export function toPublicGroupView(input: {
     governorateId: input.governorateId ?? null,
     districtId: input.districtId ?? null,
     memberCount: input.memberCount,
-    // Month precision only — never the exact day in a public surface.
     approximateDate: input.scheduledDate.slice(0, 7),
+  });
+}
+
+export interface MemberView {
+  readonly memberId: string;
+  readonly userId: string;
+  readonly role: GroupRole;
+  readonly status: MemberStatus;
+  /** null ⇒ render the anonymous label. Never leak a name without consent. */
+  readonly label: string | null;
+  readonly isSelf: boolean;
+}
+
+export function toMemberView(
+  member: GroupMember,
+  profileName: string | null,
+  viewerId: string | null,
+): MemberView {
+  const isSelf = viewerId !== null && member.userId === viewerId;
+  const label = isSelf || member.displayNameConsent ? profileName : null;
+  return Object.freeze({
+    memberId: member.id,
+    userId: member.userId,
+    role: member.role,
+    status: member.status,
+    label,
+    isSelf,
   });
 }
