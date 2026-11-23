@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { DialogHost } from '@/components/shell';
 import {
   ShellProviders,
