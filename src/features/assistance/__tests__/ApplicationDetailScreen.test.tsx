@@ -64,23 +64,49 @@ describe('ApplicationDetailScreen', () => {
     });
   });
 
-  async function setup(applicantId = 'demo-user-test') {
+async function setup(applicantId = 'demo-user-test') {
     const client = createTestQueryClient();
     client.setQueryData(sessionQueryKey('demo'), { ok: true, value: makeDemoSession() });
-    await render(
+    const view = render(
       <ShellProviders client={client}>
         <Probe />
         <ApplicationDetailScreen />
         <DialogHost />
       </ShellProviders>,
     );
+    let createdId = '';
     await act(async () => {
-      mockId = await seedApplication(applicantId);
+      const created = await submitAssistance(
+        {
+          applications: container!.repositories.applications,
+          audit: container!.repositories.audit,
+        },
+        {
+          applicantId,
+          programId: 'p1',
+          requestedAmount: 150000,
+          notes: null,
+          payload: seedAssistancePayloads[0]!,
+          rules: RULES_V1,
+        },
+      );
+      if (created.ok) {
+        createdId = created.value.id;
+        mockId = createdId;
+      }
     });
     await act(async () => {
       await client.invalidateQueries({ queryKey: ['assistance'] });
     });
-    return client;
+    view.rerender(
+      <ShellProviders client={client}>
+        <Probe />
+        <ApplicationDetailScreen />
+        <DialogHost />
+      </ShellProviders>,
+    );
+
+    return { client, view };
   }
 
   it('renders the reference, status and timeline', async () => {
@@ -120,15 +146,15 @@ describe('ApplicationDetailScreen', () => {
   });
   
   it('cancels only after confirming in the global dialog', async () => {
-    await setup();
+    const { view } = await setup();
     await waitFor(() => {
-      expect(screen.getByTestId('detail-cancel')).toBeTruthy();
+      expect(view.getByTestId('detail-cancel')).toBeTruthy();
     });
-    await fireEvent.press(screen.getByTestId('detail-cancel'));
-    expect(screen.getByTestId('shell-dialog')).toBeTruthy();
-    await fireEvent.press(screen.getByTestId('shell-dialog-confirm'));
+    await fireEvent.press(view.getByTestId('detail-cancel'));
+    expect(view.getByTestId('shell-dialog')).toBeTruthy();
+    await fireEvent.press(view.getByTestId('shell-dialog-confirm'));
     await waitFor(() => {
-      expect(screen.queryByTestId('detail-cancel', { includeHiddenElements: true })).toBeNull();
+      expect(view.queryByTestId('detail-cancel', { includeHiddenElements: true })).toBeNull();
     });
   });
 });
