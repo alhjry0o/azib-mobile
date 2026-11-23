@@ -1,6 +1,5 @@
 import type { AppEnv } from '@/config/env';
 import type { SearchProvider } from '@/providers/contracts';
-
 import type {
   ApplicationRepository,
   AuditRepository,
@@ -17,6 +16,10 @@ import type {
   SettingsRepository,
   SoukRepository,
   VolunteerRepository,
+  WeddingBudgetRepository,
+  WeddingChatRepository,
+  WeddingGroupRepository,
+  WeddingPollRepository,
   WeddingRepository,
 } from './contracts';
 import {
@@ -35,6 +38,10 @@ import {
   createMockSettingsRepository,
   createMockSoukRepository,
   createMockVolunteerRepository,
+  createMockWeddingBudgetRepository,
+  createMockWeddingChatRepository,
+  createMockWeddingGroupRepository,
+  createMockWeddingPollRepository,
   createMockWeddingRepository,
   type MockRepositoryOptions,
 } from './mock';
@@ -49,6 +56,10 @@ export interface RepositoryContainer {
   readonly donations: DonationRepository;
   readonly disbursements: DisbursementRepository;
   readonly weddings: WeddingRepository;
+  readonly weddingGroups: WeddingGroupRepository;
+  readonly weddingPolls: WeddingPollRepository;
+  readonly weddingBudgets: WeddingBudgetRepository;
+  readonly weddingChat: WeddingChatRepository;
   readonly partners: PartnerRepository;
   readonly offers: OfferRepository;
   readonly souk: SoukRepository;
@@ -91,6 +102,10 @@ function buildRepositories(
     donations: createMockDonationRepository(mockOptions),
     disbursements: createMockDisbursementRepository(mockOptions),
     weddings: createMockWeddingRepository(mockOptions),
+    weddingGroups: createMockWeddingGroupRepository(mockOptions),
+    weddingPolls: createMockWeddingPollRepository(mockOptions),
+    weddingBudgets: createMockWeddingBudgetRepository(mockOptions),
+    weddingChat: createMockWeddingChatRepository(mockOptions),
     partners: createMockPartnerRepository(mockOptions),
     offers: createMockOfferRepository(mockOptions),
     souk: createMockSoukRepository(mockOptions),
