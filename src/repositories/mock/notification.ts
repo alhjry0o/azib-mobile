@@ -1,7 +1,11 @@
 import { AppError } from '@/core/errors';
 import { ok, type Result } from '@/core/result';
-
-import type { InAppNotification, NotificationRepository } from '../contracts/notification';
+import { CreateInAppNotificationInputSchema } from '@/schemas/notification';
+import type {
+  CreateInAppNotificationInput,
+  InAppNotification,
+  NotificationRepository,
+} from '../contracts/notification';
 import type { ListQuery, PagedResult } from '../types';
 import type { MockRepositoryOptions } from './profile';
 
@@ -12,6 +16,7 @@ export function createMockNotificationRepository(
   const { delayMs = 0, forceErrorKind = null } = options;
   const byId = new Map<string, InAppNotification>();
   for (const record of seed) byId.set(record.id, record);
+  let counter = 0;
 
   async function simulate(): Promise<AppError | null> {
     if (delayMs > 0) {
@@ -36,6 +41,30 @@ export function createMockNotificationRepository(
       const all = Array.from(byId.values());
       const items = all.slice(offset, offset + limit);
       return ok({ items, total: all.length, limit, offset });
+    },
+
+    async create(input: CreateInAppNotificationInput): Promise<Result<InAppNotification>> {
+      const parsed = CreateInAppNotificationInputSchema.safeParse(input);
+      if (!parsed.success) {
+        return { ok: false, error: AppError.validation({ cause: parsed.error }) };
+      }
+      const f = await simulate();
+      if (f) return { ok: false, error: f };
+      counter += 1;
+      const id = `mock-notification-${Date.now()}-${counter}`;
+      const now = new Date().toISOString();
+      const record: InAppNotification = Object.freeze({
+        id,
+        userId: parsed.data.userId,
+        titleKey: parsed.data.titleKey,
+        bodyKey: parsed.data.bodyKey,
+        read: false,
+        createdAt: now,
+        updatedAt: now,
+        dataOrigin: 'demo' as const,
+      });
+      byId.set(id, record);
+      return ok(record);
     },
 
     async markRead(id: string): Promise<Result<InAppNotification>> {
