@@ -11,7 +11,7 @@ export const seedWeddings: readonly CreateWeddingInput[] = [
     coOrganizerIds: ['seed-user-2'],
     governorateId: 'sanaa',
     districtId: 'maeen',
-    city: 'صنعاء',
+    city: 'صنعاء', // i18n-allow-arabic
     alternateDate: '2026-06-22T16:00:00.000Z',
     targetCount: 8,
     descriptionKey: 'weddings:demo.first.description',
@@ -26,7 +26,7 @@ export const seedWeddings: readonly CreateWeddingInput[] = [
     coOrganizerIds: [],
     governorateId: 'aden',
     districtId: 'khormaksar',
-    city: 'عدن',
+    city: 'عدن', // i18n-allow-arabic
     alternateDate: null,
     targetCount: 6,
     descriptionKey: 'weddings:demo.spring.description',
