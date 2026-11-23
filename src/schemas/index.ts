@@ -7,6 +7,7 @@ export * from './application-payload';
 export * from './application';
 export * from './program';
 export * from './wedding';
+export * from './notification';
 export * from './partner';
 export * from './offer';
 export * from './souk';
