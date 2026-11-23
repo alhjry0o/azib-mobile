@@ -3,8 +3,8 @@
 > هذا الملف يُقرأ في بداية كل مرحلة. يُحدَّث في نهاية كل مرحلة قبل إعلانها Done.
 > **عام المستودع:** لا أسرار، لا بيانات شخصية حقيقية.
 
-آخر تحديث: **P08 — Assistance & Eligibility Engine (مغلقة رسمياً — 2026-11-16).**
-CI أخضر بالكامل: **155/155 suites · 1020/1020 tests** · lint وtypecheck نظيفان (بتقرير المالك).
+آخر تحديث: **P09 — Financial Assistance Architecture (مغلقة رسمياً — 2026-11-16).**
+CI أخضر بالكامل: **178/178 suites · 1138/1138 tests** · lint وtypecheck نظيفان (بتقرير المالك).
 
 ---
 
@@ -29,12 +29,19 @@ CI أخضر بالكامل: **155/155 suites · 1020/1020 tests** · lint وtype
 | تكوين الرئيسية | HomeConfig قابل للتبديل + تخصيص محلي | مُعتمد | ADR-0023 |
 | نشر المحتوى الحساس | بوابة موافقة fail-closed + تعقيم | مُعتمد | ADR-0024 |
 | الإحصاءات | إخفاء الأعداد والمبالغ + فصل Demo/Real | مُعتمد | ADR-0025/0026 |
-| **عقد الطلب** | **13 حالة + حقول اختيارية + `update`/`submit`** | **مُعتمد** | **ADR-0027** |
-| **محرك الأهلية** | **دالة نقية + قواعد مُصدَّرة بنسخ + نقاط مخفية** | **مُعتمد** | **ADR-0028** |
-| **مسار المساعدات** | **مجموعة `app/assistance/` مستقلة** | **مُعتمد** | **ADR-0029** |
-| **المسودة** | **حالة عميل محفوظة ببصمات لا معرّفات** | **مُعتمد** | **ADR-0030** |
-| **المستندات** | **وحدة حدودية + بصمة وصفية + PDF بلا معالجة** | **مُعتمد** | **ADR-0031** |
-| **المراجعة** | **محاكي `(dev)` + خط زمني من التدقيق + كتالوج أسباب** | **مُعتمد** | **ADR-0032** |
+| عقد الطلب | 13 حالة + `update`/`submit` | مُعتمد | ADR-0027 |
+| محرك الأهلية | دالة نقية + قواعد بنسخ + نقاط مخفية | مُعتمد | ADR-0028 |
+| مسار المساعدات | مجموعة `app/assistance/` | مُعتمد | ADR-0029 |
+| المسودة | حالة عميل ببصمات لا معرّفات | مُعتمد | ADR-0030 |
+| المستندات | وحدة حدودية + بصمة وصفية + PDF بلا معالجة | مُعتمد | ADR-0031 |
+| المراجعة | محاكي `(dev)` + خط زمني + كتالوج أسباب | مُعتمد | ADR-0032 |
+| **عقدا التمويل** | **تمديد إضافي + `advance` (سلامة AppendOnly)** | **مُعتمد** | **ADR-0033** |
+| **الفصل الرباعي** | **Intent / Provider / Verified / Disbursement + إيصال مشتق** | **مُعتمد** | **ADR-0034** |
+| **مزوّد Demo Payment** | **`providers/mock/` + لا تأكيد مُختَرع** | **مُعتمد** | **ADR-0035** |
+| **أنواع البرامج** | **`Program.kind?` + كتالوج 5 + قرض حسن إحالة فقط** | **مُعتمد** | **ADR-0036** |
+| **Idempotency** | **مفتاح حتمي مشتق من المدخلات** | **مُعتمد** | **ADR-0037** |
+| **الضبط المزدوج للصرف** | **Maker≠Checker + حد تراكمي + إثبات + تأكيد المستفيد** | **مُعتمد** | **ADR-0038** |
+| **تقرير الأثر** | **real+verified فقط + حجب الأعداد والمبالغ** | **مُعتمد** | **ADR-0039** |
 | نموذج الأموال | Non-Custodial | مُعتمد | ADR-0005 |
 | تقييم الأهلية | Advisory فقط + مراجعة بشرية | مُعتمد | ADR-0006 |
 | أسلوب 3D | ثلاث طبقات | مُعتمد | ADR-0003 |
@@ -46,7 +53,7 @@ CI أخضر بالكامل: **155/155 suites · 1020/1020 tests** · lint وtype
 
 ## 2) إصدارات الأدوات
 
-> المصدر `package.json` + تقارير المالك. **لا قيم TBD.** لا تبعيات جديدة بعد P08.
+> المصدر `package.json` + تقارير المالك. **لا قيم TBD.** لا تبعيات جديدة بعد P09.
 
 | الأداة | الإصدار | مصدر التحقق | تاريخ |
 |--------|---------|--------------|-------|
@@ -67,11 +74,11 @@ CI أخضر بالكامل: **155/155 suites · 1020/1020 tests** · lint وtype
 | expo-secure-store | ~58.0.3 | `package.json` | 2026-11-16 |
 | expo-local-authentication | ~58.0.3 | `package.json` | 2026-11-16 |
 | expo-image-picker | ~58.0.10 | `package.json` | 2026-11-16 |
-| expo-image-manipulator | ~58.0.16 | `package.json` (الواجهة الكلاسيكية `manipulateAsync`) | 2026-11-16 |
-| expo-file-system | ~58.0.13 | `package.json` (الواجهة الصنفية `File`/`Paths`) | 2026-11-16 |
+| expo-image-manipulator | ~58.0.16 | `package.json` (`manipulateAsync`) | 2026-11-16 |
+| expo-file-system | ~58.0.13 | `package.json` (`File`/`Paths`) | 2026-11-16 |
 | expo-sharing | ~58.0.23 | `package.json` | 2026-11-16 |
-| **expo-crypto** | **~58.0.8** | بتقرير المالك عند تثبيت P08 | 2026-11-16 |
-| **expo-document-picker** | **~58.0.5** | بتقرير المالك عند تثبيت P08 | 2026-11-16 |
+| expo-crypto | ~58.0.8 | بتقرير المالك عند تثبيت P08 | 2026-11-16 |
+| expo-document-picker | ~58.0.5 | بتقرير المالك عند تثبيت P08 | 2026-11-16 |
 | @react-native-community/netinfo | 12.0.1 | `package.json` | 2026-11-16 |
 | @tanstack/react-query | ^5.107.1 | `package.json` | 2026-11-16 |
 | react-hook-form | ^7.92.0 | `package.json` | 2026-11-16 |
@@ -105,55 +112,53 @@ CI أخضر بالكامل: **155/155 suites · 1020/1020 tests** · lint وtype
 | react-test-renderer | ^19.3.0 | `package.json` | 2026-11-16 |
 | prettier | ^3.10.0 | `package.json` | 2026-11-16 |
 
-**حاشية `expo-file-system`:** تقرير P06.2 ذكر `58.0.14` بعد `--fix`، والملف المرسل يُظهر `~58.0.13`. **الملف هو المصدر المعتمد** وdoctor أخضر في CI.
-
 ---
 
-## 3) بنية المجلدات (الفعلية بعد P08)
+## 3) بنية المجلدات (الفعلية بعد P09)
 
 ```
 azib-mobile/
 ├─ app/                          # Routes ONLY — بلا منطق أعمال
 │  ├─ _layout · index(Gate) · +not-found · maintenance
 │  ├─ (onboarding)/ · (auth)/ 6 · (tabs)/ 5 · (features)/ 8 · (staff)/
-│  ├─ (dev)/ index · integrations · auth · assistance · gallery
+│  ├─ (dev)/ index · integrations · auth · assistance · finance · gallery
 │  ├─ profile/ index · edit
 │  ├─ settings/ 13 شاشة
 │  ├─ legal/ [doc]
-│  └─ assistance/                # جديد في P08 (ADR-0029)
-│     ├─ _layout · index · conditions · pre-check · new · mine
-│     └─ [id]/ index · info-request · decision · appeal
+│  ├─ assistance/ index · conditions · pre-check · new · mine · [id]/4
+│  └─ programs/                  # جديد في P09
+│     ├─ index · [id] · kind/[kind] · donate/[id]
+│     ├─ donations · receipts · disbursements · impact
+│     └─ provider-requirements
 ├─ src/
 │  ├─ components/{ui,brand,shell}/
 │  ├─ features/
 │  │  ├─ shell/ · onboarding/ · auth/ · profile/ · settings/ · legal/ · home/
-│  │  ├─ assistance/             # جديد في P08
-│  │  │  ├─ engine/              # rules.types · rules.v1 · rules-source ·
-│  │  │  │                       # gates · flags · bands · score-application
-│  │  │  ├─ state-machine/       # workflow (11 حالة · 18 انتقالاً)
-│  │  │  ├─ schemas/             # wizard (7 خطوات) · appeal
-│  │  │  ├─ services/            # hash · dedup · audit-trail ·
-│  │  │  │                       # workflow · document-pipeline · submission
-│  │  │  ├─ hooks/               # rules/programs · document-upload ·
-│  │  │  │                       # submit · applications · actions
-│  │  │  ├─ components/          # NumericField · WizardProgress ·
-│  │  │  │                       # WizardStepShell · DocumentUploader · StatusTimeline
-│  │  │  ├─ wizard/              # AssistanceWizard + 6 steps + step-config
-│  │  │  ├─ screens/             # 8 شاشات
-│  │  │  └─ config/              # reason-catalog
-│  │  └─ dev/                    # DevSettings · Integrations · DevAuth ·
-│  │                             # DevAssistance · demo-seed
-│  ├─ stores/                    # app-mode · onboarding · shell · language ·
-│  │                             # auth · settings · assistance-draft
+│  │  ├─ assistance/  # engine · state-machine · schemas · services · hooks ·
+│  │  │               # components · wizard · screens · config
+│  │  ├─ finance/     # جديد في P09
+│  │  │  ├─ state-machines/   # donation · disbursement · guards
+│  │  │  ├─ services/         # donation-intent · disbursement · receipt ·
+│  │  │  │                    # impact · finance-audit · idempotency
+│  │  │  ├─ catalog/          # program-kinds
+│  │  │  ├─ hooks/            # program-catalog · donation-intent · donor ·
+│  │  │  │                    # beneficiary-disbursements · disbursement-actions · impact
+│  │  │  ├─ components/       # CertaintyBadge · DisbursementStatusBadge ·
+│  │  │  │                    # DisbursementCard · AmountField · FinanceScaffold
+│  │  │  └─ screens/          # 9 شاشات
+│  │  └─ dev/         # DevSettings · Integrations · DevAuth · DevAssistance ·
+│  │                  # DevFinance · demo-seed
+│  ├─ stores/         # 7 stores (app-mode · onboarding · shell · language ·
+│  │                  # auth · settings · assistance-draft)
 │  ├─ constants/routes.ts · locales/{ar,en}/ (15 ns)
-│  ├─ schemas/                   # + application-payload
+│  ├─ schemas/        # + application-payload · finance extensions
 │  └─ hooks/ theme/ core/ config/ providers/ repositories/ i18n/
-├─ mocks/seed/                   # + locations.ts · assistance.ts (مستقلان)
+├─ mocks/seed/        # + locations.ts · assistance.ts (مستقلان)
 ├─ scripts/ · tests/__tests__/scripts/
-└─ docs/                         # + INTEGRATIONS.md · ELIGIBILITY_ENGINE.md
+└─ docs/              # + INTEGRATIONS · ELIGIBILITY_ENGINE · FINANCE_ARCHITECTURE
 ```
 
-**قواعد ثابتة:** Routes in `app/` only · Features in `src/features/` · **`__tests__` دائماً** · واجهات Expo في وحدات حدودية · تطابق صيغة مفاتيح i18n · **كل Hook قبل أي `return` مبكر**.
+**قواعد ثابتة:** Routes in `app/` only · Features in `src/features/` · **`__tests__` دائماً** · واجهات Expo في وحدات حدودية · تطابق صيغة مفاتيح i18n · **كل Hook قبل أي `return` مبكر** · **`rerender` بعد تحديث متغيّر خارجي في الاختبارات**.
 
 ---
 
@@ -168,28 +173,30 @@ azib-mobile/
 | 38–44 | الملف الشخصي · التسلسل الجغرافي · الصورة · Avatar `uri` · Module 20 · الموافقات · الخروج بتأكيد | P06.2 | ADR-0019/0020. |
 | 45–52 | عقد Auth (→15) · تغيير كلمة المرور · الجلسات · البيومتري · الحذف · التصدير · Legal · `INTEGRATIONS.md` | P06.3 | ADR-0021/0022. |
 | 53–60 | HomeConfig · مصدر قابل للتبديل · useHomeConfig · useHomeSection · Header · Hero · QuickActions · SectionShell/Boundary/Lazy/Stagger | P07.1 | ADR-0023. |
-| 61–64 | 4 أقسام (أعراس/عروض/سوق/وظائف) · كتل الأدوار · التخصيص · Pull-to-Refresh · أداة تعبئة Demo | P07.1 | — |
+| 61–64 | 4 أقسام · كتل الأدوار · التخصيص · Pull-to-Refresh · أداة تعبئة Demo | P07.1 | — |
 | 65–68 | بوابة الموافقة · التعقيم · إخفاء الأعداد والمبالغ · فصل Demo/Real · 4 أقسام حساسة · تسجيل الأقسام الثمانية | P07.2 | ADR-0024…0026. |
-| 69 | **توسيع عقد Application**: 13 حالة (legacy محفوظ) + حقول اختيارية + `update` + `submit` | P08.1 | ADR-0027؛ صفر كسر لعقد P03. |
-| 70 | **`application-payload` schema**: 7 مجموعات + سجلات التقييم/الاستكمال/القرار/الاعتراض/موافقة النشر | P08.1 | أعداد صحيحة بالريال. |
-| 71 | **القواعد**: `rules.types` + `rules.v1` + `RulesSource` قابل للتبديل | P08.1 | ADR-0028. |
-| 72 | **البوابات الأربع** + **الأعلام الخمسة** + **النطاقات الأربعة** | P08.1 | فشل بوابة ⇒ لا نقاط ولا قرار. |
-| 73 | **`scoreApplication` نقية**: 6 مكوّنات، مجموع 100، `advisory:true`، `ruleVersion` | P08.1 | ثروة الأقارب والميراث مستبعدة. |
-| 74 | **آلة الحالات**: 11 حالة · 18 انتقالاً · فحص الفاعل · legacy mapping | P08.1 | كل غير صالح مرفوض. |
-| 75 | **الخدمات**: `hash` (SHA-256) · `DedupService` · `audit-trail` · `workflow-service` | P08.1 | الآلة تُفرَض في الخدمة. |
-| 76 | **`mocks/seed/assistance.ts`** مستقل | P08.1 | لا يمسّ `SeedBundle` ولا اختباره. |
-| 77 | **`document-pipeline`**: صور/PDF + حدود من القواعد + إعادة ترميز + فشل ⇒ لا رفع | P08.2 | ADR-0031. |
-| 78 | **`assistance-draft.store`**: حفظ تلقائي + تعافٍ + **بصمات لا معرّفات خام** | P08.2 | ADR-0030. |
-| 79 | **Wizard ثماني خطوات** + WizardProgress + DocumentUploader + NumericField | P08.2 | Zod لكل خطوة. |
-| 80 | **`submission-service`**: dedup → score → create → attach → submit + audit | P08.2 | رقم مرجعي من المزوّد. |
-| 81 | **نقل المسار** إلى `app/assistance/` + ROUTES + Allowlist + كل المستهلكين | P08.2 | ADR-0029. |
-| 82 | **شاشات**: تعريف البرنامج · شروط الاستحقاق · اختبار أولي غير ملزم ولا يُخزَّن | P08.2 | القيم المؤقتة موسومة وظاهرة. |
-| 83 | **طلباتي + التفاصيل + الخط الزمني** من سجل التدقيق + فحص الملكية | P08.3 | ADR-0032. |
-| 84 | **الاستكمال**: عرض المطلوب + تعديل أرقام/مستندات/ملاحظة + إعادة إرسال تمسح الطلب | P08.3 | صياغة محترمة. |
-| 85 | **شاشة القرار**: أسباب من الكتالوج، **بلا نقاط**، بلا اسم مراجع | P08.3 | `scoreVisibility='hidden'`. |
-| 86 | **الاعتراض**: Zod + مرة واحدة + نافذة قابلة للضبط + مستندات إضافية | P08.3 | إحالة لمراجع مختلف في P17. |
-| 87 | **محاكي المراجعة** في `(dev)/assistance` | P08.3 | demo فقط؛ لا قرار آلي للمستخدم. |
-| 88 | **ربط قسم حالات الدعم** بموافقة النشر + المحافظة الحقيقية | P08.3 | يغلق §8 #39؛ البوابة fail-closed. |
+| 69–76 | عقد Application (13 حالة) · payload schema · القواعد · البوابات/الأعلام/النطاقات · المحرك النقي · آلة الحالات · الخدمات · seed مستقل | P08.1 | ADR-0027/0028. |
+| 77–82 | document-pipeline · مسودة · Wizard 8 خطوات · submission-service · نقل المسار · 3 شاشات | P08.2 | ADR-0029…0031. |
+| 83–88 | طلباتي · التفاصيل/الخط الزمني · الاستكمال · القرار · الاعتراض · محاكي المراجعة · ربط قسم الدعم | P08.3 | ADR-0032. |
+| 89 | **تمديد عقدي التمويل إضافةً**: 8 حالات لكل منهما + حقول اختيارية + `advance` | P09.1 | ADR-0033؛ `append-only.contract` لم يُمسّ. |
+| 90 | **مخططات التمويل**: مبالغ أعداد صحيحة + حقول النية/الإيصال/Maker/Checker/الإثبات | P09.1 | — |
+| 91 | **آلتا حالة نقيتان**: 6+6 حالات · 6+6 انتقالات · فحص الفاعل · legacy mapping | P09.1 | كل غير صالح مرفوض استقصائياً. |
+| 92 | **الحراس النقية**: Maker≠Checker · إثبات · حد تراكمي · حالة الطلب · `committedTotal` | P09.1 | ADR-0038. |
+| 93 | **Demo Payment Provider** في `providers/mock/` + `verifyExternalPayment` صادق | P09.1 | ADR-0035؛ لا دالة محرّمة. |
+| 94 | **Idempotency حتمية** + منع التكرار في المزوّد | P09.1 | ADR-0037. |
+| 95 | **`receipt-service`**: إيصال مشتق بعد `verified` فقط + رقم موسوم | P09.1 | ADR-0034. |
+| 96 | **`impact-service`**: real+verified فقط + حجب الأعداد والمبالغ + تعريف كل رقم | P09.1 | ADR-0039. |
+| 97 | **`finance-audit`**: Append-only بميتاداتا محدودة (بلا مبالغ/هويات) | P09.1 | — |
+| 98 | **`donation-intent-service`**: إنشاء/إلغاء/تسليم/محاكاة/تحقق | P09.1 | حدّ كتابة العميل مفروض. |
+| 99 | **`disbursement-service`**: اقتراح/قرار/تسجيل دفع/رد مستفيد | P09.1 | ملكية المستفيد مفروضة. |
+| 100 | **كتالوج أنواع البرامج (5)** + `Program.kind?` اختيارية | P09.2 | ADR-0036؛ قرض حسن إحالة فقط. |
+| 101 | **شاشات الكتالوج/التفاصيل/النوع** + متطلبات الجهة المرخّصة | P09.2 | Not Connected صادق. |
+| 102 | **تدفق نية التبرع** + `CertaintyBadge` + `AmountField` + `FinanceScaffold` | P09.2 | يقين بأيقونة+نص+لون. |
+| 103 | **تبرعاتي + الإيصالات** | P09.2 | لا إيصال قبل التحقق. |
+| 104 | **سجل صرف المستفيد + تأكيد/اعتراض** | P09.3 | الملكية + سبب الاعتراض إلزامي. |
+| 105 | **تقرير الأثر** | P09.3 | فارغ صادق في Demo. |
+| 106 | **محاكي Maker/Checker** في `(dev)/finance` | P09.3 | حقول قابلة للتعديل لاختبار الفصل. |
+| 107 | **مسارات `app/programs/**`** + Allowlist + مداخل الحساب/الكتالوج/المطور | P09.2/3 | — |
 
 > لا شيء آخر مكتمل. أي جدول آخر يبقى فارغاً حتى المرحلة المعنية.
 
@@ -197,18 +204,19 @@ azib-mobile/
 
 ## 5) غير المكتملة
 
-- **P09 (Financial Architecture)** حتى **P24**.
+- **P10 (Group Weddings)** حتى **P24**. P10 **محجوبة** بقرار بشري (`PRODUCT_POLICIES #4` سياسة الانسحاب).
 - شاشات الميزات المتبقية Placeholders صادقة: عرسنا واحد P10، الشركاء P11، سوق خير P12، وظائف/متطوعون P13، الحاسبة/الدليل P14، توعية P15، الإشعارات/البحث P16، لوحة الفريق P17.
-- **الإحصاءات محجوبة** بحجم البيانات التجريبي الحالي (< الحد) — سلوك مقصود.
-- **قصص النجاح فارغة** حتى تُضاف موافقة لكل سجل محتوى (P15).
-- P18 يستبدل mocks بـSupabase + قواعد على الخادم + انتقال ذرّي + بصمة محتوى + تنفيذ الحذف والصرف.
+- **لا تبرع حقيقي ولا إيصال رسمي** قبل ربط جهة مرخّصة + Webhook خادمي (P18).
+- **تقرير الأثر فارغ دائماً في Demo** — سلوك مقصود (لا بيانات real).
+- **إحصاءات الرئيسية** ما زالت تقرأ `confirmed` القديمة ⇒ تحتاج توحيداً مع `verified`.
+- P18 يستبدل mocks بـSupabase + انتقال ذرّي + تنفيذ الحذف والصرف الرسمي.
 
 ---
 
 ## 6) الخدمات المتصلة
 
-> **لا شيء متصل.** لا مشروع Supabase، لا مزوّد دفع، لا تخزين سحابي، لا بريد، لا Push.
-> وضع `backend` يعرض **Not Connected** بصدق مع إعادة محاولة عاملة، ويشمل ذلك كل شاشات المساعدات وأقسام الرئيسية.
+> **لا شيء متصل.** لا مشروع Supabase، **لا مزوّد دفع مرخّص**، لا تخزين سحابي، لا بريد، لا Push.
+> وضع `backend` يعرض **Not Connected** بصدق، وشاشة متطلبات الجهة المرخّصة تسرد ما ينقص.
 > عند ربط أي خدمة يُضاف صف: الخدمة، ما يتصل بها، البيئة، طريقة التحقق، التاريخ، **من تحقق**.
 
 ---
@@ -224,10 +232,15 @@ azib-mobile/
 | صورة Avatar | رفع إلى MockStorage (ذاكرة) | `profile:avatar.sessionNote` |
 | أداة تعبئة الرئيسية | تنشر وتربط عبر العقود، يدوياً | `home:dev.*` |
 | إحصاءات الرئيسية | دلو demo فقط، محجوب دون الحد | `home:sections.community-stats.demoOnly` |
-| **طلب مساعدة تجريبي** | تدفق كامل عبر نفس العقود | شارة Demo على الطلب والبطاقات |
-| **الرقم المرجعي** | `AZIB-DEMO-YYYY-NNNNN` من المزوّد | `assistance:reference.demoNote` |
-| **بصمة المستند** | وصفية تجريبية | `assistance:wizard.documents.fingerprintNote` |
-| **محاكي المراجعة** | `(dev)` فقط، انتقالان حقيقيان عبر الخدمة | شارة Demo + ملاحظة النطاق |
+| طلب مساعدة تجريبي | تدفق كامل عبر نفس العقود | شارة Demo |
+| الرقم المرجعي للطلب | `AZIB-DEMO-YYYY-NNNNN` | `assistance:reference.demoNote` |
+| بصمة المستند | وصفية تجريبية | `assistance:wizard.documents.fingerprintNote` |
+| محاكي مراجعة الطلبات | `(dev)` فقط | شارة Demo |
+| **Demo Payment Provider** | دورة حياة النية بلا حركة أموال | شارة Demo + «نية غير مؤكدة» |
+| **نية تبرع تجريبية** | لا تُحتسب مستلماً ولا تدخل الأثر | `CertaintyBadge` |
+| **إيصال تجريبي** | بعد `verified` فقط، غير رسمي | `assistance:finance.receipts.demoNote` |
+| **صرف تجريبي** | Maker/Checker عبر نفس الخدمة | شارة Demo على كل عملية |
+| **محاكي Maker/Checker** | `(dev)/finance` فقط | شارة Demo + ملاحظة النطاق |
 | عدّاد شارة الإشعارات | محلي (0 افتراضاً) | المصدر الحقيقي P16 |
 | شجرة locations | بيانات demo | `profile:locations.pending` |
 
@@ -239,22 +252,22 @@ azib-mobile/
 
 | # | المشكلة | التأثير | الحالة | ملاحظات |
 |---|---------|---------|--------|---------|
-| 1 | حدود الاستحقاق ونطاقات الدخل غير معتمدة نهائياً | عتبات مؤقتة في P08 | Open | قيم P08 موسومة `PENDING_POLICY`. |
-| 2 | أوزان التقييم | — | **Closed (P08)** | HRD حدّدها: 30/20/15/15/10/10. `PRODUCT_POLICIES #2` صُحّح. |
+| 1 | حدود الاستحقاق ونطاقات الدخل غير معتمدة نهائياً | عتبات مؤقتة | Open | قيم P08 موسومة. |
+| 2 | أوزان التقييم | — | **Closed (P08)** | HRD حدّدها. |
 | 3 | مدة الاعتراض | 14 يوماً مؤقتة | Open | قرار بشري. |
-| 4 | سياسة الانسحاب من العرس | تحجب P10 | Open | قرار بشري. |
-| 5 | استثناء «مساعدة واحدة» | مغلق افتراضياً في P08 | Open | قرار بشري. |
+| 4 | **سياسة الانسحاب من العرس** | **تحجب P10** | Open | قرار بشري مطلوب قبل البدء. |
+| 5 | استثناء «مساعدة واحدة» | مغلق مؤقتاً | Open | قرار بشري. |
 | 6 | فئة خصومات الشركاء | تحجب P11 | Open | قرار بشري. |
-| 7 | مدة الاحتفاظ + فترة تأكيد الحذف | تحجب P19/P23؛ 30 يوماً مؤقتة | Open | قرار بشري. |
-| 8 | الحد الأدنى لإخفاء الإحصاءات | 10 مؤقت (P07) | Open | يحجب P15/P17. |
+| 7 | مدة الاحتفاظ + فترة تأكيد الحذف | تحجب P19/P23؛ 30 يوماً مؤقتة | Open | تشمل السجلات المالية. |
+| 8 | الحد الأدنى لإخفاء الإحصاءات | 10 مؤقت (P07+P09) | Open | يحجب P15/P17. |
 | 9 | `forceRTL` عند تبديل اللغة | — | **Closed (P05)** | ADR-0013. |
 | 10 | أيقونات أصول التطبيق من قالب Expo | لا تعكس الهوية | Open | P22/P23. |
 | 11 | لا تحقق آلي من وجود ملفات الحوكمة | يدوي | Open | `AGENT_RULES §6`. |
 | 12 | ESLint مثبّت على 9.x | لا ميزات 10 | Accepted | ADR-0007. |
 | 13 | `i18n-allow-arabic` في اختبار قديم | مقبول | Accepted | تنظيف P21. |
-| 14 | `populateDemoSeed` لا يغطي content/notifications/search | لا محتوى/إشعارات demo | Open | أداة P07 تلتفّ بالنشر لا بالخلق. |
+| 14 | `populateDemoSeed` لا يغطي content/notifications/search | لا محتوى/إشعارات demo | Open | أداة P07 تلتفّ بالنشر. |
 | 15 | backend mode يستخدم mocks للـ16 repo | بيانات demo في backend | Accepted | يُصحَّح P18. |
-| 16 | `RingProgress` بلا animation | تجربة أقل نعومة | Accepted | لم يُنفَّذ في P05–P08. |
+| 16 | `RingProgress` بلا animation | تجربة أقل نعومة | Accepted | لم يُنفَّذ في P05–P09. |
 | 17 | `BottomSheet` single-snap | لا نقاط متعددة | Accepted | P20 إن لزم. |
 | 18 | `Tabs` غير scrollable | ≤5 تبويبات | Accepted | P07 استخدم FlatList أفقياً. |
 | 19 | اختبارات Reanimated mock ثابت | الحركة لا تُختبر آلياً | Accepted | ADR-0011. |
@@ -263,52 +276,60 @@ azib-mobile/
 | 22 | الاتجاه الأصلي يكتمل بعد إعادة الفتح | لا مكتبة restart | Accepted | ملاحظة صادقة. |
 | 23 | فاحص الأزرار regex-based | لا يغطي كل الأنماط | Accepted | ADR-0015. |
 | 24 | الفاحص غير مضمّن في سكربت `lint` | خطوة CI مستقلة فقط | Open | يلزم `package.json` كامل. |
-| 25 | أنماط اختبار React 19 / RNTL v14 | أخطاء متكررة إن تُجاهلت | Accepted | دروس ملزمة في `DEVELOPMENT_PROGRESS`. |
-| 26 | **لم يُجرَ تحقق على الأجهزة (P05–P08)** | حركة/Blur/بصمة/EXIF/Carousel/رفع مستندات | Open | بقرار المالك؛ P20/P21. |
+| 25 | أنماط اختبار React 19 / RNTL v14 | أخطاء متكررة إن تُجاهلت | Accepted | دروس ملزمة. |
+| 26 | **لم يُجرَ تحقق على الأجهزة (P05–P09)** | حركة/Blur/بصمة/EXIF/Carousel/رفع/تدفق مالي | Open | بقرار المالك؛ P20/P21. |
 | 27 | رابط صورة Avatar غير دائم | يضيع بإعادة التشغيل | Open | P18. |
 | 28 | إزالة EXIF غير متحققة على جهاز | ادعاء خصوصية غير مُثبت | Open | P20. |
 | 29 | شجرة locations تجريبية | ليست مرجعاً رسمياً | Open | `pending-human-review`. |
 | 30 | الحذف مجدول لا منفَّذ | لا مسح فعلي | Open | P18 + قرار بشري. |
 | 31 | الجلسات تسميات محلية | لا إنهاء عن بُعد | Open | P18. |
 | 32 | نصوص Legal قوالب مؤقتة | **تحجب الإطلاق** | Open | مراجعة قانونية. |
-| 33 | **صفّا الأمان والحذف معطّلان في فهرس الإعدادات** | لا مدخل من الواجهة | **قرار معتمد — تنفيذ معلّق** | المالك اعتمد تحديث الاختبار وتفعيل الصفّين؛ لم يُنفَّذ. |
-| 34 | `SignInPlaceholder.tsx` مُبقى بلا استخدام | كود ميت مؤقت | Open | يُحذف مع اختباره (يلزم إرسال الملف). |
+| 33 | **صفّا الأمان والحذف معطّلان في فهرس الإعدادات** | لا مدخل من الواجهة | **قرار معتمد — تنفيذ معلّق** | الخيار (أ) معتمد؛ لم يُنفَّذ. |
+| 34 | `SignInPlaceholder.tsx` مُبقى بلا استخدام | كود ميت مؤقت | Open | يُحذف مع اختباره. |
 | 35 | سحب الموافقات الأساسية = حذف الحساب | محجوب بـ#33 | Open | يُحل مع #33. |
 | 36 | لا استعادة جلسة عند الإقلاع | يُعاد الدخول كل مرة | Open | P18. |
 | 37 | `zod` غير مُعلن في `package.json` | اعتماد على hoisting | Open | يُعلن عند أول تعديل للحزم. |
 | 38 | مصدر HomeConfig ما زال Mock | لا مزامنة عبر الأجهزة | Open | ADR-0023. |
-| 39 | لا حقول موافقة نشر في العقود | — | **Closed (P08)** | `publicationConsent` على الطلب + التقاط عند الإرسال + ربط القسم. |
-| 40 | `Donation`/`Disbursement` AppendOnly | لا تأكيد تبرع عبر العقد ⇒ إحصاءات محجوبة | Open | P18. |
+| 39 | لا حقول موافقة نشر في العقود | — | **Closed (P08)** | `publicationConsent` + ربط القسم. |
+| 40 | `Donation`/`Disbursement` AppendOnly بلا انتقال | — | **Closed (P09)** | `advance` أُضيف؛ عقد AppendOnly لم يُمسّ. |
 | 41 | `ContentRepository` ReadOnly | مستودع القصص فارغ | Open | P15/P18. |
 | 42 | لا ربط حساب↔شريك | ملخص الشريك بلا أرقام | Open | P11. |
-| 43 | المتطوعون تسجيلات لا مهام | قسم المتطوع يعرض تسجيل المستخدم | Open | P13. |
-| 44 | مبالغ البرامج غير معروضة | معلومات ناقصة في المبادرات | Open | حتى اعتماد #1. |
-| 45 | Carousel RTL + fallback الكسل 700ms | سلوك بصري/أدائي غير متحقق | Open | أجهزة + P20/P21. |
+| 43 | المتطوعون تسجيلات لا مهام | قسم المتطوع محدود | Open | P13. |
+| 44 | مبالغ البرامج غير معروضة في المبادرات | معلومات ناقصة | Open | حتى اعتماد #1. |
+| 45 | Carousel RTL + fallback الكسل | سلوك غير متحقق | Open | أجهزة + P20/P21. |
 | 46 | انحراف صيغة مفاتيح i18n | كسر اختبارين في P07.2 | Accepted | درس مُلزِم. |
 | 47 | `DESIGN_SYSTEM.md` أسطر قديمة | — | **Closed (P07)** | صُحّح في رد منفصل. |
-| 48 | **فئة الحاجة غير مجموعة في payload الطلب** | بطاقة الدعم تعرض تسمية عامة + المحافظة فقط | Open | إضافة الحقل تحتاج توسيع عقد؛ P15/P18. |
-| 49 | **`AuditRepository` بلا فلتر `target`** | الخط الزمني يُرشَّح client-side (حد 200) | Open | P18. |
-| 50 | **انتقالات سير العمل غير ذرّية** | فشل جزئي قد يفصل الحالة عن البيانات | Open | `submit` ذرّي؛ الباقي نداءان. P18. |
-| 51 | **بصمة المستند وصفية** | إعادة التسمية تُفلت من كشف التكرار | Open | بصمة محتوى + HMAC في P18 (ADR-0031). |
-| 52 | **PDF بلا معالجة** | بيانات وصفية قد تبقى في الملف | Accepted | معلن بصدق؛ لا ادعاء بإزالتها. |
-| 53 | **الرقم المرجعي من المزوّد التجريبي** | ليس رقماً رسمياً | Open | موسوم `AZIB-DEMO-*`؛ الرسمي P18. |
-| 54 | **الاستكمال يعدّل 4 أرقام + مستندات + ملاحظة** | حقول أخرى تُغطّى بالمستند/الملاحظة | Open | تحرير كامل في P17/P18. |
-| 55 | **محاكي المراجعة بديل مؤقت** | لا صلاحيات ولا فصل مراجعين فعلي | Open | P17 + RLS P18. |
-| 56 | **`Date.now()` في حساب نافذة الاعتراض** | يحتاج `eslint-disable react-hooks/purity` داخل `useMemo` | Accepted | نمط موثّق؛ بديل نقي في P20 إن لزم. |
+| 48 | فئة الحاجة غير مجموعة في payload | بطاقة الدعم بتسمية عامة | Open | P15/P18. |
+| 49 | `AuditRepository` بلا فلتر `target` | الخط الزمني client-side | Open | P18. |
+| 50 | **انتقالات سير العمل غير ذرّية** | فشل جزئي يفصل الحالة عن البيانات | Open | يشمل الطلب والصرف؛ P18. |
+| 51 | بصمة المستند وصفية | إعادة التسمية تُفلت | Open | محتوى + HMAC في P18. |
+| 52 | PDF بلا معالجة | بيانات وصفية قد تبقى | Accepted | معلن بصدق. |
+| 53 | الرقم المرجعي من المزوّد التجريبي | ليس رسمياً | Open | P18. |
+| 54 | الاستكمال يعدّل 4 أرقام + مستندات + ملاحظة | تحرير محدود | Open | P17/P18. |
+| 55 | محاكي مراجعة الطلبات بديل مؤقت | لا صلاحيات فعلية | Open | P17 + RLS P18. |
+| 56 | `Date.now()` في نافذة الاعتراض | يحتاج `eslint-disable purity` | Accepted | نمط موثّق. |
+| 57 | **لا مزوّد دفع مرخّص ولا Webhook** | **`verified` غير قابل للوصول في وضع الخادم** | Open | شاشة المتطلبات صادقة؛ P18. |
+| 58 | **إحصاءات الرئيسية تقرأ `confirmed` القديمة** | لا تتحدّث مع `verified` الجديد | Open | توحيد في P15/P18. |
+| 59 | **محاكي Maker/Checker بديل مؤقت** | لا فصل مراجعين بصلاحيات | Open | P17. |
+| 60 | **`Program.kind` غائب في الـseed** | كل البرامج تُصنّف `grant` افتراضاً | Open | تصنيف حقيقي في P18. |
+| 61 | **القرض الحسن بلا جهة إحالة مربوطة** | معلومات فقط، لا إحالة فعلية | Open | يعتمد على #11. |
+| 62 | **تقرير الأثر فارغ في Demo** | لا أرقام للمستخدم | **Accepted** | مقصود (ADR-0039)؛ ليس عطلاً. |
+| 63 | **الإيصال تجريبي غير رسمي** | لا يصلح مستنداً مالياً | Open | رقم رسمي في P18. |
 
 ---
 
 ## 9) الخطوة التالية
 
-**P09 — Financial Architecture.** غير محجوبة بقرارات بشرية، لكنها **مقيّدة بـADR-0005**: لا محفظة، لا Escrow، لا تحويل داخلي، ولا نظام دفع تجريبي يُنتج إيصالاً حقيقياً.
+**P10 — Group Weddings.** **محجوبة** حتى اعتماد `PRODUCT_POLICIES #4` (سياسة الانسحاب من العرس الجماعي).
 
-**نطاق P09 المتوقع:** سجل نية التبرع (`PaymentProvider.recordPledge`) · التحقق من دفع خارجي (`verifyExternalPayment` — يعيد `null` بصدق حتى يوجد مزوّد) · سجلات التبرعات والصرف Append-only · ربط الصرف بالطلب المقبول · شفافية مالية بإحصاءات محجوبة · لا حركة أموال داخل التطبيق.
+**نطاق P10 المتوقع بعد رفع الحجب:** كتالوج الأعراس الجماعية · التسجيل والشروط · السعة والمقاعد · حالة التسجيل · الانسحاب ضمن النافذة المعتمدة · ربط الدعم المرتبط بالطلب · لا تحصيل رسوم (Non-Custodial).
 
-**قبل بدء P09 مطلوب من المالك:**
-1. **إشارة البدء** — لم تبدأ P09.
-2. تنفيذ **#33** (تفعيل صفّي الأمان والحذف + تحديث الاختبار) — رقعة صغيرة مستقلة.
-3. `package.json` الكامل (لضم الفاحص لـ`lint` وإعلان `zod` وتأكيد إصداري P08).
-4. `src/features/shell/__tests__/SignInPlaceholder.test.tsx` لحذف الكود الميت (#34).
-5. تأكيد أن **#7 (مدة الاحتفاظ)** لا يحجب سجلات P09 المالية.
+**قبل بدء P10 مطلوب من المالك:**
+1. **رفع الحجب:** اعتماد سياسة الانسحاب (نافذة، تبعات، مصير الدعم المرتبط، ما بعد الموعد).
+2. **إشارة البدء** — لم تبدأ P10.
+3. تنفيذ **#33** (تفعيل صفّي الأمان والحذف + تحديث الاختبار).
+4. `package.json` الكامل (لضم الفاحص لـ`lint` وإعلان `zod`).
+5. `src/features/shell/__tests__/SignInPlaceholder.test.tsx` لحذف الكود الميت (#34).
+6. قرار بشأن **#58** (توحيد إحصاءات الرئيسية مع `verified`) — الآن أو في P15.
 
-**عند بدء P09 سيُطلب بالاسم:** `src/providers/contracts/payment.ts` · `src/providers/mock/payment.ts` · `src/schemas/donation.ts` · `src/schemas/disbursement.ts` · `src/repositories/mock/donation.ts` · `src/repositories/mock/disbursement.ts` · `src/repositories/mock/crud-factory.ts` · `src/locales/{ar,en}/marketplace.json` · `src/features/settings/export-service.ts` (إن لزم ربط التصدير بالسجلات المالية).
+**عند بدء P10 سيُطلب بالاسم:** `src/schemas/wedding.ts` · `src/locales/{ar,en}/weddings.json` · `src/components/ui/form/DatePicker.tsx` · `src/components/ui/Tabs.tsx` · `src/features/assistance/hooks/use-assistance-applications.ts` (للربط) · `docs/GLOSSARY.md` (مصطلحات العرس).
