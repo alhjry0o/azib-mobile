@@ -2,7 +2,7 @@
 // from Partner.status (D-3).
 import type { Offer, OfferAudience } from '@/repositories/contracts/offer';
 import type { Partner } from '@/repositories/contracts/partner';
-import { isPublished } from '../state/expiry';
+import { offerVisibility } from '../state/expiry';
 import { isVerified, type VerificationSnapshot } from '../state/verification';
 
 export interface PartnerFilters {
@@ -67,7 +67,9 @@ export function filterOffers(
   now: Date,
 ): readonly Offer[] {
   return offers.filter((offer) => {
-    if (!filters.includeExpired && !isPublished(offer, now)) return false;
+    const visibility = offerVisibility(offer, now);
+    if (visibility === 'not_published') return false;
+    if (!filters.includeExpired && visibility !== 'live') return false;
     if (filters.category && offer.category !== filters.category) return false;
     if (filters.governorateId && offer.governorateId !== filters.governorateId) return false;
     if (filters.audience && (offer.audience ?? 'beneficiaries') !== filters.audience) return false;
