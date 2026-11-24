@@ -250,7 +250,7 @@ azib-mobile/
 |--------|--------|------------------|
 | MockAuthProvider (15 capability) | يعمل عبر نفس عقد الإنتاج | DemoBanner + Badge |
 | 12 Mock Providers + **20 Mock Repos** | تعمل في وضع demo | Registry يعرض `mock` |
-| OTP · جلسات/أجهزة · صورة Avatar | تجريبية موسومة | نصوص الص respective |
+| OTP · جلسات/أجهزة · صورة Avatar | تجريبية موسومة | نصوصها الخاصة في كل namespace |
 | أداة تعبئة الرئيسية | تنشر وتربط عبر العقود، يدوياً | `home:dev.*` |
 | إحصاءات الرئيسية | دلو demo فقط، محجوب دون الحد | `home:sections.community-stats.demoOnly` |
 | طلب مساعدة · رقم مرجعي · بصمة مستند | تجريبية موسومة | `assistance:*` |
