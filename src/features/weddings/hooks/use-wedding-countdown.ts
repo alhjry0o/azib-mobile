@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useProviderContainer } from '@/providers';
+import type { Result } from '@/core/result';
 
 export interface CountdownValue {
   readonly scheduledDate: string;
@@ -41,5 +42,3 @@ export function useWeddingCountdown(groupId: string) {
     },
   });
 }
-
-import type { Result } from '@/core/result';
