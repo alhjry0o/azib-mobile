@@ -15,21 +15,21 @@
 | P03 | Core Platform | Done | 2026-11-12 | 12 providers · 16 repos · seed · ARCHITECTURE. |
 | P04 | Design System | Done | 2026-11-14 | 42 مكوّناً · 565 اختباراً · 71 suite. |
 | P05 | Shell + Onboarding | Done | 2026-11-16 | 3 أجزاء · 623 اختباراً · ADR-0012…0015. |
-| P06 | Auth / Profile / Settings / Legal | Done | 2026-11-16 | 3 أجزاء · 780 اختباراً / 110 suites · ADR-0016…0022. |
-| P07 | Home Dashboard & Discovery | Done | 2026-11-16 | جزءان · 869 اختباراً / 129 suites · ADR-0023…0026. |
-| P08 | Assistance & Eligibility Engine | Done | 2026-11-16 | 3 أجزاء · 1020 اختباراً / 155 suites · ADR-0027…0032. |
-| P09 | **Financial Assistance Architecture** | **Done** | **2026-11-16** | 3 أجزاء · **178/178 suites · 1138/1138 tests** · lint/typecheck نظيفان · CI أخضر (بتقرير المالك) · ADR-0033…0039 + `docs/FINANCE_ARCHITECTURE.md`. |
-| P10 | Group Weddings | **Blocked** | — | **محجوب** حتى `PRODUCT_POLICIES #4` (سياسة الانسحاب). |
-| P11 | Partners + Ambassadors | Not Started | — | **محجوب** حتى فئة الخصومات؛ يضيف ربط حساب↔شريك. |
-| P12 | Souk | Not Started | — | عيني فقط؛ يخدم نوع `in_kind`. |
-| P13 | Jobs + Volunteers | Not Started | — | يضيف مهام التطوع الحقيقية. |
+| P06 | Auth / Profile / Settings / Legal | Done | 2026-11-16 | 3 أجزاء · 780 / 110 · ADR-0016…0022. |
+| P07 | Home Dashboard & Discovery | Done | 2026-11-16 | جزءان · 869 / 129 · ADR-0023…0026. |
+| P08 | Assistance & Eligibility Engine | Done | 2026-11-16 | 3 أجزاء · 1020 / 155 · ADR-0027…0032. |
+| P09 | Financial Assistance Architecture | Done | 2026-11-16 | 3 أجزاء · 1138 / 178 · ADR-0033…0039. |
+| P10 | **Group Weddings** | **Done** | **2026-11-16** | 3 أجزاء · **207/207 suites · 1270/1270 tests** · lint/typecheck نظيفان · CI أخضر (بتقرير المالك) · ADR-0040…0050 + `docs/COST_SHARING.md`. |
+| P11 | Partners + Ambassadors | **Blocked** | — | **محجوب** حتى `PRODUCT_POLICIES #6`؛ يضيف ربط حساب↔شريك. |
+| P12 | Souk | Not Started | — | عيني فقط؛ يخدم `in_kind`. |
+| P13 | Jobs + Volunteers | Not Started | — | مهام تطوع حقيقية. |
 | P14 | Calculator + Guide | Not Started | — | إرشادي فقط. |
-| P15 | Education + Charter + Impact | Not Started | — | **محجوب** حتى حد الإحصاءات؛ يوحّد الأثر مع الرئيسية. |
-| P16 | Notifications + Search | Not Started | — | يربط مصدر شارة Dock وجرس الرئيسية. |
-| P17 | Staff Console | Not Started | — | لوحة Maker/Checker ومراجع حقيقية بصلاحيات. |
-| P18 | Supabase | Not Started | — | مزوّد مرخّص + Webhook + انتقال ذرّي + إيصال رسمي. |
-| P19 | Security | Not Started | — | يستهلك `THREAT_MODEL.md` (محدَّث بـP09). |
-| P20 | Offline / Perf / A11y | Not Started | — | يشمل تحقق الأجهزة المؤجل (P05–P09). |
+| P15 | Education + Charter + Impact | Not Started | — | **محجوب** حتى حد الإحصاءات؛ يوحّد الأثر. |
+| P16 | Notifications + Search | Not Started | — | مصدر شارة Dock وجرس الرئيسية. |
+| P17 | Staff Console | Not Started | — | لوحة Maker/Checker ومراجع وإدارة مجموعات. |
+| P18 | Supabase | Not Started | — | RLS للمجموعة/الدردشة/الميزانية + انتقال ذرّي. |
+| P19 | Security | Not Started | — | يستهلك `THREAT_MODEL.md` (محدَّث بـP10). |
+| P20 | Offline / Perf / A11y | Not Started | — | تحقق الأجهزة المؤجل (P05–P10). |
 | P21 | Testing | Not Started | — | Playwright + pgTAP. |
 | P22 | GitHub Actions | Not Started | — | الفاحص أُضيف مبكراً في P05. |
 | P23 | Docs | Not Started | — | يُستكمل README. |
@@ -47,150 +47,141 @@
 ### P02
 - [x] Expo SDK 58 · TS strict + `noUncheckedIndexedAccess` + alias `@/*`.
 - [x] ESLint flat + Prettier + سكربتات · Jest + اختبارات حقيقية · فاحص العربية مربوط بـ`lint`.
-- [x] `app.config.ts` (allowBackup=false, supportsRTL, scheme) · CI أخضر.
+- [x] `app.config.ts` · CI أخضر.
 
 ### P03
-- [x] `Result` · `AppError` (8 kinds) · `logger` مع redaction · `env` بـZod.
-- [x] i18next + 14 namespace + formatters + RTL + plurals عربية.
-- [x] 12 contracts + 12 mocks + 12 NotConnected + Registry + Container.
-- [x] 16 repository contracts + mocks + Contract tests · 15 مجموعة seed + populator (13/16).
+- [x] `Result` · `AppError` · `logger` مع redaction · `env` بـZod.
+- [x] i18next + 14 namespace + formatters + RTL + plurals.
+- [x] 12 contracts + mocks + NotConnected + Registry + Container · 16 repos + Contract tests · seed.
 
 ### P04
-- [x] Tokens + ThemeProvider + 4 hooks + 17 زوج WCAG AA.
-- [x] 42 مكوّناً + Gallery + `DESIGN_SYSTEM.md` + ADR-0009/0010/0011.
+- [x] Tokens + ThemeProvider + 4 hooks + 17 زوج WCAG AA · 42 مكوّناً + Gallery + `DESIGN_SYSTEM.md`.
 
 ### P05
-- [x] P05.1 الهيكل · P05.2 Splash + Onboarding + حفظ اللغة · P05.3 Dev + Integrations + فاحص الأزرار.
-- [x] 623 اختباراً، CI أخضر.
+- [x] الهيكل · Splash + Onboarding + حفظ اللغة · Dev + Integrations + فاحص الأزرار · 623 اختباراً.
 
 ### P06
-- [x] P06.1 نواة المصادقة · P06.2 الملف/الإعدادات/الصورة · P06.3 الأمان/الجلسات/الحذف/التصدير/Legal.
-- [x] 780 اختباراً / 110 suites · `docs/INTEGRATIONS.md`.
+- [x] نواة المصادقة · الملف/الإعدادات/الصورة · الأمان/الجلسات/الحذف/التصدير/Legal · 780 / 110.
 
 ### P07
-- [x] P07.1 HomeConfig + Header/Hero/QuickActions + 4 أقسام + التخصيص + أداة Demo.
-- [x] P07.2 بوابة الموافقة + التعقيم + إخفاء الأعداد والمبالغ + فصل Demo/Real + 4 أقسام حساسة.
-- [x] 869 اختباراً / 129 suites · `DESIGN_SYSTEM.md` صُحّح.
+- [x] HomeConfig + 8 أقسام + بوابة الموافقة + إخفاء الأعداد والمبالغ + فصل Demo/Real · 869 / 129.
 
 ### P08
-- [x] P08.1 العقود/المحرك/الآلة/الخدمات · P08.2 المستندات/المسودة/Wizard/الشاشات · P08.3 المتابعة/الاستكمال/القرار/الاعتراض/المحاكي.
-- [x] 1020 اختباراً / 155 suites · `docs/ELIGIBILITY_ENGINE.md`.
+- [x] العقود/المحرك/الآلة · المستندات/المسودة/Wizard · المتابعة/الاعتراض/المحاكي · 1020 / 155.
+
+### P09
+- [x] عقدا التمويل/الآلتان/الحراس · الكتالوج/النية/الإيصالات · الصرف/الأثر/المحاكي · 1138 / 178.
 
 ---
 
-## قائمة تحقق P09 (تفصيل)
+## قائمة تحقق P10 (تفصيل)
 
-### P09.1 — النواة النقية
-- [x] قراءة `append-only.contract.ts` أولاً: يفحص `getById`/`create`/`list` فقط، **ولا يمنع إضافة دوال** ⇒ `advance` آمن (شرط د-4).
-- [x] `DonationStatus` → 8 قيم (legacy `pending`/`confirmed` محفوظة) + حقول: `programId` · `anonymous` · `idempotencyKey` · `providerReference` · `receiptNumber` · `verifiedAt` · `verifiedBy`.
-- [x] `DisbursementStatus` → 8 قيم + حقول: `makerId` · `checkerId` · `approvedAt` · `paidAt` · `beneficiaryConfirmedAt` · `rejectionReasonKey` · `disputeNote`.
-- [x] `advance(id, event, actor)` على كليهما — **تطبيق فقط**؛ التحقق في الخدمة (نمط ADR-0027).
-- [x] الحالة الابتدائية بصدق: `donations.create → intent_created` · `disbursements.create → proposed` (لا اختبار قائم يؤكد القديمة).
-- [x] مخططات: مبالغ `int().positive()` + حقول اختيارية؛ `Program.kind?` اختيارية.
-- [x] `donation-machine`: 6 حالات · 6 انتقالات · `CLIENT_WRITABLE_DONATION_STATUSES` · `assertClientDonationWrite` (Forbidden).
-- [x] `disbursement-machine`: 6 حالات · 6 انتقالات · فحص الفاعل · legacy mapping.
-- [x] `guards`: Maker≠Checker (ومفقود Maker مرفوض) · إثبات · مبلغ صحيح · حد تراكمي · حالة الطلب · `committedTotal` يستثني rejected.
-- [x] `demo-payment.ts` في `providers/mock/`: عقد كما هو + `__confirmPledge`/`__declinePledge`/`__pledges` · `verifyExternalPayment` لا يخترع تأكيداً · `PLEDGE_ALREADY_SETTLED`.
-- [x] الحاوية تستخدم Demo Payment في وضع demo فقط.
-- [x] `idempotency.ts`: مفتاح حتمي مشتق (بلا `Date.now()`).
-- [x] `receipt-service`: مشتق بعد `verified` + رقم `AZIB-DEMO-RCP-*` حتمي · لا هويات في العرض.
-- [x] `impact-service`: real+verified فقط · إعادة استخدام `SMALL_NUMBER_THRESHOLD`/`buildStatCell` · تعريف كل مقياس.
-- [x] `finance-audit`: Append-only بميتاداتا `from`/`to` فقط.
-- [x] `donation-intent-service`: إنشاء/إلغاء (ملكية)/تسليم/محاكاة demo/تحقق مالي.
-- [x] `disbursement-service`: اقتراح (حالة الطلب + الحد)/قرار (فصل)/تسجيل دفع (إثبات)/رد مستفيد (ملكية).
-- [x] اختبارات: آلتان استقصائياً · الحراس · المزوّد · Idempotency · الإيصال · الأثر · الخدمات · المخططات · مستودعات advance.
-- [x] **النتيجة: 166 suites / 1093 tests، أخضر من أول تشغيل** (بتقرير المالك).
+### P10.1 — النواة النقية (14 suites · +81 اختباراً)
+- [x] قراءة `crud.contract.ts` أولاً: لا يمنع حقولاً إضافية ⇒ تمديد Wedding آمن.
+- [x] `WeddingStatus` → 7 قيم (legacy محفوظ) + `title`/`description` + حقول المجموعة (منطقة/تاريخ بديل/عدد مستهدف/وصف/نسخة السياسة/سقف).
+- [x] **4 مستودعات جديدة**: `WeddingGroupRepository` (أعضاء/طلبات/دعوات) · `WeddingPollRepository` (استطلاعات/أصوات) · `WeddingBudgetRepository` (نسخ/بنود/موافقات/اتفاقات/طلبات خدمة) · `WeddingChatRepository` (رسائل/كتم/`subscribe`/تنظيف).
+- [x] `Notification.create` + `schemas/notification.ts` — إضافة فقط؛ اختباراتها لم تُمسّ.
+- [x] `engine/largest-remainder.ts`: حساب صحيح، كسر تعادل بترتيب معلن، رفض المدخلات الفاسدة.
+- [x] `engine/cost-sharing.ts`: Equal/Weighted/Custom + Individual/Shared + **المجموع = الإجمالي**.
+- [x] `engine/withdrawal-impact.ts`: إعادة القسمة + نافذة السياسة + `groupEmpty`.
+- [x] `state/group-machine.ts`: 6 حالات · انتقالات معلنة · فحص الفاعل · legacy mapping.
+- [x] `state/roles.ts`: مصفوفة صلاحيات + `toPublicGroupView` + `toMemberView` (موافقة الاسم).
+- [x] `state/poll-rules.ts`: نصاب صحيح (`votes×100 ≥ eligible×percent`) · كسر تعادل معلن · موعد نهائي.
+- [x] `state/approvals.ts`: `requiredApprovals` · `allApproved` · `missingApprovals` · `bumpVersion` · `agreementComplete`.
+- [x] `chat/*`: فلتر (هاتف/رابط/صورة) · معدل · احتفاظ · كتم/إشراف.
+- [x] `config/limits.ts`: `system_settings.maxGroupSize` + افتراض مؤقت + دلاء الحجم.
+- [x] seed: تمديد `weddings.ts` + `wedding-planning.ts` مستقل.
+- [x] اختبارات: المحرك بجداول · الآلة استقصائياً · الأدوار · التصويت · الموافقات · الدردشة · الحدود · المخططات.
 
-### P09.2 — الكتالوج والنية والشاشات
-- [x] `catalog/program-kinds.ts`: 5 أنواع بأعلام `donatable`/`referralOnly`/`inKind` + `programKindOf` (افتراض grant).
-- [x] `use-program-catalog` (كتالوج + تفاصيل) · `use-donor` (تبرعاتي + إيصالات + أسماء البرامج) · `use-donation-intent`.
-- [x] `CertaintyBadge` (أيقونة+نص+لون) · `AmountField` (أعداد صحيحة) · `FinanceScaffold` (بوابة backend + شارة demo).
-- [x] شاشات: الكتالوج · التفاصيل · النوع · نية التبرع · تبرعاتي · الإيصالات · متطلبات الجهة المرخّصة.
-- [x] منع التبرع لغير القابل/غير المفتوح مع سبب معروض؛ القرض الحسن ⇒ إحالة فقط؛ العيني ⇒ سوق الخير.
-- [x] فصل صريح: إنشاء النية → تسليم للمزوّد → محاكاة تأكيد موسومة؛ **لا `verified` من شاشة المستخدم**.
-- [x] `ROUTES.programs` + Allowlist + بادلة `/programs/` + مداخل الحساب.
-- [x] نصوص `assistance:finance.*` (ar/en) كاملة.
-- [x] اختبارات: idempotency · الكتالوج · التفاصيل · النوع · النية · تبرعاتي · الإيصالات · المتطلبات.
-- [x] **النتيجة: 174 suites / 1120 tests، CI أخضر** (بتقرير المالك).
+### P10.2 — الاكتشاف والإنشاء والأعضاء والتصويت (8 suites · +29 اختباراً)
+- [x] `engine/discovery.ts` + `useWeddingDiscovery` بفلاتر (محافظة/مديرية/حالة/حجم/شهر).
+- [x] `WeddingDiscoveryScreen` (تبويب `/weddings`) — **بلا `app/weddings/index.tsx`**.
+- [x] `CreateGroupScreen` (3 خطوات) + `useCreateGroup` + `buildCreateGroupSchema(max)` — السقف مفروض.
+- [x] `GroupDetailScreen` · `GroupMembersScreen` (طلبات/دعوات/أدوار) · `GroupPollsScreen` + `PollCard`.
+- [x] `WeddingScaffold` (بوابة backend + شارة demo) · `useWeddingGroup`/`useWeddingMembership`/`useWeddingPolls`.
+- [x] `services/group-service.ts` (إنشاء/طلب/قرار/دعوة/دور/انسحاب/انتقال) + `poll-service.ts`.
+- [x] نصوص `weddings:*` (ar/en) + `ROUTES.weddings` + Allowlist.
+- [x] اختبارات: الاكتشاف/الإنشاء/الأعضاء/التصويت + السقف من الإعدادات.
 
-### P09.3 — الصرف والأثر والمحاكي
-- [x] `DisbursementStatusBadge` (6 مستويات يقين) · `DisbursementCard` (إثبات + إجراءات مشروطة).
-- [x] `use-beneficiary-disbursements` (طلبات المستخدم فقط) · `use-disbursement-actions` · `use-impact-report`.
-- [x] `BeneficiaryDisbursementsScreen`: تأكيد الاستلام / اعتراض بسبب إلزامي · أزرار فقط عند `paid_recorded`.
-- [x] `ImpactReportScreen`: فارغ صادق في Demo + ملاحظة الحد + تعريف كل رقم + نص استبعاد demo.
-- [x] `DevFinanceScreen`: إنشاء طلب معتمد + اقتراح + اعتماد/رفض + تسجيل دفع، بحقول Maker/Checker/Proof قابلة للتعديل.
-- [x] مسارات `programs/disbursements` · `programs/impact` · `(dev)/finance` + رابط من إعدادات المطور.
-- [x] اختبارات: تعيين اليقين · سجل المستفيد (فارغ/بيانات/تأكيد/اعتراض/backend) · الأثر · المحاكي (فصل Maker/Checker من الواجهة).
-- [x] **النتيجة النهائية: 178/178 suites · 1138/1138 tests · lint وtypecheck نظيفان · CI أخضر بالكامل** (بتقرير المالك).
+### P10.3 — الميزانية والاتفاق والدردشة والاحتفال (7 suites · +22 اختباراً)
+- [x] `services/budget-service.ts`: نسخ vN · بنود · موافقات · اعتماد بالإجماع · إعادة فتح · إعادة إصدار.
+- [x] **مسار الآلة الكامل**: `adoptBudget` يسلك open→planning→agreed (لا قفز حالتين).
+- [x] `agreed → planning` عند تعديل نسخة معتمدة.
+- [x] `services/chat-service.ts`: عضوية/كتم → فلتر → معدل → تخزين · بلاغ/حذف/كتم/تنظيف.
+- [x] `services/service-request-service.ts`: طلبات حجز بلا دفع ولا تتبّع.
+- [x] `useWeddingBudget`/`useWeddingChat`/`useWeddingServices`/`useWeddingCountdown`.
+- [x] **البث اللحظي**: `subscribe` يكتب في Query cache (لا `setState` في effect).
+- [x] `CostSplitBars` (SVG) · `GoldConfetti` (Reanimated+SVG) · `RingCountdown` (حلقتان).
+- [x] `GroupBudgetScreen` (**9 فئات كلها**) · `GroupAgreementScreen` · `GroupChatScreen` · `GroupServicesScreen` · `GroupCountdownScreen` · `GroupCompletionScreen`.
+- [x] **الإسقاط العام**: `RequireAuth` على العد التنازلي · الحلقات والتاريخ الدقيق للأعضاء فقط · الشهر التقريبي لغيرهم.
+- [x] الإشعارات (دعوة/تصويت/ميزانية/موعد) + 6 مسارات + Allowlist.
+- [x] اختبارات: الميزانية/الدردشة/الاتفاق/طلبات الخدمة/الاحتفال.
 
-### إصلاحات P09
-- [x] **P09.1: لا أخطاء** — أخضر من أول تشغيل.
-- [x] **P09.2: مجموعة واحدة** — `render` في RNTL v14 تُرجع Promise، وتحديث متغيّر خارجي (`mockId`) بعد الـrender لا يعيد الرسم تلقائياً ⇒ `await render` + تفكيك `rerender` + `await rerender(...)` بعد التحديث وقبل `waitFor`.
-- [x] **P09.3: لا أخطاء** — أخضر من أول تشغيل؛ نقطة خطر `React.ReactNode` أُغلقت بتقرير المالك.
+### النتيجة النهائية
+- [x] **207/207 test suites · 1270/1270 tests · lint وtypecheck نظيفان · CI أخضر بالكامل** (بتقرير المالك).
+- [x] صفر انحدار في P03–P10.2 (1248 اختباراً).
+- [x] **الإجمالي التراكمي لـP10: +29 suite · +132 اختباراً.**
+
+### إصلاحات P10 (8 مجموعات)
+- [x] **P10.1: لا أخطاء** — أخضر من أول تشغيل.
+- [x] **P10.2 (مراجعة قبل CI):** `GROUP_FULL` كان يقرأ السقف العام بدل المقاعد ⇒ `Math.min(capacity, maxGroupSize)`؛ تحديث fixture اختبار مخطط الميزة؛ تسرّب لغوي في `ar/weddings.json`؛ نقل حساب نافذة الانسحاب إلى معالج الحدث.
+- [x] **P10.2 (CI):** `exhaustive-deps` (اشتقاق `[]` خارج `useMemo`) · `import/no-duplicates` ×2.
+- [x] **P10.3 (مراجعة قبل CI):** `import/first` في `use-wedding-countdown` · قفز `open→agreed` · 4 فئات من 9 · تسريب التاريخ الدقيق والحلقات لغير الأعضاء.
+- [x] **P10.3 (CI):** `import/no-unresolved` ×3 (**ملف غائب** لا خطأ استيراد) · `TS18047` ×2 (تضييق لا يصمد داخل callback) · خطأ متابعة بوضع `snapshot` في دالة خاطئة (`TS2304`×2 + `TS7006`×2) · فشل اختبار معدل الدردشة (**الساعة المحقونة ≠ ساعة التخزين**).
 
 ---
 
 ## الدروس المُلزِمة (تراكمية — تُطبَّق في كل مرحلة قادمة)
 
-### الاختبارات (RNTL v14 + Query)
+### الاختبارات (RNTL v14 + Query + الساعة)
 - [ ] `await render(...)` · `await fireEvent.xxx(...)` · `await view.unmount()`.
-- [ ] **`rerender` إلزامي** بعد تحديث متغيّر خارجي تقرأه الواجهة (`useLocalSearchParams`/`useAuth` محاكاة) — تحديث المتغيّر وحده لا يعيد الرسم.
-- [ ] **لا** تغليف `fireEvent` داخل `act`.
-- [ ] `await act(() => {...})` (callback متزامن) لتحديث المتاجر.
-- [ ] كل `it` فيه `await` هو `async`.
-- [ ] مجلد الاختبار **`__tests__`** دائماً.
-- [ ] **`invalidateQueries({ queryKey: ['<feature>'] })` دائماً** — بلا `queryKey` يمسح الجلسة وكل الكاش.
-- [ ] `setQueryData(sessionQueryKey(mode), ...)` **قبل** `render`.
-- [ ] `setQueryData` مباشر على مفتاح معروف بدل الاعتماد على `invalidateQueries` وحده.
-- [ ] mock للمكونات المعتمدة على `Modal`/`Select` في اختبارات الشاشات.
-- [ ] `waitFor` على الحالة النهائية (`busy=false` أو العنصر المتوقع).
-- [ ] `user.id` يُقرأ من الجلسة، لا قيمة ثابتة.
-- [ ] `jest.mock` **بعد** كل الـimports.
+- [ ] **`rerender` إلزامي** بعد تحديث متغيّر خارجي تقرأه الواجهة.
+- [ ] **الساعة المحقونة يجب أن توافق ساعة التخزين.** إن كان المستودع يختم بـ`new Date()` فلا تحقن تاريخاً ماضياً لاختبار نافذة زمنية (معدل/احتفاظ). اشتقّ الساعة من أحدث طابع مخزَّن، أو اجعل المستودع يقبل طابعاً محقوناً. ينطبق على `purgeOlderThan`/`filterRetained`.
+- [ ] **لا** تغليف `fireEvent` داخل `act` · `await act(() => {...})` للمتاجر.
+- [ ] كل `it` فيه `await` هو `async` · مجلد **`__tests__`** دائماً.
+- [ ] **`invalidateQueries({ queryKey: ['<feature>'] })` دائماً** · `setQueryData` للجلسة **قبل** render.
+- [ ] mock للمكونات المعتمدة على `Modal`/`Select`/`DatePicker`.
+- [ ] `waitFor` على الحالة النهائية · `user.id` من الجلسة · `jest.mock` **بعد** الـimports.
 
 ### React 19 / React Compiler
-- [ ] لا `useRef().current` أثناء render ⇒ `useMemo`/`useCallback`.
-- [ ] لا `Date.now()` أثناء render ⇒ `useMemo` + `eslint-disable-next-line react-hooks/purity` فوق السطر.
-- [ ] **كل Hook قبل أي `return` مبكر** — بلا استثناء.
-- [ ] لا `setState` مباشر داخل `useEffect` ⇒ `useQuery`.
-- [ ] الكائنات المُمرَّرة كـ dependency تُغلَّف بـ`useMemo` (مثل `deps`).
-- [ ] `useWatch` بدل `watch` في React Hook Form.
-- [ ] `override` قبل `state`/`render` في أي Class Component.
-- [ ] تعديل `SharedValue` يسبقه `eslint-disable-next-line react-hooks/immutability`.
+- [ ] لا `useRef().current` أثناء render · لا `Date.now()` أثناء render (الحساب في معالج حدث أو `queryFn`).
+- [ ] **كل Hook قبل أي `return` مبكر** · لا `setState` مباشر في `useEffect` ⇒ `useQuery` أو مخزن خارجي.
+- [ ] الكائنات المُمرَّرة كـ dependency تُغلَّف بـ`useMemo` · **لا `[]`/`{}` خارج `useMemo`**.
+- [ ] `useWatch` بدل `watch` · `override` في Class Component · `eslint-disable react-hooks/immutability` لتعديل `SharedValue`.
 
 ### TypeScript / ESLint
-- [ ] `import { StyleSheet } from 'react-native'` صراحةً في كل ملف فيه `StyleSheet.create`.
-- [ ] فهرسة مصفوفة بمتغير `number` ⇒ `!` أو `?? default`.
-- [ ] لا `as const Type[]` بعد `Object.freeze([...])`.
-- [ ] أي helper/نوع جديد يُضاف لسطر الاستيراد؛ ويُحذف غير المستخدم.
-- [ ] `tabBar` prop مباشر لـ`<Tabs>` · `refreshing`/`onRefresh` props مباشرة على `FlatList`.
+- [ ] **التضييق لا يصمد داخل callback** للوصول إلى خاصية (`x.value`) ⇒ `const snapshot = x.value` بعد الحارس.
+- [ ] **كل الاستيرادات في أعلى الملف** (`import/first`) · لا استيراد مكرر من نفس المسار.
+- [ ] **فشل حلّ نفس المسار من عدة مستهلكين = ملف غائب/مُسمّى خطأً**، لا خطأ استيرادات.
+- [ ] `StyleSheet` صريح · `!`/`?? default` للفهرسة · لا `as const Type[]` بعد `Object.freeze`.
+- [ ] `tabBar` prop مباشر · `refreshing`/`onRefresh` على `FlatList`.
 
-### الحزم والواجهات
-- [ ] لا افتراض لواجهة حزمة من الذاكرة — تحقّق من المثبت أو اعزل الاستدعاء في **وحدة حدودية** (ADR-0022).
-- [ ] `manipulateAsync` (الكلاسيكية) لـimage-manipulator · `File`/`Paths` (الصنفية) لـfile-system.
-- [ ] `expo install --fix` يصلح `package.json` + `package-lock.json` معاً.
+### النطاق والآلة
+- [ ] **الخدمة تسلك المسار المعلن في الآلة** ولا تقفز حالتين؛ ولا تُوسَّع الآلة للالتفاف على ترتيبها.
+- [ ] **كل مسار بلا `RequireAuth` يُسقط إسقاطاً عاماً:** شهر لا يوم، **ولا حلقات عد تنازلي**، ولا أي بيانات بدقة الأعضاء. حجب النص وحده لا يكفي.
+- [ ] **لا تُنشئ قيمة افتراضية داخل مسار يعتمد عليه `useMemo`.**
 
-### i18n والمحتوى
-- [ ] **تطابق صيغة مفاتيح i18n بين JSON و`ts/tsx` قبل الاختبار.**
-- [ ] كل نص واجهة عبر `t()`؛ لا نصوص حرفية في المكونات.
-
-### العملية
-- [ ] **عند تغيير سلوك شاشة، حدّث اختبارها في نفس الجزء.**
-- [ ] لا تعديل على عقود الـRepositories إلا إضافةً وبموافقة (ADR)؛ ولا مساس بـContract Tests.
-- [ ] كل قرار معماري ⇒ ADR؛ كل قيمة سياسة غير معتمدة ⇒ وسم `PENDING_POLICY` ظاهر للمستخدم.
-- [ ] **لا ادعاء مالي:** نية ≠ تأكيد مزوّد ≠ تحقق مالي ≠ صرف مؤكَّد من المستفيد.
+### العملية والتحرير
+- [ ] **عند تكرار سطر الحارس في عدة دوال، حدّد مرساة فريدة** قبل طلب الاستبدال.
+- [ ] **عند تغيير أسماء حقول مخطط ميزة، حدّث اختبار تلك الميزة في نفس الجزء.**
+- [ ] **فاحص العربية:** `app/` + `src/` فقط، `.ts/.tsx`، باستثناء `src/locales/`؛ التعليقات تُستثنى؛ `// i18n-allow-arabic` **لكل سطر**؛ **`locales/*.json` خارج الفحص ⇒ مراجعة بشرية إلزامية**.
+- [ ] لا تعديل على عقود المستودعات إلا إضافةً وبموافقة (ADR)؛ ولا مساس بـContract Tests.
+- [ ] كل قرار معماري ⇒ ADR · كل قيمة سياسة غير معتمدة ⇒ وسم `PENDING_POLICY` ظاهر.
+- [ ] **لا ادعاء مالي:** نية ≠ تأكيد مزوّد ≠ تحقق مالي ≠ صرف مؤكَّد.
 
 ---
 
-## مؤجلات P09 (في PROJECT_CONTEXT §8)
-- [ ] مزوّد مرخّص + Webhook بتوقيع + كتابة `verified` خادمياً ⇒ P18 (#57).
-- [ ] توحيد إحصاءات الرئيسية مع `verified` ⇒ P15/P18 (#58).
-- [ ] لوحة Maker/Checker بصلاحيات وفصل مراجعين ⇒ P17 (#59).
-- [ ] تصنيف حقيقي للبرامج (`kind` في الـseed/الخادم) ⇒ P18 (#60).
-- [ ] جهة إحالة للقرض الحسن ⇒ بعد اعتماد #11 (#61).
-- [ ] إيصال رسمي غير تجريبي ⇒ P18 (#63).
-- [ ] انتقال ذرّي على الخادم ⇒ P18 (#50).
-- [ ] تحقق الأجهزة للتدفق المالي ⇒ P20/P21 (#26).
-- [ ] تنفيذ #33 + حذف `SignInPlaceholder` (#34) + ضم الفاحص لـ`lint` (#24) + إعلان `zod` (#37).
+## مؤجلات P10 (في PROJECT_CONTEXT §8)
+- [ ] إعادة إعلان الحصص في `custom` بعد الانسحاب ⇒ قرار بشري (#64).
+- [ ] `chat-unmute` يرفع أول كتم فقط ⇒ P17/P18 (#65).
+- [ ] `WeddingChatApi.refetch` ⇒ P11 (#66).
+- [ ] مفتاح `budget.errors.INVALID_TOTAL` ⇒ P11 (#67).
+- [ ] تنظيف `styles` الميت في `GroupBudgetScreen` (#68).
+- [ ] حفظ دائم + RLS للميزانية/الموافقات/الدردشة ⇒ P18 (#69).
+- [ ] ربط `populateDemoSeed` بـ`Notification.create` ⇒ P16 (#14).
+- [ ] تحقق الأجهزة (Confetti/الحلقات/RTL) ⇒ P20/P21 (#26).
+- [ ] اعتماد سقف المجموعة/النصاب/كسر التعادل/المعدل/الاحتفاظ ⇒ المالك (#4, #7, #70).
+- [ ] تنفيذ #33 · حذف `SignInPlaceholder` (#34) · توحيد الإحصاءات (#58) · ضم الفاحص لـ`lint` (#24) · إعلان `zod` (#37).
 
 ---
 
@@ -198,14 +189,15 @@
 
 | # | القرار | يحجب |
 |---|--------|------|
-| 1 | حدود الاستحقاق ونطاقات الدخل | P15 · اعتماد المحرك نهائياً |
-| 2 | سلّم النطاقات (الأوزان محسومة) | اعتماد المحرك نهائياً |
-| 3 | مدة الاعتراض (14 يوماً مؤقتة) | P17 |
-| 4 | **سياسة الانسحاب من العرس الجماعي** | **P10** |
+| 1 | حدود الاستحقاق ونطاقات الدخل | P15 · اعتماد المحرك |
+| 2 | سلّم النطاقات (الأوزان محسومة) | اعتماد المحرك |
+| 3 | مدة الاعتراض | P17 |
+| 4 | سياسة الانسحاب (30 يوماً استُخدمت مؤقتاً) | الاعتماد النهائي |
 | 5 | الاستثناء من مساعدة واحدة | P17 |
-| 6 | الفئة المستفيدة من خصومات الشركاء | P11 |
-| 7 | مدة الاحتفاظ + فترة تأكيد الحذف | P19 / P23 |
-| 8 | الحد الأدنى لإخفاء الإحصاءات (10 مؤقت) | P15 / P17 |
+| 6 | **الفئة المستفيدة من خصومات الشركاء** | **P11** |
+| 7 | مدة الاحتفاظ + فترة الحذف + احتفاظ الدردشة | P19 / P23 |
+| 8 | الحد الأدنى لإخفاء الإحصاءات | P15 / P17 |
 | 9 | مراجعة قانونية لنصوص Legal | الإطلاق |
 | 10 | سياسة عرض النقاط وموافقة النشر | P15 / P17 |
-| 11 | **سياسة المزوّد المرخّص (الجهة/الاتفاقية/الرسوم)** | **P18 · أي تبرع حقيقي** |
+| 11 | سياسة المزوّد المرخّص | P18 · تبرع حقيقي |
+| 12 | **إعادة توزيع الحصص المخصصة بعد الانسحاب** | إتمام `custom` |
