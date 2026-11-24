@@ -28,6 +28,8 @@ export const GROUP_TRANSITIONS: readonly GroupTransition[] = Object.freeze([
   Object.freeze({ from: 'planning', to: 'agreed', actor: 'organizer' }),
   Object.freeze({ from: 'planning', to: 'open', actor: 'organizer' }),
   Object.freeze({ from: 'planning', to: 'cancelled', actor: 'organizer' }),
+  // P10.3: editing an adopted budget reopens planning and resets approvals.
+  Object.freeze({ from: 'agreed', to: 'planning', actor: 'organizer' }),
   Object.freeze({ from: 'agreed', to: 'completed', actor: 'organizer' }),
   Object.freeze({ from: 'agreed', to: 'cancelled', actor: 'organizer' }),
 ] as const);
