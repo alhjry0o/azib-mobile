@@ -1,7 +1,13 @@
 // In-app notifications only. Push arrives in P16; nothing here claims otherwise.
 import type { NotificationRepository } from '@/repositories/contracts/notification';
 
-export type WeddingNotificationKind = 'invite' | 'joinApproved' | 'joinRejected' | 'poll';
+export type WeddingNotificationKind =
+  | 'invite'
+  | 'joinApproved'
+  | 'joinRejected'
+  | 'poll'
+  | 'budget'
+  | 'dateChange';
 
 export async function notifyWedding(
   notifications: NotificationRepository,
