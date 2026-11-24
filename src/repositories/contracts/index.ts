@@ -70,16 +70,45 @@ export type {
 } from './notification';
 export type {
   CreateOfferInput,
+  DiscountType,
   Offer,
+  OfferAudience,
   OfferRepository,
+  OfferStatus,
   UpdateOfferInput,
 } from './offer';
 export type {
   CreatePartnerInput,
   Partner,
   PartnerRepository,
+  PartnerStatus,
   UpdatePartnerInput,
 } from './partner';
+export type {
+  DecideVerificationInput,
+  PartnerVerification,
+  PartnerVerificationRepository,
+  SubmitVerificationInput,
+  VerificationStatus,
+} from './partner-verification';
+export type {
+  CreateOfferReportInput,
+  OfferReport,
+  OfferReportRepository,
+  OfferReportStatus,
+} from './offer-report';
+export type { OfferSave, PartnerEngagementRepository } from './partner-engagement';
+export type {
+  AmbassadorApplication,
+  AmbassadorApplicationStatus,
+  AmbassadorRepository,
+  AmbassadorTask,
+  AmbassadorTaskKind,
+  AmbassadorTaskStatus,
+  ApplyAmbassadorInput,
+  CreateAmbassadorTaskInput,
+  UpdateAmbassadorTaskInput,
+} from './ambassador';
 export type {
   CreateProfileInput,
   MaritalStatus,
