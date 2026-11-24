@@ -1,21 +1,54 @@
 import type { CreateOfferInput } from './types';
 
 // partnerId references seedPartners by index (mock ids differ — associations in docs only).
-// Numeric fields reflect demo values, not real prices.
+// P11.1: every demo value is explicitly a PLACEHOLDER, never a real price.
 export const seedOffers: readonly CreateOfferInput[] = [
   {
     partnerId: 'seed-partner-1',
     titleKey: 'offers.catering_20',
     discountPercent: 20,
+    title: 'عرض ضيافة تجريبي',
+    discountType: 'percent',
+    discountValue: 20,
+    discountPlaceholder: true,
+    audience: 'beneficiaries',
+    products: ['خدمة الضيافة'],
+    terms: 'قيمة تجريبية للعرض فقط، ولا تمثل سعراً حقيقياً.',
+    validFrom: '2026-01-05T00:00:00.000Z',
+    validUntil: '2026-12-31T00:00:00.000Z',
+    category: 'restaurants',
+    governorateId: 'sanaa',
   },
   {
     partnerId: 'seed-partner-2',
     titleKey: 'offers.venue_15',
     discountPercent: 15,
+    title: 'عرض قاعة تجريبي',
+    discountType: 'percent',
+    discountValue: 15,
+    discountPlaceholder: true,
+    audience: 'beneficiaries',
+    products: ['حجز القاعة'],
+    terms: 'قيمة تجريبية للعرض فقط، ولا تمثل سعراً حقيقياً.',
+    validFrom: '2026-01-05T00:00:00.000Z',
+    validUntil: '2026-12-31T00:00:00.000Z',
+    category: 'halls',
+    governorateId: 'sanaa',
   },
   {
     partnerId: 'seed-partner-3',
     titleKey: 'offers.clothing_10',
     discountPercent: 10,
+    title: 'عرض ملابس تجريبي',
+    discountType: 'percent',
+    discountValue: 10,
+    discountPlaceholder: true,
+    audience: 'beneficiaries',
+    products: ['ملابس العرس'],
+    terms: 'قيمة تجريبية للعرض فقط، ولا تمثل سعراً حقيقياً.',
+    validFrom: '2026-01-05T00:00:00.000Z',
+    validUntil: '2026-12-31T00:00:00.000Z',
+    category: 'clothing',
+    governorateId: 'aden',
   },
 ];
