@@ -44,8 +44,11 @@ export function useWeddingDiscovery(): WeddingDiscoveryApi {
     },
   });
 
+  const rows = useMemo(() => {
   const all = query.data?.ok ? query.data.value : [];
-  const rows = useMemo(() => filterGroups(all, filters), [all, filters]);
+    return filterGroups(all, filters);
+  }, [query.data, filters]);
+  
   const refetch = useCallback(() => {
     void query.refetch();
   }, [query]);
