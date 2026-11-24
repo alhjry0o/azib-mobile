@@ -132,7 +132,6 @@ export async function addBudgetItem(
   const version = await deps.budgets.getVersion(versionId);
   if (!version.ok) return version;
   if (!version.value) return { ok: false, error: AppError.notFound({ code: 'VERSION_NOT_FOUND' }) };
-  const snapshot = version.value;
 
   const added = await deps.budgets.addItem({ ...input, versionId, groupId });
   if (!added.ok) return added;
@@ -223,6 +222,7 @@ export async function adoptBudget(
   if (!version.ok) return version;
   if (!version.value) return { ok: false, error: AppError.notFound({ code: 'VERSION_NOT_FOUND' }) };
 
+  const snapshot = version.value;
   const required = await activeMemberIds(deps, groupId);
   if (!required.ok) return required;
   const approvals = await deps.budgets.listApprovals(versionId);
