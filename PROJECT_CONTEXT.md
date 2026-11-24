@@ -357,4 +357,4 @@ azib-mobile/
 5. قرار بشأن **#58** (توحيد إحصاءات الرئيسية) و**#64** (إعادة إعلان الحصص في `custom`).
 6. إصلاحات صغيرة معلنة: **#66** (`refetch` للدردشة) · **#67** (مفتاح ناقص) · **#65** (رفع الكتم المتعدد).
 
-**عند بدء P11 سيُطلب بالاسم:** `src/schemas/partner.ts` · `src/schemas/offer.ts` · `src/repositories/mock/partner.ts` · `src/repositories/mock/offer.ts` · `src/locales/{ar,en}/marketplace.json` · `src/features/finance/hooks/use-wedding-services.ts` (للربط) · أي ملف شريك/سفير غير مُرسَل.
+**عند بدء P11 سيُطلب بالاسم:** `src/schemas/partner.ts` · `src/schemas/offer.ts` · `src/repositories/mock/partner.ts` · `src/repositories/mock/offer.ts` · `src/locales/{ar,en}/marketplace.json` · `src/features/weddings/hooks/use-wedding-services.ts` (للربط) · أي ملف شريك/سفير غير مُرسَل.
