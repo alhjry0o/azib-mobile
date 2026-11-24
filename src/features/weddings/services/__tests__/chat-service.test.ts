@@ -76,9 +76,15 @@ describe('chat service enforcement', () => {
   it('enforces the rate limit', async () => {
     const { deps, groupId } = await setup();
     for (let i = 0; i < 5; i += 1) {
-      await sendChatMessage(deps, groupId, 'organizer-1', `msg ${i}`, NOW);
+      await sendChatMessage(deps, groupId, 'organizer-1', `msg ${i}`, new Date());
     }
-    const sixth = await sendChatMessage(deps, groupId, 'organizer-1', 'msg 6', NOW);
+    // The repository stamps createdAt with the real clock, so the rate window
+    // must be evaluated on that same clock — never on the fixed past NOW.
+    const stored = await deps.chat.listMessages(groupId);
+    if (!stored.ok) throw new Error('setup failed');
+    const last = stored.value[stored.value.length - 1];
+    const now = last ? new Date(last.createdAt) : new Date();
+    const sixth = await sendChatMessage(deps, groupId, 'organizer-1', 'msg 6', now);
     expect(sixth.ok).toBe(false);
     if (!sixth.ok) expect(sixth.error.meta.code).toBe('CHAT_RATE_LIMITED');
   });
