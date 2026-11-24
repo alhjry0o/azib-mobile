@@ -1,4 +1,176 @@
 {
   "title": "Group Weddings",
-  "notConnectedYet": "Group weddings will be built in P10."
+  "notConnectedYet": "Group weddings will be built in P10.",
+  "custom": { "title": "Group wedding" },
+  "discovery": {
+    "title": "Group weddings",
+    "subtitle": "Organize a shared wedding in your area with transparent cost splitting, and no financial intermediation.",
+    "create": "Create a group",
+    "publicNote": "Cards show only the name, area, participant count and approximate month. Member names are visible to members only.",
+    "demoNote": "Every group here is demo data and does not represent real people.",
+    "empty": "No matching groups",
+    "emptyDescription": "Create a new group or widen the filters. You can populate demo data from developer settings.",
+    "errorTitle": "Could not load groups",
+    "errorDescription": "Something went wrong while fetching groups. Please retry.",
+    "notConnected": "Group weddings not connected",
+    "notConnectedDescription": "Backend wiring activates in P18. Demo mode is available now.",
+    "members": "{{count}} participants",
+    "approximateDate": "Approximate date: {{month}}",
+    "openGroup": "Open group",
+    "filters": {
+      "title": "Filters",
+      "governorate": "Governorate",
+      "district": "District",
+      "clear": "Clear filters"
+    },
+    "status": {
+      "any": "All",
+      "open": "Open",
+      "planning": "Planning",
+      "agreed": "Agreed",
+      "draft": "Draft",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "size": {
+      "any": "Any size",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large"
+    }
+  },
+  "create": {
+    "title": "Create a wedding group",
+    "subtitle": "Three short steps. No amount and no card data are requested.",
+    "steps": { "basics": "Name & area", "schedule": "Date & size", "review": "Description & consent" },
+    "next": "Next",
+    "back": "Back",
+    "submit": "Create group",
+    "fields": {
+      "name": "Group name",
+      "governorate": "Governorate",
+      "district": "District",
+      "city": "City",
+      "scheduledDate": "Proposed date",
+      "alternateDate": "Alternate date",
+      "targetCount": "Target participants",
+      "description": "Group description"
+    },
+    "help": {
+      "alternateDate": "Optional; used in voting if the first date does not work.",
+      "targetCount": "From 2 up to {{max}} participants.",
+      "description": "Optional. Do not include phone numbers or personal data."
+    },
+    "consent": "I accept the group's approved withdrawal policy.",
+    "policyNote": "Withdrawal is allowed until {{days}} days before the date. This window is provisional and awaits owner approval.",
+    "maxNote": "Maximum group size: {{max}} (provisional value from system settings)."
+  },
+  "detail": {
+    "title": "Group",
+    "publicNote": "You are not a member; you see the public summary only. Send a join request to see details.",
+    "capacity": "{{count}} of {{max}} participants",
+    "scheduled": "Date: {{date}}",
+    "join": "Request to join",
+    "joinMessage": "Short message to the organizer",
+    "joinConsent": "I agree to show my display name to group members only.",
+    "members": "Members & requests",
+    "polls": "Voting",
+    "budgetComing": "Budget and agreement ship in the next part of P10.",
+    "withdraw": "Withdraw from the group",
+    "withdrawConfirmTitle": "Confirm withdrawal",
+    "withdrawConfirm": "Withdraw",
+    "withdrawWindowOpen": "You are inside the withdrawal window. Costs will be re-split across remaining members once the budget is adopted.",
+    "withdrawWindowClosed": "The withdrawal window has closed; your withdrawal is recorded and costs are re-split, and your future priority may be affected.",
+    "organizer": "Organizer",
+    "coOrganizer": "Co-organizer",
+    "member": "Member",
+    "notFound": "Group not found",
+    "notFoundDescription": "We could not find this group. It may have been deleted or the link is invalid."
+  },
+  "members": {
+    "title": "Members",
+    "subtitle": "Names are visible to group members only, and with the owner's consent.",
+    "empty": "No pending requests",
+    "emptyDescription": "Join requests will appear here for review.",
+    "requests": "Join requests",
+    "invite": "Invite a member",
+    "inviteUserId": "User id",
+    "approve": "Approve",
+    "reject": "Reject",
+    "rejectReason": "The request does not currently meet the group's conditions.",
+    "makeCoOrganizer": "Promote to co-organizer",
+    "makeMember": "Return to member",
+    "anonymous": "Member (name not disclosed)",
+    "you": "You",
+    "active": "Active",
+    "withdrawn": "Withdrawn",
+    "removed": "Removed"
+  },
+  "polls": {
+    "title": "Voting",
+    "subtitle": "One vote per participant, changeable until the deadline.",
+    "empty": "No polls",
+    "emptyDescription": "The organizer or a co-organizer creates polls for the date, venue and more.",
+    "notMember": "Voting is limited to active group members.",
+    "open": "Open",
+    "closed": "Closed",
+    "quorumMet": "Quorum met",
+    "quorumNotMet": "Quorum not met",
+    "tieBreak": "Tie-break: {{rule}}",
+    "tieBreakOrganizer": "organizer's vote wins",
+    "tieBreakOrder": "declared option order",
+    "cast": "Vote",
+    "changeVote": "Change my vote",
+    "winner": "Result",
+    "refresh": "Refresh results",
+    "resultsNote": "Results are live and never produce a binding decision; the final agreement is signed by members."
+  },
+  "poll": {
+    "reasons": {
+      "open": "Voting is still open; no final result before the deadline.",
+      "noVotes": "No votes yet.",
+      "quorumNotMet": "Quorum was not met, so no result is adopted.",
+      "majority": "Clear majority.",
+      "tieOrganizer": "Tie, resolved by the organizer's vote.",
+      "tieOrder": "Tie, resolved by the declared option order."
+    }
+  },
+  "withdrawal": {
+    "reasons": {
+      "withinWindow": "Withdrawal inside the allowed window.",
+      "windowClosed": "Withdrawal after the window closed.",
+      "groupEmpty": "No members remain; costs are not assigned to anyone."
+    }
+  },
+  "chat": {
+    "blocked": {
+      "empty": "The message is empty.",
+      "tooLong": "The message is too long.",
+      "image": "Images are not allowed in the organizational chat.",
+      "link": "Links are not allowed in the organizational chat.",
+      "phone": "Phone numbers are not allowed; protect privacy.",
+      "rate": "Please slow down before sending another message.",
+      "notMember": "Chat is limited to active members.",
+      "muted": "You have been temporarily muted by the organizer."
+    }
+  },
+  "notifications": {
+    "invite": { "title": "Wedding group invitation", "body": "You were invited to join a group wedding." },
+    "joinApproved": { "title": "Your request was approved", "body": "You are now a member of the wedding group." },
+    "joinRejected": { "title": "Your request was not approved", "body": "Contact the organizer for clarification." },
+    "poll": { "title": "New poll", "body": "A poll was added to the wedding group; you can vote until the deadline." }
+  },
+  "validation": {
+    "title": "Enter a group name (at least 3 characters).",
+    "targetCount": "The target count must be within the allowed range.",
+    "targetMax": "The count exceeds the maximum group size.",
+    "withdrawalConsent": "Accepting the withdrawal policy is required.",
+    "message": "Write a short message to the organizer.",
+    "displayNameConsent": "Consent to show your display name to members is required.",
+    "reason": "A reason is required.",
+    "question": "Write the poll question.",
+    "options": "Add at least two options.",
+    "label": "Write a label for the item.",
+    "amount": "Enter a valid amount greater than zero."
+  }
 }
