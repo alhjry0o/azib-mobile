@@ -374,7 +374,7 @@
   - `WeddingChatRepository.subscribe(groupId, listener): () => void` — ناقل محلي داخل المستودع، يُصدر لقطة مرتّبة عند كل تغيير.
   - الـhook يشترك في `useEffect` ويكتب في **Query cache** عبر `client.setQueryData` (مخزن خارجي) ⇒ **لا `setState` داخل effect**، ولا يخالف `react-hooks/set-state-in-effect`.
   - التنظيف بإلغاء الاشتراك عند التفكيك.
-- **البدائل المدروسة:** مزوّد 13 (يكسر اختبار المزوّدين ويحتاج ADR أوسع)؛ Polling بـ`refetchInterval` (ليس بثاً حقيقياً ويهدر запросات)؛ `setState` في effect (يخالف درس React 19)؛ WebSocket حقيقي (لا خادم قبل P18).
+- **البدائل المدروسة:** مزوّد 13 (يكسر اختبار المزوّدين ويحتاج ADR أوسع)؛ Polling بـ`refetchInterval` (ليس بثاً حقيقياً ويهدر الطلبات)؛ `setState` في effect (يخالف درس React 19)؛ WebSocket حقيقي (لا خادم قبل P18).
 - **التبعات:**
   - + بث لحظي فعلي بلا تبعية ولا مزوّد جديد، وصفر انحدار.
   - + الواجهة تتحدث فوراً عند أي رسالة/حذف/تنظيف.
