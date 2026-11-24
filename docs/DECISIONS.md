@@ -387,7 +387,7 @@
 
 ## ADR-0042 — التبويب `/weddings` كـDiscovery بلا `app/weddings/index.tsx`
 - **التاريخ:** 2026-11-16 · **الحالة:** Accepted
-- **السياق:** `app/(tabs)/weddings.tsx` يُنتج `/weddings`، و`app/weddings/index.tsx` يُنتج نفس المسار ⇒ تعارض Expo Router. unlike P08، **التبويب جزء من `TABS` والـDock** ⇒ حذفه يكسر التنقل الرئيسي.
+- **السياق:** `app/(tabs)/weddings.tsx` يُنتج `/weddings`، و`app/weddings/index.tsx` يُنتج نفس المسار ⇒ تعارض Expo Router. وبخلاف P08، **التبويب جزء من `TABS` والـDock** ⇒ حذفه يكسر التنقل الرئيسي.
 - **القرار:**
   - **الإبقاء على التبويب** واستبدال محتواه بـ`WeddingDiscoveryScreen`.
   - `app/weddings/` يحوي `new.tsx` و`[id]/*` فقط — **بلا `index.tsx`**.
