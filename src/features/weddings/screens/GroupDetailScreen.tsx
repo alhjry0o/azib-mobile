@@ -98,8 +98,12 @@ export function GroupDetailScreen() {
               })}
             </Text>
             <Text variant="caption" color="secondary">
-              {t('weddings:detail.scheduled', { date: format.date(data.group.scheduledDate) })}
-            </Text>
+            {data.isMember
+              ? t('weddings:detail.scheduled', { date: format.date(data.group.scheduledDate) })
+              : t('weddings:discovery.approximateDate', {
+                  month: data.group.scheduledDate.slice(0, 7),
+                })}
+          </Text>
             {data.group.description ? (
               <Text variant="body" color="secondary">
                 {data.group.description}
