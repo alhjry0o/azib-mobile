@@ -32,12 +32,7 @@
       "completed": "Completed",
       "cancelled": "Cancelled"
     },
-    "size": {
-      "any": "Any size",
-      "small": "Small",
-      "medium": "Medium",
-      "large": "Large"
-    }
+    "size": { "any": "Any size", "small": "Small", "medium": "Medium", "large": "Large" }
   },
   "create": {
     "title": "Create a wedding group",
@@ -135,14 +130,84 @@
       "tieOrder": "Tie, resolved by the declared option order."
     }
   },
-  "withdrawal": {
-    "reasons": {
-      "withinWindow": "Withdrawal inside the allowed window.",
-      "windowClosed": "Withdrawal after the window closed.",
-      "groupEmpty": "No members remain; costs are not assigned to anyone."
+  "budget": {
+    "title": "Budget",
+    "subtitle": "Numbered versions, shared and individual items, and everyone's approval before adoption.",
+    "empty": "No budget version",
+    "emptyDescription": "The organizer or a co-organizer creates the first version, then items are added and approvals collected.",
+    "createVersion": "Create the first version",
+    "version": "Version v{{version}}",
+    "status": { "draft": "Draft", "adopted": "Adopted", "superseded": "Superseded" },
+    "approvals": "Approvals: {{approved}} of {{total}}",
+    "unanimous": "Everyone approved",
+    "missing": "Waiting for {{count}} approval(s)",
+    "modes": { "equal": "Equal", "weighted": "Weighted", "custom": "Custom shares" },
+    "categories": {
+      "hall": "Venue",
+      "artists": "Artists",
+      "baraa": "Bara'a services",
+      "sound_light": "Sound & lighting",
+      "water_drinks": "Water & drinks",
+      "hospitality": "Hospitality",
+      "organization": "Organization",
+      "clothing": "Clothing",
+      "other": "Other"
+    },
+    "addItem": "Add item",
+    "removeItem": "Remove item",
+    "itemLabel": "Item label",
+    "itemAmount": "Amount (YER)",
+    "scopeShared": "Make it a shared item",
+    "scopeIndividual": "Make it an individual item",
+    "reportTitle": "Final per-participant report",
+    "splitDetail": "Shared: {{shared}} · Individual: {{individual}}",
+    "grandTotal": "Total: {{value}} YER",
+    "approve": "I approve my share",
+    "adopt": "Adopt budget and agreement",
+    "reissue": "Re-issue the version",
+    "reissueNote": "After a withdrawal or a new member, re-issue the version so costs are re-split and approvals collected again.",
+    "errors": {
+      "CUSTOM_SUM_MISMATCH": "Custom shares do not add up to the shared items total. Fix the shares or re-issue the version.",
+      "INVALID_WEIGHT": "Complete every member's weight before using weighted splitting.",
+      "NO_MEMBERS": "There are no active members to split costs across.",
+      "INVALID_AMOUNT": "One item has an invalid amount.",
+      "UNKNOWN_MEMBER": "An individual item belongs to an inactive member.",
+      "DUPLICATE_MEMBER": "Duplicate entry in the member list.",
+      "INVALID_CUSTOM_SHARE": "An invalid custom share.",
+      "UNKNOWN": "Could not compute the split. Review items and shares."
     }
   },
+  "agreement": {
+    "title": "Final agreement",
+    "subtitle": "A summary every participant acknowledges. The log is append-only.",
+    "summary": "Members agreed on the adopted budget version and the shown cost split, with no money transfer inside the app.",
+    "empty": "No agreement yet",
+    "emptyDescription": "The agreement is created automatically once all active members approve and the budget is adopted.",
+    "progress": "Acknowledgements: {{done}} of {{total}}",
+    "complete": "Agreement complete",
+    "pending": "Awaiting acknowledgements",
+    "acknowledge": "I acknowledge the agreement",
+    "cancel": "Cancel the group",
+    "cancelTitle": "Cancel group",
+    "cancelDescription": "The agreement will be void and the group closed. This cannot be undone.",
+    "cancelConfirm": "Confirm cancellation",
+    "cancelReason": "The group was cancelled by the organizer."
+  },
   "chat": {
+    "title": "Organizational chat",
+    "subtitle": "Text only, for active group members.",
+    "rules": "No images, links or phone numbers. Violating messages are blocked with an explanation.",
+    "empty": "No messages",
+    "emptyDescription": "Start coordinating with group members using a short text message.",
+    "compose": "Your message",
+    "send": "Send",
+    "report": "Report",
+    "reported": "Reported",
+    "remove": "Remove",
+    "removed": "Message removed by the organizer.",
+    "mute": "Mute author",
+    "unmute": "Lift mute",
+    "retentionNote": "Messages are deleted automatically after {{days}} days (provisional, awaiting approval).",
     "blocked": {
       "empty": "The message is empty.",
       "tooLong": "The message is too long.",
@@ -154,11 +219,51 @@
       "muted": "You have been temporarily muted by the organizer."
     }
   },
+  "services": {
+    "title": "Shared services",
+    "subtitle": "Booking requests to partners, with their offers as suggestions.",
+    "noPayment": "No in-app payment and no payment tracking. The request is coordination only; the agreement happens outside the app.",
+    "offersTitle": "Partner offers",
+    "offersEmpty": "No active offers",
+    "offersEmptyDescription": "Verified partner offers appear here. The partners directory ships in P11.",
+    "request": "Send booking request",
+    "message": "Request message",
+    "defaultMessage": "We would like to know availability and details for this service.",
+    "requestsTitle": "Request log",
+    "requestsEmpty": "No requests yet.",
+    "markAccepted": "Record partner acceptance",
+    "acceptedReply": "The partner tentatively confirmed availability.",
+    "status": { "sent": "Sent", "accepted": "Accepted", "declined": "Declined", "cancelled": "Cancelled" }
+  },
+  "countdown": {
+    "title": "Countdown",
+    "subtitle": "Time remaining until the shared wedding date.",
+    "remaining": "days remaining · {{hours}} hours",
+    "today": "Today",
+    "pastNote": "The date has arrived or passed. The organizer can record completion."
+  },
+  "completion": {
+    "title": "Wedding completion",
+    "subtitle": "The achievement moment is recorded here, with no financial claim.",
+    "done": "The group wedding was completed",
+    "pending": "Completion not recorded yet",
+    "note": "Recording is an organizer action after the agreement completes. The platform issues no financial receipt.",
+    "mark": "Record completion"
+  },
+  "withdrawal": {
+    "reasons": {
+      "withinWindow": "Withdrawal inside the allowed window.",
+      "windowClosed": "Withdrawal after the window closed.",
+      "groupEmpty": "No members remain; costs are not assigned to anyone."
+    }
+  },
   "notifications": {
     "invite": { "title": "Wedding group invitation", "body": "You were invited to join a group wedding." },
     "joinApproved": { "title": "Your request was approved", "body": "You are now a member of the wedding group." },
     "joinRejected": { "title": "Your request was not approved", "body": "Contact the organizer for clarification." },
-    "poll": { "title": "New poll", "body": "A poll was added to the wedding group; you can vote until the deadline." }
+    "poll": { "title": "New poll", "body": "A poll was added to the wedding group; you can vote until the deadline." },
+    "budget": { "title": "Budget updated", "body": "Budget items or shares changed. Review your share and approve again." },
+    "dateChange": { "title": "Date changed", "body": "The proposed wedding date changed. Review the new date." }
   },
   "validation": {
     "title": "Enter a group name (at least 3 characters).",
