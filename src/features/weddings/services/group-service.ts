@@ -115,7 +115,8 @@ export async function requestJoin(
   const members = await deps.groups.listMembers(groupId);
   if (!members.ok) return members;
   const active = members.value.filter((m) => m.status === 'active').length;
-  const ceiling = group.value.maxGroupSize ?? group.value.capacity;
+  const hardCap = group.value.maxGroupSize ?? group.value.capacity;
+  const ceiling = Math.min(group.value.capacity, hardCap);
   if (active >= ceiling) {
     return { ok: false, error: AppError.conflict({ code: 'GROUP_FULL' }) };
   }
