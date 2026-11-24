@@ -27,12 +27,12 @@ describe('external actions boundary', () => {
   });
 
   it('shares text and reports dismissal honestly', async () => {
-    const spy = jest.spyOn(Share, 'share').mockResolvedValue({ action: Share.sharedAction });
+    const spy = jest.spyOn(Share, 'share').mockResolvedValue({ action: Share.sharedAction, activityType: undefined });
     const shared = await shareText('Demo offer');
     expect(shared.ok).toBe(true);
     if (shared.ok) expect(shared.value).toBe(true);
 
-    spy.mockResolvedValue({ action: Share.dismissedAction });
+    spy.mockResolvedValue({ action: Share.dismissedAction, activityType: undefined });
     const dismissed = await shareText('Demo offer');
     expect(dismissed.ok).toBe(true);
     if (dismissed.ok) expect(dismissed.value).toBe(false);
