@@ -6,6 +6,7 @@ import { useHomeFormatters } from '@/features/home/hooks/use-home-formatters';
 import { RingCountdown } from '../components/RingCountdown';
 import { WeddingScaffold } from '../components/WeddingScaffold';
 import { useWeddingCountdown } from '../hooks/use-wedding-countdown';
+import { useWeddingGroup } from '../hooks/use-wedding-group';
 
 export function GroupCountdownScreen() {
   const { t } = useTranslation();
@@ -13,8 +14,10 @@ export function GroupCountdownScreen() {
   const params = useLocalSearchParams<{ id?: string }>();
   const groupId = params.id ?? '';
   const countdown = useWeddingCountdown(groupId);
+  const group = useWeddingGroup(groupId);
   const format = useHomeFormatters();
   const value = countdown.data?.ok ? countdown.data.value : null;
+  const isMember = group.data?.isMember === true;
 
   return (
     <WeddingScaffold
@@ -31,7 +34,7 @@ export function GroupCountdownScreen() {
           testID="countdown-missing"
         />
       ) : null}
-      {value ? (
+      {value && isMember ? (
         <>
           <RingCountdown
             days={value.days}
@@ -49,6 +52,23 @@ export function GroupCountdownScreen() {
             onPress={() => router.push(href(ROUTES.weddings.completion(groupId)))}
             testID="countdown-open-completion"
           />
+        </>
+      ) : null}
+      {value && !isMember ? (
+        <>
+          <Text
+            variant="caption"
+            color="secondary"
+            align="center"
+            testID="countdown-public-month"
+          >
+            {t('weddings:discovery.approximateDate', {
+              month: value.scheduledDate.slice(0, 7),
+            })}
+          </Text>
+          <Text variant="body" color="secondary" testID="countdown-public-note">
+            {t('weddings:detail.publicNote')}
+          </Text>
         </>
       ) : null}
     </WeddingScaffold>
