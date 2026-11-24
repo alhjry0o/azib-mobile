@@ -70,8 +70,8 @@ app/
 | `profile/*` · بعض `settings/*` | `RequireAuth` |
 | `assistance/{new,mine,[id]/*}` | `RequireAuth` + ملكية |
 | `programs/{donate,donations,receipts,disbursements}` | `RequireAuth` + ملكية |
-| **`weddings/new` · `weddings/[id]/*`** | **`RequireAuth`** (بما فيها countdown — ADR-0050) |
-| **`weddings` (التبويب) · `programs` العام** | **عام بإسقاط عام** |
+| **`weddings/new` · `weddings/[id]/{members,polls,budget,agreement,chat,countdown,completion,services}`** | **`RequireAuth`** (بما فيها countdown — ADR-0050) |
+| **`weddings` (التبويب) · `weddings/[id]` (التفاصيل) · `programs` العام** | **عام بإسقاط عام** |
 
 > الحارس واجهة فقط؛ الحماية الفعلية RLS في P18 (قاعدة 19).
 
