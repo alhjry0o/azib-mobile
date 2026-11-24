@@ -53,6 +53,12 @@ export const ROUTES = {
     detail: (id: string): string => `/weddings/${id}`,
     members: (id: string): string => `/weddings/${id}/members`,
     polls: (id: string): string => `/weddings/${id}/polls`,
+    budget: (id: string): string => `/weddings/${id}/budget`,
+    agreement: (id: string): string => `/weddings/${id}/agreement`,
+    chat: (id: string): string => `/weddings/${id}/chat`,
+    countdown: (id: string): string => `/weddings/${id}/countdown`,
+    completion: (id: string): string => `/weddings/${id}/completion`,
+    services: (id: string): string => `/weddings/${id}/services`,
   },
   settings: {
     root: '/settings',
