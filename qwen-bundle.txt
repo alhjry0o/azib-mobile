@@ -1,0 +1,776 @@
+===============================================
+### FILE: src/schemas/partner.ts
+===============================================
+
+```
+import { z } from 'zod';
+
+import { DataOriginSchema, IdSchema, IsoDateSchema } from './common';
+
+export const PartnerStatusSchema = z.enum(['draft', 'verified', 'suspended']);
+
+export const PartnerSchema = z.object({
+  id: IdSchema,
+  displayName: z.string().min(1).max(200),
+  category: z.string().min(1).max(100),
+  status: PartnerStatusSchema,
+  createdAt: IsoDateSchema,
+  updatedAt: IsoDateSchema,
+  dataOrigin: DataOriginSchema,
+});
+
+export const CreatePartnerInputSchema = z.object({
+  displayName: z.string().min(1).max(200),
+  category: z.string().min(1).max(100),
+});
+
+export const UpdatePartnerInputSchema = z.object({
+  displayName: z.string().min(1).max(200).optional(),
+  category: z.string().min(1).max(100).optional(),
+  status: PartnerStatusSchema.optional(),
+});
+```
+
+===============================================
+### FILE: src/schemas/offer.ts
+===============================================
+
+```
+import { z } from 'zod';
+
+import { DataOriginSchema, IdSchema, IsoDateSchema } from './common';
+
+export const OfferStatusSchema = z.enum(['draft', 'active', 'expired']);
+
+export const OfferSchema = z.object({
+  id: IdSchema,
+  partnerId: IdSchema,
+  titleKey: z.string().min(1),
+  discountPercent: z.number().int().min(0).max(100),
+  status: OfferStatusSchema,
+  createdAt: IsoDateSchema,
+  updatedAt: IsoDateSchema,
+  dataOrigin: DataOriginSchema,
+});
+
+export const CreateOfferInputSchema = z.object({
+  partnerId: IdSchema,
+  titleKey: z.string().min(1),
+  discountPercent: z.number().int().min(0).max(100),
+});
+
+export const UpdateOfferInputSchema = z.object({
+  titleKey: z.string().min(1).optional(),
+  discountPercent: z.number().int().min(0).max(100).optional(),
+  status: OfferStatusSchema.optional(),
+});
+```
+
+===============================================
+### FILE: src/repositories/mock/partner.ts
+===============================================
+
+```
+import { CreatePartnerInputSchema, UpdatePartnerInputSchema } from '@/schemas/partner';
+
+import type {
+  CreatePartnerInput,
+  Partner,
+  PartnerRepository,
+  UpdatePartnerInput,
+} from '../contracts/partner';
+import { createMockCrudRepository } from './crud-factory';
+import type { MockRepositoryOptions } from './profile';
+
+export function createMockPartnerRepository(
+  options: MockRepositoryOptions = {},
+): PartnerRepository {
+  return createMockCrudRepository<Partner, CreatePartnerInput, UpdatePartnerInput>({
+    idPrefix: 'mock-partner',
+    schemaCreate: CreatePartnerInputSchema,
+    schemaUpdate: UpdatePartnerInputSchema,
+    buildEntity: ({ id, input, nowIso }) => ({
+      id,
+      displayName: input.displayName,
+      category: input.category,
+      status: 'draft',
+      createdAt: nowIso,
+      updatedAt: nowIso,
+      dataOrigin: 'demo',
+    }),
+    applyUpdate: ({ existing, patch, nowIso }) => ({
+      ...existing,
+      ...(patch.displayName !== undefined && { displayName: patch.displayName }),
+      ...(patch.category !== undefined && { category: patch.category }),
+      ...(patch.status !== undefined && { status: patch.status }),
+      updatedAt: nowIso,
+    }),
+    delayMs: options.delayMs,
+    forceErrorKind: options.forceErrorKind ?? null,
+  });
+}
+```
+
+===============================================
+### FILE: src/repositories/mock/__tests__/partner.test.ts
+===============================================
+
+```
+import { crudRepositoryContract } from '../../__tests__/contracts/crud.contract';
+import { createMockPartnerRepository } from '../partner';
+
+describe('MockPartnerRepository', () => {
+  crudRepositoryContract({
+    getRepo: () => createMockPartnerRepository(),
+    validCreate: {
+      displayName: 'Demo Partner',
+      category: 'catering',
+    },
+    invalidCreate: {
+      displayName: '',
+      category: '',
+    },
+    validUpdate: { status: 'verified' as const },
+    expectedDataOrigin: 'demo',
+  });
+
+  it('forceErrorKind: Network causes all methods to fail', async () => {
+    const repo = createMockPartnerRepository({ forceErrorKind: 'Network' });
+    const r = await repo.list();
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.kind).toBe('Network');
+  });
+});
+```
+
+===============================================
+### FILE: src/repositories/mock/__tests__/offer.test.ts
+===============================================
+
+```
+import { crudRepositoryContract } from '../../__tests__/contracts/crud.contract';
+import { createMockOfferRepository } from '../offer';
+
+describe('MockOfferRepository', () => {
+  crudRepositoryContract({
+    getRepo: () => createMockOfferRepository(),
+    validCreate: {
+      partnerId: 'partner-1',
+      titleKey: 'offers.demo.title',
+      discountPercent: 15,
+    },
+    invalidCreate: {
+      partnerId: '',
+      titleKey: '',
+      discountPercent: 150,
+    },
+    validUpdate: { discountPercent: 25 },
+    expectedDataOrigin: 'demo',
+  });
+
+  it('forceErrorKind: Network causes all methods to fail', async () => {
+    const repo = createMockOfferRepository({ forceErrorKind: 'Network' });
+    const r = await repo.list();
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.kind).toBe('Network');
+  });
+});
+```
+
+===============================================
+### FILE: src/repositories/contracts/search.ts
+===============================================
+
+```
+import type { Result } from '@/core/result';
+
+import type { ListQuery } from '../types';
+
+export interface SearchRepository {
+  /** Delegates to the SearchProvider. Kept as a repo for feature-level composition. */
+  search<T = Record<string, unknown>>(
+    text: string,
+    query?: ListQuery,
+  ): Promise<Result<readonly T[]>>;
+}
+```
+
+===============================================
+### FILE: src/repositories/mock/search.ts
+===============================================
+
+```
+// SearchRepository mock delegates to an injected SearchProvider.
+// No duplicated search logic. The provider is the single source of the search index.
+
+import { ok, type Result } from '@/core/result';
+
+import type { SearchProvider } from '@/providers/contracts';
+
+import type { SearchRepository } from '../contracts/search';
+import type { ListQuery } from '../types';
+
+export function createMockSearchRepository(searchProvider: SearchProvider): SearchRepository {
+  return Object.freeze({
+    async search<T = Record<string, unknown>>(
+      text: string,
+      query?: ListQuery,
+    ): Promise<Result<readonly T[]>> {
+      const r = await searchProvider.query<T>({
+        text,
+        ...(query?.limit !== undefined && { limit: query.limit }),
+      });
+      if (!r.ok) return r;
+      return ok(r.value.map((hit) => hit.item));
+    },
+  });
+}
+```
+
+===============================================
+### FILE: src/locales/ar/marketplace.json
+===============================================
+
+```
+{
+  "title": "السوق",
+  "notConnectedYet": "السوق ستُبنى في P12."
+}
+```
+
+===============================================
+### FILE: src/locales/en/marketplace.json
+===============================================
+
+```
+{
+  "title": "Marketplace",
+  "notConnectedYet": "Marketplace will be built in P12."
+}
+```
+
+===============================================
+### FILE: app/(tabs)/partners.tsx
+===============================================
+
+```
+import { useTranslation } from 'react-i18next';
+import { RoutePlaceholder } from '@/components/shell';
+
+export default function PartnersScreen() {
+  const { t } = useTranslation();
+  return (
+    <RoutePlaceholder
+      icon="users"
+      title={t('common:shell.features.partners.title')}
+      description={t('common:shell.features.partners.description')}
+      phase="P11"
+      testID="partners-screen"
+    />
+  );
+}
+```
+
+===============================================
+### FILE: src/features/weddings/screens/GroupBudgetScreen.tsx
+===============================================
+
+```
+import { useState } from 'react';
+import { useLocalSearchParams } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import {
+  Badge,
+  Banner,
+  Button,
+  Card,
+  EmptyState,
+  ErrorState,
+  ListItem,
+  SegmentedControl,
+  Skeleton,
+  Text,
+  TextInput,
+} from '@/components/ui';
+import { BUDGET_CATEGORIES, type BudgetCategory, type SplitMode } from '@/repositories/contracts/wedding-budget';
+import { authErrorKey } from '@/features/auth/errors';
+import { useHomeFormatters } from '@/features/home/hooks/use-home-formatters';
+import { useTheme } from '@/theme';
+import { CostSplitBars } from '../components/CostSplitBars';
+import { WeddingScaffold } from '../components/WeddingScaffold';
+import { useWeddingBudget } from '../hooks/use-wedding-budget';
+import { useWeddingGroup } from '../hooks/use-wedding-group';
+import { can } from '../state/roles';
+
+export function GroupBudgetScreen() {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const params = useLocalSearchParams<{ id?: string }>();
+  const groupId = params.id ?? '';
+  const group = useWeddingGroup(groupId);
+  const budget = useWeddingBudget(groupId);
+  const format = useHomeFormatters();
+  const [category, setCategory] = useState<BudgetCategory>('hall');
+  const [label, setLabel] = useState('');
+  const [amount, setAmount] = useState<number | null>(null);
+  const [individual, setIndividual] = useState(false);
+
+  const data = budget.data;
+  const role = group.data?.myRole ?? null;
+  const canEdit = role !== null && can(role, 'edit_budget');
+  const canAdopt = role !== null && can(role, 'adopt_budget');
+  const labels: Record<string, string> = {};
+  for (const member of group.data?.members ?? []) {
+    labels[member.userId] = member.label ?? t('weddings:members.anonymous');
+  }
+
+  const addItem = async (): Promise<void> => {
+    if (label.trim().length === 0 || amount === null) return;
+    const result = await budget.addItem({
+      category,
+      labelKey: label.trim(),
+      amount,
+      scope: individual ? 'individual' : 'shared',
+      memberId: individual ? (group.data?.members.find((m) => m.isSelf)?.userId ?? null) : null,
+      offerId: null,
+    });
+    if (result.ok) {
+      setLabel('');
+      setAmount(null);
+    }
+  };
+
+  return (
+    <WeddingScaffold
+      testID="group-budget-screen"
+      title={t('weddings:budget.title')}
+      subtitle={t('weddings:budget.subtitle')}
+      notConnectedRetry={budget.refetch}
+    >
+      {budget.isLoading ? <Skeleton variant="rect" height={140} /> : null}
+      {budget.error ? (
+        <ErrorState
+          title={t('weddings:discovery.errorTitle')}
+          description={t('weddings:discovery.errorDescription')}
+          onRetry={budget.refetch}
+          testID="budget-error"
+        />
+      ) : null}
+      {budget.actionError ? (
+        <Banner
+          variant="error"
+          message={t(authErrorKey(budget.actionError))}
+          testID="budget-action-error"
+        />
+      ) : null}
+
+      {data && !data.version ? (
+        <EmptyState
+          icon="creditCard"
+          title={t('weddings:budget.empty')}
+          description={t('weddings:budget.emptyDescription')}
+          testID="budget-empty"
+        />
+      ) : null}
+
+      {data && !data.version && canEdit ? (
+        <Button
+          fullWidth
+          loading={budget.busy}
+          label={t('weddings:budget.createVersion')}
+          onPress={() => {
+            void budget.createVersion({ splitMode: 'equal' });
+          }}
+          testID="budget-create-version"
+        />
+      ) : null}
+
+      {data?.version ? (
+        <Card style={{ gap: theme.spacing[2] }} testID="budget-version-card">
+          <Text variant="h3">
+            {t('weddings:budget.version', { version: format.number(data.version.version) })}
+          </Text>
+          <Badge
+            variant={data.version.status === 'adopted' ? 'success' : 'pending'}
+            size="sm"
+            label={t(`weddings:budget.status.${data.version.status}`)}
+            testID="budget-version-status"
+          />
+          <Text variant="caption" color="secondary">
+            {t('weddings:budget.approvals', {
+              approved: format.number(data.approvedIds.length),
+              total: format.number(data.memberIds.length),
+            })}
+          </Text>
+          {data.unanimous ? (
+            <Badge variant="verified" size="sm" label={t('weddings:budget.unanimous')} />
+          ) : (
+            <Text variant="caption" color="secondary" testID="budget-missing">
+              {t('weddings:budget.missing', { count: format.number(data.missingIds.length) })}
+            </Text>
+          )}
+        </Card>
+      ) : null}
+
+      {data?.version && canEdit ? (
+        <SegmentedControl<SplitMode>
+          segments={[
+            { value: 'equal', label: t('weddings:budget.modes.equal') },
+            { value: 'weighted', label: t('weddings:budget.modes.weighted') },
+            { value: 'custom', label: t('weddings:budget.modes.custom') },
+          ]}
+          value={data.version.splitMode}
+          onChange={(value) => {
+            void budget.setSplit({ splitMode: value });
+          }}
+          size="sm"
+          testID="budget-split-mode"
+        />
+      ) : null}
+
+      {data?.reportErrorCode ? (
+        <Banner
+          variant="warning"
+          message={t(`weddings:budget.errors.${data.reportErrorCode}`)}
+          testID="budget-report-error"
+        />
+      ) : null}
+
+      {data?.report ? (
+        <Card style={{ gap: theme.spacing[3] }} testID="budget-report">
+          <Text variant="h3">{t('weddings:budget.reportTitle')}</Text>
+          <CostSplitBars shares={data.report.shares} labels={labels} testID="cost-split-bars" />
+          <Text variant="bodyStrong">
+            {t('weddings:budget.grandTotal', { value: format.number(data.report.grandTotal) })}
+          </Text>
+        </Card>
+      ) : null}
+
+      {data?.version && canEdit ? (
+        <Card style={{ gap: theme.spacing[3] }} testID="budget-item-form">
+          <Text variant="h3">{t('weddings:budget.addItem')}</Text>
+          <SegmentedControl<BudgetCategory>
+            segments={BUDGET_CATEGORIES.map((c) => ({
+              value: c,
+              label: t(`weddings:budget.categories.${c}`),
+            }))}
+            value={category}
+            onChange={setCategory}
+            size="sm"
+            testID="budget-category"
+          />
+          <TextInput
+            testID="budget-item-label"
+            label={t('weddings:budget.itemLabel')}
+            value={label}
+            onChangeText={setLabel}
+          />
+          <TextInput
+            testID="budget-item-amount"
+            label={t('weddings:budget.itemAmount')}
+            keyboardType="number-pad"
+            value={amount === null ? '' : String(amount)}
+            onChangeText={(text) => {
+              const digits = text.replace(/\D/g, '').slice(0, 9);
+              setAmount(digits.length === 0 ? null : Number.parseInt(digits, 10));
+            }}
+          />
+          <Button
+            variant="ghost"
+            size="sm"
+            label={individual ? t('weddings:budget.scopeShared') : t('weddings:budget.scopeIndividual')}
+            onPress={() => setIndividual((prev) => !prev)}
+            testID="budget-scope-toggle"
+          />
+          <Button
+            fullWidth
+            loading={budget.busy}
+            label={t('weddings:budget.addItem')}
+            onPress={() => {
+              void addItem();
+            }}
+            testID="budget-add-item"
+          />
+        </Card>
+      ) : null}
+
+      {data?.items.map((item) => (
+        <ListItem
+          key={item.id}
+          variant="card"
+          title={item.labelKey}
+          subtitle={`${t(`weddings:budget.categories.${item.category}`)} · ${format.number(item.amount)}`}
+          trailing={
+            canEdit ? (
+              <Button
+                variant="icon"
+                size="sm"
+                leftIcon="x"
+                accessibilityLabel={t('weddings:budget.removeItem')}
+                onPress={() => {
+                  void budget.removeItem(item.id);
+                }}
+                testID={`budget-remove-${item.id}`}
+              />
+            ) : undefined
+          }
+          testID={`budget-item-${item.id}`}
+        />
+      ))}
+
+      {data?.version && group.data?.isMember ? (
+        <Button
+          fullWidth
+          variant="secondary"
+          loading={budget.busy}
+          label={t('weddings:budget.approve')}
+          onPress={() => {
+            void budget.approve();
+          }}
+          testID="budget-approve"
+        />
+      ) : null}
+
+      {data?.version && canAdopt ? (
+        <Button
+          fullWidth
+          variant="gold"
+          disabled={!data.unanimous}
+          loading={budget.busy}
+          label={t('weddings:budget.adopt')}
+          onPress={() => {
+            void budget.adopt();
+          }}
+          testID="budget-adopt"
+        />
+      ) : null}
+
+      {data?.version && canEdit ? (
+        <View style={{ gap: theme.spacing[2] }}>
+          <Text variant="caption" color="secondary">
+            {t('weddings:budget.reissueNote')}
+          </Text>
+          <Button
+            variant="ghost"
+            fullWidth
+            loading={budget.busy}
+            label={t('weddings:budget.reissue')}
+            onPress={() => {
+              void budget.reissue();
+            }}
+            testID="budget-reissue"
+          />
+        </View>
+      ) : null}
+    </WeddingScaffold>
+  );
+}
+
+const styles = StyleSheet.create({
+  spacer: { height: 8 },
+});
+
+void styles;
+```
+
+===============================================
+### FILE: src/components/ui/form/Chip.tsx
+===============================================
+
+```
+import { Pressable, StyleSheet, View } from 'react-native';
+
+import { useHaptics } from '@/hooks';
+import { useTheme } from '@/theme';
+
+import { Icon, type IconName } from '../Icon';
+import { Text } from '../Text';
+
+export type ChipVariant = 'default' | 'accent' | 'gold';
+
+export interface ChipProps {
+  readonly label: string;
+  readonly selected?: boolean;
+  readonly onPress?: () => void;
+  readonly disabled?: boolean;
+  readonly leftIcon?: IconName;
+  readonly variant?: ChipVariant;
+  readonly testID?: string;
+}
+
+export function Chip({
+  label,
+  selected = false,
+  onPress,
+  disabled = false,
+  leftIcon,
+  variant = 'default',
+  testID,
+}: ChipProps) {
+  const theme = useTheme();
+  const haptics = useHaptics();
+  const isInteractive = !!onPress;
+
+  const palette =
+    variant === 'accent'
+      ? { fill: theme.colors.accent.fill, text: theme.colors.text.primary, border: 'transparent' }
+      : variant === 'gold'
+        ? { fill: theme.colors.gold.fill, text: theme.colors.text.inverse, border: 'transparent' }
+        : {
+            fill: selected ? theme.colors.accent.fill : 'transparent',
+            text: selected ? theme.colors.text.primary : theme.colors.text.secondary,
+            border: selected ? theme.colors.accent.fill : theme.colors.border.subtle,
+          };
+
+  const content = (
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: palette.fill,
+          borderColor: palette.border,
+          borderRadius: theme.radius.full,
+          paddingHorizontal: theme.spacing[3],
+          paddingVertical: theme.spacing[1],
+          opacity: disabled ? 0.45 : 1,
+        },
+      ]}
+    >
+      {leftIcon ? <Icon name={leftIcon} size={14} color={palette.text} /> : null}
+      <Text variant="captionStrong" color={palette.text}>
+        {label}
+      </Text>
+    </View>
+  );
+
+  if (!isInteractive) return content;
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected, disabled }}
+      accessibilityLabel={label}
+      onPress={() => {
+        if (disabled) return;
+        haptics.light();
+        onPress?.();
+      }}
+      disabled={disabled}
+      hitSlop={6}
+      testID={testID}
+    >
+      {content}
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    borderWidth: 1,
+    minHeight: 32,
+  },
+});
+```
+
+===============================================
+### FILE: src/components/ui/form/Search.tsx
+===============================================
+
+```
+import { forwardRef, useState, type ElementRef } from 'react';
+
+import { TextInput, type TextInputProps } from './TextInput';
+
+export interface SearchProps
+  extends Omit<TextInputProps, 'leftIcon' | 'rightIcon' | 'onRightIconPress'> {
+  readonly value?: string;
+  readonly onClear?: () => void;
+}
+
+export const Search = forwardRef<ElementRef<typeof TextInput>, SearchProps>(function Search(
+  { value, onClear, onChangeText, ...rest },
+  ref,
+) {
+  const [internalValue, setInternalValue] = useState('');
+  const current = value ?? internalValue;
+  const showClear = current.length > 0 && !!onClear;
+
+  return (
+    <TextInput
+      ref={ref}
+      {...rest}
+      value={value}
+      onChangeText={(t) => {
+        setInternalValue(t);
+        onChangeText?.(t);
+      }}
+      returnKeyType={rest.returnKeyType ?? 'search'}
+      autoCorrect={false}
+      autoCapitalize={rest.autoCapitalize ?? 'none'}
+      leftIcon="search"
+      rightIcon={showClear ? 'x' : undefined}
+      onRightIconPress={showClear ? onClear : undefined}
+    />
+  );
+});
+```
+
+===============================================
+### FILE: src/repositories/mock/__tests__/search.test.ts
+===============================================
+
+```
+import { createMockSearchProvider } from '@/providers/mock';
+
+import { createMockSearchRepository } from '../search';
+
+describe('MockSearchRepository', () => {
+  it('delegates to SearchProvider and unwraps items', async () => {
+    const provider = createMockSearchProvider(undefined, [
+      { id: '1', score: 1, item: { name: 'wedding partner' } },
+      { id: '2', score: 1, item: { name: 'souk' } },
+    ]);
+    const repo = createMockSearchRepository(provider);
+    const r = await repo.search<{ name: string }>('wedding');
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value.length).toBe(1);
+      expect(r.value[0]?.name).toBe('wedding partner');
+    }
+  });
+
+  it('returns empty for empty query', async () => {
+    const provider = createMockSearchProvider();
+    const repo = createMockSearchRepository(provider);
+    const r = await repo.search('   ');
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value).toEqual([]);
+  });
+
+  it('respects limit', async () => {
+    const items = Array.from({ length: 10 }, (_, i) => ({
+      id: String(i),
+      score: 1,
+      item: { name: 'match' },
+    }));
+    const provider = createMockSearchProvider(undefined, items);
+    const repo = createMockSearchRepository(provider);
+    const r = await repo.search('match', { limit: 3 });
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value.length).toBe(3);
+  });
+
+  it('propagates provider errors', async () => {
+    const provider = createMockSearchProvider({ delayMs: 0, forceError: 'Network' });
+    const repo = createMockSearchRepository(provider);
+    const r = await repo.search('anything');
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.kind).toBe('Network');
+  });
+});
+```
+
