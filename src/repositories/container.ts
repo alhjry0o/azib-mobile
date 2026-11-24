@@ -1,6 +1,7 @@
 import type { AppEnv } from '@/config/env';
 import type { SearchProvider } from '@/providers/contracts';
 import type {
+  AmbassadorRepository,
   ApplicationRepository,
   AuditRepository,
   ContentRepository,
@@ -8,8 +9,11 @@ import type {
   DonationRepository,
   JobRepository,
   NotificationRepository,
+  OfferReportRepository,
   OfferRepository,
+  PartnerEngagementRepository,
   PartnerRepository,
+  PartnerVerificationRepository,
   ProfileRepository,
   ProgramRepository,
   SearchRepository,
@@ -23,6 +27,7 @@ import type {
   WeddingRepository,
 } from './contracts';
 import {
+  createMockAmbassadorRepository,
   createMockApplicationRepository,
   createMockAuditRepository,
   createMockContentRepository,
@@ -30,8 +35,11 @@ import {
   createMockDonationRepository,
   createMockJobRepository,
   createMockNotificationRepository,
+  createMockOfferReportRepository,
   createMockOfferRepository,
+  createMockPartnerEngagementRepository,
   createMockPartnerRepository,
+  createMockPartnerVerificationRepository,
   createMockProfileRepository,
   createMockProgramRepository,
   createMockSearchRepository,
@@ -61,6 +69,10 @@ export interface RepositoryContainer {
   readonly weddingBudgets: WeddingBudgetRepository;
   readonly weddingChat: WeddingChatRepository;
   readonly partners: PartnerRepository;
+  readonly partnerVerifications: PartnerVerificationRepository;
+  readonly offerReports: OfferReportRepository;
+  readonly partnerEngagement: PartnerEngagementRepository;
+  readonly ambassadors: AmbassadorRepository;
   readonly offers: OfferRepository;
   readonly souk: SoukRepository;
   readonly jobs: JobRepository;
@@ -107,6 +119,10 @@ function buildRepositories(
     weddingBudgets: createMockWeddingBudgetRepository(mockOptions),
     weddingChat: createMockWeddingChatRepository(mockOptions),
     partners: createMockPartnerRepository(mockOptions),
+    partnerVerifications: createMockPartnerVerificationRepository(mockOptions),
+    offerReports: createMockOfferReportRepository(mockOptions),
+    partnerEngagement: createMockPartnerEngagementRepository(mockOptions),
+    ambassadors: createMockAmbassadorRepository(mockOptions),
     offers: createMockOfferRepository(mockOptions),
     souk: createMockSoukRepository(mockOptions),
     jobs: createMockJobRepository(mockOptions),
