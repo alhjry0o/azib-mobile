@@ -260,6 +260,13 @@ export async function adoptBudget(
   });
   if (!adopted.ok) return adopted;
 
+  const current = await deps.weddings.getById(groupId);
+  if (!current.ok) return current;
+  if (current.value && toGroupStatus(current.value.status) === 'open') {
+    const planned = await transitionGroup(deps, groupId, actorId, 'planning');
+    if (!planned.ok) return planned;
+  }
+
   const moved = await transitionGroup(deps, groupId, actorId, 'agreed', { budgetAdopted: true });
   if (!moved.ok) return moved;
 
