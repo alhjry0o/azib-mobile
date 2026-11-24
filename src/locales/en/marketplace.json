@@ -1,4 +1,142 @@
 {
   "title": "Marketplace",
-  "notConnectedYet": "Marketplace will be built in P12."
+  "notConnectedYet": "Marketplace will be built in P12.",
+  "browser": {
+    "title": "Partners directory",
+    "subtitle": "Verified partners and offers. The crown comes only from a live verification record, never from a user-written field.",
+    "crownNote": "The Verified badge appears only with a live verification record. Demo values are labeled and are not real prices.",
+    "searchPlaceholder": "Search by partner name or description",
+    "region": "Governorate",
+    "verifiedOnly": "Verified only",
+    "allCategories": "All categories",
+    "clearFilters": "Clear filters",
+    "offerCount": "{{count}} offers",
+    "openPartner": "View partner",
+    "empty": "No matching partners",
+    "emptyDescription": "Widen or clear the filters. You can populate demo data from developer settings.",
+    "errorTitle": "Could not load partners",
+    "errorDescription": "Something went wrong while fetching partners. Please retry.",
+    "notConnected": "Partners directory not connected",
+    "notConnectedDescription": "Backend wiring activates in P18. Demo mode is available now."
+  },
+  "profile": {
+    "title": "Partner profile",
+    "notFound": "Partner not found",
+    "notFoundDescription": "We could not find this partner. It may have been removed or the link is invalid.",
+    "notVerifiedNote": "This partner is not verified right now. No verification badge is shown; confirm details before dealing."
+  },
+  "offers": {
+    "title": "Partner offers",
+    "subtitle": "Published offers only. Drafts and in-review offers never appear here.",
+    "openOffer": "Offer details",
+    "empty": "No published offers",
+    "emptyDescription": "Offers appear after review and publication. No demo offer is presented as real."
+  },
+  "detail": {
+    "title": "Offer details",
+    "products": "Covered products",
+    "terms": "Terms",
+    "how": "How to benefit",
+    "howNote": "Contact the partner directly and mention you are from AZIB. No in-app payment and no commission; eligibility is checked at the partner without revealing your identity to anyone else.",
+    "audienceNote": "The beneficiary category is a provisional policy: approved beneficiaries only for now.",
+    "views": "Views: {{count}}",
+    "viewsSuppressed": "View count is withheld to protect privacy at small numbers.",
+    "notFound": "Offer not found",
+    "notFoundDescription": "We could not find this offer. It may have been cancelled or the link is invalid."
+  },
+  "categories": {
+    "halls": "Venues",
+    "furniture": "Furniture",
+    "appliances": "Appliances",
+    "gold": "Gold",
+    "clothing": "Clothing",
+    "photography": "Photography",
+    "kitchens": "Kitchens",
+    "textiles": "Textiles",
+    "restaurants": "Restaurants & catering",
+    "baraa": "Bara'a services",
+    "artists": "Artists",
+    "sound_light": "Sound & lighting",
+    "transport": "Transport",
+    "home_maintenance": "Home maintenance",
+    "other": "Other"
+  },
+  "audience": {
+    "everyone": "Everyone",
+    "beneficiaries": "Approved beneficiaries",
+    "engaged": "Engaged couples",
+    "pendingPolicy": "This option awaits approval of the beneficiary-category policy."
+  },
+  "discount": {
+    "types": {
+      "percent": "Discount rate",
+      "fixed": "Fixed amount",
+      "gift": "Gift",
+      "service": "Service"
+    },
+    "placeholder": "Demo value"
+  },
+  "validity": {
+    "daysLeft": "Ends in {{days}} days",
+    "openEnded": "Valid with no end date",
+    "expired": "Expired",
+    "scheduled": "Not started yet",
+    "notPublished": "Not published"
+  },
+  "crown": { "verified": "Verified partner" },
+  "actions": {
+    "call": "Call the partner",
+    "whatsapp": "WhatsApp",
+    "maps": "Open location in Maps",
+    "share": "Share offer",
+    "save": "Save offer",
+    "unsave": "Remove from saved",
+    "report": "Report an incorrect offer",
+    "noPhone": "No disclosed number"
+  },
+  "external": {
+    "confirm": "Continue",
+    "whatsappTitle": "Leave the app for WhatsApp",
+    "whatsappDescription": "WhatsApp will open with the partner's number. No data from your account is sent, and you will leave the app.",
+    "mapsTitle": "Leave the app for Maps",
+    "mapsDescription": "Your maps app will open at the partner's location. You will leave the app.",
+    "failed": "Could not open the external app. Please try again."
+  },
+  "report": {
+    "title": "Report an offer",
+    "reason": "Report reason",
+    "detail": "Report details",
+    "submit": "Submit report",
+    "received": "Your report was received and will be reviewed by the responsible team. Thank you for keeping the directory accurate.",
+    "reasons": {
+      "wrongDiscount": "The discount value is incorrect",
+      "expired": "The offer is actually expired",
+      "unreachable": "The partner cannot be reached",
+      "misleading": "The description is misleading"
+    }
+  },
+  "saved": {
+    "title": "Saved offers",
+    "subtitle": "Your private list. Nobody else can see it.",
+    "empty": "No saved offers",
+    "emptyDescription": "Save any offer from its details screen to see it here.",
+    "privateNote": "Saving is local to your account and is not shared with the partner or any other user."
+  },
+  "demo": {
+    "partnerBadge": "Demo partner",
+    "notice": "Every partner and offer here is demo data and does not represent real businesses or prices."
+  },
+  "validation": {
+    "title": "Enter an offer title (at least 3 characters).",
+    "discountValue": "Enter a valid value greater than zero.",
+    "percentRange": "The discount rate must not exceed 100.",
+    "validityWindow": "The end date must be after the start date.",
+    "reportReason": "Choose a report reason.",
+    "reportDetail": "Describe the report in at least 10 characters."
+  },
+  "errors": {
+    "noSession": "Sign-in is required for this action.",
+    "offerNotFound": "Offer not found.",
+    "blockedUrl": "This link is not allowed."
+  }
 }
