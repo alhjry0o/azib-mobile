@@ -1,5 +1,4 @@
-export type { CleanedPhone } from './phone';
-export { cleanYemeniPhone } from './phone';
+export type { CleanedPhone, cleanYemeniPhone } from './phone';
 export type { ExternalKind, MapsPlatform, MapsTarget } from './external-links';
 export {
   ALLOWED_EXTERNAL_PREFIXES,
