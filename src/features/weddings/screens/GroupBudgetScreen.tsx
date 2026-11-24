@@ -173,7 +173,7 @@ export function GroupBudgetScreen() {
         <Card style={{ gap: theme.spacing[3] }} testID="budget-item-form">
           <Text variant="h3">{t('weddings:budget.addItem')}</Text>
           <SegmentedControl<BudgetCategory>
-            segments={BUDGET_CATEGORIES.slice(0, 4).map((c) => ({
+            segments={BUDGET_CATEGORIES.map((c) => ({
               value: c,
               label: t(`weddings:budget.categories.${c}`),
             }))}
