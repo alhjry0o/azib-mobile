@@ -3,14 +3,14 @@ import { BudgetItemSchema, CreatePollSchema } from '../planning';
 import { ChatMessageSchema } from '../chat';
 
 const group = {
-  titleKey: 'weddings:demo.title',
+  title: 'Demo group',
   governorateId: 'sanaa',
   districtId: null,
   city: null,
   scheduledDate: '2026-06-15T16:00:00.000Z',
   alternateDate: null,
   targetCount: 6,
-  descriptionKey: null,
+  description: null,
   withdrawalConsent: true,
 };
 
