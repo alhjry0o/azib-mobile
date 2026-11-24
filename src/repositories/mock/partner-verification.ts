@@ -35,7 +35,7 @@ export function createMockPartnerVerificationRepository(
       let latest: PartnerVerification | null = null;
       for (const record of byId.values()) {
         if (record.partnerId !== partnerId) continue;
-        if (latest === null || record.createdAt > latest.createdAt) latest = record;
+        if (latest === null || record.createdAt >= latest.createdAt) latest = record;
       }
       return ok(latest);
     },
