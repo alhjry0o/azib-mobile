@@ -13,8 +13,8 @@ import { OfferDetailScreen } from '../screens/OfferDetailScreen';
 
 let mockOfferId = '';
 let container: ProviderContainer | null = null;
-const mockOpenExternalUrl = jest.fn(async () => ({ ok: true as const, value: undefined }));
-const mockShareText = jest.fn(async () => ({ ok: true as const, value: true }));
+const mockOpenExternalUrl = jest.fn(async (_url: string) => ({ ok: true as const, value: undefined }));
+const mockShareText = jest.fn(async (_message: string) => ({ ok: true as const, value: true }));
 
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: jest.fn(), replace: jest.fn(), navigate: jest.fn() }),
