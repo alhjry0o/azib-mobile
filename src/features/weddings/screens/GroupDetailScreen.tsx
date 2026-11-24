@@ -1,6 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
 import {
   Badge,
   Banner,
@@ -38,6 +37,7 @@ export function GroupDetailScreen() {
   const data = group.data;
   const status = data ? toGroupStatus(data.group.status) : 'open';
 
+  // The clock is read in the event handler, never during render.
   const confirmWithdraw = (): void => {
     if (!data) return;
     const windowOpen = isWithdrawalWindowOpen(data.group.scheduledDate, new Date());
@@ -91,16 +91,14 @@ export function GroupDetailScreen() {
               label={t(`weddings:discovery.status.${status}`)}
               testID="group-status"
             />
-            <Text variant="caption" color="secondary">
+            <Text variant="caption" color="secondary" testID="group-capacity">
               {t('weddings:detail.capacity', {
                 count: format.number(data.activeCount),
-                max: format.number(data.group.maxGroupSize ?? data.group.capacity),
+                max: format.number(data.group.capacity),
               })}
             </Text>
             <Text variant="caption" color="secondary">
-              {t('weddings:detail.scheduled', {
-                date: format.date(data.group.scheduledDate),
-              })}
+              {t('weddings:detail.scheduled', { date: format.date(data.group.scheduledDate) })}
             </Text>
             {data.group.description ? (
               <Text variant="body" color="secondary">
@@ -126,7 +124,7 @@ export function GroupDetailScreen() {
           ) : null}
 
           {data.isMember ? (
-            <View style={{ gap: theme.spacing[2] }}>
+            <>
               <Button
                 fullWidth
                 leftIcon="users"
@@ -142,9 +140,46 @@ export function GroupDetailScreen() {
                 onPress={() => router.push(href(ROUTES.weddings.polls(groupId)))}
                 testID="group-open-polls"
               />
-              <Text variant="caption" color="secondary">
-                {t('weddings:detail.budgetComing')}
-              </Text>
+              <Button
+                fullWidth
+                variant="secondary"
+                leftIcon="creditCard"
+                label={t('weddings:budget.title')}
+                onPress={() => router.push(href(ROUTES.weddings.budget(groupId)))}
+                testID="group-open-budget"
+              />
+              <Button
+                fullWidth
+                variant="secondary"
+                leftIcon="message"
+                label={t('weddings:chat.title')}
+                onPress={() => router.push(href(ROUTES.weddings.chat(groupId)))}
+                testID="group-open-chat"
+              />
+              <Button
+                fullWidth
+                variant="secondary"
+                leftIcon="gift"
+                label={t('weddings:services.title')}
+                onPress={() => router.push(href(ROUTES.weddings.services(groupId)))}
+                testID="group-open-services"
+              />
+              <Button
+                fullWidth
+                variant="ghost"
+                leftIcon="shield"
+                label={t('weddings:agreement.title')}
+                onPress={() => router.push(href(ROUTES.weddings.agreement(groupId)))}
+                testID="group-open-agreement"
+              />
+              <Button
+                fullWidth
+                variant="ghost"
+                leftIcon="calendar"
+                label={t('weddings:countdown.title')}
+                onPress={() => router.push(href(ROUTES.weddings.countdown(groupId)))}
+                testID="group-open-countdown"
+              />
               {data.myRole !== 'organizer' ? (
                 <Button
                   variant="ghost"
@@ -155,7 +190,7 @@ export function GroupDetailScreen() {
                   testID="group-withdraw"
                 />
               ) : null}
-            </View>
+            </>
           ) : (
             <Button
               fullWidth
@@ -176,9 +211,3 @@ export function GroupDetailScreen() {
     </WeddingScaffold>
   );
 }
-
-const styles = StyleSheet.create({
-  row: { alignItems: 'center' },
-});
-
-void styles;
