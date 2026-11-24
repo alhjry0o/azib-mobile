@@ -37,12 +37,10 @@ export function GroupDetailScreen() {
 
   const data = group.data;
   const status = data ? toGroupStatus(data.group.status) : 'open';
-  const windowOpen = data
-    ? isWithdrawalWindowOpen(data.group.scheduledDate, new Date(data.group.updatedAt))
-    : false;
 
   const confirmWithdraw = (): void => {
     if (!data) return;
+    const windowOpen = isWithdrawalWindowOpen(data.group.scheduledDate, new Date());
     openDialog({
       title: t('weddings:detail.withdrawConfirmTitle'),
       description: t(
