@@ -132,6 +132,7 @@ export async function addBudgetItem(
   const version = await deps.budgets.getVersion(versionId);
   if (!version.ok) return version;
   if (!version.value) return { ok: false, error: AppError.notFound({ code: 'VERSION_NOT_FOUND' }) };
+  const snapshot = version.value;
 
   const added = await deps.budgets.addItem({ ...input, versionId, groupId });
   if (!added.ok) return added;
@@ -241,8 +242,8 @@ export async function adoptBudget(
   const report = computeCostSharing({
     members: required.value.map((memberId) => ({
       memberId,
-      weight: version.value.weights.find((w) => w.memberId === memberId)?.weight ?? 1,
-      customAmount: version.value.customShares.find((c) => c.memberId === memberId)?.amount ?? 0,
+      weight: snapshot.weights.find((w) => w.memberId === memberId)?.weight ?? 1,
+      customAmount: snapshot.customShares.find((c) => c.memberId === memberId)?.amount ?? 0,
     })),
     items: items.value.map((i) => ({
       id: i.id,
