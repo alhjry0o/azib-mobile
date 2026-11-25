@@ -6,6 +6,7 @@ import { ok, type Result } from '@/core/result';
 import type { AuditRepository } from '@/repositories/contracts/audit';
 import type { SoukItem, SoukRepository } from '@/repositories/contracts/souk';
 import { checkChatRate } from '@/features/weddings/chat/rate-limit';
+import { filterChatMessage } from '@/features/weddings/chat/message-filter'; 
 import { ItemDraftSchema } from '../schemas/item';
 import { detectDuplicate } from '../state/duplicate';
 import {
@@ -76,6 +77,10 @@ export async function createItemDraft(
   }
 
   const sale = detectSaleWords(`${input.title} ${input.description}`);
+  const screened = filterChatMessage(`${input.title} ${input.description}`);
+  if (!screened.allowed && screened.reason !== 'tooLong' && screened.reason !== 'empty') {
+    return { ok: false, error: AppError.validation({ code: 'ITEM_CONTACT_IN_DESCRIPTION' }) };
+  }
   const duplicate = detectDuplicate(
     {
       imageFingerprints: input.imageFingerprints,
