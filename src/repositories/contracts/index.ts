@@ -32,15 +32,8 @@ export type {
   ReviewDecision,
   UpdateApplicationInput,
 } from './application';
-export type {
-  AuditEntry,
-  AuditRepository,
-  CreateAuditEntryInput,
-} from './audit';
-export type {
-  ContentRecord,
-  ContentRepository,
-} from './content';
+export type { AuditEntry, AuditRepository, CreateAuditEntryInput } from './audit';
+export type { ContentRecord, ContentRepository } from './content';
 export type {
   CreateDisbursementInput,
   Disbursement,
@@ -57,12 +50,7 @@ export type {
   DonationRepository,
   DonationStatus,
 } from './donation';
-export type {
-  CreateJobInput,
-  Job,
-  JobRepository,
-  UpdateJobInput,
-} from './job';
+export type { CreateJobInput, Job, JobRepository, UpdateJobInput } from './job';
 export type {
   CreateInAppNotificationInput,
   InAppNotification,
@@ -130,10 +118,34 @@ export type { SearchRepository } from './search';
 export type { Settings, SettingsRepository } from './settings';
 export type {
   CreateSoukItemInput,
+  SoukCondition,
+  SoukDeliveryMethod,
   SoukItem,
   SoukRepository,
+  SoukStatus,
   UpdateSoukItemInput,
 } from './souk';
+export type {
+  CreateSoukRequestInput,
+  SoukRequest,
+  SoukRequestRepository,
+  SoukRequestStatus,
+  UpdateSoukRequestInput,
+} from './souk-request';
+export type {
+  CreateSoukReportInput,
+  SoukReport,
+  SoukReportRepository,
+  SoukReportStatus,
+  SoukReportTargetKind,
+} from './souk-report';
+export type {
+  SendSoukMessageInput,
+  SoukChatListener,
+  SoukChatMessage,
+  SoukChatRepository,
+  SoukChatStatus,
+} from './souk-chat';
 export type {
   CreateVolunteerInput,
   UpdateVolunteerInput,
