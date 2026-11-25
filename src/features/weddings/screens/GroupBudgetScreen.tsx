@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import {
@@ -16,6 +16,7 @@ import {
   TextInput,
 } from '@/components/ui';
 import { BUDGET_CATEGORIES, type BudgetCategory, type SplitMode } from '@/repositories/contracts/wedding-budget';
+import { ROUTES, href } from '@/constants/routes';
 import { authErrorKey } from '@/features/auth/errors';
 import { useHomeFormatters } from '@/features/home/hooks/use-home-formatters';
 import { useTheme } from '@/theme';
@@ -23,15 +24,20 @@ import { CostSplitBars } from '../components/CostSplitBars';
 import { WeddingScaffold } from '../components/WeddingScaffold';
 import { useWeddingBudget } from '../hooks/use-wedding-budget';
 import { useWeddingGroup } from '../hooks/use-wedding-group';
+import { useWeddingServices } from '../hooks/use-wedding-services';
 import { can } from '../state/roles';
+
+const MAX_SUGGESTIONS = 3;
 
 export function GroupBudgetScreen() {
   const theme = useTheme();
+  const router = useRouter();
   const { t } = useTranslation();
   const params = useLocalSearchParams<{ id?: string }>();
   const groupId = params.id ?? '';
   const group = useWeddingGroup(groupId);
   const budget = useWeddingBudget(groupId);
+  const services = useWeddingServices(groupId);
   const format = useHomeFormatters();
   const [category, setCategory] = useState<BudgetCategory>('hall');
   const [label, setLabel] = useState('');
@@ -46,6 +52,7 @@ export function GroupBudgetScreen() {
   for (const member of group.data?.members ?? []) {
     labels[member.userId] = member.label ?? t('weddings:members.anonymous');
   }
+  const suggestions = services.offers.slice(0, MAX_SUGGESTIONS);
 
   const addItem = async (): Promise<void> => {
     if (label.trim().length === 0 || amount === null) return;
@@ -166,6 +173,39 @@ export function GroupBudgetScreen() {
           <Text variant="bodyStrong">
             {t('weddings:budget.grandTotal', { value: format.number(data.report.grandTotal) })}
           </Text>
+        </Card>
+      ) : null}
+
+      {suggestions.length > 0 ? (
+        <Card style={{ gap: theme.spacing[2] }} testID="budget-offer-suggestions">
+          <Text variant="h3">{t('weddings:budget.suggestionsTitle')}</Text>
+          <Text variant="caption" color="secondary">
+            {t('weddings:budget.suggestionsNote')}
+          </Text>
+          {suggestions.map((offer) => (
+            <View key={offer.id} style={{ gap: theme.spacing[1] }}>
+              <Text variant="bodyStrong">{offer.title ?? t(offer.titleKey)}</Text>
+              <View style={[styles.suggestionRow, { gap: theme.spacing[2] }]}>
+                <Text variant="caption" color="secondary">
+                  {format.percent(offer.discountPercent / 100)}
+                </Text>
+                {offer.discountPlaceholder === true || offer.dataOrigin === 'demo' ? (
+                  <Badge
+                    variant="pending"
+                    size="sm"
+                    label={t('marketplace:discount.placeholder')}
+                  />
+                ) : null}
+              </View>
+              <Button
+                variant="ghost"
+                size="sm"
+                label={t('weddings:budget.openSuggestion')}
+                onPress={() => router.push(href(ROUTES.partners.offer(offer.id)))}
+                testID={`budget-suggestion-${offer.id}`}
+              />
+            </View>
+          ))}
         </Card>
       ) : null}
 
@@ -291,6 +331,7 @@ export function GroupBudgetScreen() {
 
 const styles = StyleSheet.create({
   spacer: { height: 8 },
+  suggestionRow: { flexDirection: 'row', alignItems: 'center' },
 });
 
-void styles;
+void styles.spacer;
