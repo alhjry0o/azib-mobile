@@ -9,6 +9,7 @@ import {
   EmptyState,
   ErrorState,
   ListItem,
+  MediaUploadField, 
   Skeleton,
   Text,
 } from '@/components/ui';
@@ -100,6 +101,18 @@ export function PartnerDashboardScreen() {
             ) : null}
           </Card>
 
+          {canResubmit ? (
+            <MediaUploadField
+              testID="dashboard-documents"
+              label={t('marketplace:register.documents')}
+              fileIds={registration.form.documentFileIds}
+              uploading={registration.uploading}
+              allowPdf
+              onPick={(source) => { void registration.uploadMedia('document', source); }}
+              onRemove={(fileId) => registration.removeMedia('document', fileId)}
+            />
+          ) : null}
+          
           {canResubmit ? (
             <Button
               fullWidth
