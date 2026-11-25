@@ -20,6 +20,7 @@ import { useProviderContainer } from '@/providers';
 import type { Offer } from '@/repositories/contracts/offer';
 import type { Partner } from '@/repositories/contracts/partner';
 import type { Result } from '@/core/result';
+import { AppError } from '@/core/errors';
 import { authErrorKey } from '@/features/auth/errors';
 import { useTheme } from '@/theme';
 import { OfferStatusBadge } from '../partners/components/OfferStatusBadge';
@@ -199,7 +200,7 @@ export function DevPartnersScreen() {
                 if (!latest.value) {
                   return {
                     ok: false,
-                    error: { kind: 'NotFound' } as never,
+                    error: AppError.notFound({ code: 'VERIFICATION_NOT_FOUND' })
                   };
                 }
                 return decideVerification(
@@ -225,7 +226,12 @@ export function DevPartnersScreen() {
                   selected.id,
                 );
                 if (!latest.ok) return latest;
-                if (!latest.value) return latest;
+                if (!latest.value) {
+                  return { 
+                    ok: false,
+                    error: AppError.notFound({ code: 'VERIFICATION_NOT_FOUND' })
+                  };
+                }
                 return decideVerification(
                   verificationDeps,
                   selected.id,
