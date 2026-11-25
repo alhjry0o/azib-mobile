@@ -277,6 +277,13 @@ export function DevSettingsScreen() {
         />
         <ListItem
           variant="card"
+          title={t('marketplace:dev.title')}
+          leading={<Icon name="users" size={20} />}
+          onPress={() => router.push(href(ROUTES.devPartners))}
+          testID="dev-partners-link"
+        />
+        <ListItem
+          variant="card"
           title={t('common:shell.dev.links.integrations')}
           leading={<Icon name="info" size={20} />}
           onPress={() => router.push(href(ROUTES.devIntegrations))}
