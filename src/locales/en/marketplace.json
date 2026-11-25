@@ -84,6 +84,23 @@
     "notPublished": "Not published"
   },
   "crown": { "verified": "Verified partner" },
+  "partnerStatus": {
+    "draft": "Draft",
+    "pending_verification": "Pending verification",
+    "verified": "Verified",
+    "rejected": "Rejected",
+    "suspended": "Suspended",
+    "expired": "Expired"
+  },
+  "offerStatus": {
+    "draft": "Draft",
+    "in_review": "In review",
+    "approved": "Approved",
+    "active": "Published",
+    "expired": "Expired",
+    "rejected": "Rejected",
+    "cancelled": "Cancelled"
+  },
   "actions": {
     "call": "Call the partner",
     "whatsapp": "WhatsApp",
@@ -122,6 +139,124 @@
     "emptyDescription": "Save any offer from its details screen to see it here.",
     "privateNote": "Saving is local to your account and is not shared with the partner or any other user."
   },
+  "media": {
+    "pickImage": "Upload image",
+    "pickPdf": "Upload PDF",
+    "uploading": "Uploading…",
+    "empty": "No files uploaded yet.",
+    "attached": "Attached",
+    "remove": "Remove file",
+    "privateNote": "Images are processed to drop location metadata before upload; verification documents are visible to authorized reviewers only."
+  },
+  "register": {
+    "title": "Register a partner",
+    "subtitle": "Register your business and attach verification documents. Review is human.",
+    "reviewNote": "After submission the status becomes Pending verification. The crown is granted only by an authorized verifier.",
+    "fields": {
+      "name": "Business name",
+      "category": "Category",
+      "description": "Business description",
+      "governorate": "Governorate",
+      "district": "District",
+      "phone": "Contact number",
+      "whatsapp": "WhatsApp number"
+    },
+    "help": { "whatsapp": "Optional. If left empty the contact number is used." },
+    "images": "Business images",
+    "documents": "Verification documents (shop photo / licence)",
+    "documentsHelp": "At least one document. These are visible to authorized reviewers only.",
+    "terms": "I accept the cooperation terms and the accuracy of the submitted data.",
+    "submit": "Submit registration",
+    "privateNote": "No card or bank data is requested, and no fees are charged."
+  },
+  "dashboard": {
+    "title": "Partner dashboard",
+    "subtitle": "Your business status, offers and aggregated, privacy-safe view stats.",
+    "empty": "No business registered yet",
+    "emptyDescription": "Register your business to be able to submit offers.",
+    "notVerifiedNote": "Your business is not verified yet; offers cannot be published before verification.",
+    "reverifyAfter": "Re-verification before: {{date}}",
+    "resubmit": "Re-submit verification documents",
+    "offersTitle": "My offers",
+    "offersEmpty": "No offers",
+    "offersEmptyDescription": "Create an offer to be reviewed and then published.",
+    "editOffer": "Edit",
+    "submitOffer": "Submit for review",
+    "cancelOffer": "Cancel offer",
+    "renewOffer": "Renew offer"
+  },
+  "composer": {
+    "title": "New offer",
+    "editTitle": "Edit offer",
+    "subtitle": "Set the discount type and value, products, duration and terms.",
+    "reviewNote": "The offer is reviewed by a human before publication. No in-app payment and no commission.",
+    "noPartner": "You must register a business first to submit an offer.",
+    "newOffer": "Create a new offer",
+    "fields": {
+      "title": "Offer title",
+      "category": "Category",
+      "governorate": "Governorate",
+      "discountType": "Discount type",
+      "discountValue": "Discount value",
+      "audience": "Beneficiary category",
+      "validFrom": "Starts on",
+      "validUntil": "Ends on",
+      "products": "Covered products",
+      "terms": "Terms"
+    },
+    "productsHelp": "Separate products with a comma.",
+    "audienceNote": "Disabled options await approval of the beneficiary-category policy.",
+    "images": "Offer images",
+    "save": "Save draft",
+    "noPaymentNote": "The platform collects no money and tracks no payment."
+  },
+  "ambassador": {
+    "title": "AZIB ambassadors",
+    "subtitle": "Field tasks in your assigned regions: nominating partners and activity verification photos.",
+    "privacyNote": "Ambassadors never reach verification documents or any beneficiary data. Their permissions are field-only.",
+    "applyTitle": "Apply as an ambassador",
+    "region": "Your region",
+    "motivation": "Why do you want to be an ambassador?",
+    "apply": "Submit application",
+    "applicationTitle": "Application status",
+    "status": { "pending": "In review", "approved": "Approved", "rejected": "Rejected" },
+    "tasksTitle": "My tasks",
+    "tasksEmpty": "No tasks",
+    "tasksEmptyDescription": "Tasks are assigned by the responsible team in your approved regions.",
+    "taskStatus": {
+      "assigned": "Assigned",
+      "submitted": "Submitted",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    },
+    "taskNominate": "Nominate a new partner in your region",
+    "photos": "Activity verification photos",
+    "submitTask": "Submit task"
+  },
+  "dev": {
+    "title": "Partners simulator",
+    "subtitle": "Internal tool to run verification decisions and offer reviews through the same services. No automated decision in the user path.",
+    "notDemo": "This simulator works in demo mode only.",
+    "partnersTitle": "Partners",
+    "partnersEmpty": "No partners. Register a business from the registration screen.",
+    "offersTitle": "Offers of the selected partner",
+    "offersEmpty": "No offers for this partner.",
+    "ambassadorsTitle": "Ambassador applications",
+    "ambassadorsEmpty": "No applications.",
+    "verify": "Verify partner",
+    "reject": "Reject verification",
+    "rejectReason": "The documents are insufficient for verification.",
+    "expirePartner": "Expire verification",
+    "suspend": "Suspend partner",
+    "suspendReason": "Violation of the cooperation terms.",
+    "reinstate": "Reinstate partner",
+    "approveOffer": "Approve offer",
+    "publishOffer": "Publish offer",
+    "expireOffer": "Expire offer",
+    "approveAmbassador": "Approve ambassador application",
+    "createTask": "Assign a nomination task",
+    "applied": "Decision applied and recorded in the audit trail."
+  },
   "demo": {
     "partnerBadge": "Demo partner",
     "notice": "Every partner and offer here is demo data and does not represent real businesses or prices."
@@ -132,7 +267,15 @@
     "percentRange": "The discount rate must not exceed 100.",
     "validityWindow": "The end date must be after the start date.",
     "reportReason": "Choose a report reason.",
-    "reportDetail": "Describe the report in at least 10 characters."
+    "reportDetail": "Describe the report in at least 10 characters.",
+    "businessName": "Enter the business name (at least 3 characters).",
+    "description": "Describe the business in at least 10 characters.",
+    "phone": "Enter a valid Yemeni contact number.",
+    "documents": "Attach at least one verification document.",
+    "terms": "Accepting the cooperation terms is required.",
+    "regions": "Choose at least one region.",
+    "motivation": "Explain your motivation in at least 20 characters.",
+    "taskEvidence": "Attach a photo or nominate a partner before submitting the task."
   },
   "errors": {
     "noSession": "Sign-in is required for this action.",
