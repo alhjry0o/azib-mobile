@@ -18,7 +18,6 @@ import {
 } from '@/components/ui';
 import { ROUTES, href } from '@/constants/routes';
 import { childrenOf } from '@/features/profile/locations';
-import { useDirection } from '@/hooks';
 import { useProviderContainer } from '@/providers';
 import { useTheme } from '@/theme';
 import { PartnerCard } from '../components/PartnerCard';
@@ -30,7 +29,6 @@ export function PartnerBrowserScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { t } = useTranslation();
-  const { isRTL } = useDirection();
   const container = useProviderContainer();
   const browser = usePartnerBrowser();
 
@@ -76,6 +74,30 @@ export function PartnerBrowserScreen() {
         label={t('marketplace:saved.title')}
         onPress={() => router.push(href(ROUTES.partners.saved))}
         testID="partners-open-saved"
+      />
+      <Button
+        variant="ghost"
+        fullWidth
+        leftIcon="userCheck"
+        label={t('marketplace:dashboard.title')}
+        onPress={() => router.push(href(ROUTES.partners.dashboard))}
+        testID="partners-open-dashboard"
+      />
+      <Button
+        variant="ghost"
+        fullWidth
+        leftIcon="plus"
+        label={t('marketplace:register.title')}
+        onPress={() => router.push(href(ROUTES.partners.register))}
+        testID="partners-open-register"
+      />
+      <Button
+        variant="ghost"
+        fullWidth
+        leftIcon="sparkles"
+        label={t('marketplace:ambassador.title')}
+        onPress={() => router.push(href(ROUTES.partners.ambassador))}
+        testID="partners-open-ambassador"
       />
 
       <Search
@@ -159,7 +181,6 @@ export function PartnerBrowserScreen() {
       <Text variant="caption" color="secondary" align="center">
         {t('marketplace:demo.notice')}
       </Text>
-      <View style={[styles.hidden, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} />
     </Screen>
   );
 }
@@ -167,5 +188,4 @@ export function PartnerBrowserScreen() {
 const styles = StyleSheet.create({
   center: { justifyContent: 'center' },
   title: { marginTop: 16 },
-  hidden: { height: 0 },
 });
