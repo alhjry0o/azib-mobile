@@ -1,8 +1,7 @@
 // Public projection for unauthenticated surfaces (ADR-0050 pattern).
 // Strips donorId, estimatedValue, handoverCode, ratings and exact addresses.
-import type { SoukItem } from '@/repositories/contracts/souk';
+import type { SoukCondition, SoukDeliveryMethod, SoukItem } from '@/repositories/contracts/souk';
 import type { SoukRequest } from '@/repositories/contracts/souk-request';
-import type { SoukCondition, SoukDeliveryMethod } from '@/repositories/contracts/souk';
 
 export interface PublicSoukItemView {
   readonly id: string;
