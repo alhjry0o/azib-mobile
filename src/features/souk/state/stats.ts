@@ -27,17 +27,23 @@ export function computeSoukStats(input: SoukStatsInput): SoukStats {
   let available = 0;
   let handedOver = 0;
   let estimated = 0;
+  let estimatedCount = 0;
   for (const item of input.items) {
     const status = toItemWorkflowStatus(item.status);
     if (status === 'available') available += 1;
     if (status === 'handed_over') handedOver += 1;
     const value = item.estimatedValue ?? null;
-    if (value !== null && Number.isFinite(value)) estimated += value;
+    if (value !== null && Number.isFinite(value)) {
+      estimated += value;
+      estimatedCount += 1;
+    }
   }
+  const estimateGate = suppressSmallNumber(estimatedCount, threshold);
   return Object.freeze({
     availableCount: suppressSmallNumber(available, threshold),
     handedOverCount: suppressSmallNumber(handedOver, threshold),
-    estimatedTotal: suppressSmallNumber(estimated, threshold),
+    estimatedTotal:
+      estimateGate.kind === 'suppressed' ? estimateGate : suppressSmallNumber(estimated, 1),
     unverified: true as const,
     threshold,
   });
