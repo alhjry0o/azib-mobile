@@ -52,6 +52,9 @@ export async function decideVerification(
 
   const now = new Date().toISOString();
   const validUntil = decision === 'verified' ? reverifyDeadline(now, intervalDays) : null;
+  const from = toPartnerWorkflowStatus(partner.value.status);
+  const allowed = assertPartnerTransition(from, decision, 'partner_verifier');
+  if (!allowed.ok) return allowed;
   const decided = await deps.verifications.decide(verificationId, {
     decision,
     decidedBy: actorId,
@@ -59,11 +62,7 @@ export async function decideVerification(
     validUntil,
   });
   if (!decided.ok) return decided;
-
-  const from = toPartnerWorkflowStatus(partner.value.status);
-  const allowed = assertPartnerTransition(from, decision, 'partner_verifier');
-  if (!allowed.ok) return allowed;
-
+  
   const moved = await deps.partners.update(partnerId, {
     status: decision,
     verificationId,
