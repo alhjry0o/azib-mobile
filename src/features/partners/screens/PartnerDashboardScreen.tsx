@@ -9,7 +9,6 @@ import {
   EmptyState,
   ErrorState,
   ListItem,
-  MediaUploadField, 
   Skeleton,
   Text,
 } from '@/components/ui';
@@ -17,6 +16,7 @@ import { ROUTES, href } from '@/constants/routes';
 import { useHomeFormatters } from '@/features/home/hooks/use-home-formatters';
 import { useTheme } from '@/theme';
 import { OfferStatusBadge } from '../components/OfferStatusBadge';
+import { MediaUploadField } from '../components/MediaUploadField';
 import { PartnerScaffold } from '../components/PartnerScaffold';
 import { ValidityCountdown } from '../components/ValidityCountdown';
 import { VerificationStatusBadge } from '../components/VerificationStatusBadge';
