@@ -18,7 +18,10 @@ import type {
   ProgramRepository,
   SearchRepository,
   SettingsRepository,
+  SoukChatRepository,
+  SoukReportRepository,
   SoukRepository,
+  SoukRequestRepository,
   VolunteerRepository,
   WeddingBudgetRepository,
   WeddingChatRepository,
@@ -44,7 +47,10 @@ import {
   createMockProgramRepository,
   createMockSearchRepository,
   createMockSettingsRepository,
+  createMockSoukChatRepository,
+  createMockSoukReportRepository,
   createMockSoukRepository,
+  createMockSoukRequestRepository,
   createMockVolunteerRepository,
   createMockWeddingBudgetRepository,
   createMockWeddingChatRepository,
@@ -75,6 +81,9 @@ export interface RepositoryContainer {
   readonly ambassadors: AmbassadorRepository;
   readonly offers: OfferRepository;
   readonly souk: SoukRepository;
+  readonly soukRequests: SoukRequestRepository;
+  readonly soukReports: SoukReportRepository;
+  readonly soukChat: SoukChatRepository;
   readonly jobs: JobRepository;
   readonly volunteers: VolunteerRepository;
   readonly content: ContentRepository;
@@ -125,6 +134,9 @@ function buildRepositories(
     ambassadors: createMockAmbassadorRepository(mockOptions),
     offers: createMockOfferRepository(mockOptions),
     souk: createMockSoukRepository(mockOptions),
+    soukRequests: createMockSoukRequestRepository(mockOptions),
+    soukReports: createMockSoukReportRepository(mockOptions),
+    soukChat: createMockSoukChatRepository(mockOptions),
     jobs: createMockJobRepository(mockOptions),
     volunteers: createMockVolunteerRepository(mockOptions),
     content: createMockContentRepository(mockOptions),
