@@ -1,6 +1,7 @@
 // Provisional marketplace policy values (D-1, D-10). Read from system_settings
 // when present; the fallback is never an approved policy.
 import type { OfferAudience } from '@/repositories/contracts/offer';
+import type { DocumentLimits } from '@/features/assistance/engine/rules.types';
 
 /** Shared record with P10; each reader picks only its own field. */
 export const SYSTEM_SETTINGS_KEY = 'system_settings';
@@ -12,6 +13,16 @@ export const MAX_REVERIFICATION_DAYS = 1825;
 
 /** PENDING_POLICY — only approved beneficiaries may benefit for now. */
 export const DEFAULT_OFFER_AUDIENCE: OfferAudience = 'beneficiaries';
+
+/** Operational upload limits for partner media and verification documents. */
+export const PARTNER_MEDIA_LIMITS: DocumentLimits = Object.freeze({
+  imageMaxBytes: 5 * 1024 * 1024,
+  pdfMaxBytes: 10 * 1024 * 1024,
+  allowedMimeTypes: Object.freeze(['image/jpeg', 'image/png', 'application/pdf']),
+});
+
+export const MAX_PARTNER_IMAGES = 6;
+export const MAX_VERIFICATION_DOCUMENTS = 4;
 
 export interface AudienceOption {
   readonly value: OfferAudience;
