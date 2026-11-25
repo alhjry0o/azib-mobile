@@ -1,7 +1,7 @@
 // Deep-link allowlist for the azib:// scheme (P05 → P11).
 // Query strings and fragments are dropped entirely: no sensitive data in links.
 // Dynamic assistance/programs/weddings/partners paths are allowed by prefix;
-// the screens themselves enforce authentication + membership (RLS in P18).
+// the screens themselves enforce authentication + ownership (RLS in P18).
 import { stripGroups } from './routing';
 
 export type DeepLinkResolution =
@@ -25,6 +25,10 @@ const ALLOWED: ReadonlySet<string> = new Set([
   '/weddings/new',
   '/partners',
   '/partners/saved',
+  '/partners/register',
+  '/partners/dashboard',
+  '/partners/ambassador',
+  '/partners/offers/new',
   '/account',
   '/profile',
   '/profile/edit',
