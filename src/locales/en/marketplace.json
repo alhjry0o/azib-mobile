@@ -281,5 +281,191 @@
     "noSession": "Sign-in is required for this action.",
     "offerNotFound": "Offer not found.",
     "blockedUrl": "This link is not allowed."
+  },
+  "souk": {
+    "customItem": "Donation item",
+    "browser": {
+      "title": "Souk Khair",
+      "subtitle": "In-kind donations between families: furniture, appliances, home essentials and free services.",
+      "noPriceNote": "No prices, no selling, no money in exchange. Every item is an in-kind donation, and reselling received items is forbidden.",
+      "areaNote": "General area only — no exact address and no contact number in the description.",
+      "searchPlaceholder": "Search by item title or description",
+      "region": "Governorate",
+      "allCategories": "All categories",
+      "clearFilters": "Clear filters",
+      "openItem": "Item details",
+      "empty": "No available items",
+      "emptyDescription": "Add the first in-kind donation, or widen the filters. Labelled demo items do not represent real people.",
+      "errorTitle": "Could not load items",
+      "errorDescription": "Something went wrong while fetching Souk Khair items. Please retry.",
+      "notConnected": "Souk Khair not connected",
+      "notConnectedDescription": "Backend wiring activates in P18. Demo mode is available now."
+    },
+    "detail": {
+      "title": "Item details",
+      "privacyNote": "No exact address and no contact number are shown. Contact starts inside the app after the request is accepted and both parties consent.",
+      "noResaleNote": "Condition of benefit: received donations must not be resold or used for money in exchange.",
+      "unavailable": "This item is not available for requests right now.",
+      "notFound": "Item not found",
+      "notFoundDescription": "We could not find this item. It may have been withdrawn or the link is invalid."
+    },
+    "composer": {
+      "title": "Add an in-kind donation",
+      "subtitle": "Add an item to donate. There is no price field; the optional estimate is for statistics only.",
+      "noPriceNote": "Do not mention a price, money in exchange, or a contact number in the title or description.",
+      "fields": {
+        "title": "Item title",
+        "category": "Category",
+        "condition": "Condition",
+        "description": "Description",
+        "governorate": "Governorate",
+        "district": "District",
+        "delivery": "Delivery method"
+      },
+      "descriptionHelp": "Write a useful description with no phone numbers, links or exact address.",
+      "images": "Item images",
+      "imagesHelp": "Up to {{max}} images. Compressed and stripped of location metadata before upload.",
+      "addImage": "Add image",
+      "removeImage": "Remove image",
+      "uploading": "Uploading…",
+      "imageAttached": "Image {{index}} attached",
+      "exifNote": "If processing fails, nothing is uploaded — for your privacy.",
+      "noResale": "I confirm this is an in-kind donation and accept the no-resale condition.",
+      "submit": "Publish donation"
+    },
+    "request": {
+      "title": "Request to benefit",
+      "subtitle": "Briefly explain your need. The donor or the team reviews the request.",
+      "reason": "Request reason",
+      "limitNote": "Active requests are limited, and you cannot request the same item twice.",
+      "submit": "Submit request",
+      "noPaymentNote": "No payment and no money in exchange. Handover is confirmed by both parties with a code."
+    },
+    "mine": {
+      "title": "My donations",
+      "subtitle": "Your items and their statuses. Publish a draft, withdraw an item, or relist it.",
+      "empty": "No donations yet",
+      "emptyDescription": "Add an in-kind item so it appears here and you can publish it.",
+      "publish": "Publish item",
+      "relist": "Relist item",
+      "withdraw": "Withdraw item"
+    },
+    "requests": {
+      "title": "My requests",
+      "subtitle": "The benefit requests you submitted and their statuses.",
+      "empty": "No requests",
+      "emptyDescription": "Browse Souk Khair and submit a benefit request on a suitable item.",
+      "cancel": "Cancel request",
+      "coordinationNote": "Coordination, chat, contact disclosure and code handover ship in the next part of P12."
+    },
+    "categories": {
+      "furniture": "Furniture",
+      "appliances": "Appliances",
+      "kitchenware": "Kitchenware",
+      "textiles": "Textiles",
+      "home_essentials": "Home essentials",
+      "electronics": "Electronics",
+      "baby_items": "Baby items",
+      "books": "Books",
+      "medical_devices": "Medical devices",
+      "free_services": "Free services",
+      "other": "Other"
+    },
+    "condition": { "new": "New", "good": "Good", "acceptable": "Acceptable" },
+    "delivery": {
+      "self_pickup": "Self pickup",
+      "donor_delivers": "Donor delivers",
+      "volunteer_help": "Volunteer help"
+    },
+    "itemStatus": {
+      "available": "Available",
+      "reserved": "Reserved",
+      "claimed": "Handed over",
+      "draft": "Draft",
+      "pending_review": "Pending review",
+      "handed_over": "Handed over",
+      "withdrawn": "Withdrawn",
+      "expired": "Expired",
+      "rejected": "Rejected"
+    },
+    "requestStatus": {
+      "pending": "In review",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled",
+      "handed_over": "Handed over"
+    },
+    "images": {
+      "none": "No images for this item.",
+      "demoNote": "Demo images — real image rendering activates with real storage in P18."
+    },
+    "estimated": {
+      "label": "Estimated value (optional)",
+      "help": "For internal statistics only. Never shown as a price and never in the impact report.",
+      "unverified": "Unverified — the donor's estimate, not a price and binding on nobody."
+    },
+    "disclosure": {
+      "not_a_party": "You are not a party to this request.",
+      "not_accepted": "Contact is not disclosed before the request is accepted.",
+      "awaiting_consents": "Waiting for both parties to consent to disclosure.",
+      "ready": "Contact disclosed with both parties' consent."
+    },
+    "antiCommodification": {
+      "warning": "Words suggesting selling or money in exchange were found. Souk Khair is in-kind only — reword it or report the item."
+    },
+    "duplicate": {
+      "fingerprint": "An image fingerprint matches another item (the fingerprint is metadata-based; renaming evades it).",
+      "titleArea": "The same title and area as one of your earlier items."
+    },
+    "report": {
+      "reasons": {
+        "forSale": "Offered for sale or money in exchange",
+        "misleading": "The description is misleading",
+        "unavailable": "The item is not actually available",
+        "unsafe": "Unsafe meeting or handover"
+      }
+    },
+    "validation": {
+      "title": "Enter an item title (at least 3 characters).",
+      "description": "Write a description in at least 10 characters.",
+      "noResale": "Accepting the no-resale condition is required.",
+      "reason": "Explain your need in at least 10 characters.",
+      "handoverCode": "Enter the full handover code.",
+      "message": "Write a text message.",
+      "reportReason": "Choose a report reason.",
+      "reportDetail": "Describe the report in at least 10 characters."
+    },
+    "demo": {
+      "badge": "Demo donation",
+      "notice": "Every item here is demo data and does not represent real people or real offers.",
+      "inKindOnly": "In-kind only"
+    },
+    "errors": {
+      "itemNotFound": "Item not found.",
+      "notItemDonor": "This item is not yours.",
+      "itemNotAvailable": "The item is not available for requests.",
+      "itemRateLimited": "You reached the item creation limit. Try later.",
+      "contactInDescription": "The title or description contains a contact number or a link. Remove it and try again.",
+      "noResaleConsent": "Accepting the no-resale condition is required.",
+      "tooManyImages": "You exceeded the maximum number of images.",
+      "ownItem": "You cannot request your own item.",
+      "activeRequestLimit": "You reached the active request limit. Cancel one or wait.",
+      "duplicateRequest": "You already have an active request on this item.",
+      "requestRateLimited": "You reached the request submission limit. Try later.",
+      "requestNotFound": "Request not found.",
+      "requestNotAccepted": "The request is not accepted yet.",
+      "notAParty": "You are not a party to this request.",
+      "handoverNotReady": "Handover is not ready for confirmation.",
+      "handoverCodeMismatch": "The handover code is incorrect.",
+      "handoverNotCompleted": "Handover is not complete yet.",
+      "invalidRating": "The rating must be between 1 and 5.",
+      "ratingNoteTooLong": "The rating note is too long.",
+      "chatContentBlocked": "The message contains disallowed content.",
+      "chatRateLimited": "Please slow down before sending another message.",
+      "invalidTransition": "This status cannot be reached from the current one.",
+      "reasonRequired": "A reason is required.",
+      "noPermission": "You do not have permission for this action.",
+      "noSession": "Sign-in is required for this action."
+    }
   }
 }
