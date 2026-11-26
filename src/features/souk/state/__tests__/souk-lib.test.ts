@@ -35,7 +35,13 @@ function item(patch: Partial<SoukItem> = {}): SoukItem {
 describe('souk filters', () => {
   const rows = [
     item(),
-    item({ id: 'i2', category: 'textiles', governorateId: 'aden', condition: 'new' }),
+    item({
+      id: 'i2',
+      title: 'Kitchen tools',
+      category: 'textiles',
+      governorateId: 'aden',
+      condition: 'new',
+    }),
     item({ id: 'i3', status: 'draft' }),
     item({ id: 'i4', status: 'handed_over' }),
   ];
