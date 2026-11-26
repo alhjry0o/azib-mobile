@@ -42,19 +42,9 @@ export {
   validateRating,
 } from './handover';
 export type { SaleDetection } from './sale-lexicon';
-export {
-  SALE_WORDS_AR,
-  SALE_WORDS_EN,
-  detectSaleWords,
-  hasNoResaleConsent,
-} from './sale-lexicon';
+export { SALE_WORDS_AR, SALE_WORDS_EN, detectSaleWords, hasNoResaleConsent } from './sale-lexicon';
 export type { SoukPermission, SoukRole } from './permissions';
-export {
-  canCancelOwnRequest,
-  canEditOwnItem,
-  canSouk,
-  canViewRatings,
-} from './permissions';
+export { canCancelOwnRequest, canEditOwnItem, canSouk, canViewRatings } from './permissions';
 export type { SoukLimits } from './limits';
 export {
   DEFAULT_ITEM_CREATE_RATE,
@@ -65,6 +55,7 @@ export {
   DEFAULT_REQUIRE_ITEM_REVIEW,
   DEFAULT_SOUK_CHAT_RATE,
   DEFAULT_SOUK_LIMITS,
+  SOUK_MEDIA_LIMITS,
   SYSTEM_SETTINGS_KEY,
   isItemExpired,
   itemExpiryFrom,
@@ -85,3 +76,4 @@ export type { DuplicateProbe, DuplicateResult } from './duplicate';
 export { detectDuplicate } from './duplicate';
 export type { SoukStats, SoukStatsInput } from './stats';
 export { computeSoukStats } from './stats';
+export { soukErrorKey } from './error-keys';
