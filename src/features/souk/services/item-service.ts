@@ -93,6 +93,7 @@ export async function createItemDraft(
 
   const created = await deps.souk.create({
     titleKey: 'marketplace:souk.customItem',
+    status: 'draft',
     title: input.title,
     category: input.category,
     description: input.description,
