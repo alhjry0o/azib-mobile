@@ -29,37 +29,38 @@ export function GiftEmptyState({
   const progress = useSharedValue(0);
 
   return (
-    <EmptyState
-      testID={testID}
-      title={title}
-      description={description}
-      {...(actionLabel && onAction
-        ? { action: { label: actionLabel, onPress: onAction } }
-        : {})}
-      illustration={
-        <View testID={testID ? `${testID}-gift` : undefined}>
-          <Hero3D
-            progress={progress}
-            height={200}
-            background={
-              <View style={StyleSheet.absoluteFill}>
-                <View
-                  style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.bg.surface }]}
-                />
-                <QamariyaPattern width={width} height={200} opacity={0.12} />
-              </View>
-            }
-            foreground={
-              <ArchHero width={130} variant="outlined">
-                <Icon name="gift" size={44} color={theme.colors.gold.fill} />
-                <Text variant="caption" color="secondary" align="center">
-                  {t('marketplace:souk.demo.inKindOnly')}
-                </Text>
-              </ArchHero>
-            }
-          />
-        </View>
-      }
-    />
+    <View style={{ gap: theme.spacing[3] }}>
+      <View testID={testID ? `${testID}-gift` : undefined}>
+        <Hero3D
+          progress={progress}
+          height={200}
+          background={
+            <View style={StyleSheet.absoluteFill}>
+              <View
+                style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.bg.surface }]}
+              />
+              <QamariyaPattern width={width} height={200} opacity={0.12} />
+            </View>
+          }
+          foreground={
+            <ArchHero width={130} variant="outlined">
+              <Icon name="gift" size={44} color={theme.colors.gold.fill} />
+              <Text variant="caption" color="secondary" align="center">
+                {t('marketplace:souk.demo.inKindOnly')}
+              </Text>
+            </ArchHero>
+          }
+        />
+      </View>
+      <EmptyState
+        icon="gift"
+        testID={testID}
+        title={title}
+        description={description}
+        action={
+          actionLabel && onAction ? { label: actionLabel, onPress: onAction } : undefined
+        }
+      />
+    </View>
   );
 }
