@@ -21,7 +21,7 @@ export function createMockSoukRepository(
       id,
       titleKey: input.titleKey,
       category: input.category,
-      status: 'available',
+      status: input.status ?? 'available',
       createdAt: nowIso,
       updatedAt: nowIso,
       dataOrigin: 'demo',
