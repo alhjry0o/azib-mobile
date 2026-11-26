@@ -66,8 +66,8 @@ export const CreateSoukItemInputSchema = z.object({
   estimatedValue: z.number().int().nonnegative().nullable().optional(),
   noResaleConsentAt: IsoDateSchema.nullable().optional(),
   expiresAt: IsoDateSchema.nullable().optional(),
+  status: SoukStatusSchema.optional(),
 });
-
 export const UpdateSoukItemInputSchema = z.object({
   titleKey: z.string().min(1).optional(),
   category: z.string().min(1).max(100).optional(),
