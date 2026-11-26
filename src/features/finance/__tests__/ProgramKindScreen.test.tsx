@@ -53,7 +53,7 @@ describe('ProgramKindScreen', () => {
       </ShellProviders>,
     );
     await fireEvent.press(screen.getByTestId('program-kind-souk'));
-    expect(mockPush).toHaveBeenCalledWith('/(features)/souk');
+    expect(mockPush).toHaveBeenCalledWith('/souk');
   });
 
   it('shows a missing state for an unknown kind', async () => {
