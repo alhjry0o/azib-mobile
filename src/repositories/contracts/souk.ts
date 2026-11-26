@@ -58,8 +58,9 @@ export interface CreateSoukItemInput {
   readonly estimatedValue?: number | null;
   readonly noResaleConsentAt?: string | null;
   readonly expiresAt?: string | null;
+  /** Optional initial status. Defaults to 'available' so seeded items stay browsable. */
+  readonly status?: SoukStatus;
 }
-
 export interface UpdateSoukItemInput {
   readonly titleKey?: string;
   readonly category?: string;
