@@ -6,6 +6,7 @@ import {
   Banner,
   Button,
   Chip,
+  ErrorState, 
   NotConnectedState,
   Screen,
   Search,
@@ -20,9 +21,7 @@ import { useTheme } from '@/theme';
 import { GiftEmptyState } from '../components/GiftEmptyState';
 import { SoukItemCard } from '../components/SoukItemCard';
 import { useSoukBrowser } from '../hooks/use-souk-browser';
-import { SOUK_CATEGORIES } from '../state/filters';
-import { hasActiveSoukFilters } from '../state/filters';
-import { ErrorState } from '@/components/ui';
+import { SOUK_CATEGORIES, hasActiveSoukFilters } from '../state/filters';
 
 export function SoukBrowserScreen() {
   const theme = useTheme();
