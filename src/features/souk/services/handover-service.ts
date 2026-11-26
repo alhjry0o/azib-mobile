@@ -21,7 +21,7 @@ export async function confirmHandover(
   if (!found.ok) return found;
   const request = found.value;
   if (!request) return { ok: false, error: AppError.notFound({ code: 'REQUEST_NOT_FOUND' }) };
-  const snapshot = request.value;
+  const snapshot = request;
   const item = await deps.souk.getById(snapshot.itemId);
   if (!item.ok) return item;
   if (!item.value) return { ok: false, error: AppError.notFound({ code: 'ITEM_NOT_FOUND' }) };
@@ -69,7 +69,7 @@ export async function rateExperience(
   if (!found.ok) return found;
   const request = found.value;
   if (!request) return { ok: false, error: AppError.notFound({ code: 'REQUEST_NOT_FOUND' }) };
-  const snapshot = request.value;
+  const snapshot = request;
   const item = await deps.souk.getById(snapshot.itemId);
   if (!item.ok) return item;
   if (!item.value) return { ok: false, error: AppError.notFound({ code: 'ITEM_NOT_FOUND' }) };
