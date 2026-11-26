@@ -1,4 +1,4 @@
-// Single source of truth for all app routes (P05 → P11).
+// Single source of truth for all app routes (P05 → P12).
 // No Arabic strings here. href() casts to expo-router's Href so typed-routes
 // generation (when present) stays satisfied without duplicating path literals.
 import type { Href } from 'expo-router';
@@ -59,7 +59,6 @@ export const ROUTES = {
     completion: (id: string): string => `/weddings/${id}/completion`,
     services: (id: string): string => `/weddings/${id}/services`,
   },
-  // D-5: the tab stays the browser; app/partners has NO index.tsx.
   partners: {
     root: '/partners',
     saved: '/partners/saved',
@@ -71,6 +70,16 @@ export const ROUTES = {
     profile: (id: string): string => `/partners/${id}`,
     offers: (id: string): string => `/partners/${id}/offers`,
     offer: (offerId: string): string => `/partners/offers/${offerId}`,
+  },
+  // D-1 (P12): Souk is NOT a tab, so the (features) placeholder was removed
+  // and app/souk owns /souk with a real index (ADR-0029 pattern).
+  souk: {
+    root: '/souk',
+    new: '/souk/new',
+    mine: '/souk/mine',
+    requests: '/souk/requests',
+    detail: (id: string): string => `/souk/${id}`,
+    request: (id: string): string => `/souk/${id}/request`,
   },
   settings: {
     root: '/settings',
@@ -95,7 +104,8 @@ export const ROUTES = {
     souk: '/legal/souk',
   },
   features: {
-    souk: '/(features)/souk',
+    assistance: '/assistance',
+    souk: '/souk',
     jobs: '/(features)/jobs',
     volunteers: '/(features)/volunteers',
     learn: '/(features)/learn',
