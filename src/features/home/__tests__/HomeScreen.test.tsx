@@ -80,7 +80,7 @@ describe('HomeScreen', () => {
       </ShellProviders>,
     );
     await fireEvent.press(screen.getByTestId('quick-action-souk'));
-    expect(mockNavigate).toHaveBeenCalledWith('/(features)/souk');
+    expect(mockNavigate).toHaveBeenCalledWith('/souk');
     await fireEvent.press(screen.getByTestId('hero-primary'));
     expect(mockNavigate).toHaveBeenCalledWith('/(tabs)/weddings');
     await fireEvent.press(screen.getByTestId('hero-secondary'));
