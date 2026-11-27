@@ -7,6 +7,8 @@ import type {
   ContentRepository,
   DisbursementRepository,
   DonationRepository,
+  JobApplicationRepository,
+  JobEngagementRepository,
   JobRepository,
   NotificationRepository,
   OfferReportRepository,
@@ -23,6 +25,7 @@ import type {
   SoukRepository,
   SoukRequestRepository,
   VolunteerRepository,
+  VolunteerTaskRepository,
   WeddingBudgetRepository,
   WeddingChatRepository,
   WeddingGroupRepository,
@@ -36,6 +39,8 @@ import {
   createMockContentRepository,
   createMockDisbursementRepository,
   createMockDonationRepository,
+  createMockJobApplicationRepository,
+  createMockJobEngagementRepository,
   createMockJobRepository,
   createMockNotificationRepository,
   createMockOfferReportRepository,
@@ -52,6 +57,7 @@ import {
   createMockSoukRepository,
   createMockSoukRequestRepository,
   createMockVolunteerRepository,
+  createMockVolunteerTaskRepository,
   createMockWeddingBudgetRepository,
   createMockWeddingChatRepository,
   createMockWeddingGroupRepository,
@@ -85,7 +91,10 @@ export interface RepositoryContainer {
   readonly soukReports: SoukReportRepository;
   readonly soukChat: SoukChatRepository;
   readonly jobs: JobRepository;
+  readonly jobApplications: JobApplicationRepository;
+  readonly jobEngagement: JobEngagementRepository;
   readonly volunteers: VolunteerRepository;
+  readonly volunteerTasks: VolunteerTaskRepository;
   readonly content: ContentRepository;
   readonly notifications: NotificationRepository;
   readonly search: SearchRepository;
@@ -138,7 +147,10 @@ function buildRepositories(
     soukReports: createMockSoukReportRepository(mockOptions),
     soukChat: createMockSoukChatRepository(mockOptions),
     jobs: createMockJobRepository(mockOptions),
+    jobApplications: createMockJobApplicationRepository(mockOptions),
+    jobEngagement: createMockJobEngagementRepository(mockOptions),
     volunteers: createMockVolunteerRepository(mockOptions),
+    volunteerTasks: createMockVolunteerTaskRepository(mockOptions),
     content: createMockContentRepository(mockOptions),
     notifications: createMockNotificationRepository(mockOptions),
     search: createMockSearchRepository(searchProvider),
