@@ -1,0 +1,381 @@
+===============================================
+### FILE: src/schemas/job.ts
+===============================================
+
+```
+import { z } from 'zod';
+
+import { DataOriginSchema, IdSchema, IsoDateSchema } from './common';
+
+export const JobStatusSchema = z.enum(['draft', 'open', 'closed']);
+
+export const JobSchema = z.object({
+  id: IdSchema,
+  titleKey: z.string().min(1),
+  partnerId: IdSchema,
+  status: JobStatusSchema,
+  createdAt: IsoDateSchema,
+  updatedAt: IsoDateSchema,
+  dataOrigin: DataOriginSchema,
+});
+
+export const CreateJobInputSchema = z.object({
+  titleKey: z.string().min(1),
+  partnerId: IdSchema,
+});
+
+export const UpdateJobInputSchema = z.object({
+  titleKey: z.string().min(1).optional(),
+  status: JobStatusSchema.optional(),
+});
+```
+
+===============================================
+### FILE: src/schemas/volunteer.ts
+===============================================
+
+```
+import { z } from 'zod';
+
+import { DataOriginSchema, IdSchema, IsoDateSchema } from './common';
+
+export const VolunteerStatusSchema = z.enum(['active', 'inactive']);
+
+export const VolunteerSchema = z.object({
+  id: IdSchema,
+  userId: IdSchema,
+  skillKey: z.string().min(1),
+  status: VolunteerStatusSchema,
+  createdAt: IsoDateSchema,
+  updatedAt: IsoDateSchema,
+  dataOrigin: DataOriginSchema,
+});
+
+export const CreateVolunteerInputSchema = z.object({
+  userId: IdSchema,
+  skillKey: z.string().min(1),
+});
+
+export const UpdateVolunteerInputSchema = z.object({
+  skillKey: z.string().min(1).optional(),
+  status: VolunteerStatusSchema.optional(),
+});
+```
+
+===============================================
+### FILE: src/repositories/mock/job.ts
+===============================================
+
+```
+import { CreateJobInputSchema, UpdateJobInputSchema } from '@/schemas/job';
+
+import type {
+  CreateJobInput,
+  Job,
+  JobRepository,
+  UpdateJobInput,
+} from '../contracts/job';
+import { createMockCrudRepository } from './crud-factory';
+import type { MockRepositoryOptions } from './profile';
+
+export function createMockJobRepository(
+  options: MockRepositoryOptions = {},
+): JobRepository {
+  return createMockCrudRepository<Job, CreateJobInput, UpdateJobInput>({
+    idPrefix: 'mock-job',
+    schemaCreate: CreateJobInputSchema,
+    schemaUpdate: UpdateJobInputSchema,
+    buildEntity: ({ id, input, nowIso }) => ({
+      id,
+      titleKey: input.titleKey,
+      partnerId: input.partnerId,
+      status: 'draft',
+      createdAt: nowIso,
+      updatedAt: nowIso,
+      dataOrigin: 'demo',
+    }),
+    applyUpdate: ({ existing, patch, nowIso }) => ({
+      ...existing,
+      ...(patch.titleKey !== undefined && { titleKey: patch.titleKey }),
+      ...(patch.status !== undefined && { status: patch.status }),
+      updatedAt: nowIso,
+    }),
+    delayMs: options.delayMs,
+    forceErrorKind: options.forceErrorKind ?? null,
+  });
+}
+```
+
+===============================================
+### FILE: src/repositories/mock/volunteer.ts
+===============================================
+
+```
+import { CreateVolunteerInputSchema, UpdateVolunteerInputSchema } from '@/schemas/volunteer';
+
+import type {
+  CreateVolunteerInput,
+  UpdateVolunteerInput,
+  Volunteer,
+  VolunteerRepository,
+} from '../contracts/volunteer';
+import { createMockCrudRepository } from './crud-factory';
+import type { MockRepositoryOptions } from './profile';
+
+export function createMockVolunteerRepository(
+  options: MockRepositoryOptions = {},
+): VolunteerRepository {
+  return createMockCrudRepository<Volunteer, CreateVolunteerInput, UpdateVolunteerInput>({
+    idPrefix: 'mock-volunteer',
+    schemaCreate: CreateVolunteerInputSchema,
+    schemaUpdate: UpdateVolunteerInputSchema,
+    buildEntity: ({ id, input, nowIso }) => ({
+      id,
+      userId: input.userId,
+      skillKey: input.skillKey,
+      status: 'active',
+      createdAt: nowIso,
+      updatedAt: nowIso,
+      dataOrigin: 'demo',
+    }),
+    applyUpdate: ({ existing, patch, nowIso }) => ({
+      ...existing,
+      ...(patch.skillKey !== undefined && { skillKey: patch.skillKey }),
+      ...(patch.status !== undefined && { status: patch.status }),
+      updatedAt: nowIso,
+    }),
+    delayMs: options.delayMs,
+    forceErrorKind: options.forceErrorKind ?? null,
+  });
+}
+```
+
+===============================================
+### FILE: src/repositories/mock/__tests__/job.test.ts
+===============================================
+
+```
+import { crudRepositoryContract } from '../../__tests__/contracts/crud.contract';
+import { createMockJobRepository } from '../job';
+
+describe('MockJobRepository', () => {
+  crudRepositoryContract({
+    getRepo: () => createMockJobRepository(),
+    validCreate: {
+      titleKey: 'jobs.demo.title',
+      partnerId: 'partner-1',
+    },
+    invalidCreate: {
+      titleKey: '',
+      partnerId: '',
+    },
+    validUpdate: { status: 'open' as const },
+    expectedDataOrigin: 'demo',
+  });
+
+  it('forceErrorKind: Network causes all methods to fail', async () => {
+    const repo = createMockJobRepository({ forceErrorKind: 'Network' });
+    const r = await repo.list();
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.kind).toBe('Network');
+  });
+});
+```
+
+===============================================
+### FILE: src/repositories/mock/__tests__/volunteer.test.ts
+===============================================
+
+```
+import { crudRepositoryContract } from '../../__tests__/contracts/crud.contract';
+import { createMockVolunteerRepository } from '../volunteer';
+
+describe('MockVolunteerRepository', () => {
+  crudRepositoryContract({
+    getRepo: () => createMockVolunteerRepository(),
+    validCreate: {
+      userId: 'user-1',
+      skillKey: 'volunteer.skills.teaching',
+    },
+    invalidCreate: {
+      userId: '',
+      skillKey: '',
+    },
+    validUpdate: { status: 'inactive' as const },
+    expectedDataOrigin: 'demo',
+  });
+
+  it('forceErrorKind: Network causes all methods to fail', async () => {
+    const repo = createMockVolunteerRepository({ forceErrorKind: 'Network' });
+    const r = await repo.list();
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.kind).toBe('Network');
+  });
+});
+```
+
+===============================================
+### FILE: src/locales/ar/jobs.json
+===============================================
+
+```
+{
+  "title": "الوظائف",
+  "notConnectedYet": "الوظائف ستُبنى في P13."
+}
+```
+
+===============================================
+### FILE: src/locales/en/jobs.json
+===============================================
+
+```
+{
+  "title": "Jobs",
+  "notConnectedYet": "Jobs will be built in P13."
+}
+```
+
+===============================================
+### FILE: app/(features)/jobs.tsx
+===============================================
+
+```
+import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { RoutePlaceholder } from '@/components/shell';
+import { ROUTES, href } from '@/constants/routes';
+
+export default function JobsScreen() {
+  const router = useRouter();
+  const { t } = useTranslation();
+  return (
+    <RoutePlaceholder
+      icon="users"
+      title={t('common:shell.features.jobs.title')}
+      description={t('common:shell.features.jobs.description')}
+      phase="P13"
+      action={{
+        label: t('common:shell.placeholder.backHome'),
+        onPress: () => router.replace(href(ROUTES.tabs.home)),
+      }}
+      testID="jobs-screen"
+    />
+  );
+}
+```
+
+===============================================
+### FILE: app/(features)/volunteers.tsx
+===============================================
+
+```
+import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { RoutePlaceholder } from '@/components/shell';
+import { ROUTES, href } from '@/constants/routes';
+
+export default function VolunteersScreen() {
+  const router = useRouter();
+  const { t } = useTranslation();
+  return (
+    <RoutePlaceholder
+      icon="userCheck"
+      title={t('common:shell.features.volunteers.title')}
+      description={t('common:shell.features.volunteers.description')}
+      phase="P13"
+      action={{
+        label: t('common:shell.placeholder.backHome'),
+        onPress: () => router.replace(href(ROUTES.tabs.home)),
+      }}
+      testID="volunteers-screen"
+    />
+  );
+}
+```
+
+===============================================
+### FILE: package.json
+===============================================
+
+```
+{
+  "name": "azib-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "npm run lint:js && npm run lint:arabic",
+    "lint:js": "expo lint",
+    "lint:arabic": "node scripts/check-hardcoded-arabic.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "web:export": "expo export --platform web",
+    "doctor": "npx expo-doctor"
+  },
+  "dependencies": {
+    "@expo-google-fonts/cairo": "^0.4.2",
+    "@expo-google-fonts/ibm-plex-sans-arabic": "^0.4.2",
+    "@hookform/resolvers": "^7.0.6",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-community/netinfo": "12.0.1",
+    "@tanstack/react-query": "^5.107.1",
+    "expo": "~58.1.0",
+    "expo-blur": "~58.0.6",
+    "expo-constants": "~58.0.15",
+    "expo-crypto": "~58.0.9",
+    "expo-document-picker": "~58.0.5",
+    "expo-file-system": "~58.0.13",
+    "expo-font": "~58.0.12",
+    "expo-haptics": "~58.0.8",
+    "expo-image-manipulator": "~58.0.16",
+    "expo-image-picker": "~58.0.10",
+    "expo-linking": "~58.0.17",
+    "expo-local-authentication": "~58.0.3",
+    "expo-localization": "~58.0.5",
+    "expo-router": "~58.0.33",
+    "expo-secure-store": "~58.0.3",
+    "expo-sharing": "~58.0.24",
+    "expo-splash-screen": "~58.0.15",
+    "expo-status-bar": "~58.0.5",
+    "i18next": "^27.1.0",
+    "lucide-react-native": "^1.72.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.92.0",
+    "react-i18next": "^18.0.1",
+    "react-native": "0.88.1",
+    "react-native-gesture-handler": "~3.3.0",
+    "react-native-reanimated": "4.7.1",
+    "react-native-safe-area-context": "~5.11.1",
+    "react-native-screens": "~4.30.1",
+    "react-native-svg": "15.16.0",
+    "react-native-web": "~0.21.4",
+    "react-native-worklets": "0.13.0",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@testing-library/react-native": "^14.1.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.6",
+    "@types/react": "~19.3.0",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "^58.0.4",
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-import": "^2.32.0",
+    "expo-doctor": "1.21.9",
+    "jest": "^30.5.2",
+    "jest-expo": "~58.0.16",
+    "prettier": "^3.10.0",
+    "react-test-renderer": "^19.3.0",
+    "typescript": "~6.0.3"
+  }
+}
+```
+
