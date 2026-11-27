@@ -1,4 +1,235 @@
 {
   "title": "Jobs",
-  "notConnectedYet": "Jobs will be built in P13."
+  "notConnectedYet": "Jobs will be built in P13.",
+  "customJob": "Job opportunity",
+  "browser": {
+    "title": "Job opportunities",
+    "subtitle": "Daily, professional, freelance and internship roles from community publishers.",
+    "salaryNote": "Salary is declared by the publisher and unverified. No in-app payment, no commission, no tracking.",
+    "searchPlaceholder": "Search by job title or description",
+    "region": "Governorate",
+    "category": "Category",
+    "workType": "Work type",
+    "schedule": "Schedule",
+    "all": "All",
+    "salaryFloor": "Minimum salary (YER)",
+    "salaryFloorHelp": "Shows jobs whose declared ceiling reaches this amount or more.",
+    "clearFilters": "Clear filters",
+    "openJob": "Job details",
+    "empty": "No matching jobs",
+    "emptyDescription": "Widen the filters or publish a role. Labelled demo jobs do not represent real employers.",
+    "errorTitle": "Could not load jobs",
+    "errorDescription": "Something went wrong while fetching jobs. Please retry.",
+    "notConnected": "Jobs not connected",
+    "notConnectedDescription": "Backend wiring activates in P18. Demo mode is available now."
+  },
+  "detail": {
+    "title": "Job details",
+    "requirements": "Requirements",
+    "how": "How to apply",
+    "noPaymentNote": "The platform collects no money, tracks no payment, and does not broker the contract.",
+    "deadline": "Application deadline: {{date}}",
+    "expiresIn": "Listing ends in {{days}} days",
+    "unknownPublisher": "Unnamed publisher",
+    "unverifiedPublisher": "Unverified publisher",
+    "save": "Save job",
+    "unsave": "Remove from saved",
+    "notFound": "Job not found",
+    "notFoundDescription": "We could not find this job. It may be closed or the link is invalid.",
+    "visibility": {
+      "live": "This listing is open for applications.",
+      "closed": "The publisher closed this listing.",
+      "expired": "This listing has expired.",
+      "not_published": "This listing is not published yet."
+    }
+  },
+  "composer": {
+    "title": "Publish a job",
+    "subtitle": "Light publisher verification: a name and accepted terms. No badge without a verification record.",
+    "unverifiedNote": "Your job will carry an Unverified publisher label. A verification badge is granted only by an authorized reviewer.",
+    "reviewEnabled": "Review before publication is currently enabled: your job stays In review until the team approves it.",
+    "publisherHelp": "The business or organisation name as applicants will see it.",
+    "descriptionHelp": "Write a useful description with no phone numbers, links or exact address.",
+    "requirementsHelp": "Separate requirements with a comma.",
+    "instructionsHelp": "External application instructions only if you choose that method. No contact numbers.",
+    "fields": {
+      "title": "Job title",
+      "publisherName": "Publisher name",
+      "category": "Category",
+      "description": "Job description",
+      "governorate": "Governorate",
+      "district": "District",
+      "workType": "Work type",
+      "schedule": "Schedule",
+      "salaryMin": "Declared minimum salary (YER, optional)",
+      "salaryMax": "Declared maximum salary (YER, optional)",
+      "requirements": "Requirements",
+      "applicationMethod": "Application method",
+      "applicationInstructions": "Application instructions",
+      "deadline": "Application deadline"
+    },
+    "terms": "I confirm the data is accurate, accept the publishing terms, and take responsibility for this listing.",
+    "submit": "Publish job"
+  },
+  "apply": {
+    "title": "Apply for this job",
+    "subtitle": "A short profile and a message. The CV is optional and private.",
+    "privacyNote": "Your phone and email are never shown to the publisher. The applicant list carries minimum data only.",
+    "headline": "Short profile (e.g. two years of retail experience)",
+    "message": "Application message",
+    "submit": "Submit application"
+  },
+  "applications": {
+    "title": "My applications",
+    "subtitle": "All your applications and their statuses as a timeline of real stamps.",
+    "timeline": "Timeline",
+    "empty": "No applications",
+    "emptyDescription": "Browse job opportunities and apply to a suitable one to see it here.",
+    "withdraw": "Withdraw application"
+  },
+  "applicants": {
+    "title": "Applicants",
+    "subtitle": "For the job publisher only, with minimum data.",
+    "minimumNote": "No phone, no email, no applicant id. The CV is read through an explicit permission-checked call.",
+    "empty": "No applicants",
+    "emptyDescription": "Applications will appear here for review when they arrive.",
+    "notOwner": "You are not this job's publisher",
+    "notOwnerDescription": "The applicant list is available to the concerned job publisher only.",
+    "markViewed": "Mark as viewed",
+    "shortlist": "Shortlist",
+    "hire": "Record hire",
+    "reject": "Reject application",
+    "readCv": "Read CV reference"
+  },
+  "saved": {
+    "title": "Saved jobs",
+    "subtitle": "Your private list. Nobody else can see it.",
+    "empty": "No saved jobs",
+    "emptyDescription": "Save any job from its details screen to see it here.",
+    "privateNote": "Saving is local to your account and is not shared with the publisher or any other user."
+  },
+  "reportScreen": {
+    "title": "Report a job",
+    "subtitle": "Help us protect job seekers from fake listings.",
+    "reason": "Report reason",
+    "detail": "Report details",
+    "submit": "Submit report",
+    "received": "Your report was received and will be reviewed by the responsible team. Your identity is not shown to the publisher."
+  },
+  "cv": {
+    "title": "CV (optional)",
+    "privateNote": "The CV is private: never projected into a list, and read only by the concerned publisher through a permission-checked call.",
+    "pickPdf": "Upload PDF",
+    "pickImage": "Upload image",
+    "uploading": "Uploading…",
+    "attached": "CV attached",
+    "remove": "Remove CV",
+    "optional": "No CV uploaded. You can apply without one.",
+    "none": "No CV attached.",
+    "referenceTitle": "CV reference",
+    "renderNote": "The reference is private and permission-checked. Actual file rendering activates with real storage in P18."
+  },
+  "salary": {
+    "declared": "Declared salary: {{range}} YER",
+    "notDeclared": "No salary declared",
+    "unverified": "Unverified",
+    "note": "Declared by the publisher and unverified. No in-app payment and no commission."
+  },
+  "categories": {
+    "retail": "Retail & sales",
+    "hospitality": "Hospitality & catering",
+    "construction": "Construction",
+    "transport": "Transport & delivery",
+    "education": "Education & training",
+    "health": "Health & care",
+    "it": "Information technology",
+    "admin": "Admin & accounting",
+    "crafts": "Crafts",
+    "agriculture": "Agriculture",
+    "other": "Other"
+  },
+  "workType": {
+    "daily": "Daily",
+    "professional": "Professional",
+    "freelance": "Freelance",
+    "internship": "Internship"
+  },
+  "schedule": {
+    "full_time": "Full time",
+    "part_time": "Part time",
+    "shifts": "Shifts",
+    "flexible": "Flexible"
+  },
+  "applicationMethod": {
+    "in_app": "Apply inside the app",
+    "external_instructions": "External application instructions"
+  },
+  "jobStatus": {
+    "draft": "Draft",
+    "pending_review": "In review",
+    "open": "Published",
+    "closed": "Closed",
+    "expired": "Expired",
+    "rejected": "Rejected"
+  },
+  "applicationStatus": {
+    "submitted": "Submitted",
+    "viewed": "Viewed",
+    "shortlisted": "Shortlisted",
+    "rejected": "Rejected",
+    "hired": "Hired",
+    "withdrawn": "Withdrawn"
+  },
+  "report": {
+    "reasons": {
+      "fake": "Fake listing or non-existent employer",
+      "expired": "The job is no longer actually available",
+      "unpaid": "Asks the applicant for fees or money",
+      "misleading": "The description is misleading"
+    }
+  },
+  "reasons": {
+    "notQualified": "The stated experience does not match the job requirements.",
+    "positionFilled": "The position was filled by another candidate.",
+    "incompleteProfile": "The short profile is incomplete."
+  },
+  "validation": {
+    "title": "Enter a job title (at least 3 characters).",
+    "publisherName": "Enter the publisher name (at least 2 characters).",
+    "description": "Describe the job in at least 20 characters.",
+    "salaryRange": "The maximum salary must not be below the minimum.",
+    "publisherTerms": "Accepting the publishing terms is required.",
+    "headline": "Write a short profile (at least 3 characters).",
+    "message": "Write an application message in at least 20 characters.",
+    "reportReason": "Choose a report reason.",
+    "reportDetail": "Describe the report in at least 10 characters."
+  },
+  "demo": {
+    "badge": "Demo job",
+    "notice": "Every job here is demo data and does not represent real employers or real opportunities."
+  },
+  "errors": {
+    "jobNotFound": "Job not found.",
+    "notJobPublisher": "This job is not yours.",
+    "jobNotOpen": "The job is not open for applications right now.",
+    "jobRateLimited": "You reached the job publishing limit. Try later.",
+    "contactInText": "The text contains a contact number or a link. Remove it and try again.",
+    "publisherTermsRequired": "Accepting the publishing terms is required.",
+    "invalidJob": "The job data is invalid. Review the fields.",
+    "applicationNotFound": "Application not found.",
+    "activeApplicationLimit": "You reached the active application limit. Withdraw one or wait.",
+    "duplicateApplication": "You already have an active application on this job.",
+    "applyRateLimited": "You reached the application submission limit. Try later.",
+    "ownJob": "You cannot apply to your own job.",
+    "invalidApplication": "The application data is invalid.",
+    "notApplicationOwner": "This application is not yours.",
+    "cvNotFound": "No CV attached.",
+    "invalidSave": "The save data is invalid.",
+    "invalidReport": "The report data is invalid.",
+    "reportNotFound": "Report not found.",
+    "invalidTransition": "This status cannot be reached from the current one.",
+    "reasonRequired": "A reason is required.",
+    "noPermission": "You do not have permission for this action.",
+    "noSession": "Sign-in is required for this action."
+  }
 }
