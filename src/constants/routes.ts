@@ -1,4 +1,4 @@
-// Single source of truth for all app routes (P05 → P12).
+// Single source of truth for all app routes (P05 → P13).
 // No Arabic strings here. href() casts to expo-router's Href so typed-routes
 // generation (when present) stays satisfied without duplicating path literals.
 import type { Href } from 'expo-router';
@@ -71,8 +71,6 @@ export const ROUTES = {
     offers: (id: string): string => `/partners/${id}/offers`,
     offer: (offerId: string): string => `/partners/offers/${offerId}`,
   },
-  // D-1 (P12): Souk is NOT a tab, so the (features) placeholder was removed
-  // and app/souk owns /souk with a real index (ADR-0029 pattern).
   souk: {
     root: '/souk',
     new: '/souk/new',
@@ -84,6 +82,18 @@ export const ROUTES = {
     report: (id: string): string => `/souk/${id}/report`,
     coordination: (requestId: string): string => `/souk/coordination/${requestId}`,
     handover: (requestId: string): string => `/souk/handover/${requestId}`,
+  },
+  // P13.2: Jobs is NOT a tab, so the (features) placeholder was removed and
+  // app/jobs owns /jobs with a real index (ADR-0029/0061 pattern).
+  jobs: {
+    root: '/jobs',
+    new: '/jobs/new',
+    saved: '/jobs/saved',
+    applications: '/jobs/applications',
+    detail: (id: string): string => `/jobs/${id}`,
+    apply: (id: string): string => `/jobs/${id}/apply`,
+    applicants: (id: string): string => `/jobs/${id}/applicants`,
+    report: (id: string): string => `/jobs/${id}/report`,
   },
   settings: {
     root: '/settings',
@@ -110,7 +120,7 @@ export const ROUTES = {
   features: {
     assistance: '/assistance',
     souk: '/souk',
-    jobs: '/(features)/jobs',
+    jobs: '/jobs',
     volunteers: '/(features)/volunteers',
     learn: '/(features)/learn',
     calculator: '/(features)/calculator',
