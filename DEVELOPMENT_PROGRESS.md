@@ -81,7 +81,7 @@
 
 ### P12.1 — النواة النقية (10 suites · +79 اختباراً)
 - [x] قراءة `crud.contract.ts` و`souk.test.ts` أولاً: لا يمنع حقولاً إضافية، و`validUpdate:{status:'reserved'}` يبقى صالحاً.
-- [x] `SoukStatus` → 9 قيم (legacy `available`/`reserved`/`claimed` محفوظة، و`claimed` **للقراءة فقط** تُ映射 إلى `handed_over`).
+- [x] `SoukStatus` → 9 قيم (legacy `available`/`reserved`/`claimed` محفوظة، و`claimed` **للقراءة فقط** تُحوَّل إلى `handed_over`).
 - [x] حقول إضافية: `donorId` · `title` · `description` · `condition` · `governorateId`/`districtId` · `deliveryMethod` · `imageFileIds`/`imageFingerprints` · `estimatedValue` · `noResaleConsentAt` · `reservedForRequestId` · `expiresAt` · `rejectionReasonKey` · `duplicateFlag` · `saleWordFlag`.
 - [x] **لا `price`/`amountPaid`/`currency` في أي كيان أو شاشة** (ADR-0063).
 - [x] **3 مستودعات جديدة**: `SoukRequestRepository` (طلبات/موافقات كشف/تأكيدان/تقييم) · `SoukReportRepository` · `SoukChatRepository` (رسائل/بلاغ/حذف/`subscribe`) ⇒ **27**.
@@ -104,7 +104,7 @@
 - [x] screens: Browser · ItemDetail · ItemComposer · Request · MyItems · MyRequests.
 - [x] **الإسقاط العام إلزامي:** لا `donorId` ولا `estimatedValue` ولا عنوان دقيق في أي سطح عام.
 - [x] إضافة عنصر: ضغط/EXIF عبر خط P08 · حد الصور من الإعدادات · شرط عدم إعادة البيع · **رفض رقم تواصل في الوصف**.
-- [x] طلب الاستفادة: سبب ≥10 · حد نشط · منع تكرار · لا طلب على عنصر خود.
+- [x] طلب الاستفادة: سبب ≥10 · حد نشط · منع تكرار · لا طلب على عنصرك الخاص.
 - [x] **اختبارا رفض المعدل** بساعة توافق ساعة التخزين (3 عناصر ثم الرابع · 5 طلبات ثم السادس).
 - [x] **حذف `app/(features)/souk.tsx`** + `app/souk/` كاملة بـ`index.tsx` + `ROUTES.features.souk='/souk'`.
 - [x] تحديث اختبارين قديمين يثبّتان المسار نصياً (`HomeScreen.test` · `ProgramKindScreen.test`).
