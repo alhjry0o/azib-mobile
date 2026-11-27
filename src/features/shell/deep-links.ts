@@ -1,6 +1,6 @@
-// Deep-link allowlist for the azib:// scheme (P05 → P12).
+// Deep-link allowlist for the azib:// scheme (P05 → P13).
 // Query strings and fragments are dropped entirely: no sensitive data in links.
-// Dynamic assistance/programs/weddings/partners/souk paths are allowed by
+// Dynamic assistance/programs/weddings/partners/souk/jobs paths are allowed by
 // prefix; the screens themselves enforce auth + ownership (RLS in P18).
 import { stripGroups } from './routing';
 
@@ -34,6 +34,10 @@ const ALLOWED: ReadonlySet<string> = new Set([
   '/souk/mine',
   '/souk/requests',
   '/souk/inbox',
+  '/jobs',
+  '/jobs/new',
+  '/jobs/saved',
+  '/jobs/applications',
   '/account',
   '/profile',
   '/profile/edit',
@@ -66,7 +70,6 @@ const ALLOWED: ReadonlySet<string> = new Set([
   '/legal/eligibility',
   '/legal/weddings-withdrawal',
   '/legal/souk',
-  '/jobs',
   '/volunteers',
   '/learn',
   '/calculator',
@@ -81,6 +84,7 @@ const ALLOWED_PREFIXES: readonly string[] = [
   '/weddings/',
   '/partners/',
   '/souk/',
+  '/jobs/',
 ];
 const GUARDED_PREFIXES: readonly string[] = ['/onboarding', '/staff', '/dev', '/gallery'];
 
