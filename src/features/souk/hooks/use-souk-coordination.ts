@@ -74,12 +74,14 @@ export function useSoukCoordination(requestId: string): SoukCoordinationApi {
       const item = await container.repositories.souk.getById(request.itemId);
       if (!item.ok) return item;
       if (!item.value) return { ok: false, error: AppError.notFound({ code: 'ITEM_NOT_FOUND' }) };
+      const view = toPartyRequestView(request);
+      const isDonor = item.value.donorId === userId;
       return {
         ok: true,
         value: {
-          request: toPartyRequestView(request),
+          request: isDonor ? view : { ...view, handoverCode: null },
           itemTitle: item.value.title ?? item.value.titleKey,
-          isDonor: item.value.donorId === userId,
+          isDonor,
           accepted: toRequestWorkflowStatus(request.status) === 'accepted',
         },
       };
