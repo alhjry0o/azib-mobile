@@ -24,6 +24,15 @@ export function SoukMyItemsScreen() {
       subtitle={t('marketplace:souk.mine.subtitle')}
       notConnectedRetry={mine.refetch}
     >
+      <Button
+        fullWidth
+        variant="secondary"
+        leftIcon="bell"
+        label={t('marketplace:souk.inbox.title')}
+        onPress={() => router.push(href(ROUTES.souk.inbox))}
+        testID="souk-mine-open-inbox"
+      />
+
       {mine.isLoading ? <Skeleton variant="rect" height={120} /> : null}
       {mine.error ? (
         <ErrorState
