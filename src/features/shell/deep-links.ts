@@ -33,6 +33,7 @@ const ALLOWED: ReadonlySet<string> = new Set([
   '/souk/new',
   '/souk/mine',
   '/souk/requests',
+  '/souk/inbox',
   '/account',
   '/profile',
   '/profile/edit',
