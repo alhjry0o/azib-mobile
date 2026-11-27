@@ -358,6 +358,95 @@
       "cancel": "Cancel request",
       "coordinationNote": "Coordination, chat, contact disclosure and code handover ship in the next part of P12."
     },
+        "coordination": {
+      "title": "Coordination",
+      "subtitle": "Limited text chat after the request is accepted, with contact disclosure by mutual consent.",
+      "safeTitle": "Safe meeting guidelines",
+      "safe": {
+        "publicPlace": "Agree on a well-known public place, not a private home address.",
+        "daylight": "Prefer daylight, and tell someone you trust about the meeting.",
+        "companion": "Bring a companion if possible, especially when moving heavy furniture.",
+        "noPayment": "No money in exchange and no mandatory transport fees. The donation is in-kind with no financial conditions.",
+        "report": "If you feel unsafe or pressured, stop the meeting and report the item from its screen."
+      },
+      "chatTitle": "Coordination chat",
+      "chatEmpty": "No messages yet. Start with a short text message.",
+      "compose": "Your message",
+      "send": "Send",
+      "reportMessage": "Report message",
+      "reported": "Reported",
+      "removed": "Message removed by moderation.",
+      "notAccepted": "Chat and contact disclosure are available only after the request is accepted.",
+      "consentTitle": "Contact number disclosure",
+      "consentMine": "I agree to disclose my number to the other party",
+      "consentNote": "No number is disclosed before the request is accepted and both parties consent. You can withdraw consent anytime.",
+      "revealed": "Disclosed with mutual consent",
+      "callNote": "The number comes from the other party's profile. Dial it manually from your phone — we never place a call for you.",
+      "handoverTitle": "Handover code",
+      "openHandover": "Confirm handover"
+    },
+    "handover": {
+      "title": "Handover confirmation",
+      "subtitle": "Handover is confirmed by both parties with the code. One confirmation is not enough.",
+      "codeLabel": "Handover code",
+      "codeHelp": "Enter the code shown on the coordination screen. Both parties exchange it at the meeting.",
+      "confirm": "I confirm handover",
+      "donorState": "Donor confirmation",
+      "recipientState": "Recipient confirmation",
+      "bothConfirmed": "Both parties confirmed the handover.",
+      "waiting": "Waiting for the other party's confirmation.",
+      "completed": "Handed over",
+      "demoNote": "Demo code — the official code is minted server-side in P18.",
+      "rateTitle": "Rate the experience (optional)",
+      "rateHelp": "Rate the experience quality from 1 to 5. No moral rating and no scoring of people.",
+      "rateNote": "Short note (optional)",
+      "rateSubmit": "Submit rating",
+      "rated": "Thank you. Your rating is staff-private for service improvement and is never shown publicly.",
+      "privateNote": "The rating is not visible to any other user and affects nobody's eligibility."
+    },
+    "inbox": {
+      "title": "Requests on my donations",
+      "subtitle": "Review benefit requests on your items and accept or reject with a reason.",
+      "empty": "No requests",
+      "emptyDescription": "When someone requests one of your items, the request appears here.",
+      "accept": "Accept request",
+      "reject": "Reject request",
+      "rejectReason": "The item is no longer available or the request does not fit its condition.",
+      "openCoordination": "Open coordination"
+    },
+    "reportScreen": {
+      "title": "Report an item",
+      "subtitle": "Help us keep Souk Khair free of commodification and misleading content.",
+      "reason": "Report reason",
+      "detail": "Report details",
+      "submit": "Submit report",
+      "received": "Your report was received and will be reviewed by the responsible team. Your identity is not shown to the item owner."
+    },
+    "dev": {
+      "title": "Souk simulator",
+      "subtitle": "Internal tool to review items, requests and reports through the same services. No automated decision in the user path.",
+      "notDemo": "This simulator works in demo mode only.",
+      "itemsTitle": "Items",
+      "itemsEmpty": "No items. Add a donation from the composer screen.",
+      "requestsTitle": "Requests on the selected item",
+      "requestsEmpty": "No requests on this item.",
+      "reportsTitle": "Reports",
+      "reportsEmpty": "No reports.",
+      "approveItem": "Approve item",
+      "rejectItem": "Reject item",
+      "rejectReason": "The item violates Souk Khair conditions.",
+      "expireItem": "Expire item",
+      "acceptRequest": "Accept request",
+      "rejectRequest": "Reject request",
+      "resolveReport": "Close report",
+      "reportStatus": {
+        "open": "Open",
+        "reviewing": "Reviewing",
+        "resolved": "Resolved",
+        "dismissed": "Dismissed"
+      },
+      "applied": "Decision applied and recorded in the audit trail."
+    }, 
     "categories": {
       "furniture": "Furniture",
       "appliances": "Appliances",
@@ -441,6 +530,12 @@
       "inKindOnly": "In-kind only"
     },
     "errors": {
+      "invalidItem": "The item data is invalid. Review the fields.",
+      "invalidRequest": "The request data is invalid.",
+      "invalidMessage": "The message is invalid.",
+      "messageNotFound": "Message not found.",
+      "reportNotFound": "Report not found.",
+      "invalidReport": "The report data is invalid."
       "itemNotFound": "Item not found.",
       "notItemDonor": "This item is not yours.",
       "itemNotAvailable": "The item is not available for requests.",
