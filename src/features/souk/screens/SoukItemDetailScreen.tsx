@@ -13,7 +13,12 @@ import {
 } from '@/components/ui';
 import { ROUTES, href } from '@/constants/routes';
 import { useTheme } from '@/theme';
-import { ConditionBadge, DeliveryBadge, SoukItemStatusBadge, SoukRequestStatusBadge } from '../components/SoukBadges';
+import {
+  ConditionBadge,
+  DeliveryBadge,
+  SoukItemStatusBadge,
+  SoukRequestStatusBadge,
+} from '../components/SoukBadges';
 import { SoukImageGallery } from '../components/SoukImageGallery';
 import { SoukScaffold } from '../components/SoukScaffold';
 import { useSoukItem } from '../hooks/use-souk-item';
@@ -133,6 +138,15 @@ export function SoukItemDetailScreen() {
               {t('marketplace:souk.detail.unavailable')}
             </Text>
           ) : null}
+
+          <Button
+            fullWidth
+            variant="ghost"
+            leftIcon="alertTriangle"
+            label={t('marketplace:souk.reportScreen.title')}
+            onPress={() => router.push(href(ROUTES.souk.report(itemId)))}
+            testID="souk-detail-report"
+          />
         </>
       ) : null}
     </SoukScaffold>
