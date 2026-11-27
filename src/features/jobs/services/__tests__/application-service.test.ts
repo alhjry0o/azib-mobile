@@ -2,7 +2,6 @@ import { createMockAuditRepository } from '@/repositories/mock/audit';
 import { createMockJobRepository } from '@/repositories/mock/job';
 import { createMockJobApplicationRepository } from '@/repositories/mock/job-application';
 import { createMockJobEngagementRepository } from '@/repositories/mock/job-engagement';
-import { createMockStorageProvider } from '@/providers/mock/storage';
 import {
   applyToJob,
   hireApplication,
@@ -57,7 +56,6 @@ async function openJob(deps: ReturnType<typeof setup>, title = 'Shop assistant')
     { jobs: deps.jobs, audit: deps.audit },
     created.value.id,
     'publisher-1',
-    false,
     DEFAULT_JOB_LIMITS,
     now,
   );
@@ -239,19 +237,19 @@ describe('CV privacy', () => {
 
     const denied = await readApplicantCvFileId(deps, applied.value.id, 'other-employer', 'member');
     expect(denied.ok).toBe(false);
-    const volunteerDenied = await readApplicantCvFileId(
+    const guestDenied = await readApplicantCvFileId(
       deps,
       applied.value.id,
       'publisher-1',
       'guest',
     );
-    expect(volunteerDenied.ok).toBe(false);
+    expect(guestDenied.ok).toBe(false);
     const allowed = await readApplicantCvFileId(deps, applied.value.id, 'publisher-1', 'member');
     expect(allowed.ok).toBe(true);
     if (allowed.ok) expect(allowed.value).toBe('cv-file-1');
   });
 
-  it('returns NotFound when no CV was attached', async () => {
+  it('returns CV_NOT_FOUND when no CV was attached, and never leaks it in a list', async () => {
     const deps = setup();
     const jobId = await openJob(deps);
     const applied = await applyToJob(
@@ -268,7 +266,13 @@ describe('CV privacy', () => {
     const missing = await readApplicantCvFileId(deps, applied.value.id, 'publisher-1', 'member');
     expect(missing.ok).toBe(false);
     if (!missing.ok) expect(missing.error.meta.code).toBe('CV_NOT_FOUND');
-    expect(createMockStorageProvider).toBeDefined();
+
+    const listed = await deps.jobApplications.listByJob(jobId);
+    expect(listed.ok).toBe(true);
+    if (listed.ok) {
+      expect(listed.value.length).toBe(1);
+      expect(listed.value[0]?.cvFileId).toBeNull();
+    }
   });
 });
 
@@ -307,5 +311,6 @@ describe('saves and reports', () => {
       'resolved',
     );
     expect(resolved.ok).toBe(true);
+    if (resolved.ok) expect(resolved.value.resolvedBy).toBe('mod-1');
   });
 });
