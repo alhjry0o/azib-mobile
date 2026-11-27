@@ -80,6 +80,23 @@ export function SoukMyRequestsScreen() {
                 onPress={() => router.push(href(ROUTES.souk.detail(request.itemId)))}
                 testID={`souk-request-open-${request.id}`}
               />
+              {status === 'accepted' || status === 'handed_over' ? (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  label={t('marketplace:souk.coordination.title')}
+                  onPress={() => router.push(href(ROUTES.souk.coordination(request.id)))}
+                  testID={`souk-request-coordinate-${request.id}`}
+                />
+              ) : null}
+              {status === 'accepted' ? (
+                <Button
+                  size="sm"
+                  label={t('marketplace:souk.handover.title')}
+                  onPress={() => router.push(href(ROUTES.souk.handover(request.id)))}
+                  testID={`souk-request-handover-${request.id}`}
+                />
+              ) : null}
               {isActiveRequestStatus(status) ? (
                 <Button
                   size="sm"
@@ -96,9 +113,6 @@ export function SoukMyRequestsScreen() {
           );
         })}
       </View>
-      <Text variant="caption" color="secondary">
-        {t('marketplace:souk.requests.coordinationNote')}
-      </Text>
     </SoukScaffold>
   );
 }
