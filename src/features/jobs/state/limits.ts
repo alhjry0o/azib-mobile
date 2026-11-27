@@ -9,6 +9,8 @@ export const SYSTEM_SETTINGS_KEY = 'system_settings';
 /** PENDING_POLICY — provisional until the owner approves. */
 export const DEFAULT_JOB_EXPIRY_DAYS = 30;
 export const DEFAULT_MAX_ACTIVE_APPLICATIONS = 5;
+/** Review before publication can be switched ON from settings at first abuse. */
+export const DEFAULT_JOB_REQUIRE_REVIEW = false;
 
 export const DEFAULT_JOB_PUBLISH_RATE: RateLimitConfig = Object.freeze({
   maxMessages: 3,
@@ -32,6 +34,7 @@ export const JOB_CV_LIMITS: DocumentLimits = Object.freeze({
 export interface JobLimits {
   readonly jobExpiryDays: number;
   readonly maxActiveApplications: number;
+  readonly requireReview: boolean;
   readonly publishRate: RateLimitConfig;
   readonly applyRate: RateLimitConfig;
 }
@@ -39,6 +42,7 @@ export interface JobLimits {
 export const DEFAULT_JOB_LIMITS: JobLimits = Object.freeze({
   jobExpiryDays: DEFAULT_JOB_EXPIRY_DAYS,
   maxActiveApplications: DEFAULT_MAX_ACTIVE_APPLICATIONS,
+  requireReview: DEFAULT_JOB_REQUIRE_REVIEW,
   publishRate: DEFAULT_JOB_PUBLISH_RATE,
   applyRate: DEFAULT_JOB_APPLY_RATE,
 });
@@ -59,6 +63,10 @@ export function resolveJobLimits(value: unknown): JobLimits {
       DEFAULT_MAX_ACTIVE_APPLICATIONS,
       50,
     ),
+    requireReview:
+      typeof raw.jobRequireReview === 'boolean'
+        ? raw.jobRequireReview
+        : DEFAULT_JOB_REQUIRE_REVIEW,
     publishRate: DEFAULT_JOB_PUBLISH_RATE,
     applyRate: DEFAULT_JOB_APPLY_RATE,
   });
