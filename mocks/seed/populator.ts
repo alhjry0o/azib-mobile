@@ -5,9 +5,7 @@
 //
 // Do NOT call this in backend mode. It intentionally no-ops and reports
 // `skipped: 'not-demo-mode'`.
-
 import type { RepositoryContainer } from '@/repositories/container';
-
 import { buildDemoSeedBundle } from './index';
 
 export interface PopulateReport {
@@ -75,11 +73,10 @@ export async function populateDemoSeed(
   await tryCreate('souk', bundle.souk, (i) =>
     container.souk.create(i as (typeof bundle.souk)[number]),
   );
+  // P13.1: pass the whole seed job so its explicit `status` survives.
+  // Picking only two fields left every seeded job a draft (empty browser).
   await tryCreate('jobs', bundle.jobs, (i) =>
-    container.jobs.create({
-      titleKey: (i as (typeof bundle.jobs)[number]).titleKey,
-      partnerId: (i as (typeof bundle.jobs)[number]).partnerId,
-    }),
+    container.jobs.create(i as (typeof bundle.jobs)[number]),
   );
   await tryCreate('volunteers', bundle.volunteers, (i) =>
     container.volunteers.create(i as (typeof bundle.volunteers)[number]),
