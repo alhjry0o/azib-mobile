@@ -1,8 +1,7 @@
 // Projections. Data minimisation happens HERE, at the hook boundary,
 // never only in the UI (ADR-0065).
-import type { Job } from '@/repositories/contracts/job';
+import type { Job, JobApplicationMethod, JobSchedule, JobWorkType } from '@/repositories/contracts/job';
 import type { JobApplication } from '@/repositories/contracts/job-application';
-import type { JobSchedule, JobWorkType, JobApplicationMethod } from '@/repositories/contracts/job';
 
 export interface PublicJobView {
   readonly id: string;
