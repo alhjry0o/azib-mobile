@@ -50,7 +50,30 @@ export type {
   DonationRepository,
   DonationStatus,
 } from './donation';
-export type { CreateJobInput, Job, JobRepository, UpdateJobInput } from './job';
+export type {
+  CreateJobInput,
+  Job,
+  JobApplicationMethod,
+  JobRepository,
+  JobSchedule,
+  JobStatus,
+  JobWorkType,
+  UpdateJobInput,
+} from './job';
+export type {
+  CreateJobApplicationInput,
+  JobApplication,
+  JobApplicationRepository,
+  JobApplicationStatus,
+  UpdateJobApplicationInput,
+} from './job-application';
+export type {
+  CreateJobReportInput,
+  JobEngagementRepository,
+  JobReport,
+  JobReportStatus,
+  JobSave,
+} from './job-engagement';
 export type {
   CreateInAppNotificationInput,
   InAppNotification,
@@ -150,8 +173,18 @@ export type {
   CreateVolunteerInput,
   UpdateVolunteerInput,
   Volunteer,
+  VolunteerHelpType,
   VolunteerRepository,
+  VolunteerStatus,
 } from './volunteer';
+export type {
+  CreateVolunteerTaskInput,
+  UpdateVolunteerTaskInput,
+  VolunteerTask,
+  VolunteerTaskKind,
+  VolunteerTaskRepository,
+  VolunteerTaskStatus,
+} from './volunteer-task';
 export type {
   CreateWeddingInput,
   UpdateWeddingInput,
