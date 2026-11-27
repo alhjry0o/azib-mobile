@@ -12,7 +12,8 @@ import {
   type JobActor,
   type JobWorkflowStatus,
 } from '../state/job-machine';
-import { jobExpiryFrom, type JobLimits } from '../state/limits';
+import { jobExpiryFrom } from '../state/expiry';
+import type { JobLimits } from '../state/limits';
 import { canJob, type JobRole } from '../state/permissions';
 
 export interface JobDeps {
