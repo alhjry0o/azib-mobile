@@ -43,6 +43,14 @@ export type { SoukComposerApi, SoukComposerForm } from './hooks/use-souk-compose
 export { EMPTY_SOUK_FORM, useSoukComposer } from './hooks/use-souk-composer';
 export type { SoukMineApi } from './hooks/use-souk-mine';
 export { useSoukMine } from './hooks/use-souk-mine';
+export type { InboxRow, SoukInboxApi } from './hooks/use-souk-inbox';
+export { useSoukInbox } from './hooks/use-souk-inbox';
+export type { CoordinationPayload, SoukCoordinationApi } from './hooks/use-souk-coordination';
+export { soukChatQueryKey, useSoukCoordination } from './hooks/use-souk-coordination';
+export type { HandoverPayload, SoukHandoverApi } from './hooks/use-souk-handover';
+export { useSoukHandover } from './hooks/use-souk-handover';
+export type { SoukReportApi } from './hooks/use-souk-report';
+export { useSoukReport } from './hooks/use-souk-report';
 export { SoukScaffold } from './components/SoukScaffold';
 export {
   ConditionBadge,
@@ -53,9 +61,16 @@ export {
 export { GiftEmptyState } from './components/GiftEmptyState';
 export { SoukImageGallery } from './components/SoukImageGallery';
 export { SoukItemCard } from './components/SoukItemCard';
+export { SafeMeetingNote } from './components/SafeMeetingNote';
+export { ContactDisclosureCard } from './components/ContactDisclosureCard';
+export { HandoverCodeCard } from './components/HandoverCodeCard';
 export { SoukBrowserScreen } from './screens/SoukBrowserScreen';
 export { SoukItemDetailScreen } from './screens/SoukItemDetailScreen';
 export { SoukItemComposerScreen } from './screens/SoukItemComposerScreen';
 export { SoukRequestScreen } from './screens/SoukRequestScreen';
 export { SoukMyItemsScreen } from './screens/SoukMyItemsScreen';
 export { SoukMyRequestsScreen } from './screens/SoukMyRequestsScreen';
+export { SoukInboxScreen } from './screens/SoukInboxScreen';
+export { SoukCoordinationScreen } from './screens/SoukCoordinationScreen';
+export { SoukHandoverScreen } from './screens/SoukHandoverScreen';
+export { SoukReportScreen } from './screens/SoukReportScreen';
