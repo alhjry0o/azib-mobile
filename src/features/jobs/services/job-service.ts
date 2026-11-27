@@ -1,4 +1,5 @@
 // Job lifecycle. The machine is checked BEFORE any write (ADR-0060).
+// Review-before-publish is DERIVED from settings, never a caller flag.
 import { AppError } from '@/core/errors';
 import { ok, type Result } from '@/core/result';
 import type { AuditRepository } from '@/repositories/contracts/audit';
@@ -152,12 +153,11 @@ async function assertPublisher(
   return ok(job.value);
 }
 
-/** Publishes directly, or routes through review when the policy requires it. */
+/** Publishes directly, or routes through review when SETTINGS require it. */
 export async function publishJob(
   deps: JobDeps,
   jobId: string,
   publisherId: string,
-  requireReview: boolean,
   limits: JobLimits,
   now: Date,
 ): Promise<Result<Job>> {
@@ -166,7 +166,9 @@ export async function publishJob(
   if (!job.value.publisherTermsAcceptedAt) {
     return { ok: false, error: AppError.validation({ code: 'PUBLISHER_TERMS_REQUIRED' }) };
   }
-  if (requireReview) return move(deps, jobId, 'pending_review', 'publisher', publisherId);
+  if (limits.requireReview) {
+    return move(deps, jobId, 'pending_review', 'publisher', publisherId);
+  }
   return move(deps, jobId, 'open', 'publisher', publisherId, {
     expiresAt: jobExpiryFrom(now.toISOString(), limits.jobExpiryDays),
   });
