@@ -45,19 +45,12 @@ describe('job service', () => {
     expect(Object.keys(created.value)).not.toContain('verified');
   });
 
-  it('publishes directly and sets expiry', async () => {
+  it('publishes directly and sets expiry when review is off', async () => {
     const deps = setup();
     const now = new Date('2026-06-01T00:00:00.000Z');
     const created = await createJobDraft(deps, input, DEFAULT_JOB_LIMITS, now);
     if (!created.ok) throw new Error('setup failed');
-    const published = await publishJob(
-      deps,
-      created.value.id,
-      'publisher-1',
-      false,
-      DEFAULT_JOB_LIMITS,
-      now,
-    );
+    const published = await publishJob(deps, created.value.id, 'publisher-1', DEFAULT_JOB_LIMITS, now);
     expect(published.ok).toBe(true);
     if (published.ok) {
       expect(published.value.status).toBe('open');
@@ -65,19 +58,14 @@ describe('job service', () => {
     }
   });
 
-  it('routes through review when required and refuses non-moderators', async () => {
+  it('routes through review when SETTINGS require it, not a caller flag', async () => {
     const deps = setup();
+    const limits = resolveJobLimits({ jobRequireReview: true });
+    expect(limits.requireReview).toBe(true);
     const now = new Date();
-    const created = await createJobDraft(deps, input, DEFAULT_JOB_LIMITS, now);
+    const created = await createJobDraft(deps, input, limits, now);
     if (!created.ok) throw new Error('setup failed');
-    const submitted = await publishJob(
-      deps,
-      created.value.id,
-      'publisher-1',
-      true,
-      DEFAULT_JOB_LIMITS,
-      now,
-    );
+    const submitted = await publishJob(deps, created.value.id, 'publisher-1', limits, now);
     expect(submitted.ok).toBe(true);
     if (submitted.ok) expect(submitted.value.status).toBe('pending_review');
 
@@ -87,7 +75,7 @@ describe('job service', () => {
       'member',
       'someone',
       'open',
-      DEFAULT_JOB_LIMITS,
+      limits,
       now,
     );
     expect(denied.ok).toBe(false);
@@ -97,10 +85,11 @@ describe('job service', () => {
       'moderator',
       'mod-1',
       'open',
-      DEFAULT_JOB_LIMITS,
+      limits,
       now,
     );
     expect(approved.ok).toBe(true);
+    if (approved.ok) expect(approved.value.status).toBe('open');
   });
 
   it('rejects contact data in the description', async () => {
@@ -142,7 +131,7 @@ describe('job service', () => {
     const now = new Date('2026-06-01T00:00:00.000Z');
     const created = await createJobDraft(deps, input, limits, now);
     if (!created.ok) throw new Error('setup failed');
-    await publishJob(deps, created.value.id, 'publisher-1', false, limits, now);
+    await publishJob(deps, created.value.id, 'publisher-1', limits, now);
     const closed = await closeJob(deps, created.value.id, 'publisher-1');
     expect(closed.ok).toBe(true);
     const reopened = await reopenJob(deps, created.value.id, 'publisher-1', limits, now);
