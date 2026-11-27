@@ -20,18 +20,18 @@
 | P08 | Assistance & Eligibility Engine | Done | 2026-11-16 | 3 أجزاء · 1020 / 155 · ADR-0027…0032. |
 | P09 | Financial Assistance Architecture | Done | 2026-11-16 | 3 أجزاء · 1138 / 178 · ADR-0033…0039. |
 | P10 | Group Weddings | Done | 2026-11-16 | 3 أجزاء · 1270 / 207 · ADR-0040…0050. |
-| P11 | **Partner Marketplace, Contribution System & Ambassadors** | **Done** | **2026-11-26** | 3 أجزاء · **231/231 suites · 1396/1396 tests** · lint/typecheck نظيفان · CI أخضر (بتقرير المالك) · ADR-0051…0060. |
-| P12 | Souk | Not Started | — | عيني فقط؛ يخدم `in_kind`؛ لا دفع ولا تتبّع. |
-| P13 | Jobs + Volunteers | Not Started | — | مهام تطوع حقيقية. |
+| P11 | Partners + Ambassadors | Done | 2026-11-26 | 3 أجزاء · 1396 / 231 · ADR-0051…0060. |
+| P12 | **Souk Al Khair** | **Done** | **2026-11-26** | 3 أجزاء · **252/252 suites · 1503/1503 tests** · lint/typecheck نظيفان · doctor 20/20 · CI أخضر (بتقرير المالك) · ADR-0061…0073. |
+| P13 | Jobs + Volunteers | Not Started | — | مهام تطوع حقيقية؛ لا بيانات تواصل عامة. |
 | P14 | Calculator + Guide | Not Started | — | إرشادي فقط. |
 | P15 | Education + Charter + Impact | Not Started | — | **محجوب** حتى حد الإحصاءات؛ يوحّد الأثر وعرض الخصم. |
-| P16 | Notifications + Search | Not Started | — | مصدر شارة Dock وجرس الرئيسية. |
-| P17 | Staff Console | Not Started | — | لوحة مراجعة الشركاء/العروض + Maker/Checker + إدارة مجموعات. |
-| P18 | Supabase | Not Started | — | RLS لمستندات التحقق/البلاغات/مهام السفير + تخزين دائم. |
-| P19 | Security | Not Started | — | يستهلك `THREAT_MODEL.md` (محدَّث بـP11). |
-| P20 | Offline / Perf / A11y | Not Started | — | تحقق الأجهزة المؤجل (P05–P11). |
+| P16 | Notifications + Search | Not Started | — | مصدر شارة Dock وجرس الرئيسية **وإشعارات سوق خير**. |
+| P17 | Staff Console | Not Started | — | طابور إشراف سوق خير + لوحة الشركاء + Maker/Checker. |
+| P18 | Supabase | Not Started | — | RLS للطلبات/الدردشة/البلاغات + تخزين دائم + رمز رسمي. |
+| P19 | Security | Not Started | — | يستهلك `THREAT_MODEL.md` (محدَّث بـP12). |
+| P20 | Offline / Perf / A11y | Not Started | — | تحقق الأجهزة المؤجل (P05–P12). |
 | P21 | Testing | Not Started | — | Playwright + pgTAP. |
-| P22 | GitHub Actions | Not Started | — | الفاحص أُضيف مبكراً في P05. |
+| P22 | GitHub Actions | Not Started | — | الفاحص أُضيف مبكراً في P05؛ Doctor ثُبّت في P12. |
 | P23 | Docs | Not Started | — | يُستكمل README. |
 | P24 | Final Integration | Not Started | — | مسار كامل حقيقي. |
 
@@ -72,132 +72,139 @@
 ### P10
 - [x] تمديد Wedding + 4 مستودعات · المحرك/الآلة/التصويت/الموافقات/الدردشة · الميزانية/الاتفاق/الاحتفال · 1270 / 207.
 
+### P11
+- [x] تمديد Partner/Offer + 4 مستودعات · الشارة من السجل · الروابط الخارجية · التسجيل/اللوحة/العروض · السفراء · 1396 / 231.
+
 ---
 
-## قائمة تحقق P11 (تفصيل)
+## قائمة تحقق P12 (تفصيل)
 
-### P11.1 — النواة النقية (10 suites · +74 اختباراً)
-- [x] قراءة `crud.contract.ts` أولاً: لا يمنع حقولاً أو دوال إضافية ⇒ التمديد آمن.
-- [x] `PartnerStatus` → 6 قيم (legacy محفوظ) + `ownerId`/وصف/محافظة/مديرية/مدينة/هاتف/واتساب/صور/`termsAcceptedAt` + `verificationId`/`verifiedAt`/`reverifyAfter`/أسباب + إحداثيات.
-- [x] `OfferStatus` → 7 قيم + `DiscountType` (percent/fixed/gift/service) + `OfferAudience` + `title`/`discountValue`/`discountPlaceholder`/منتجات/شروط/`validFrom`/`validUntil`/صور/فئة/منطقة/أسباب/`publishedAt`/`reviewRequestedAt`.
-- [x] **4 مستودعات جديدة**: `PartnerVerificationRepository` (submit/decide/getLatest) · `OfferReportRepository` · `PartnerEngagementRepository` (save/unsave/listSaved/recordView/getViews/getViewsForOffers) · `AmbassadorRepository` (apply/decide/createTask/listTasks/listTasksByRegion/updateTask) ⇒ **24**.
-- [x] `state/partner-machine.ts`: 6 حالات · **10 انتقالات** · فاعل لكل انتقال · لا حالة نهائية (كلها قابلة للاستعادة).
-- [x] `state/offer-machine.ts`: 7 حالات · **8 انتقالات** · `cancelled` نهائية · `isClientWritableOfferStatus` يرفض `expired`.
-- [x] `state/verification.ts`: `isVerified(verification, now)` **لا يقرأ `Partner.status` إطلاقاً** · `isVerificationActive` · `needsReverification` · `reverifyDeadline`.
-- [x] `state/expiry.ts`: `isExpired` · `hasStarted` · `offerVisibility` (live/scheduled/expired/not_published) · `daysRemaining`.
-- [x] `state/permissions.ts`: 9 أدوار × 25 صلاحية · `AMBASSADOR_FORBIDDEN` صريحة · `canEditOwnPartner/Offer` تشترط الملكية.
-- [x] `lib/phone.ts`: تنظيف يمني (5 صيغ) · رفض غير الصحيح · إنتاج e164/digits/national.
-- [x] `lib/external-links.ts`: قائمة سماح (tel:/wa.me/geo:/maps:/maps.google.com) · builders · `requiresConfirmation` (واتساب/خرائط فقط).
-- [x] `lib/categories.ts`: **14 فئة** + `categoryLabelKey`.
-- [x] `lib/stats.ts`: `computeOfferStats` tái يستخدم `SMALL_NUMBER_THRESHOLD`/`suppressSmallNumber` · `totalViews`.
-- [x] `lib/filters.ts`: `filterPartners` (نص/فئة/منطقة/موثّق) · `filterOffers`.
-- [x] `config/limits.ts`: `system_settings` · إعادة تحقق 365 (30..1825) · `AUDIENCE_OPTIONS` بـ`beneficiaries` فقط مفعّل.
-- [x] seed: تمديد partners/offers (بلا هواتف في الحزمة) + `partner-marketplace.ts` مستقل بأرقام مُختلقة بوضوح.
-- [x] اختبارات: الآلتان استقصائياً · الشارة · الانتهاء · التنظيف · الروابط · الفلاتر · الإحصاءات · الصلاحيات · الحدود · المخططات · المستودعات الأربعة.
+### P12.1 — النواة النقية (10 suites · +79 اختباراً)
+- [x] قراءة `crud.contract.ts` و`souk.test.ts` أولاً: لا يمنع حقولاً إضافية، و`validUpdate:{status:'reserved'}` يبقى صالحاً.
+- [x] `SoukStatus` → 9 قيم (legacy `available`/`reserved`/`claimed` محفوظة، و`claimed` **للقراءة فقط** تُ映射 إلى `handed_over`).
+- [x] حقول إضافية: `donorId` · `title` · `description` · `condition` · `governorateId`/`districtId` · `deliveryMethod` · `imageFileIds`/`imageFingerprints` · `estimatedValue` · `noResaleConsentAt` · `reservedForRequestId` · `expiresAt` · `rejectionReasonKey` · `duplicateFlag` · `saleWordFlag`.
+- [x] **لا `price`/`amountPaid`/`currency` في أي كيان أو شاشة** (ADR-0063).
+- [x] **3 مستودعات جديدة**: `SoukRequestRepository` (طلبات/موافقات كشف/تأكيدان/تقييم) · `SoukReportRepository` · `SoukChatRepository` (رسائل/بلاغ/حذف/`subscribe`) ⇒ **27**.
+- [x] `state/item-machine.ts`: 8 حالات · **10 انتقالات** · فحص الفاعل · `isClientWritableItemStatus` يرفض `reserved`/`handed_over`/`expired`.
+- [x] `state/request-machine.ts`: 5 حالات · **9 انتقالات** · `handed_over` للنظام فقط · النهائية مغلقة.
+- [x] `state/contact-disclosure.ts`: `not_a_party` / `not_accepted` / `awaiting_consents` / `ready` · لا كشف بموافقة طرف واحد · لا كشف للطرفين معاً في بيانات منحطة.
+- [x] `state/handover.ts`: رمز `AZIB-DEMO-HO-*` حتمي · `assertCanConfirmHandover` · `isHandoverComplete` · `validateRating` (1..5 + ملاحظة ≤300).
+- [x] `state/sale-lexicon.ts`: معجم عربي/إنجليزي **بسطر واحد + `// i18n-allow-arabic`** · تحذير لا حجب · `hasNoResaleConsent`.
+- [x] `state/duplicate.ts`: بصمة صورة أو عنوان+منطقة+متبرع · **قيد إعادة التسمية معلن**.
+- [x] `state/stats.ts`: تقدير غير موثق · **حجب المبلغ مع عدد المساهمين** (إصلاح المالك).
+- [x] `state/limits.ts`: `system_settings` + افتراضات موسومة + `SOUK_MEDIA_LIMITS` مستقل.
+- [x] `state/filters.ts` (11 تصنيفاً) · `state/public-view.ts` · `state/permissions.ts` · `state/error-keys.ts`.
+- [x] `services/*`: item · request · coordination · handover · report · media (إعادة استخدام خط P08).
+- [x] seed: تمديد `souk.ts` + `souk-marketplace.ts` مستقل.
+- [x] اختبارات: الآلتان استقصائياً · الكشف · الرمز · المعجم · التكرار · الإحصاء · الحدود · المخططات · المستودعات الثلاثة.
 
-### P11.2 — المتصفح والتفاصيل والتفاعل (6 suites · +23 اختباراً)
-- [x] `services/external-actions.ts`: **وحدة حدودية** لـ`expo-linking` + `Share`؛ قائمة السماح تُفرض **قبل** الفتح.
-- [x] `services/engagement-service.ts`: save/unsave/report/recordView + تدقيق للبلاغ.
-- [x] hooks: browser (فلاتر + تاج من السجل) · profile · offer-detail (مشاهدات/محفوظ/صلاحية) · offer-actions · saved.
-- [x] components: `PartnerScaffold` · `VerifiedCrown` · `DiscountValue` (وسم placeholder) · `ValidityCountdown` · `PartnerCard` · `OfferCard` · `ReportOfferForm`.
-- [x] screens: Browser (التبويب) · Profile · OfferList · OfferDetail · SavedOffers.
-- [x] تفاصيل العرض: قيمة الخصم · المنتجات · الشروط · عدّاد صلاحية · طريقة الاستفادة · ملاحظة الفئة المؤقتة.
-- [x] اتصال `tel:` مباشر · واتساب/خرائط **بتأكيد قبل المغادرة** · مشاركة برابط `azib://` حقيقي · أزرار معطّلة بسبب عند غياب الرقم.
-- [x] `ROUTES.partners` + Allowlist + بلا `app/partners/index.tsx`.
-- [x] نصوص `marketplace:*` (ar/en) كاملة.
+### P12.2 — التصفح والتفاصيل والإضافة والطلب (6 suites · +16 اختباراً)
+- [x] hooks: limits · browser · item · composer · mine.
+- [x] components: `SoukScaffold` · `SoukBadges` (4 شارات) · `GiftEmptyState` (3D هدية) · `SoukImageGallery` · `SoukItemCard`.
+- [x] screens: Browser · ItemDetail · ItemComposer · Request · MyItems · MyRequests.
+- [x] **الإسقاط العام إلزامي:** لا `donorId` ولا `estimatedValue` ولا عنوان دقيق في أي سطح عام.
+- [x] إضافة عنصر: ضغط/EXIF عبر خط P08 · حد الصور من الإعدادات · شرط عدم إعادة البيع · **رفض رقم تواصل في الوصف**.
+- [x] طلب الاستفادة: سبب ≥10 · حد نشط · منع تكرار · لا طلب على عنصر خود.
+- [x] **اختبارا رفض المعدل** بساعة توافق ساعة التخزين (3 عناصر ثم الرابع · 5 طلبات ثم السادس).
+- [x] **حذف `app/(features)/souk.tsx`** + `app/souk/` كاملة بـ`index.tsx` + `ROUTES.features.souk='/souk'`.
+- [x] تحديث اختبارين قديمين يثبّتان المسار نصياً (`HomeScreen.test` · `ProgramKindScreen.test`).
+- [x] نصوص `marketplace:souk.*` (ar/en) + المسارات + Allowlist.
 
-### P11.3 — التسجيل واللوحة والعروض والسفراء (8 suites · +29 اختباراً)
-- [x] `config/limits.ts` + `PARTNER_MEDIA_LIMITS` (5MB صور / 10MB PDF) + حدود عدد الوسائط.
-- [x] `schemas/registration.ts`: تسجيل الشريك (شروط + مستند واحد على الأقل) · طلب السفير · تسليم المهمة.
-- [x] `services/media-service.ts`: **إعادة استخدام** `pickImageDocument`/`pickPdfDocument`/`prepareDocument` من P08 بحدود السوق (القاعدة 7).
-- [x] `services/registration-service.ts`: `registerPartner` ⇒ `pending_verification` + سجل · `resubmitVerification` عبر الآلة.
-- [x] `services/verification-service.ts`: `decideVerification` · `requestReverification` · `expirePartner` (system) · `suspendPartner` · `reinstatePartner`.
-- [x] `services/offer-lifecycle-service.ts`: draft → in_review → approved/rejected → active → expired/cancelled → renew؛ **النشر يشترط سجل تحقق ساري**.
-- [x] `services/ambassador-service.ts`: طلب/موافقة/مهام؛ **التبعيات لا تحوي مستودعات المستفيدين أصلاً**؛ المهمة مقيّدة بالمنطقة المعتمدة.
-- [x] hooks: registration · my-partner (لوحة + إحصاءات) · offer-composer · ambassador.
-- [x] components: `VerificationStatusBadge` · `OfferStatusBadge` · `MediaUploadField`.
-- [x] screens: Register · Dashboard · OfferComposer · Ambassador.
-- [x] `features/dev/DevPartnersScreen.tsx` + `app/(dev)/partners.tsx` + رابط من إعدادات المطور.
-- [x] ربط الأعراس: اقتراحات عروض في `GroupBudgetScreen` **قراءة فقط** بوسم placeholder.
-- [x] 6 مسارات جديدة + Allowlist + نصوص الترجمة.
+### P12.3 — التنسيق والتسليم والبلاغ والمحاكي (5 suites · +12 اختباراً)
+- [x] hooks: inbox · coordination · handover · report.
+- [x] components: `SafeMeetingNote` · `ContactDisclosureCard` · `HandoverCodeCard`.
+- [x] screens: **SoukInboxScreen** (قبول/رفض بسبب/فتح التنسيق) · Coordination · Handover · Report.
+- [x] دردشة بعد القبول فقط · فلتر P10 · معدل · `subscribe` يكتب في Query cache (لا `setState` في effect).
+- [x] كشف الرقم من `Profile.phone` عند `accepted` + موافقتين + طرفية.
+- [x] **الرمز للمتبرع فقط** — تصغير عند حدود الـhook في `use-souk-coordination` و`use-souk-handover` (إصلاح المالك).
+- [x] `handed_over` للطلب **والعنصر** بعد التأكيدَين · رمز خاطئ مرفوض.
+- [x] تقييم 1..5 بعد الاكتمال · خاص بالفريق · لا يظهر في `toPartyRequestView`.
+- [x] البلاغ بسبب وتفصيل ≥10 + تدقيق + هوية المبلّغ لا تُعرض لصاحب العنصر.
+- [x] `features/dev/DevSoukScreen.tsx` + `app/(dev)/souk.tsx` + رابط من إعدادات المطور.
+- [x] 5 مسارات جديدة + Allowlist + نصوص الترجمة.
 
 ### النتيجة النهائية
-- [x] **231/231 test suites · 1396/1396 tests · lint وtypecheck نظيفان · CI أخضر بالكامل** (بتقرير المالك 2026-11-26).
-- [x] صفر انحدار في P03–P11.2 (1367 اختباراً).
-- [x] **الإجمالي التراكمي لـP11: +24 suite · +126 اختباراً.**
+- [x] **252/252 test suites · 1503/1503 tests · lint وtypecheck نظيفان · expo-doctor 20/20 · CI أخضر** (بتقرير المالك 2026-11-26).
+- [x] صفر انحدار في P03–P12.2 (1491 اختباراً).
+- [x] **الإجمالي التراكمي لـP12: +21 suite · +107 اختبارات.**
 
-### تسلسل P11.3 بصدق
-- [x] الملفات **الأصلية** بُنيت **خضراء قبل** تعديلات المراجعة.
-- [x] التعديلات الأربعة كانت **وقائية** (صحة وقت تشغيل ونطاق) — لم تكن مرئية في CI.
-- [x] الخطأ الوحيد الذي ظهر في CI نتج عن **تعليمة استيراد غير دقيقة من المالك**، لا عن كود النموذج.
+### إصلاحات P12
+- [x] **P12.1 (مراجعة قبل CI):** حجب التقدير بمقداره لا مع العدد ⇒ بوابة على عدد المساهمين · استيرادان مكرران في `public-view` · **الوصف لا يُفحص ضد الهواتف** ⇒ إعادة استخدام فلتر P10 باستثناء قاعدة الطول · **نافذة نشر قبل المراجعة** ⇒ `status?: SoukStatus` اختياري في العقد/المخطط و`input.status ?? 'available'` في المصنع و`status:'draft'` من الخدمة.
+- [x] **P12.1 (CI):** `TS2339` ×2 فكّ تغليف مزدوج في `handover-service` ⇒ `const snapshot = request` · fixture البحث النصي لا يميّز ⇒ عنوان مختلف لـ`i2`.
+- [x] **P12.2 (مراجعة قبل CI):** زوجان مكرران في `SoukBrowserScreen` · `GiftEmptyState` يمرّر `illustration` غير الموجود ⇒ الهدية كشقيق مع الحفاظ على testID.
+- [x] **P12.2 (Doctor):** انحراف تبعيات خارجي — `expo-doctor` غير مثبّت فنشرت Expo خط 58.1.x بين التشغيلين. **الحل:** تثبيت الأداة + `expo install --fix` + إضافة `expo-sharing` يدوياً إلى `plugins` (CLI لا يكتب تكويناً ديناميكياً). **التزام صيانة منفصل**، و`ci.yml` لم يُمسّ.
+- [x] **P12.2 (CI):** اختباران قديمان يثبّتان `/(features)/souk` نصياً ⇒ حُدّثا إلى `/souk`.
+- [x] **P12.3 (مراجعة قبل CI):** **الرمز يصل للطرفين** ⇒ تصغير عند حدود الـhook · تسرّب `traole` في `souk.handover.codeHelp` ⇒ صُحّح · ملفا الترجمة أُخرجا ككتل (خرق قاعدة 3) ⇒ دُمجا يدوياً.
 
-### إصلاحات P11 (5 مجموعات)
-- [x] **P11.1: لا أخطاء** — أخضر من أول تشغيل.
-- [x] **P11.2 (CI):** موكات معرّفة بلا معاملات في `OfferDetailScreen.test` · نقص `activityType` في موك `Share`.
-- [x] **P11.3 وقائي 1:** خطأ مُصنّع `{kind:'NotFound'} as never` بلا `meta` ينهار في `authErrorKey` ⇒ `AppError.notFound({code:'VERIFICATION_NOT_FOUND'})`.
-- [x] **P11.3 وقائي 2:** `dev-reject-partner` يُرجع `ok:true/value:null` عند غياب السجل ⇒ **نجاح كاذب**؛ استُبدل بنفس خطأ NotFound.
-- [x] **P11.3 وقائي 3:** زر «إعادة تقديم المستندات» ميت دائماً (لا رافع في اللوحة) ⇒ أُضيف `MediaUploadField` مربوط بالـhook ومشروط بـ`canResubmit`.
-- [x] **P11.3 وقائي 4:** `decideVerification` يحسم السجل **قبل** فحص الآلة ⇒ حالة متناقضة (سجل verified وشريك suspended)؛ نُقل الفحص قبل الكتابة.
-- [x] **P11.3 CI:** `TS2305` + `TS7006`×2 — `MediaUploadField` أُضيف إلى كتلة `@/components/ui` بدل مساره النسبي؛ الخطآن الثانيان **نتيجة** لجهل نوع الـprops.
+---
+
+## التزام الصيانة المنفصل (2026-11-26)
+
+- [x] تثبيت `expo-doctor@1.21.9` في `devDependencies` — حتى لا تتحرك توقعات الأداة تحت المشروع (ADR-0073).
+- [x] `npx expo install --fix` لمحاذاة حزم SDK (خرج بـ1 ومعناه «لا أستطيع كتابة تكوين ديناميكي» لا «فشل التثبيت»).
+- [x] إضافة `'expo-sharing'` إلى `plugins` في `app.config.ts` يدوياً.
+- [x] `npx expo-doctor` ⇒ **20/20** · `npm run typecheck` نظيف.
+- [x] دفع `package.json` + `package-lock.json` + `app.config.ts` في التزام **بلا أي ملف ميزة**.
+- [x] **لا `continue-on-error`** ولا أي إضعاف لبوابة CI.
+- [ ] تحديث `PROJECT_CONTEXT §2` من `package.json` الفعلي (#86).
 
 ---
 
 ## الدروس المُلزِمة (تراكمية — تُطبَّق في كل مرحلة قادمة)
 
-### الاختبارات (RNTL v14 + Query + الساعة)
-- [ ] `await render(...)` · `await fireEvent.xxx(...)` · `await view.unmount()`.
-- [ ] **`rerender` إلزامي** بعد تحديث متغيّر خارجي تقرأه الواجهة.
-- [ ] **الموكات تُعرَّف بمعاملات صريحة** مطابقة للاستدعاء، وإلا فشل typecheck.
-- [ ] موك `Share.share` يعيد `activityType` (ولو `undefined`) — تعريفات RN تتطلبه.
-- [ ] **الساعة المحقونة توافق ساعة التخزين**؛ اشتقّها من البيانات المخزَّنة لا من تاريخ ماضٍ ثابت.
-- [ ] لا `act` حول `fireEvent` · `await act(() => {...})` للمتاجر · كل `it` فيه `await` هو `async`.
-- [ ] **`invalidateQueries({ queryKey: ['<feature>'] })` دائماً** · `setQueryData` للجلسة قبل render.
-- [ ] mock للمكونات المعتمدة على `Modal`/`Select`/`DatePicker` · `jest.mock` بعد الـimports.
+### تصغير البيانات والخصوصية
+- [ ] **صغّر البيانات عند حدود الـhook لا في الواجهة.** أي حقل يصل للعميل قابل للاستخراج حتى لو أخفته الشاشة. النمط: `isDonor ? view : { ...view, secret: null }`.
+- [ ] **التأكيد المزدوج يفقد معناه إن رأى الطرفان الرمز** ⇒ يُعرض لطرف ويُدخل من الآخر.
+- [ ] كل مسار بلا `RequireAuth` يُسقط إسقاطاً عاماً — والحلقات مع التاريخ.
+- [ ] **حجب المبلغ مع العدد لا بمقداره.** ابنِ بوابة على عدد المساهمين ثم أعِد استخدام نفس كائن `StatValue`.
+- [ ] لا تُمرّر مبلغاً إلى `suppressSmallNumber` مع حدّ أعداد.
 
-### React 19 / React Compiler
-- [ ] لا `useRef().current` ولا `Date.now()` أثناء render.
-- [ ] **كل Hook قبل أي `return` مبكر** · لا `setState` مباشر في `useEffect`.
-- [ ] الكائنات المُمرَّرة كـ dependency تُغلَّف بـ`useMemo` · لا `[]`/`{}` خارج `useMemo`.
-- [ ] `useWatch` بدل `watch` · `override` في Class Component · `eslint-disable react-hooks/immutability` لتعديل `SharedValue`.
+### الاختبارات (RNTL v14 + Query + الساعة)
+- [ ] `await render(...)` · `await fireEvent.xxx(...)` · `await view.unmount()` · **`rerender`** بعد متغيّر خارجي.
+- [ ] **الساعة المحقونة توافق ساعة التخزين**؛ اشتقّها من البيانات المخزَّنة لا من تاريخ ماضٍ ثابت.
+- [ ] **fixture البحث النصي يجب أن يميّز:** عنوان مختلف صراحةً لكل صف.
+- [ ] موكات بمعاملات صريحة · موك `Share` يعيد `activityType` · `fireEvent(el,'valueChange',v)` يعمل على `Switch` المخصص.
+- [ ] **عند نقل مسار، ابحث عن نصّه الحرفي في كل الاختبارات قبل الدفع.**
+- [ ] `invalidateQueries({queryKey:[feature]})` مقيّد · `setQueryData` للجلسة قبل render.
 
 ### TypeScript / ESLint / الاستيرادات
-- [ ] **مكوّنات الميزة تُستورد بمسارها النسبي** (`../components/X`) **لا من برميل `@/components/ui`**.
-- [ ] **كل تعليمة «أضف استيراداً» تحمل المسار الكامل** — وإلا نتج `TS2305` ومعه `TS7006` تابعة.
+- [ ] **لا فكّ تغليف مزدوج:** بعد `if (!found.value) return …` يكون `found.value` هو الكيان.
 - [ ] التضييق لا يصمد داخل callback ⇒ `const snapshot = x.value` بعد الحارس.
-- [ ] كل الاستيرادات أعلى الملف · لا استيراد مكرر من نفس المسار.
+- [ ] **لا استيراد مكرر من نفس المسار** — راجع كل كتل الملف لا الأولى فقط.
+- [ ] مكوّنات الميزة بمسارها النسبي · كل تعليمة استيراد بمسار كامل · كل الاستيرادات أعلى الملف.
 - [ ] **فشل حلّ نفس المسار من عدة مستهلكين = ملف غائب/مُسمّى خطأً**.
-- [ ] `StyleSheet` صريح · `!`/`?? default` للفهرسة · لا `as const Type[]` بعد `Object.freeze`.
 
 ### صحة وقت التشغيل والنطاق
-- [ ] **لا تُصنّع كائن خطأ يدوياً** (`{kind:'X'} as never`) — استخدم `AppError.*` دائماً؛ المستهلك يقرأ `meta`.
-- [ ] **لا تُرجع `ok:true/value:null` عند غياب مورد مطلوب** — هذا نجاح كاذب في الواجهة؛ أعِد `NotFound`.
-- [ ] **كل زر يحتاج مدخلاته موجودة في نفس الشاشة** — زر يقرأ حقول نموذج فارغ دائماً = زر ميت.
-- [ ] **الآلة قبل الكتابة في كل خدمة**: افحص الانتقال ثم اكتب السجل/الحالة، وإلا نتجت حالة بيانات متناقضة.
-- [ ] الخدمة تسلك المسار المعلن ولا تقفز حالتين؛ ولا تُوسَّع الآلة للالتفاف على ترتيبها.
-- [ ] كل مسار بلا `RequireAuth` يُسقط إسقاطاً عاماً — والحلقات مع التاريخ.
+- [ ] **الآلة قبل الكتابة** في كل خدمة · الخدمة تسلك المسار المعلن ولا تقفز حالتين.
+- [ ] لا خطأ مُصنّع (`AppError.*` فقط) · لا `ok:true/value:null` لمورد غائب.
+- [ ] **كل زر مدخلاته في نفس الشاشة** · **قبول الطلب إجراء مستخدم** فيجب أن يوجد في مساره لا في المحاكي وحده.
+- [ ] `EmptyState` يقبل `icon/title/description/action/testID` — أي رسم تزييني يُرسم كشقيق.
+- [ ] الحالة الابتدائية تُمرَّر كمعامل اختياري لا بتغيير افتراض المصنع.
 
 ### العملية والتحرير
-- [ ] عند تكرار سطر الحارس في عدة دوال، حدّد **مرساة فريدة** قبل طلب الاستبدال.
-- [ ] عند تغيير أسماء حقول مخطط ميزة، حدّث اختبار تلك الميزة في نفس الجزء.
-- [ ] **فاحص العربية:** `app/` + `src/` فقط، `.ts/.tsx`، عدا `src/locales/`؛ التعليقات تُستثنى؛ العلامة **لكل سطر**؛ **`locales/*.json` خارج الفحص ⇒ مراجعة بشرية إلزامية**.
-- [ ] **إعادة الاستخدام تُثبت بالبناء**: إن كان البناء أخضر فلا تطلب ملفين مُستهلكَين ولا تعِد كتابتهما (القاعدة 7).
+- [ ] **أخرِج الملف كاملاً دائماً** (قاعدة 3) حتى لو طال — دمج JSON يدوياً عرضة لأخطاء الفواصل.
+- [ ] **`locales/*.json` خارج فاحص العربية** ⇒ مراجعة بشرية إلزامية لكل قيمة.
+- [ ] **أداة CI غير مثبّتة تحرّك معيارها تحتك** ⇒ ثبّتها؛ ومحاذاة التبعيات **التزام منفصل**.
+- [ ] **لا تُضعف بوابة CI لتحصل على الأخضر** — أصلح السبب الجذري.
+- [ ] **CI أخضر ≠ سلوك صحيح.** الإصلاحان الجوهريان في P12 لم يكونا ليظهرا في أي بوابة.
+- [ ] عند تكرار سطر الحارس في عدة دوال، حدّد **مرساة فريدة**.
 - [ ] لا تعديل على عقود المستودعات إلا إضافةً وبموافقة (ADR)؛ ولا مساس بـContract Tests.
-- [ ] كل قرار معماري ⇒ ADR · كل قيمة سياسة غير معتمدة ⇒ وسم `PENDING_POLICY` ظاهر.
-- [ ] **لا ادعاء مالي** · **لا شارة توثيق من حقل يكتبه العميل**.
+- [ ] **لا ادعاء مالي** · **لا شارة من حقل** · **لا سعر في سوق خير**.
 
 ---
 
-## مؤجلات P11 (في PROJECT_CONTEXT §8)
-- [ ] توحيد عرض الخصم غير النسبي في الرئيسية والاقتراحات ⇒ P12/P15 (#71).
-- [ ] تخزين دائم + RLS لصور الشركاء ومستندات التحقق ⇒ P18 (#72).
-- [ ] مزامنة الحفظ والمشاهدات ⇒ P18 (#73).
-- [ ] لوحة مراجعة الشركاء/العروض بصلاحيات ⇒ P17 (#74).
-- [ ] اعتماد مدة إعادة التحقق ⇒ المالك (#75).
-- [ ] خرائط i18n لأكواد أخطاء السوق ⇒ P17 (#76).
-- [ ] تغطية أوسع لمحاكي الشركاء ⇒ P17/P21 (#77).
-- [ ] ربط `populateDemoSeed` بمستودعات P10/P11 ⇒ P16 (#14).
-- [ ] تحقق الأجهزة (tel:/wa.me/الخرائط/رفع الوسائط) ⇒ P20/P21 (#26, #28).
-- [ ] تنفيذ #33 · حذف `SignInPlaceholder` (#34) · #58 · #64 · #65 · #66 · #67 · #24 · #37.
+## مؤجلات P12 (في PROJECT_CONTEXT §8)
+- [ ] إشعارات سوق خير ⇒ P16 أو رقعة صغيرة (#84).
+- [ ] توجيه الطلب (متبرع/فريق) بمفتاح إعداد ⇒ P13/P17 (#85).
+- [ ] احتفاظ دردشة السوق ⇒ مع اعتماد #7 (#78).
+- [ ] رمز تسليم رسمي على الخادم ⇒ P18 (#79).
+- [ ] تخزين دائم + RLS للطلبات/الدردشة/البلاغات + عرض الصور ⇒ P18 (#81, #82).
+- [ ] طابور إشراف حقيقي ⇒ P17 (#74, ADR-0072).
+- [ ] تغطية أوسع لمحاكي سوق خير ⇒ P17/P21 (#80).
+- [ ] اعتماد قيم سوق خير التشغيلية ⇒ المالك (#83, #14).
+- [ ] تحديث §2 من `package.json` بعد الصيانة (#86).
+- [ ] تحقق الأجهزة (رفع الصور/EXIF/RTL) ⇒ P20/P21 (#26, #28).
+- [ ] تنفيذ #33 · حذف `SignInPlaceholder` (#34) · #58 · #64 · #65 · #66 · #67 · #68 · #71 · #24 · #37.
 
 ---
 
@@ -210,11 +217,12 @@
 | 3 | مدة الاعتراض | P17 |
 | 4 | سياسة الانسحاب (30 يوماً مؤقتة) | الاعتماد النهائي |
 | 5 | الاستثناء من مساعدة واحدة | P17 |
-| 6 | **فئة خصومات الشركاء** (`beneficiaries` مؤقتة) | الاعتماد النهائي · P15 |
-| 7 | مدة الاحتفاظ + الحذف + الدردشة + مستندات التحقق | P19 / P23 |
+| 6 | فئة خصومات الشركاء (`beneficiaries` مؤقتة) | الاعتماد النهائي · P15 |
+| 7 | مدة الاحتفاظ + الحذف + الدردشة + مستندات الشركاء + **دردشة سوق خير** | P19 / P23 |
 | 8 | الحد الأدنى لإخفاء الإحصاءات | P15 / P17 |
 | 9 | مراجعة قانونية لنصوص Legal | الإطلاق |
 | 10 | سياسة عرض النقاط وموافقة النشر | P15 / P17 |
 | 11 | سياسة المزوّد المرخّص | P18 · تبرع حقيقي |
 | 12 | إعادة توزيع الحصص المخصصة بعد الانسحاب | إتمام `custom` |
-| 13 | **مدة إعادة التحقق الدورية للشركاء (365 يوماً مؤقتة)** | الاعتماد النهائي |
+| 13 | مدة إعادة التحقق الدورية للشركاء (365 يوماً مؤقتة) | الاعتماد النهائي |
+| 14 | **القيم التشغيلية لسوق خير** (طلبات/صور/مراجعة/انتهاء/معدلات/تقييم) | الاعتماد النهائي |
