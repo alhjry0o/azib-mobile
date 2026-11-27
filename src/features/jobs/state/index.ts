@@ -28,12 +28,7 @@ export {
   toApplicationWorkflowStatus,
 } from './application-machine';
 export type { JobPermission, JobRole } from './permissions';
-export {
-  canJob,
-  canManageOwnJob,
-  canViewApplicantCv,
-  canViewApplicants,
-} from './permissions';
+export { canJob, canManageOwnJob, canViewApplicantCv, canViewApplicants } from './permissions';
 export type { JobValidity, JobVisibility } from './expiry';
 export {
   daysRemaining,
@@ -49,6 +44,7 @@ export {
   DEFAULT_JOB_EXPIRY_DAYS,
   DEFAULT_JOB_LIMITS,
   DEFAULT_JOB_PUBLISH_RATE,
+  DEFAULT_JOB_REQUIRE_REVIEW,
   DEFAULT_MAX_ACTIVE_APPLICATIONS,
   JOB_CV_LIMITS,
   SYSTEM_SETTINGS_KEY,
@@ -66,9 +62,5 @@ export {
   jobCategoryLabelKey,
 } from './filters';
 export type { ApplicantOwnView, EmployerApplicantView, PublicJobView } from './public-view';
-export {
-  toApplicantOwnView,
-  toEmployerApplicantView,
-  toPublicJobView,
-} from './public-view';
+export { toApplicantOwnView, toEmployerApplicantView, toPublicJobView } from './public-view';
 export { jobErrorKey } from './error-keys';
