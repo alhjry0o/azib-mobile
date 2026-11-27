@@ -137,7 +137,7 @@ describe('Demo seed bundle', () => {
     it('jobs have titleKey and partnerId', () => {
       for (const j of seedJobs) {
         expect(j.titleKey.length).toBeGreaterThan(0);
-        expect(j.partnerId.length).toBeGreaterThan(0);
+        expect((j.partnerId ?? '').length).toBeGreaterThan(0);
       }
     });
 
